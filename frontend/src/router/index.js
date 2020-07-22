@@ -2,8 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '@/views/Main.vue'
 import Blog from '@/views/Blog.vue'
-import Login from '@/views/user/Login.vue'
-import Signup from '@/views/user/Signup.vue'
+import User from '@/views/User.vue'
 
 
 
@@ -21,14 +20,9 @@ Vue.use(VueRouter)
     component: Blog,
   },
   {
-    path: '/user/login',
-    name: 'Login',
-    component: Login,
-  },
-  {
-    path: '/user/signup',
-    name: 'Signup',
-    component: Signup,
+    path: '/user',
+    name: 'User',
+    component: User,
   },
 ]
 
