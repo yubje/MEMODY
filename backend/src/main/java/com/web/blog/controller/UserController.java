@@ -1,22 +1,16 @@
-package com.web.blog.controller.account;
+package com.web.blog.controller;
 
-import java.util.List;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Random;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,13 +23,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.web.blog.config.security.JwtTokenProvider;
+import com.web.blog.config.security.User;
+import com.web.blog.config.security.UserRepository;
 import com.web.blog.model.UserDto;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -68,7 +67,7 @@ public class UserController {
 		}
 		boolean check = userService.register(user);
 		if (check) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+			return new ResponseEntity<String>(HttpStatus.OK);
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
@@ -161,6 +160,7 @@ public class UserController {
 	@ApiOperation(value = "Req.6-1 로그인", response = UserDto.class)
 	@PostMapping(value = "/jwt")
 	public ResponseEntity jwtLogin(@RequestBody UserDto user,HttpServletResponse response) {
+		System.out.println("ddd");
 		UserDto login = userService.login(user);
 		
 		if (login == null) {
@@ -173,4 +173,26 @@ public class UserController {
 			return new ResponseEntity<UserDto>(login, HttpStatus.OK);
 		}
 	}
+	////////////////////////////////////////////////////////////////////////////////////////
+	// sub 2
+	
+	private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserRepository userRepository;
+	
+    // 회원가입
+    @PostMapping("/joinr")
+    public String join(@RequestBody Map<String, String> user,HttpServletResponse response) {
+    	if(userRepository.findByEmail(user.get("email")) != null) {
+//    		response.setStatus(200);
+    		throw new IllegalArgumentException("가입된 E-MAIL 입니다.");
+    	}
+        return userRepository.save(User.builder()
+        		.uid(user.get("uid"))
+                .email(user.get("email"))
+                .password(passwordEncoder.encode(user.get("password")))
+                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
+                .build()).getUid();
+    }
+   
 }
