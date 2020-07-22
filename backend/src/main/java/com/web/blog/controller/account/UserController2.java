@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController2 {
 
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
