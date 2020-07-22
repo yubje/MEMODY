@@ -1,4 +1,3 @@
-
 <template>
   <div id="main">
     <div>
@@ -27,4 +26,3 @@ export default {
 <style>
 
 </style>
-
