@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Navbar/>
-    <router-view/>
+    <b-container>
+      <router-view/>
+    </b-container>
   </div>
 </template>
 
@@ -16,8 +18,10 @@ export default {
 </script>
 
 <style>
+@font-face { font-family: 'BMHANNAPro'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_seven@1.0/BMHANNAPro.woff') format('woff'); font-weight: normal; font-style: normal; }
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: BMHANNAPro, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
