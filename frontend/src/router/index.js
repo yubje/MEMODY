@@ -5,6 +5,8 @@ import Blog from '@/views/Blog.vue'
 import Login from '@/views/user/Login.vue'
 import Signup from '@/views/user/Signup.vue'
 import ResetPW from '@/views/user/ResetPW.vue'
+import UserInfo from '@/views/user/UserInfo.vue'
+import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +25,16 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/users/info',
+    name: 'UserInfo',
+    component: UserInfo,
+  },
+  {
+    path: '/users/info/update',
+    name: 'UserInfoUpdate',
+    component: UserInfoUpdate,
   },
   {
     path: '/users',
