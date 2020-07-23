@@ -4,6 +4,9 @@
     <div v-for="category in categories" :key="category">
       <router-link :to="{ name: 'BlogCategory' }">{{ category }}</router-link>
     </div>
+    <router-link :to="{name: 'BLogSettings'}"> 
+      Settings
+    </router-link>
 
   </div>
 </template>
