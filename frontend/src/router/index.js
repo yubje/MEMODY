@@ -4,8 +4,7 @@ import Main from '@/views/Main.vue'
 import Blog from '@/views/Blog.vue'
 import Login from '@/views/user/Login.vue'
 import Signup from '@/views/user/Signup.vue'
-
-
+import ResetPW from '@/views/user/ResetPW.vue'
 
 Vue.use(VueRouter)
 
@@ -21,14 +20,19 @@ Vue.use(VueRouter)
     component: Blog,
   },
   {
-    path: '/user/login',
+    path: '/login',
     name: 'Login',
     component: Login,
   },
   {
-    path: '/user/signup',
+    path: '/users',
     name: 'Signup',
     component: Signup,
+  },
+  {
+    path: '/users/pw',
+    name: 'ResetPW',
+    component: ResetPW,
   },
 ]
 
