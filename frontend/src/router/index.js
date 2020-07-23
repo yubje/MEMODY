@@ -4,6 +4,9 @@ import Main from '@/views/Main.vue'
 import Blog from '@/views/Blog.vue'
 import Login from '@/views/user/Login.vue'
 
+import UserInfo from '@/views/user/UserInfo.vue'
+import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
+
 
 
 Vue.use(VueRouter)
@@ -24,6 +27,17 @@ Vue.use(VueRouter)
     name: 'Login',
     component: Login,
   },
+  {
+    path: '/users/info',
+    name: 'UserInfo',
+    component: UserInfo,
+  },
+  {
+    path: '/users/info/update',
+    name: 'UserInfoUpdate',
+    component: UserInfoUpdate,
+  },
+  
 ]
 
 const router = new VueRouter({
