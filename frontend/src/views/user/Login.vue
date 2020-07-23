@@ -6,7 +6,7 @@
     <br>
     <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
     <br>
-    <a href="">비밀번호 재설정</a>
+    <router-link v-b-modal.resetpw-modal :to="{ name: 'ResetPW' }" >비밀번호 찾기</router-link>
     <br>
     <button>로그인</button>
     <br>
