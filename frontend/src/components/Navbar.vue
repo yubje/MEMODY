@@ -27,6 +27,13 @@
             <router-link v-b-modal.login-modal :to="{ name: 'Login' }">Login</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
+
+        <b-nav-item-dropdown right>
+          <template v-slot:button-content>User</template>
+          <b-dropdown-item>
+            <router-link v-b-modal.info-modal :to="{ name: 'UserInfo' }">회원 정보</router-link>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
