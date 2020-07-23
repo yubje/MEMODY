@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.web.blog.config.security.JwtTokenProvider;
-import com.web.blog.config.security.User;
-import com.web.blog.config.security.UserRepository;
+import com.web.blog.config.security.Users;
+import com.web.blog.config.security.UsersRepository;
 import com.web.blog.model.UserDto;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.UserService;
@@ -176,23 +176,5 @@ public class UserController {
 	////////////////////////////////////////////////////////////////////////////////////////
 	// sub 2
 	
-	private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
-	
-    // 회원가입
-    @PostMapping("/joinr")
-    public String join(@RequestBody Map<String, String> user,HttpServletResponse response) {
-    	if(userRepository.findByEmail(user.get("email")) != null) {
-//    		response.setStatus(200);
-    		throw new IllegalArgumentException("가입된 E-MAIL 입니다.");
-    	}
-        return userRepository.save(User.builder()
-        		.uid(user.get("uid"))
-                .email(user.get("email"))
-                .password(passwordEncoder.encode(user.get("password")))
-                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
-                .build()).getUid();
-    }
    
 }
