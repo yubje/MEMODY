@@ -21,12 +21,12 @@ Vue.use(VueRouter)
     component: Blog,
   },
   {
-    path: '/user/login',
+    path: '/login',
     name: 'Login',
     component: Login,
   },
   {
-    path: '/user/signup',
+    path: '/users',
     name: 'Signup',
     component: Signup,
   },
@@ -37,5 +37,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router
