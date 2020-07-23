@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Main from '@/views/Main.vue'
 import Blog from '@/views/Blog.vue'
 import Login from '@/views/user/Login.vue'
+import Signup from '@/views/user/Signup.vue'
 
 import UserInfo from '@/views/user/UserInfo.vue'
 import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
@@ -37,7 +38,12 @@ Vue.use(VueRouter)
     name: 'UserInfoUpdate',
     component: UserInfoUpdate,
   },
-  
+  {
+    path: '/users',
+    name: 'Signup',
+    component: Signup,
+  },
+
 ]
 
 const router = new VueRouter({
@@ -45,5 +51,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router
