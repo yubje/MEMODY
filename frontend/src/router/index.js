@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Main from '@/views/Main.vue'
 import Blog from '@/views/Blog.vue'
 import Login from '@/views/user/Login.vue'
+import Signup from '@/views/user/Signup.vue'
 
 
 
@@ -24,6 +25,11 @@ Vue.use(VueRouter)
     name: 'Login',
     component: Login,
   },
+  {
+    path: '/users',
+    name: 'Signup',
+    component: Signup,
+  },
 ]
 
 const router = new VueRouter({
@@ -31,5 +37,7 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
 
 export default router
