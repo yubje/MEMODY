@@ -39,6 +39,15 @@ export default new Vuex.Store({
       }
       dispatch('postAuthData', info)
     },
+    signup({ dispatch }, signupData) {
+      const info = {
+        data: signupData,
+        location: '/users'
+      }
+      dispatch('postAuthData', info)
+      this.$router.push({ name: 'Main'})
+    },
+
 
   },
   modules: {
