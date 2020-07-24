@@ -15,13 +15,13 @@
             <br>
             <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
             <br>
-            <router-link v-b-modal.resetpw-modal :to="{ name: 'ResetPW' }" >비밀번호 찾기</router-link>
+            <router-link data-toggle="modal" data-target="#resetpw-modal" :to="{ name: 'UserResetPWView' }" >비밀번호 찾기</router-link>
             <br>
             <button @click="login" data-dismiss="modal" >로그인</button>
             <br>
             <a href="">아직 회원이 아니세요?</a>
             <br>
-            <router-link :to="{ name: 'Signup' }" data-dismiss="modal" data-toggle="modal" data-target="#signup-modal" >회원 가입</router-link>
+            <router-link :to="{ name: 'UserSignupView' }" data-dismiss="modal" data-toggle="modal" data-target="#signup-modal" >회원 가입</router-link>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'Login',
+  name: 'UserLoginView',
   data() {
     return {
       loginData: {
