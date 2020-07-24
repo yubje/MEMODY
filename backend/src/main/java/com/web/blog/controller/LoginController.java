@@ -35,7 +35,7 @@ public class LoginController {
 	/**
 	 * 로그인
 	 * 
-	 * @param Map<String, String>
+	 * @param Map<String, String> - email, password
 	 * @return ResponseEntity
 	 */
 	@ApiOperation(value = "로그인", response = ResponseEntity.class)
@@ -43,7 +43,6 @@ public class LoginController {
 	public ResponseEntity login(@RequestBody Map<String, String> user, HttpServletResponse response) {
 		Users member = usersRepository.findByEmail(user.get("email"))
 				.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
-//        	.orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 		if (!passwordEncoder.matches(user.get("password"), member.getPassword())) {
 			return new ResponseEntity<>(new DefaultRes(StatusCode.FORBIDDEN, ResponseMessage.LOGIN_FAIL),
 					HttpStatus.FORBIDDEN);
@@ -55,12 +54,18 @@ public class LoginController {
 		return new ResponseEntity<>(new DefaultRes(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, result),
 				HttpStatus.OK);
 	}
-	@PostMapping("/join")
+	
+	/**
+	 * 회원가입
+	 * 
+	 * @param Map<String, String> - email, uid, password
+	 * @return ResponseEntity
+	 */
+	@PostMapping("/users")
 	public String join(@RequestBody Map<String, String> users) {
 		System.out.println(users.get("email"));
 		System.out.println(usersRepository.findByEmail(users.get("email")));
 		if (usersRepository.findByEmail(users.get("email")).isPresent()) {
-//	    		response.setStatus(200);
 			throw new IllegalArgumentException("중복된 Email 입니다.");
 		}
 		return usersRepository.save(Users.builder()
