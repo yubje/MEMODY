@@ -1,51 +1,67 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Main from '@/views/Main.vue'
-import Blog from '@/views/Blog.vue'
-import Login from '@/views/user/Login.vue'
-import Signup from '@/views/user/Signup.vue'
-import ResetPW from '@/views/user/ResetPW.vue'
-import UserInfo from '@/views/user/UserInfo.vue'
-import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
+import MainView from '@/views/MainView.vue'
+import BlogView from '@/views/BlogView.vue'
+import UserLoginView from '@/views/user/UserLoginView.vue'
+import UserSignupView from '@/views/user/UserSignupView.vue'
+import UserResetPWView from '@/views/user/UserResetPWView.vue'
+import UserInfoView from '@/views/user/UserInfoView.vue'
+import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
+
+import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
+import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 
 
 Vue.use(VueRouter)
 
   const routes = [
+  // views
   {
     path: '/',
     name: 'Main',
-    component: Main,
+    component: MainView,
   },
   {
     path: '/blog',
-    name: 'Blog',
-    component: Blog,
+    name: 'BlogView',
+    component: BlogView,
   },
   {
     path: '/login',
-    name: 'Login',
-    component: Login,
+    name: 'UserLoginView',
+    component: UserLoginView,
   },
+  // users
   {
     path: '/users/info',
-    name: 'UserInfo',
-    component: UserInfo,
+    name: 'UserInfoView',
+    component: UserInfoView,
   },
   {
     path: '/users/info/update',
-    name: 'UserInfoUpdate',
-    component: UserInfoUpdate,
+    name: 'UserInfoUpdateView',
+    component: UserInfoUpdateView,
   },
   {
     path: '/users',
-    name: 'Signup',
-    component: Signup,
+    name: 'UserSignupView',
+    component: UserSignupView,
   },
   {
     path: '/users/pw',
-    name: 'ResetPW',
-    component: ResetPW,
+    name: 'UserResetPWView',
+    component: UserResetPWView,
+  },
+  // blog
+  {
+    path: '/blog/settings',
+    name: 'BlogSettingsInfo',
+    component: BlogSettingsInfo,
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsCategory',
+    component: BlogSettingsCategory,
   },
 ]
 
