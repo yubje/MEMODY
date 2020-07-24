@@ -8,9 +8,23 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'MainRecommendBlogList',
-
+  data() {
+    return {
+      recommendBlogList: []
+    }
+  },
+  created() {
+    // 로그인 후 내 블로그 목록 조회 (API 문서 - 61D)
+    axios.get(`${process.env.VUE_APP_SERVER}/main/before`)
+      .then(response => {
+        console.log(response.data)
+        this.recommendBlogList = response.data
+      })
+      .catch(error => console.log(error.response.data))
+  }
 }
 </script>
 
