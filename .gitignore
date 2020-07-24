@@ -3,7 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,visualstudiocode,vue,vuejs,java,node
 
 # Spring
-.properties
+*.properties
 
 
 ### Eclipse ###
@@ -51,6 +51,7 @@ local.properties
 
 # STS (Spring Tool Suite)
 .springBeans
+*.properties
 
 # Code Recommenders
 .recommenders/
