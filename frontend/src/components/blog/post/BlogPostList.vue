@@ -1,13 +1,13 @@
 <template>
   <div>
-    <PostListItem/>
+    <BlogPostListItem/>
   </div>
 </template>
 
 <script>
-import PostListItem from '@/components/blog/post/PostListItem.vue'
+import BlogPostListItem from '@/components/blog/post/BlogPostListItem.vue'
 export default {
-  name: 'PostList',
+  name: 'BlogPostList',
   components: {
     PostListItem,
   },

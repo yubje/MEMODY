@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Main from '@/views/Main.vue'
-import Blog from '@/views/Blog.vue'
+import MainView from '@/views/MainView.vue'
+import BlogView from '@/views/BlogView.vue'
 import Login from '@/views/user/Login.vue'
 import Signup from '@/views/user/Signup.vue'
 import ResetPW from '@/views/user/ResetPW.vue'
@@ -15,12 +15,12 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Main',
-    component: Main,
+    component: MainView,
   },
   {
     path: '/blog',
-    name: 'Blog',
-    component: Blog,
+    name: 'BlogView',
+    component: BlogView,
   },
   {
     path: '/login',

@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'PostEdit',
+  name: 'BlogPostEdit',
 }
 </script>
 
