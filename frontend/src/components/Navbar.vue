@@ -24,7 +24,7 @@
         <b-nav-item-dropdown right>
           <template v-slot:button-content>로그인·회원가입</template>
           <b-dropdown-item>
-            <router-link v-b-modal.login-modal :to="{ name: 'Login' }">Login</router-link>
+            <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'Login' }">Login</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
