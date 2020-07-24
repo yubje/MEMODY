@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <!-- Sidebar -->
-        <Sidebar class="col col-lg-2"/>
+        <BlogSidebar class="col col-lg-2"/>
         <div class="col col-lg-10">
           <div>
             <h1>BLOG TITIE</h1>
@@ -19,12 +19,12 @@
 <script>
 
 import axios from 'axios'
-import Sidebar from '@/components/blog/sidebar/Sidebar.vue'
+import BlogSidebar from '@/components/blog/sidebar/BlogSidebar.vue'
 
 export default {
-  name: 'Blog',
+  name: 'BlogView',
   components: {
-    Sidebar,
+    BlogSidebar,
   },
   // props: {
   //   bid: {
