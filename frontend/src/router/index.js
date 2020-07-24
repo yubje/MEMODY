@@ -8,10 +8,14 @@ import ResetPW from '@/views/user/ResetPW.vue'
 import UserInfo from '@/views/user/UserInfo.vue'
 import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
 
+import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
+import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
+
 
 Vue.use(VueRouter)
 
   const routes = [
+  // views
   {
     path: '/',
     name: 'Main',
@@ -27,6 +31,7 @@ Vue.use(VueRouter)
     name: 'Login',
     component: Login,
   },
+  // users
   {
     path: '/users/info',
     name: 'UserInfo',
@@ -46,6 +51,17 @@ Vue.use(VueRouter)
     path: '/users/pw',
     name: 'ResetPW',
     component: ResetPW,
+  },
+  // blog
+  {
+    path: '/blog/settings',
+    name: 'BlogSettingsInfo',
+    component: BlogSettingsInfo,
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsCategory',
+    component: BlogSettingsCategory,
   },
 ]
 
