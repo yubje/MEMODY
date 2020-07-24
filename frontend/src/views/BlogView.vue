@@ -3,10 +3,10 @@
     <div class="container-fluid">
       <div class="row">
         <!-- Sidebar -->
-        <Sidebar class="col col-lg-2"/>
+        <BlogPostSidebar/>
         <div class="col col-lg-10">
           <div>
-            <h1>BLOG TITIE</h1>
+            <h1>BLOG TITLE</h1>
             <h3>Subtitle</h3>
             <p>Description</p>
           </div>
@@ -19,12 +19,12 @@
 <script>
 
 import axios from 'axios'
-import Sidebar from '@/components/blog/sidebar/Sidebar.vue'
+import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 export default {
-  name: 'Blog',
+  name: 'BlogView',
   components: {
-    Sidebar,
+    BlogPostSidebar,
   },
   // props: {
   //   bid: {
@@ -32,19 +32,31 @@ export default {
   //   }
   // },
   methods: {
+    // 블로그 정보 조회 (API 문서 - 28D)
     getBlogInfo(bid) {
-      axios.get(process.env.SERVER_URL, bid)
+      axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}/`)
         .then(response => {
           console.log(response.data)
         })
         .catch(error => console.log(error.response.data))
 
-    }
+    },
   },
 }
 </script>
 
 <style>
+#blog {
+  height: 100%;
+}
+
+.container-fluid {
+  height: 100%;
+}
+
+.row {
+  height: 100%;
+}
 
 
 </style>

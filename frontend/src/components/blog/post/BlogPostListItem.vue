@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p @click="onPostSelect">PostListItem</p>
+    <p @click="onPostSelect">블로그 글</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'PostListItem',
+  name: 'BlogPostListItem',
   methods: {
     onPostSelect() {
       this.$store.commit('storeFunctionName')
