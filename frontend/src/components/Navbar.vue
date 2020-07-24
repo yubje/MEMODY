@@ -14,7 +14,7 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item>
-          <router-link :to="{ name: 'Blog' }" class="text-decoration-none text-light">Blog</router-link>
+          <router-link :to="{ name: 'BlogView' }" class="text-decoration-none text-light">Blog</router-link>
         </b-nav-item>
         <b-nav-item-dropdown right>
           <template v-slot:button-content >알람</template>
@@ -24,14 +24,14 @@
         <b-nav-item-dropdown right>
           <template v-slot:button-content>로그인·회원가입</template>
           <b-dropdown-item>
-            <router-link v-b-modal.login-modal :to="{ name: 'Login' }">Login</router-link>
+            <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown right>
           <template v-slot:button-content>User</template>
           <b-dropdown-item>
-            <router-link v-b-modal.info-modal :to="{ name: 'UserInfo' }">회원 정보</router-link>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
