@@ -1,4 +1,4 @@
-package com.web.blog.common;
+package com.web.blog.model;
 public class StatusCode {
 
     public static final int OK = 200;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.model.UserDto;
-import com.web.blog.service.UserService;
+import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -22,7 +22,7 @@ public class AuthController {
 	private static final String DUPLICATE = "duplicate";
 	
 	@Autowired
-	private UserService userService;
+	private UserService2 userService;
 	
 	// 회원가입 시 이메일 인증 보내기
 	@ApiOperation(value = "Req.5-1 이메일 인증", response = UserDto.class)

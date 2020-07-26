@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
-import com.web.blog.dao.UsersRepository;
+import com.web.blog.domain.Users;
 import com.web.blog.model.UserDto;
-import com.web.blog.model.Users;
+import com.web.blog.repository.UsersRepository;
 import com.web.blog.service.JwtService;
-import com.web.blog.service.UserService;
+import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class UserController {
 	private static final String DUPLICATE = "duplicate";
 
 	@Autowired
-	private UserService userService;
+	private UserService2 userService;
 
 	@Autowired
 	private JwtService jwtService;
@@ -112,7 +112,7 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Req.6-1 로그인", response = UserDto.class)
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/in")
 	public ResponseEntity login(@RequestBody UserDto user, HttpSession session) {
 		UserDto login = userService.login(user);
 		if (login == null) {

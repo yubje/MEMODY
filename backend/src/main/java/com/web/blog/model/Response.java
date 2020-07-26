@@ -1,7 +1,4 @@
 package com.web.blog.model;
-import com.web.blog.common.ResponseMessage;
-import com.web.blog.common.StatusCode;
-
 import lombok.*;
 
 @Getter

@@ -1,4 +1,4 @@
-package com.web.blog.advice;
+package com.web.blog.model;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,4 +1,5 @@
-package com.web.blog.model;
+package com.web.blog.domain;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
