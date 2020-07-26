@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.web.blog.config.security.JwtTokenProvider;
-import com.web.blog.config.security.Users;
-import com.web.blog.config.security.UsersRepository;
+import com.web.blog.config.jwt.JwtTokenProvider;
+import com.web.blog.dao.UsersRepository;
 import com.web.blog.model.UserDto;
+import com.web.blog.model.Users;
 import com.web.blog.service.JwtService;
 import com.web.blog.service.UserService;
 
@@ -127,13 +127,6 @@ public class UserController {
 
 			return new ResponseEntity<UserDto>(login, HttpStatus.OK);
 		}
-	}
-
-	@ApiOperation(value = "Req.6-2 로그아웃", response = UserDto.class)
-	@GetMapping(value = "/logout")
-	public ResponseEntity logout(HttpSession session) {
-		session.invalidate();
-		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 
 	// 회원가입 시 이메일 인증 보내기

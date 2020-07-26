@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DefaultRes<T> {
+public class Response<T> {
 
     private int status;
 
@@ -16,23 +16,23 @@ public class DefaultRes<T> {
 
     private T data;
 
-    public DefaultRes(final int status, final String message) {
+    public Response(final int status, final String message) {
         this.status = status;
         this.message = message;
         this.data = null;
     }
 
-    public static<T> DefaultRes<T> res(final int status, final String message) {
+    public static<T> Response<T> res(final int status, final String message) {
         return res(status, message, null);
     }
 
-    public static<T> DefaultRes<T> res(final int status, final String message, final T t) {
-        return DefaultRes.<T>builder()
+    public static<T> Response<T> res(final int status, final String message, final T t) {
+        return Response.<T>builder()
                 .data(t)
                 .status(status)
                 .message(message)
                 .build();
     }
 
-    public static final DefaultRes FAIL_DEFAULT_RES = new DefaultRes(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR);
+    public static final Response FAIL_DEFAULT_RES = new Response(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR);
 }

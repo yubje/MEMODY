@@ -1,9 +1,11 @@
-package com.web.blog.config.security;
+package com.web.blog.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.web.blog.dao.UsersRepository;
 
 @RequiredArgsConstructor
 @Service

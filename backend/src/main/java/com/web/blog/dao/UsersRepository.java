@@ -1,6 +1,8 @@
-package com.web.blog.config.security;
+package com.web.blog.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.web.blog.model.Users;
 
 import java.util.Optional;
 

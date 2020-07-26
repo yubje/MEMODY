@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.BlogException;
-import com.web.blog.dao.user.UserDao2;
+import com.web.blog.dao.UserDao2;
 import com.web.blog.model.UserDto;
 
 @Service

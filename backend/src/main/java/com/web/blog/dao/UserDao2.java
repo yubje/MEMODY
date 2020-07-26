@@ -1,4 +1,4 @@
-package com.web.blog.dao.user;
+package com.web.blog.dao;
 
 import java.sql.SQLException;
 
