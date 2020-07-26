@@ -104,17 +104,17 @@ public class LoginController {
 	@ApiOperation(value = "로그아웃", response = ResponseEntity.class)
 	@GetMapping(path = "/logout")
 	public ResponseEntity logout(HttpServletRequest req) {
+		System.out.println("test");
 		String token = req.getHeader("auth");
-
 		if (jwtTokenProvider.validateToken(token)) {
 			Date expirationDate = jwtTokenProvider.getExpirationDate(token);
 			redisTemplate.opsForValue().set(token, "logout",
 					expirationDate.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.LOGOUT_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.LOGOUT_FAIL),HttpStatus.FORBIDDEN);
 		}
 		
-		return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.LOGOUT_SUCCESS),HttpStatus.NO_CONTENT);
 	}
 
 	/**
