@@ -17,7 +17,7 @@
             <br>
             <router-link data-toggle="modal" data-target="#resetpw-modal" :to="{ name: 'UserResetPWView' }" >비밀번호 찾기</router-link>
             <br>
-            <button @click="login" data-dismiss="modal" >로그인</button>
+            <button @click="login(loginData)" data-dismiss="modal" >로그인</button>
             <br>
             <a href="">아직 회원이 아니세요?</a>
             <br>
