@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -59,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/logout").hasRole("USER")
 				.anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
 				.and()
-//				.addFilterBefore(new CorsFilter(),SecurityContextPersistenceFilter.class)
+				.addFilterBefore(new CorsFilter(),SecurityContextPersistenceFilter.class)
 				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 						UsernamePasswordAuthenticationFilter.class);
 		// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
@@ -76,21 +77,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	 * @apiNote FrontEnd와의 통신에서 Header에 토큰 값을 노출시켜주기 위한 설정
 	 * 
 	 */
-	@Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.addAllowedOrigin("http://localhost:8081");
-        configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-        
-        List<String> list = new ArrayList<String>();
-        list.add("auth");
-        configuration.setExposedHeaders(list);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//	@Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        configuration.addAllowedOrigin("http://localhost:8081");
+//        configuration.addAllowedHeader("*");
+//        configuration.addAllowedMethod("*");
+//        configuration.setAllowCredentials(true);
+//        
+//        List<String> list = new ArrayList<String>();
+//        list.add("auth");
+//        configuration.setExposedHeaders(list);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }
