@@ -5,6 +5,8 @@ import axios from 'axios'
 import router from '@/router'
 import cookies from 'vue-cookies'
 
+import blog from './blog-module.js'
+
 Vue.use(Vuex)
 
 
@@ -51,5 +53,6 @@ export default new Vuex.Store({
 
   },
   modules: {
+    blog
   }
 })
