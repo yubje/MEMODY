@@ -10,6 +10,7 @@ import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
+import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 
 
 Vue.use(VueRouter)
@@ -52,7 +53,7 @@ Vue.use(VueRouter)
     name: 'UserResetPWView',
     component: UserResetPWView,
   },
-  // blog
+  // blog setting
   {
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
@@ -62,6 +63,12 @@ Vue.use(VueRouter)
     path: '/blog/settings/category',
     name: 'BlogSettingsCategory',
     component: BlogSettingsCategory,
+  },
+  // blog post
+  {
+    path: '/blogs/posts',
+    name: 'BlogPostCreate',
+    component: BlogPostCreate,
   },
 ]
 
