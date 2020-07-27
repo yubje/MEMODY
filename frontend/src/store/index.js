@@ -12,7 +12,7 @@ const SERVER = process.env.VUE_APP_SERVER
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    userInfo: null,
+    userInfo: null
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
@@ -49,10 +49,12 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
+      console.log(SERVER+info.location)
       axios.post(SERVER + info.location, info.data)
         .then(response => {
           // console.log(res.headers)
           // console.log(res.headers.auth)
+          console.log(response.headers)
           commit('SET_TOKEN', response.headers.auth)
           // console.log(res.data)
           commit('SET_USERINFO', response.data)
