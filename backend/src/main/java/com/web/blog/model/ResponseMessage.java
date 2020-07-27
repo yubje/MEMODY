@@ -9,7 +9,10 @@ public class ResponseMessage {
     public static final String READ_USER = "회원 정보 조회 성공";
     public static final String NOT_FOUND_USER = "회원을 찾을 수 없습니다.";
     
-    public static final String TEMP_PWD = "임시 비밀번호 생성 성공";
+    public static final String CREATE_CODE = "인증번호 생성";
+    public static final String RESET_PWD = "비밀번호 재설정 성공";
+    public static final String FAIL_RESET_PWD = "비밀번호 재설정 실패";
+    
     
     public static final String ALREADY_USER = "이미 존재하는 Email입니다.";
     public static final String CREATED_USER = "회원 가입 성공";

@@ -172,29 +172,28 @@ public class LoginController {
 	}
 	
 	
-	
-	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
-	@GetMapping(value = "/users/{emails}/pw")
-	public ResponseEntity tempPassword(@PathVariable String email) {
+	@ApiOperation(value = "이메일 인증", response = ResponseEntity.class)
+	@GetMapping(value = "/auth/{email}")
+	public ResponseEntity authEmail(@PathVariable String email) {
 		
 		if(userService.findByEmail(email).isPresent()) {
-			// 임시 비밀번호 생성
-			String tmpPassword = UUID.randomUUID().toString().replaceAll("-", "");
-			tmpPassword = tmpPassword.substring(0, 10);
+			// 인증코드 생성
+			String code = UUID.randomUUID().toString().replaceAll("-", "");
+			code = code.substring(0, 10);
 			
 			final String SEND_EMAIL_ID = "kimhyungtaik@gmail.com"; // 관리자 email
-			String subject = "임시비밀번호 발급 안내 입니다.";
+			String subject = "인증코드 발급 안내 입니다.";
 			StringBuilder sb = new StringBuilder();
-			sb.append("귀하의 임시 비밀번호 입니다. 로그인 후 비밀번호를 변경하세요.\n");
-			sb.append("임시 비밀번호 : " + tmpPassword);
+			sb.append("귀하의 인증코드 입니다.\n");
+			sb.append("인증코드 : " + code);
 			
-			String ecdPwd = passwordEncoder.encode(tmpPassword);
+			//String ecdPwd = passwordEncoder.encode(tmpPassword);
 //			System.out.println(ecdPwd);
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
 				// DB에 임시 비밀번호로 재설정 해줘야함. 암호화 해서 
-				userService.tempPwdUpdate(email,ecdPwd);
+				//userService.tempPwdUpdate(email,ecdPwd);
 				
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.TEMP_PWD),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.OK);
 			}
@@ -208,7 +207,7 @@ public class LoginController {
 	@PutMapping(value = "/users/{email}")
 	public ResponseEntity updateUser(@PathVariable String email, String uid, String password, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		
+//		System.out.println("회원정보 수정");
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 //			System.out.println(email+" "+uid+" "+password);
 			String ecdPwd = passwordEncoder.encode(password);
@@ -218,6 +217,23 @@ public class LoginController {
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, uid),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
+	@PutMapping(value = "/users/{email}/pw")
+	public ResponseEntity resetPassword(@PathVariable String email, String password, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+//		System.out.println("비밀번호 재설정 ");
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
+//			System.out.println(email+" "+uid+" "+password);
+			String ecdPwd = passwordEncoder.encode(password);
+//			System.out.println(ecdPwd);
+			userService.pwdUpdate(email, ecdPwd);
+			
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, email),HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_RESET_PWD),HttpStatus.FORBIDDEN);
 		}
 	}
 	

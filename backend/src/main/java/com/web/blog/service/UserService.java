@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
 				.roles(Collections.singletonList("ROLE_USER")).build());
 	}
 
-	public void tempPwdUpdate(String email, String password) {
+	public void pwdUpdate(String email, String password) {
 		Optional<Users> updateUser = userRepository.findByEmail(email);
 		updateUser.ifPresent(selectUser->{
 			selectUser.setPassword(password);
