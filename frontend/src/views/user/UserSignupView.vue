@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="modal fade" id="signup-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="signup-modal" data-keyboard="false" tabindex="-1" role="dialog"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -10,63 +11,76 @@
             </button>
           </div>
           <div class="modal-body">
-            <b-row class="justify-content-center">
-              <h1 >회원가입</h1>  
-            </b-row>
+            <div class="justify-content-center">
+              <h1>회원가입</h1>
+            </div>
             <div class="row col mt-5">
               <span class="col-3">닉네임</span>
-              <input class="col-9 " v-model:="signupData.username" type="text" placeholder="닉네임을 입력하세요">
+              <input class="col-9 " v-model="signupData.uid" type="text" placeholder="닉네임을 입력하세요">
             </div>
             <div class="row col mt-2">
-              <span class="col-3">이메일</span>
+              <span class="col-3">이메일 입력</span>
               <div class="row col-9 justify-content-between mt-2">
-              <input class="col-8" v-model:="signupData.email" type="text" placeholder="이메일을 입력하세요">
-              <button class="col-4">중복체크</button>
+                <input class="col-8" v-model="signupData.email" type="text" placeholder="이메일을 입력하세요">
+                <button class="col-4" @click="duplicated(signupData.email)">중복체크</button>
+                <div class="example-modal-window">
+                  <button class="btn" >E-mail 인증</button>
+                </div>
               </div>
             </div>
             <div class="row col mt-2">
               <span class="col-3">비밀번호</span>
-              <input class="col-9" v-model:="signupData.password1" type="password" placeholder="비밀번호를 입력하세요">
+              <input class="col-9" v-model="signupData.password" type="password" placeholder="비밀번호를 입력하세요">
             </div>
             <div class="row col mt-2">
               <span class="col-3">비밀번호 확인</span>
-              <input class="col-9" v-model:="signupData.password2" type="password" placeholder="비밀번호 확인">
+              <input class="col-9" v-model="password2" type="password" placeholder="비밀번호 확인">
             </div>
             <div class="row justify-content-center mt-5">
-              <button class=" col-10 btn btn-primary" data-dismiss="modal" @Click.prevent="Signup">회원가입</button>
+              <button class=" col-10 btn btn-primary" data-dismiss="modal"
+                @click.prevent="signup(signupData)">회원가입</button>
+
             </div>
           </div>
         </div>
       </div>
     </div>
 
-  
+
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+  import {
+    mapActions
+  } from 'vuex'
 
-export default {
+  // import MyModal from "../../components/Modal.vue";
+
+  export default {
     name: 'UserSignupView',
+    components: {
+    },
     data() {
       return {
         signupData: {
-          username: null,
-          email: null,
-          password1: null,
-          password2: null
-        }
+          uid: '',
+          email: '',
+          password: '',
+        },
+        password2: '',
+        modal: false,
+        emailValidation: false,
       };
     },
     mounted() {
-      //회원가입 모달 창 띄우기
-      this.$bvModal.show('signup-modal')
+      window.$('#signup-modal').modal('show')
+
     },
     methods: {
-      ...mapActions(["signup"])
+      ...mapActions(["signup","duplicated"]),
     },
-}
+  }
 </script>
 
 <style>

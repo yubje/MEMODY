@@ -45,7 +45,18 @@ export default new Vuex.Store({
         location: '/users'
       }
       dispatch('postAuthData', info)
-      this.$router.push({ name: 'Main'})
+      router.push({ name: 'Main'})
+    },
+    duplicated( { dispatch }, email) {
+      console.log('중복체크')
+      console.log(dispatch)
+      console.log(email)
+      axios.get(`${SERVER}'/users/'${email}`)
+      .then(response => {
+        
+        console.log(response)
+      })
+
     },
 
 
