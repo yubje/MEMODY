@@ -17,6 +17,10 @@ public class ResponseMessage {
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String FAIL_UPDATE_USER = "회원 정보 수정 실패";
     public static final String DELETE_USER = "회원 탈퇴 성공";
+    
+    // Blog
+    public static final String CREATE_BLOG_SUCCESS = "블로그 생성 성공";
+    public static final String CREATE_BLOG_FAIL = "블로그 생성 실패";
 
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
