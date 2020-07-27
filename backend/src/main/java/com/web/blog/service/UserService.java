@@ -59,10 +59,18 @@ public class UserService implements UserDetailsService {
 		});
 	}
 	
-	public void userUpdate(Users user, String password) {
-		Optional<Users> updateUser = userRepository.findByEmail(user.getEmail());
+//	public void userUpdate(Users user, String password) {
+//		Optional<Users> updateUser = userRepository.findByEmail(user.getEmail());
+//		updateUser.ifPresent(selectUser->{
+//			selectUser.setUid(user.getUid());
+//			selectUser.setPassword(password);
+//			userRepository.save(selectUser);
+//		});
+//	}
+	public void userUpdate(String email, String uid, String password) {
+		Optional<Users> updateUser = userRepository.findByEmail(email);
 		updateUser.ifPresent(selectUser->{
-			selectUser.setUid(user.getUid());
+			selectUser.setUid(uid);
 			selectUser.setPassword(password);
 			userRepository.save(selectUser);
 		});

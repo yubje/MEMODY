@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +77,7 @@ public class LoginController {
 		
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
-		
+		System.out.println(token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
@@ -133,7 +135,7 @@ public class LoginController {
 	@GetMapping(value = "/users/{email}")
 	public ResponseEntity userInfo(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		
+		System.out.println(email+" "+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			Users member = userService.findByEmail(email)
 					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
@@ -187,7 +189,7 @@ public class LoginController {
 			sb.append("임시 비밀번호 : " + tmpPassword);
 			
 			String ecdPwd = passwordEncoder.encode(tmpPassword);
-			
+//			System.out.println(ecdPwd);
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
 				// DB에 임시 비밀번호로 재설정 해줘야함. 암호화 해서 
 				userService.tempPwdUpdate(email,ecdPwd);
@@ -202,22 +204,21 @@ public class LoginController {
 
 	}
 
-//	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
-//	@PutMapping(value = "/users/{emails}")
-//	public ResponseEntity updateUser(@PathVariable String email, Users userHttpServletRequest req) {
 	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
-	@PutMapping(value = "/users")
-	public ResponseEntity updateUser(Users user) {
-//		String token = req.getHeader("auth");
-//		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
-//		Users member = userService.findByEmail(user.getEmail())
-//				.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
-		System.out.println(user.getUid()+" "+user.getPassword()+" "+user.getEmail());
-		userService.userUpdate(user, passwordEncoder.encode(user.getPassword()));
-		return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),HttpStatus.OK);
-//		}else {
-//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),HttpStatus.FORBIDDEN);
-//		}
+	@PutMapping(value = "/users/{email}")
+	public ResponseEntity updateUser(@PathVariable String email, String uid, String password, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
+//			System.out.println(email+" "+uid+" "+password);
+			String ecdPwd = passwordEncoder.encode(password);
+//			System.out.println(ecdPwd);
+			userService.userUpdate(email, uid, ecdPwd);
+			
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, uid),HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),HttpStatus.FORBIDDEN);
+		}
 	}
 	
 }
