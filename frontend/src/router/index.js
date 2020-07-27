@@ -3,10 +3,12 @@ import VueRouter from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import BlogView from '@/views/BlogView.vue'
 import UserLoginView from '@/views/user/UserLoginView.vue'
+import UserLogout from '@/components/user/UserLogout.vue'
 import UserSignupView from '@/views/user/UserSignupView.vue'
 import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
+
 
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
@@ -31,6 +33,11 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'UserLoginView',
     component: UserLoginView,
+  },
+  {
+    path: '/logout',
+    name: 'UserLogout',
+    component: UserLogout,
   },
   // users
   {
