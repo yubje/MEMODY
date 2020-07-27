@@ -9,6 +9,7 @@ import cookies from 'vue-cookies'
 Vue.use(Vuex)
 
 const SERVER = process.env.VUE_APP_SERVER
+
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
@@ -49,29 +50,37 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
+      console.log(loginData)
       console.log(SERVER+info.location)
-      axios.post(SERVER + info.location, info.data)
+      axios.post(SERVER + info.location, info.data, )
         .then(response => {
-          // console.log(res.headers)
-          // console.log(res.headers.auth)
+          console.log(response.headers)
+          console.log(response.headers.auth)
           console.log(response.headers)
           commit('SET_TOKEN', response.headers.auth)
           // console.log(res.data)
-          commit('SET_USERINFO', response.data)
+          commit('SET_USERINFO', response.data.data)
+          console.log(this.state.userInfo)
           router.push({ name: 'Main'})
         })
-        .catch(error => alert(error.response.data.message))
+        .catch(error => alert(error.response.message))
       
     },
     logout({ getters, commit }) {
       console.log(getters.config)
       console.log(cookies.get('auth-token'))
-      axios.get(SERVER + '/logout/', null, getters.config)
-        .then(() => {
+      axios.get(SERVER + '/logout', getters.config)
+        .then((response) => {
+          console.log('success')
+          console.log(response.data)
           commit('SET_TOKEN', null)
           cookies.remove('auth-token')
           window.localStorage.removeItem('userInfo')
           router.push({ name: 'Main' })
+        })
+        .catch(error => {
+          alert(error.response)
+          console.log(error)
         })
     },
     signup({ dispatch }, signupData) {
