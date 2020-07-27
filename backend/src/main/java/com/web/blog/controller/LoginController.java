@@ -1,6 +1,7 @@
 package com.web.blog.controller;
 
 import java.util.Date;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +26,7 @@ import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.UserService;
+import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,7 @@ public class LoginController {
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	RedisTemplate 		redisTemplate;
 	private final 	UserService 		userService;
+	private final 	UserService2 		mailService;
 
 	/**
 	 * 로그인 - 가입한 Email과 Password를 입력하여 로그인한다. Header에 토큰 값을 전달한다.
@@ -163,5 +167,56 @@ public class LoginController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	
+	
+	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
+	@GetMapping(value = "/users/{emails}/pw")
+	public ResponseEntity tempPassword(@PathVariable String email) {
+		
+		if(userService.findByEmail(email).isPresent()) {
+			// 임시 비밀번호 생성
+			String tmpPassword = UUID.randomUUID().toString().replaceAll("-", "");
+			tmpPassword = tmpPassword.substring(0, 10);
+			
+			final String SEND_EMAIL_ID = "kimhyungtaik@gmail.com"; // 관리자 email
+			String subject = "임시비밀번호 발급 안내 입니다.";
+			StringBuilder sb = new StringBuilder();
+			sb.append("귀하의 임시 비밀번호 입니다. 로그인 후 비밀번호를 변경하세요.\n");
+			sb.append("임시 비밀번호 : " + tmpPassword);
+			
+			String ecdPwd = passwordEncoder.encode(tmpPassword);
+			
+			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				// DB에 임시 비밀번호로 재설정 해줘야함. 암호화 해서 
+				userService.tempPwdUpdate(email,ecdPwd);
+				
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.TEMP_PWD),HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.NOT_FOUND_USER),HttpStatus.FORBIDDEN);
+		}
 
+	}
+
+//	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
+//	@PutMapping(value = "/users/{emails}")
+//	public ResponseEntity updateUser(@PathVariable String email, Users userHttpServletRequest req) {
+	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
+	@PutMapping(value = "/users")
+	public ResponseEntity updateUser(Users user) {
+//		String token = req.getHeader("auth");
+//		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
+//		Users member = userService.findByEmail(user.getEmail())
+//				.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+		System.out.println(user.getUid()+" "+user.getPassword()+" "+user.getEmail());
+		userService.userUpdate(user, passwordEncoder.encode(user.getPassword()));
+		return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),HttpStatus.OK);
+//		}else {
+//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),HttpStatus.FORBIDDEN);
+//		}
+	}
+	
 }

@@ -51,4 +51,20 @@ public class UserService implements UserDetailsService {
 				.roles(Collections.singletonList("ROLE_USER")).build());
 	}
 
+	public void tempPwdUpdate(String email, String password) {
+		Optional<Users> updateUser = userRepository.findByEmail(email);
+		updateUser.ifPresent(selectUser->{
+			selectUser.setPassword(password);
+			userRepository.save(selectUser);
+		});
+	}
+	
+	public void userUpdate(Users user, String password) {
+		Optional<Users> updateUser = userRepository.findByEmail(user.getEmail());
+		updateUser.ifPresent(selectUser->{
+			selectUser.setUid(user.getUid());
+			selectUser.setPassword(password);
+			userRepository.save(selectUser);
+		});
+	}
 }

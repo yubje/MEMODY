@@ -75,5 +75,12 @@ public class Users implements UserDetails {
         return true;
     }
 
+    public void setPassword(String password) {
+    	this.password = password;
+    }
+    
+    public void setUid(String uid) {
+    	this.uid = uid;
+    }
 
 }
