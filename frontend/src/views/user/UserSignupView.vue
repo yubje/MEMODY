@@ -24,7 +24,8 @@
                 <input class="col-8" v-model="signupData.email" type="text" placeholder="이메일을 입력하세요">
                 <button class="col-4" @click="duplicated(signupData.email)">중복체크</button>
                 <div class="example-modal-window">
-                  <button class="btn" >E-mail 인증</button>
+                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm" >E-mail 인증</button>
+                  <MyModal/>
                 </div>
               </div>
             </div>
@@ -39,7 +40,6 @@
             <div class="row justify-content-center mt-5">
               <button class=" col-10 btn btn-primary" data-dismiss="modal"
                 @click.prevent="signup(signupData)">회원가입</button>
-
             </div>
           </div>
         </div>
@@ -55,11 +55,12 @@
     mapActions
   } from 'vuex'
 
-  // import MyModal from "../../components/Modal.vue";
+  import MyModal from "../../components/Modal.vue";
 
   export default {
     name: 'UserSignupView',
     components: {
+      MyModal
     },
     data() {
       return {
