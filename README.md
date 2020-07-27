@@ -1,7 +1,5 @@
 # Sub PJT 2
 
-
-
 ### Contents
 
 - [Commit | Merge](#Commit  | Merge) 
@@ -26,18 +24,22 @@
 
   ex) `S03P11A305-1 | Done | 회원가입`
 
+  ex) `S03P11A305-2 | In Progress| 회원정보 수정`
+
   `[마무리] | {날짜 }| README.md`
 
   - ex) `[마무리] | 2020.07.21 | README.md`
 
-  
+  `[MR] | {날짜} | '{소스브랜치}' into '{타겟브랜치}'`
 
+  
+  
   **진행상황** 
 
   - Todo
   - In Progress
   - Done
-
+  
   
 
 ### 역할 분담
@@ -60,14 +62,15 @@
 
     - Front
 
-      - Feature/에픽
-        - Feature/에픽/스토리(?)
-      - Feature/에픽
+      - FeatureFront/doc
+      - FeatureFront/에픽
+        - FeatureFront/에픽/스토리(?)
 
     - Back
 
-      - Feature/에픽
-
+      - FeatureBack/doc
+- FeatureBack/에픽
+      
       
 
 ### 지라
