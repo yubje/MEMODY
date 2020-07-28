@@ -32,6 +32,7 @@
           <template v-slot:button-content>User</template>
           <b-dropdown-item>
             <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>

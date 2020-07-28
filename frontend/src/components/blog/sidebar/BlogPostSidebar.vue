@@ -1,6 +1,9 @@
 <!--카테고리 2중-->
 <template>
   <div class="col col-lg-2 container bg-light">
+    <div>
+      <router-link :to="{ name: 'BlogPostCreate' }">새글쓰기</router-link>
+    </div>
     <router-link :to="{ name: 'BlogView' }">Blog Home</router-link>
     <div v-for="category in categories" :key="category">
       <router-link :to="{ name: 'BlogCategory' }">{{ category }}</router-link>
@@ -8,7 +11,6 @@
     <router-link :to="{name: 'BlogSettingsInfo'}"> 
       Settings
     </router-link>
-
   </div>
 </template>
 
