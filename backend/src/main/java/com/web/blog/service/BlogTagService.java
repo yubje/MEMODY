@@ -26,8 +26,8 @@ public class BlogTagService {
 
 	private final BlogTagRepository blogtagRepository;
 
-	public void blogAndTag(int bid, int tid) {
-		blogtagRepository.save(Blogtag.builder().bid(bid).tid(tid).build());
+	public void blogAndTag(int bid, int tid, String tname) {
+		blogtagRepository.save(Blogtag.builder().bid(bid).tid(tid).tname(tname).build());
 	}
 
 }

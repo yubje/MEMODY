@@ -1,5 +1,6 @@
 package com.web.blog.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -39,18 +42,40 @@ public class Blog {
 	
 	@Column(length = 45, nullable = false)
 	private String manager;
+
+	@Column(nullable = true)
+	private int views;
 	
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="tname")
+	private Collection<Blogtag> hashtags;
 	
 	@Builder
-	public Blog(String btitle,String bsubtitle, String bcontent, String manager) {
+	public Blog(String btitle,String bsubtitle, String bcontent, String manager, int views) {
 		this.btitle = btitle;
 		this.bsubtitle = bsubtitle;
 		this.bcontent = bcontent;
 		this.manager = manager;
+		this.views = views;
 	}
 
 	public void setManager(String manager) {
 		this.manager = manager;
+	}
+	
+	public void setViews(int views) {
+		this.views = views;
+	}
+	
+	public void setHashtags(List<Blogtag> hashtags) {
+		this.hashtags = hashtags;
+	}
+	
+	public void addHashTag(Blogtag tag) {
+		if(hashtags == null) {
+			hashtags = new ArrayList<Blogtag>();
+		}
+		hashtags.add(tag);
 	}
 
 	@Override
@@ -58,5 +83,7 @@ public class Blog {
 		return "Blog [bid=" + bid + ", btitle=" + btitle + ", bsubtitle=" + bsubtitle + ", bcontent=" + bcontent
 				+ ", manager=" + manager + "]";
 	}
+
+	
 
 }
