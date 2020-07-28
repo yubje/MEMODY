@@ -29,6 +29,7 @@ Vue.use(VueRouter)
     name: 'BlogView',
     component: BlogView,
   },
+  // users
   {
     path: '/login',
     name: 'UserLoginView',
@@ -39,7 +40,6 @@ Vue.use(VueRouter)
     name: 'UserLogout',
     component: UserLogout,
   },
-  // users
   {
     path: '/users/info',
     name: 'UserInfoView',
@@ -55,20 +55,13 @@ Vue.use(VueRouter)
     name: 'UserSignupView',
     component: UserSignupView,
   },
-<<<<<<< HEAD
-=======
-  {
-    path: '/users',
-    name: 'Signup',
-    component: Signup,
-  },
->>>>>>> 8d7fe3860811236e8d5f9764e893364b074da51e
   {
     path: '/users/pw',
     name: 'UserResetPWView',
     component: UserResetPWView,
   },
-  // blog setting
+  // blog
+  // blog settings
   {
     path: '/blog/settings',
     name: 'BlogSettingsInfo',

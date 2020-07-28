@@ -1,7 +1,7 @@
 <template>
   <div>
     <input v-model="searchData.hashtag" type="text" id="hashtag">
-    <button @click="checkHashtag()">검색</button>
+    <button @click="checkHashtag()" class="btn btn-primary">검색</button>
   </div>
 </template>
 
