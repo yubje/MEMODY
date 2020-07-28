@@ -134,25 +134,19 @@ public class PostController {
 	}
 	
 	/**
-	 * 게시글 상세 조회 - 게시글 상세내용 조회
+	 * 게시글 수정 - 게시글을 수정한다.
 	 * 
 	 * @param String Email
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
 	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class)
-	@PutMapping(value = "/blogs/{bid}/posts/{pid}")
-	public ResponseEntity updatePost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
+	@PutMapping(value = "/blogs/posts")
+	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("게시글 수정 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			Post post = postService.findByPid(pid);
-			System.out.println(post);
-			if(post != null) {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
-			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
-			}
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}

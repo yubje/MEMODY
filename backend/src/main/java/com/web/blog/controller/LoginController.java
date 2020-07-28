@@ -146,8 +146,6 @@ public class LoginController {
 		}
 	}
 	
-	
-	
 	/**
 	 * 회원 탈퇴 - 현재 로그인되어있는 사용자의 회원 정보 삭제
 	 * 
@@ -159,7 +157,7 @@ public class LoginController {
 	@DeleteMapping(value = "/users/{email}")
 	public ResponseEntity findAllUser(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		
+		System.out.println("DELETE>>>>>");
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 			userService.deleteUser(email);
 			
@@ -198,18 +196,16 @@ public class LoginController {
 	}
 
 	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
-	@PutMapping(value = "/users/{email}")
-	public ResponseEntity updateUser(@PathVariable String email, String uid, String password, HttpServletRequest req) {
+	@PutMapping(value = "/users")
+	public ResponseEntity updateUser(@RequestBody Users user, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("회원정보 수정");
-		System.out.println(email+" "+uid+" "+password);
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
-//			System.out.println(email+" "+uid+" "+password);
-			String ecdPwd = passwordEncoder.encode(password);
-//			System.out.println(ecdPwd);
-			userService.userUpdate(email, uid, ecdPwd);
+		System.out.println(user.getEmail()+" "+user.getUid()+" "+user.getPassword());
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(user.getEmail())) {
+			String ecdPwd = passwordEncoder.encode(user.getPassword());
+			userService.userUpdate(user.getEmail(), user.getUid(), ecdPwd);
 			
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, uid),HttpStatus.OK);
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),HttpStatus.FORBIDDEN);
 		}
@@ -218,29 +214,18 @@ public class LoginController {
 	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
 	@PutMapping(value = "/users/{email}/pw")
 	public ResponseEntity resetPassword(@PathVariable String email, String password, HttpServletRequest req) {
-//		String token = req.getHeader("auth");
-//		System.out.println("비밀번호 재설정 ");
-//		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
-//			System.out.println(email+" "+uid+" "+password);
-			String ecdPwd = passwordEncoder.encode(password);
-//			System.out.println(ecdPwd);
-			userService.pwdUpdate(email, ecdPwd);
-			
-			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, email),HttpStatus.OK);
-//		}else {
-//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_RESET_PWD),HttpStatus.FORBIDDEN);
-//		}
+		String ecdPwd = passwordEncoder.encode(password);
+		userService.pwdUpdate(email, ecdPwd);
+		
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, email),HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)
 	@GetMapping(value = "/users/{uid}/nickname")
 	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
-//		System.out.println("회원정보 조회");
 		if(!userService.findByUid(uid).isPresent()) {
-//			System.out.println("해당 닉네임으로 조회된 회원 없음. 닉네임 사용가능");
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),HttpStatus.OK);
 		}else {
-//			System.out.println("해당 닉네임으로 조회된 회원 있음. 닉네임 사용 불가능");
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST),HttpStatus.FORBIDDEN);
 		}
 
