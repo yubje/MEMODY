@@ -26,17 +26,11 @@ export default {
   color: #2c3e50;
 }
 
-
-/* #nav a {
-  font-weight: bold;
-  color: #2c3e50;
-} */
-
-/* #nav a.router-link-exact-active {
-  color: #42b983;
-} */
-
 .btn-primary {
   background-color: #25374F !important;
+}
+
+input {
+  font-family: Avenir !important;
 }
 </style>
