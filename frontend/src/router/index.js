@@ -55,6 +55,14 @@ Vue.use(VueRouter)
     name: 'UserSignupView',
     component: UserSignupView,
   },
+<<<<<<< HEAD
+=======
+  {
+    path: '/users',
+    name: 'Signup',
+    component: Signup,
+  },
+>>>>>>> 8d7fe3860811236e8d5f9764e893364b074da51e
   {
     path: '/users/pw',
     name: 'UserResetPWView',

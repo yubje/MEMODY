@@ -9,6 +9,7 @@ import blog from './blog-module.js'
 
 import { main } from './main-module.js'
 
+
 Vue.use(Vuex)
 
 
@@ -115,6 +116,7 @@ export default new Vuex.Store({
   modules: {
     blog, 
     main: main,
+
   }
 })
 
