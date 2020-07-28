@@ -77,7 +77,7 @@ public class LoginController {
 		
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
-		System.out.println(token);
+		System.out.println("LOGIN>>>>>>>>"+token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
@@ -201,7 +201,8 @@ public class LoginController {
 	@PutMapping(value = "/users/{email}")
 	public ResponseEntity updateUser(@PathVariable String email, String uid, String password, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-//		System.out.println("회원정보 수정");
+		System.out.println("회원정보 수정");
+		System.out.println(email+" "+uid+" "+password);
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 //			System.out.println(email+" "+uid+" "+password);
 			String ecdPwd = passwordEncoder.encode(password);
@@ -217,18 +218,18 @@ public class LoginController {
 	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
 	@PutMapping(value = "/users/{email}/pw")
 	public ResponseEntity resetPassword(@PathVariable String email, String password, HttpServletRequest req) {
-		String token = req.getHeader("auth");
+//		String token = req.getHeader("auth");
 //		System.out.println("비밀번호 재설정 ");
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
+//		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 //			System.out.println(email+" "+uid+" "+password);
 			String ecdPwd = passwordEncoder.encode(password);
 //			System.out.println(ecdPwd);
 			userService.pwdUpdate(email, ecdPwd);
 			
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, email),HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_RESET_PWD),HttpStatus.FORBIDDEN);
-		}
+//		}else {
+//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_RESET_PWD),HttpStatus.FORBIDDEN);
+//		}
 	}
 	
 	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)

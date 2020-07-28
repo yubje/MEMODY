@@ -29,6 +29,15 @@ public class ResponseMessage {
     public static final String SEARCH_MYBLOG_NONE = "블로그가 없습니다.";
     public static final String SEARCH_MYBLOG_SUCCESS = "블로그 조회 성공";
     
+    // Post
+    public static final String CREATE_POST_SUCCESS = "성공적으로 게시글을 작성하였습니다.";
+    public static final String SAVE_POST_SUCCESS = "임시저장 되었습니다.";
+    public static final String CREATE_POST_FAIL = "게시글 작성 실패";
+    public static final String SEARCH_ALLPOST_NONE = "게시글이 없습니다.";
+    public static final String SEARCH_ALLPOST_SUCCESS = "전체 게시글 목록 조회 성공";
+    public static final String SEARCH_POST_SUCCESS = "게시글 상세 조회 성공";
+    public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
+    
 
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
