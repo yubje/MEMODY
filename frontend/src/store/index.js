@@ -9,8 +9,8 @@ import blog from './blog-module.js'
 
 import { main } from './main-module.js'
 
-Vue.use(Vuex)
 
+Vue.use(Vuex)
 
 
 const SERVER = process.env.VUE_APP_SERVER
@@ -18,12 +18,18 @@ const SERVER = process.env.VUE_APP_SERVER
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    userInfo: null
+    userInfo: null,
+    
+    //이메일 인증
+    emailValidationNumber: '',
+    isValid: false,
+    
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
-    config: state => ({ headers: { "auth": state.authToken } })
+    config: state => ({ headers: { "auth": state.authToken } }), 
   },
+
   mutations: {
     SET_TOKEN(state, token) {
       state.authToken = token
@@ -32,19 +38,20 @@ export default new Vuex.Store({
     SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo
       window.localStorage.setItem('userInfo', userInfo);
+    },
+    SET_VALIDATION(state, number) {
+      state.emailValidationNumber = number
+    },
+    SET_ISVALID(state) {
+      state.isValid = true
     }
-
   },
   actions: {
     // auth
     postAuthData({ commit }, info) {
       axios.post(SERVER + info.location, info.data)
         .then(response => {
-          // console.log(res.headers)
-          // console.log(res.headers.auth)
           commit('SET_TOKEN', response.headers.auth)
-          // console.log(res.data)
-          
           router.push({ name: 'Main'})
         })
         .catch(error => alert(error.response.data.message))
@@ -55,39 +62,24 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
-      console.log(loginData)
-      console.log(SERVER+info.location)
       axios.post(SERVER + info.location, info.data, )
-        .then(response => {
-          console.log(response.headers)
-          console.log(response.headers.auth)
-          console.log(response.headers)
+        .then((response) => {
           commit('SET_TOKEN', response.headers.auth)
-          // console.log(res.data)
           commit('SET_USERINFO', response.data.data)
-          console.log(this.state.userInfo)
           router.push({ name: 'Main'})
         })
-        .catch(error => alert(error.response.message))
+        .catch(error => alert(error.response.data.message))
       
     },
     logout({ getters, commit }) {
-      console.log(getters.config)
-      console.log(cookies.get('auth-token'))
- 
       axios.get(SERVER + '/logout/', getters.config)
-        .then((response) => {
-          console.log('success')
-          console.log(response.data)
+        .then(() => {
           commit('SET_TOKEN', null)
           cookies.remove('auth-token')
           window.localStorage.removeItem('userInfo')
           router.push({ name: 'Main' })
         })
-        .catch(error => {
-          alert(error)
-          console.log(error)
-        })
+        .catch(error => alert(error.response.data.message))
     },
     signup({ dispatch }, signupData) {
       const info = {
@@ -97,6 +89,26 @@ export default new Vuex.Store({
       dispatch('postAuthData', info)
       router.push({ name: 'Main'})
     },
+    validateEmail({ commit }, email) {
+      axios.get(`${SERVER}/auth/${email}`)
+      .then(response => {
+        commit('SET_VALIDATION', response.data.data )
+        
+      })
+      .catch(error => alert(error.response.data.message))
+    },
+    //인증번호 매칭확인
+    checkValidation( {commit} ,validationNumber) {
+      if (this.state.emailValidationNumber === validationNumber) {
+        alert("확인되었습니다.")
+        commit('SET_ISVALID')
+        window.$('#email-validation').modal('hide')
+        
+      } else {
+        alert("인증번호가 틀립니다.")
+      }
+    }  
+    
 
 
 
@@ -104,6 +116,7 @@ export default new Vuex.Store({
   modules: {
     blog, 
     main: main,
+
   }
 })
 
