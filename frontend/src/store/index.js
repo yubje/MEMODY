@@ -10,7 +10,7 @@ import blog from './blog-module.js'
 import { main } from './main-module.js'
 
 
-
+Vue.use(Vuex)
 
 const SERVER = process.env.VUE_APP_SERVER
 
@@ -86,7 +86,7 @@ export default new Vuex.Store({
     logout({ getters, commit }) {
       console.log(getters.config)
       console.log(cookies.get('auth-token'))
-      axios.get(SERVER + '/logout/', getters.config)
+      axios.get(SERVER + '/logout/',null,  getters.config)
         .then((response) => {
           console.log('success')
           console.log(response.data)
@@ -133,7 +133,8 @@ export default new Vuex.Store({
       }else {
         alert("인증번호가 틀립니다.")
       }
-    }  
+    },
+
     
 
 
