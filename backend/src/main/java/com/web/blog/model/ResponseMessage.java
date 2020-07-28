@@ -21,6 +21,9 @@ public class ResponseMessage {
     // Blog
     public static final String CREATE_BLOG_SUCCESS = "블로그 생성 성공";
     public static final String CREATE_BLOG_FAIL = "블로그 생성 실패";
+    public static final String SEARCH_MYBLOG_NONE = "블로그가 없습니다.";
+    public static final String SEARCH_MYBLOG_SUCCESS = "블로그 조회 성공";
+    
 
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";

@@ -2,6 +2,7 @@ package com.web.blog.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,7 @@ import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.BlogTagService;
+import com.web.blog.service.MemberService;
 import com.web.blog.service.TagService;
 import com.web.blog.service.UserService;
 import com.web.blog.service.UserService2;
@@ -49,7 +51,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-07-27, Blog 관리 Controller
+ * @version 0.1, 2020-07-28, Blog 관리 Controller
  * @see None
  * 
  */
@@ -62,9 +64,10 @@ public class BlogController {
 	private final 	BlogService 		blogService;
 	private final 	TagService 			tagService;
 	private final 	BlogTagService 		blogtagService;
+	private final 	MemberService 		memberService;
 
 	/**
-	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능.
+	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능. 
 	 * 
 	 * @param Blog String bTitle, String bSubTitle, String bContent
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_BLOG_SUCCESS), HttpStatus
@@ -99,7 +102,7 @@ public class BlogController {
 					// blog_and_tag 테이블에 추가
 					blogtagService.blogAndTag(bid, tid);
 				}
-				
+				memberService.inviteMember(bid, email);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.CREATE_BLOG_SUCCESS),HttpStatus.CREATED);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CREATE_BLOG_FAIL),HttpStatus.FORBIDDEN);
@@ -107,9 +110,32 @@ public class BlogController {
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
-	
 	}
 
+	
+	/**
+	 * 내 블로그 목록 조회 - 내가 참여하고 있는 블로그 조회
+	 * 
+	 * @param String Email
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(READ_USER,NOT_FOUND_USER), HttpStatus, data(사용자 정보)
+	 * @exception RestException - NOT_FOUND
+	 */
+	@ApiOperation(value = "내 블로그 목록 조회", response = ResponseEntity.class)
+	@GetMapping(value = "/blogs/{email}")
+	public ResponseEntity userInfo(@PathVariable String email, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			List<Blog> list = blogService.myBlogList(email);
+			
+			if(list.size()==0) {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_MYBLOG_NONE),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_MYBLOG_SUCCESS, list),HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
 	
 	
 }

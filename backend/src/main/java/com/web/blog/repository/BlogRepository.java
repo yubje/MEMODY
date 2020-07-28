@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface BlogRepository extends JpaRepository<Blog, Long> {
 
 	long countByManager(String manager);
+	
+	Blog findByBid(int bid);
+	
 }
