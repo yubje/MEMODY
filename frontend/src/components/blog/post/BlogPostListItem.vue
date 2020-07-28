@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p @click="onPostSelect">BlogPostListItem</p>
+    <p @click="onPostSelect">블로그 글</p>
   </div>
 </template>
 

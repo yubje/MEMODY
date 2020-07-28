@@ -1,6 +1,12 @@
 <template>
   <div>
-    <BlogPostListItem/>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col col-lg-10">
+          <BlogPostListItem/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
