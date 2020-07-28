@@ -2,16 +2,23 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import BlogView from '@/views/BlogView.vue'
-import Login from '@/views/user/Login.vue'
-import Signup from '@/views/user/Signup.vue'
-import ResetPW from '@/views/user/ResetPW.vue'
-import UserInfo from '@/views/user/UserInfo.vue'
-import UserInfoUpdate from '@/views/user/UserInfoUpdate.vue'
+import UserLoginView from '@/views/user/UserLoginView.vue'
+import UserLogout from '@/components/user/UserLogout.vue'
+import UserSignupView from '@/views/user/UserSignupView.vue'
+import UserResetPWView from '@/views/user/UserResetPWView.vue'
+import UserInfoView from '@/views/user/UserInfoView.vue'
+import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
+
+
+import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
+import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
+import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 
 
 Vue.use(VueRouter)
 
   const routes = [
+  // views
   {
     path: '/',
     name: 'Main',
@@ -24,28 +31,51 @@ Vue.use(VueRouter)
   },
   {
     path: '/login',
-    name: 'Login',
-    component: Login,
+    name: 'UserLoginView',
+    component: UserLoginView,
   },
   {
+    path: '/logout',
+    name: 'UserLogout',
+    component: UserLogout,
+  },
+  // users
+  {
     path: '/users/info',
-    name: 'UserInfo',
-    component: UserInfo,
+    name: 'UserInfoView',
+    component: UserInfoView,
   },
   {
     path: '/users/info/update',
-    name: 'UserInfoUpdate',
-    component: UserInfoUpdate,
+    name: 'UserInfoUpdateView',
+    component: UserInfoUpdateView,
   },
   {
     path: '/users',
-    name: 'Signup',
-    component: Signup,
+    name: 'UserSignupView',
+    component: UserSignupView,
   },
   {
     path: '/users/pw',
-    name: 'ResetPW',
-    component: ResetPW,
+    name: 'UserResetPWView',
+    component: UserResetPWView,
+  },
+  // blog setting
+  {
+    path: '/blog/settings',
+    name: 'BlogSettingsInfo',
+    component: BlogSettingsInfo,
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsCategory',
+    component: BlogSettingsCategory,
+  },
+  // blog post
+  {
+    path: '/blogs/posts',
+    name: 'BlogPostCreate',
+    component: BlogPostCreate,
   },
 ]
 
