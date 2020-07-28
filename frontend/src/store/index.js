@@ -5,8 +5,8 @@ import axios from 'axios'
 import router from '@/router'
 import cookies from 'vue-cookies'
 
-import { blog } from './modules/blog-module'
-import { main } from './main-module.js'
+import { blog } from './modules/blog-module.js'
+import { main } from './modules/main-module.js'
 
 Vue.use(Vuex)
 
@@ -16,12 +16,11 @@ export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
     userInfo: null,
-    
     //이메일 인증
     emailValidationNumber: '',
     isValid: false,
-    
   },
+
   getters: {
     isLoggedIn: state => !!state.authToken,
     config: state => ({ headers: { "auth": state.authToken } }), 
@@ -32,17 +31,21 @@ export default new Vuex.Store({
       state.authToken = token
       cookies.set('auth-token', token)
     },
+
     SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo
       window.localStorage.setItem('userInfo', userInfo);
     },
+
     SET_VALIDATION(state, number) {
       state.emailValidationNumber = number
     },
+
     SET_ISVALID(state) {
       state.isValid = true
     }
   },
+
   actions: {
     // auth
     postAuthData({ commit }, info) {
@@ -53,7 +56,7 @@ export default new Vuex.Store({
         })
         .catch(error => alert(error.response.data.message))
     },
-
+    // 로그인 (API 문서 - 10~11 D)
     login({ commit }, loginData) {
       const info = {
         data: loginData,
@@ -66,8 +69,8 @@ export default new Vuex.Store({
           router.push({ name: 'Main'})
         })
         .catch(error => alert(error.response.data.message))
-      
     },
+    // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
       axios.get(SERVER + '/logout/', getters.config)
         .then(() => {
@@ -78,6 +81,8 @@ export default new Vuex.Store({
         })
         .catch(error => alert(error.response.data.message))
     },
+
+    // 회원가입 (API 문서 - 7~9 D)
     signup({ dispatch }, signupData) {
       const info = {
         data: signupData,
@@ -86,6 +91,8 @@ export default new Vuex.Store({
       dispatch('postAuthData', info)
       router.push({ name: 'Main'})
     },
+
+    // 이메일 인증 (API 문서 - 20 D)
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
@@ -94,6 +101,7 @@ export default new Vuex.Store({
       })
       .catch(error => alert(error.response.data.message))
     },
+
     //인증번호 매칭확인
     checkValidation( {commit} ,validationNumber) {
       if (this.state.emailValidationNumber === validationNumber) {
@@ -105,13 +113,10 @@ export default new Vuex.Store({
         alert("인증번호가 틀립니다.")
       }
     }  
-    
-
-
-
   },
+
   modules: {
     blog: blog,
-    main: main
+    main: main,
   }
 })

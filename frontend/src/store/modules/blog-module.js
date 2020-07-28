@@ -1,14 +1,15 @@
+// blog 상태 관리 모듈
 import BlogService from '@/services/blog-service'
 
 export const blog = {
   namespaced: true,
   state: {
     //블로그 정보
-    blogInfoData: {
-      bName: '',
-      bTitle: '',
-      bContent: '',
-      hashtag: ''
+    blogData: {
+      btitle: null,
+      bsubtitle: null,
+      bcontent: null,
+      hashtag: null,
     },
 
     //전체 카테고리
@@ -35,8 +36,13 @@ export const blog = {
 
   },
   actions: {
-    postCreate(postData) {
-      BlogService.postCreate(postData)
+    // 블로그 추가 (API 문서 - 26~29 D)
+    createBlog(response) {
+      BlogService.createBlog(response)
+    },
+    // 블로그 게시글 작성
+    createPost(postData) {
+      BlogService.createPost(postData)
       //alert()
     }
 

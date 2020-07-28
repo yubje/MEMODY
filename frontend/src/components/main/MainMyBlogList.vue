@@ -15,7 +15,7 @@ import MainCreateBlog from '@/components/main/MainCreateBlog.vue'
 export default {
   name: 'MainMyBlogList',
   components: {
-    MainCreateBlog
+    MainCreateBlog,
   },
   
   data() {

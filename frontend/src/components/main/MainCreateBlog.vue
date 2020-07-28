@@ -50,10 +50,10 @@ export default {
   //   }
   // },
   computed: {
-    ...mapState('main', ['blogData'])
+    ...mapState('blog', ['blogData'])
   },
   methods: {
-    ...mapActions('main', ['createBlog'])
+    ...mapActions('blog', ['createBlog'])
     // ...mapActions('module', ['createBlog(blogData)'])
     // createBlog(blogData) {
     //   console.log(blogData)
