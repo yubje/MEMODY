@@ -7,7 +7,9 @@ import cookies from 'vue-cookies'
 
 import blog from './blog-module.js'
 
-Vue.use(Vuex)
+import { main } from './main-module.js'
+
+
 
 
 const SERVER = process.env.VUE_APP_SERVER
@@ -94,7 +96,7 @@ export default new Vuex.Store({
           router.push({ name: 'Main' })
         })
         .catch(error => {
-          alert(error.response)
+          alert(error)
           console.log(error)
         })
     },
@@ -138,6 +140,8 @@ export default new Vuex.Store({
 
   },
   modules: {
-    blog
+    blog, 
+    main: main,
   }
 })
+
