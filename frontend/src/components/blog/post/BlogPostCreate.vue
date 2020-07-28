@@ -4,7 +4,7 @@
       <input v-model="postData.pTitle" type="text" placeholder="제목">
     </div>
     <div>
-      <editor ref="toastuiEditor" :value="postData.pContent" :options="editorOptions" initialEditType="wysiwyg" previewStyle="vertical" />
+      <editor ref="toastuiEditor" :value="postData.pContent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
     <div> 
       <a>카테고리</a>
