@@ -7,9 +7,11 @@ import cookies from 'vue-cookies'
 
 import blog from './blog-module.js'
 
-Vue.use(Vuex)
+import { main } from './main-module.js'
 
 Vue.use(Vuex)
+
+
 
 const SERVER = process.env.VUE_APP_SERVER
 
@@ -20,7 +22,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
-    config: state => ({ headers: { auth: state.authToken } })
+    config: state => ({ headers: { "auth": state.authToken } })
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -72,7 +74,8 @@ export default new Vuex.Store({
     logout({ getters, commit }) {
       console.log(getters.config)
       console.log(cookies.get('auth-token'))
-      axios.get(SERVER + '/logout', getters.config)
+ 
+      axios.get(SERVER + '/logout/', getters.config)
         .then((response) => {
           console.log('success')
           console.log(response.data)
@@ -82,7 +85,7 @@ export default new Vuex.Store({
           router.push({ name: 'Main' })
         })
         .catch(error => {
-          alert(error.response)
+          alert(error)
           console.log(error)
         })
     },
@@ -99,6 +102,8 @@ export default new Vuex.Store({
 
   },
   modules: {
-    blog
+    blog, 
+    main: main,
   }
 })
+
