@@ -176,7 +176,7 @@ public class LoginController {
 	@GetMapping(value = "/auth/{email}")
 	public ResponseEntity authEmail(@PathVariable String email) {
 		
-		if(userService.findByEmail(email).isPresent()) {
+		if(!userService.findByEmail(email).isPresent()) {
 			// 인증코드 생성
 			String code = UUID.randomUUID().toString().replaceAll("-", "");
 			code = code.substring(0, 10);
@@ -187,18 +187,13 @@ public class LoginController {
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
 			
-			//String ecdPwd = passwordEncoder.encode(tmpPassword);
-//			System.out.println(ecdPwd);
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
-				// DB에 임시 비밀번호로 재설정 해줘야함. 암호화 해서 
-				//userService.tempPwdUpdate(email,ecdPwd);
-				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.OK);
 			}
 		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.NOT_FOUND_USER),HttpStatus.FORBIDDEN);
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.ALREADY_USER),HttpStatus.FORBIDDEN);
 		}
 
 	}
