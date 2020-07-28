@@ -111,7 +111,6 @@ public class LoginController {
 	@ApiOperation(value = "로그아웃", response = ResponseEntity.class)
 	@GetMapping(path = "/logout")
 	public ResponseEntity logout(HttpServletRequest req) {
-		System.out.println("test");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			Date expirationDate = jwtTokenProvider.getExpirationDate(token);
@@ -230,6 +229,20 @@ public class LoginController {
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_RESET_PWD),HttpStatus.FORBIDDEN);
 		}
+	}
+	
+	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)
+	@GetMapping(value = "/users/{uid}/nickname")
+	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
+//		System.out.println("회원정보 조회");
+		if(!userService.findByUid(uid).isPresent()) {
+//			System.out.println("해당 닉네임으로 조회된 회원 없음. 닉네임 사용가능");
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),HttpStatus.OK);
+		}else {
+//			System.out.println("해당 닉네임으로 조회된 회원 있음. 닉네임 사용 불가능");
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST),HttpStatus.FORBIDDEN);
+		}
+
 	}
 	
 }

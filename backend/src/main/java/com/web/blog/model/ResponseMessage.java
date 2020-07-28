@@ -12,6 +12,8 @@ public class ResponseMessage {
     public static final String CREATE_CODE = "인증번호 생성";
     public static final String RESET_PWD = "비밀번호 재설정 성공";
     public static final String FAIL_RESET_PWD = "비밀번호 재설정 실패";
+    public static final String SEARCH_NICKNAME_NONE = "닉네임 사용 가능";
+    public static final String SEARCH_NICKNAME_EXIST = "이미 존재하는 닉네임입니다.";
     
     
     public static final String ALREADY_USER = "이미 존재하는 Email입니다.";
@@ -20,6 +22,13 @@ public class ResponseMessage {
     public static final String UPDATE_USER = "회원 정보 수정 성공";
     public static final String FAIL_UPDATE_USER = "회원 정보 수정 실패";
     public static final String DELETE_USER = "회원 탈퇴 성공";
+    
+    // Blog
+    public static final String CREATE_BLOG_SUCCESS = "블로그 생성 성공";
+    public static final String CREATE_BLOG_FAIL = "블로그 생성 실패";
+    public static final String SEARCH_MYBLOG_NONE = "블로그가 없습니다.";
+    public static final String SEARCH_MYBLOG_SUCCESS = "블로그 조회 성공";
+    
 
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
