@@ -21,29 +21,43 @@ export const blog = {
     //블로그 게시글 상세정보
     postData: {
       pid: '',
-      pTitle: '',
-      pContent: '',
+      lcid: '1', /***나중에 수정***/
+      mcid: '1', /***나중에 수정***/
+      ptitle: '',
+      pcontent: '',
       author: '',
       post_time: '',
       update_time: '',
-      type: '' //'SAVE' = 임시저장, '' = 게시글 등록
+      ptype: ''
     }
   },
   getters: {
     
   },
   mutations: {
-
+    initPostData(state) {
+      state.postData = {
+        pid: '',
+        lcid: '1', /***나중에 수정***/
+        mcid: '1', /***나중에 수정***/
+        ptitle: '',
+        pcontent: '',
+        author: '',
+        post_time: '',
+        update_time: '',
+        ptype: ''
+      }
+    }
   },
   actions: {
     // 블로그 추가 (API 문서 - 26~29 D)
     createBlog(response) {
       BlogService.createBlog(response)
     },
-    // 블로그 게시글 작성
-    createPost(postData) {
-      BlogService.createPost(postData)
-      //alert()
+
+    // 블로그 게시글 작성 (API 문서 - 44D)
+    createPost(response) {
+      BlogService.createPost(response)
     }
 
   }
