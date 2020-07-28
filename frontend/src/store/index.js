@@ -114,7 +114,7 @@ export default new Vuex.Store({
   },
   modules: {
     blog, 
-    main: main,
+    main: main
   }
 })
 
