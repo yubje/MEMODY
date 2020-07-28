@@ -5,12 +5,10 @@ import axios from 'axios'
 import router from '@/router'
 import cookies from 'vue-cookies'
 
-import blog from './blog-module.js'
-
+import { blog } from './modules/blog-module'
 import { main } from './main-module.js'
 
 Vue.use(Vuex)
-
 
 const SERVER = process.env.VUE_APP_SERVER
 
@@ -61,7 +59,7 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
-      axios.post(SERVER + info.location, info.data, )
+      axios.post(SERVER + info.location, info.data)
         .then((response) => {
           commit('SET_TOKEN', response.headers.auth)
           commit('SET_USERINFO', response.data.data)
@@ -113,8 +111,7 @@ export default new Vuex.Store({
 
   },
   modules: {
-    blog, 
+    blog: blog,
     main: main
   }
 })
-
