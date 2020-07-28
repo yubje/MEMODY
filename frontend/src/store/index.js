@@ -15,11 +15,17 @@ const SERVER = process.env.VUE_APP_SERVER
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
-    userInfo: null
+    userInfo: null,
+    
+    //이메일 인증
+    emailValidationNumber: '',
+    isValid: false,
+    
   },
   getters: {
     isLoggedIn: state => !!state.authToken,
-    config: state => ({ headers: { auth: state.authToken } })
+    config: state => ({ headers: { "auth": state.authToken } }),
+    
   },
   mutations: {
     SET_TOKEN(state, token) {
@@ -29,7 +35,14 @@ export default new Vuex.Store({
     SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo
       window.localStorage.setItem('userInfo', userInfo);
+    },
+    SET_VALIDATION(state, number) {
+      state.emailValidationNumber = number
+    },
+    SET_ISVALID(state) {
+      state.isValid = true
     }
+  
 
   },
   actions: {
@@ -71,7 +84,7 @@ export default new Vuex.Store({
     logout({ getters, commit }) {
       console.log(getters.config)
       console.log(cookies.get('auth-token'))
-      axios.get(SERVER + '/logout', getters.config)
+      axios.get(SERVER + '/logout/', getters.config)
         .then((response) => {
           console.log('success')
           console.log(response.data)
@@ -93,17 +106,33 @@ export default new Vuex.Store({
       dispatch('postAuthData', info)
       router.push({ name: 'Main'})
     },
-    duplicated( { dispatch }, email) {
-      console.log('중복체크')
-      console.log(dispatch)
-      console.log(email)
-      axios.get(`${SERVER}'/users/'${email}`)
+    validateEmail({ commit }, email) {
+      console.log(`${SERVER}/auth/${email}`)
+      axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
+        commit('SET_VALIDATION', response.data.data )
+        console.log(response.data.data)
         
-        console.log(response)
       })
-
+      .catch((err) => {
+        console.log(err)
+        console.log('validation Failed')
+      })
     },
+    //인증번호 매칭확인
+    checkValidation( {commit} ,validationNumber) {
+      console.log(this.state.emailValidationNumber)
+      console.log(validationNumber)
+      if (this.state.emailValidationNumber === validationNumber) {
+        alert("확인되었습니다.")
+        commit('SET_ISVALID')
+        window.$('#email-validation').modal('hide')
+        
+      }else {
+        alert("인증번호가 틀립니다.")
+      }
+    }  
+    
 
 
 

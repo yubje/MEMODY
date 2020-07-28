@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal fade" id="signup-modal" data-keyboard="false" tabindex="-1" role="dialog"
+    <div class="modal fade" data-backdrop="static" id="signup-modal" data-keyboard="false" tabindex="-1" role="dialog"
       aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -22,10 +22,9 @@
               <span class="col-3">이메일 입력</span>
               <div class="row col-9 justify-content-between mt-2">
                 <input class="col-8" v-model="signupData.email" type="text" placeholder="이메일을 입력하세요">
-                <button class="col-4" @click="duplicated(signupData.email)">중복체크</button>
                 <div class="example-modal-window">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm" >E-mail 인증</button>
-                  <MyModal/>
+                  <button @click="validateEmail(signupData.email)" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm" >E-mail 인증</button>
+                  <MyModal  />
                 </div>
               </div>
             </div>
@@ -39,7 +38,7 @@
             </div>
             <div class="row justify-content-center mt-5">
               <button class=" col-10 btn btn-primary" data-dismiss="modal"
-                @click.prevent="signup(signupData)">회원가입</button>
+                @click.prevent="signup(signupData)" :disabled="isValid==false" >회원가입</button>
             </div>
           </div>
         </div>
@@ -51,9 +50,7 @@
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
+  import { mapActions, mapState} from 'vuex'
 
   import MyModal from "../../components/Modal.vue";
 
@@ -70,17 +67,19 @@
           password: '',
         },
         password2: '',
-        modal: false,
-        emailValidation: false,
       };
     },
     mounted() {
       window.$('#signup-modal').modal('show')
-
     },
+  
     methods: {
-      ...mapActions(["signup","duplicated"]),
+      ...mapActions(["signup","validateEmail"]),
     },
+    computed: {
+      ...mapState(['isValid'])
+    },
+
   }
 </script>
 
