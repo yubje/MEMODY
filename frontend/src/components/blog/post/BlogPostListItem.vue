@@ -1,20 +1,20 @@
 <template>
   <div>
-    <p @click="onPostSelect">블로그 글</p>
+      <!-- <hr>
+      <a>글제목</a>
+      <a style="float:right">작성일</a>
+      <hr>
+      <a>글제목</a>
+      <a style="float:right">작성일</a>
+      <hr>
+      <a>글제목</a>
+      <a style="float:right">작성일</a> -->
   </div>
+  
 </template>
 
 <script>
 export default {
   name: 'BlogPostListItem',
-  methods: {
-    onPostSelect() {
-      this.$store.commit('storeFunctionName')
-    }
-  }
 }
 </script>
-
-<style>
-
-</style>
