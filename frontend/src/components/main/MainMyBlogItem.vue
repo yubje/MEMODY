@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="card">
+    <div class="card" @click="moveToBlog">
       <div class="card-body">
-        <span v-for="hashtags in myblog.hashtags" :key="hashtags"> #{{hashtags.tname}}</span>
+        <span v-for="hashtags in myblog.hashtags" :key="hashtags.id"> #{{hashtags.tname}}</span>
         <h5 class="card-title">{{myblog.btitle}}</h5>
         <h6 class="card-subtitle mb-2 text-muted">{{myblog.bsubtitle}}</h6>
         <p class="card-text">{{myblog.bcontent}}</p>
@@ -16,8 +16,16 @@
 export default {
   name: 'MainMyBlogItem',
   props: {
-    myblog: Object
-  }
+    myblog: {
+      type: Object
+    }
+  },
+  methods: {
+    moveToBlog() {
+      console.log('hui')
+    }
+  },
+
 }
 </script>
 
