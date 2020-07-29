@@ -85,10 +85,6 @@ public class MainController {
 			
 			List<Blog> myList = blogService.myBlogList(email);
 			
-			List<Blog> mainList = new ArrayList<Blog>();
-			
-			mainList.addAll(myList);
-			mainList.addAll(recommendList);
 			Map<String,List<Blog>> result = new HashMap<String, List<Blog>>();
 			result.put("myBlog",myList);
 			result.put("recommendBlog",recommendList);
