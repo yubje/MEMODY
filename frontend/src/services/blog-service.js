@@ -1,9 +1,30 @@
-// import axios from 'axios'
+import axios from 'axios'
+import router from '@/router'
+import cookies from 'vue-cookies'
 
-// const SERVER = process.env.VUE_APP_SERVER
+const SERVER = process.env.VUE_APP_SERVER
 
-// class BlogService {
+class BlogService {
 
-// }
+  // 블로그 추가 (API 문서 - 26~29 D)
+  createBlog(response) {
+    axios.post(`${SERVER}/blogs`, response.state.blogData, {headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        router.push({ name: 'Main'})
+      })
+      .catch(error => console.log(error.response.data.message))
+  }
 
-// export default new BlogService()
+  // 블로그 게시글 작성 (API 문서 - 44D)
+  createPost(response) {
+    console.log(cookies.get('auth-token'))
+    axios.post(`${SERVER}/blogs/1/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
+      .then((result) => {
+        alert(result.data.message)
+        router.push({ name: 'BlogView'})
+      })
+      .catch(error => console.log(error.data.message))
+  }
+}
+
+export default new BlogService()

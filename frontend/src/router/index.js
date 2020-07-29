@@ -14,6 +14,8 @@ import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategor
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 
+import MainSearchResultView from '@/views/main/MainSearchResultView'
+
 
 Vue.use(VueRouter)
 
@@ -29,6 +31,7 @@ Vue.use(VueRouter)
     name: 'BlogView',
     component: BlogView,
   },
+  // users
   {
     path: '/login',
     name: 'UserLoginView',
@@ -39,7 +42,6 @@ Vue.use(VueRouter)
     name: 'UserLogout',
     component: UserLogout,
   },
-  // users
   {
     path: '/users/info',
     name: 'UserInfoView',
@@ -55,20 +57,13 @@ Vue.use(VueRouter)
     name: 'UserSignupView',
     component: UserSignupView,
   },
-<<<<<<< HEAD
-=======
-  {
-    path: '/users',
-    name: 'Signup',
-    component: Signup,
-  },
->>>>>>> 8d7fe3860811236e8d5f9764e893364b074da51e
   {
     path: '/users/pw',
     name: 'UserResetPWView',
     component: UserResetPWView,
   },
-  // blog setting
+  // blog
+  // blog settings
   {
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
@@ -85,6 +80,16 @@ Vue.use(VueRouter)
     name: 'BlogPostCreate',
     component: BlogPostCreate,
   },
+  // main
+  {
+    path: '/main',
+    name: 'MainSearchResultView',
+    component: MainSearchResultView,
+    props(route) {
+      return { search: route.query.search }
+    }
+
+  }
 ]
 
 const router = new VueRouter({

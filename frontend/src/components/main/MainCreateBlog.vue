@@ -39,26 +39,11 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'MainCreateBlog',
-  // data() {
-  //   return {
-  //     blogData: {
-  //       btitle: null,
-  //       bsubtitle: null,
-  //       bcontent: null,
-  //       hashtag: null,
-  //     }
-  //   }
-  // },
   computed: {
-    ...mapState('main', ['blogData'])
+    ...mapState('blog', ['blogData'])
   },
   methods: {
-    ...mapActions('main', ['createBlog'])
-    // ...mapActions('module', ['createBlog(blogData)'])
-    // createBlog(blogData) {
-    //   console.log(blogData)
-    // }
-    // ...mapActions('main/createBlog')
+    ...mapActions('blog', ['createBlog'])
   },
 }
 </script>
