@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-for="post in this.getpostListData" :key="post.pid">
-      <hr>
+    <div id="post" v-for="post in this.getpostListData" :key="post.pid" @click="blogPostDetail(post)">
+      <hr style="margin-top: 0; margin-bottom:0">
       <a>{{post.ptitle}}</a>
-      <a style="float:right">{{post.post_time}}</a>
+      <a style="float:right">{{post.postTime}}</a>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'BlogPostListItem',
@@ -17,8 +17,23 @@ export default {
     this.lookupPostList
   },
   computed: {
-    ...mapActions('blog', ['lookupPostList']),
-    ...mapGetters('blog', ['getpostListData'])
+    ...mapGetters('blog', ['getpostListData']),
+    ...mapActions('blog', ['lookupPostList'])
+  },
+  methods: {
+    ...mapMutations('blog', ['setPostDetailData']),
+
+    blogPostDetail(post) {
+      this.setPostDetailData(post)
+      this.$router.push({ name: 'BlogPostDetail'})
+    }
   }
 }
 </script>
+
+<style>
+#post:hover {
+  background: rgb(183, 190, 207);
+  cursor: pointer;
+}
+</style>

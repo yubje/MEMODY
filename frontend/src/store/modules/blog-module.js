@@ -26,9 +26,9 @@ export const blog = {
       ptitle: '',
       pcontent: '',
       author: '',
-      post_time: '',
+      postTime: '',
       update_time: '',
-      ptype: ''
+      ptype: null
     }
   },
   getters: {
@@ -45,14 +45,18 @@ export const blog = {
         ptitle: '',
         pcontent: '',
         author: '',
-        post_time: '',
+        postTime: '',
         update_time: '',
         ptype: ''
       }
     },
 
-    setpostListData(state, postList) {
+    setPostListData(state, postList) {
       state.postListData = postList;
+    },
+
+    setPostDetailData(state, postData) {
+      state.postData = postData;
     }
   },
   actions: {
@@ -70,7 +74,7 @@ export const blog = {
     lookupPostList({commit}) {
       return BlogService.lookupPostList()
       .then(postListData => {
-        commit('setpostListData', postListData)
+        commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
     }

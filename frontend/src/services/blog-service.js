@@ -29,7 +29,7 @@ class BlogService {
   lookupPostList() {
     return axios.get(`${SERVER}/blogs/1/posts/`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
-        console.log(result.data.data)
+        console.log(result.data.data) ////////////////////////////
         return result.data.data
       })
   }
