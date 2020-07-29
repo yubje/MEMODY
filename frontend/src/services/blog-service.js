@@ -29,9 +29,23 @@ class BlogService {
   lookupPostList() {
     return axios.get(`${SERVER}/blogs/1/posts/`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
-        console.log(result.data.data) ////////////////////////////
         return result.data.data
       })
+  }
+
+  // 블로그 게시글 수정 (API 문서 - 54D)
+  updatePost() {
+
+  }
+
+  // 블로그 게시글 삭제 (API 문서 - 65D)
+  deletePost(pid) {
+    axios.delete(`${SERVER}/blogs/posts`, pid, {headers: {"auth": cookies.get('auth-token')}})
+    .then((result) => {
+      alert(result.data.message)
+      router.push({ name: 'BlogPostList'})
+    })
+    .catch(error => console.log(error.response.data.message))
   }
 }
 

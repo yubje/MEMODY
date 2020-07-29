@@ -80,17 +80,17 @@ Vue.use(VueRouter)
   },
   // blog post
   {
-    path: '/blogs/post/create',
+    path: '/blog/post/create',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
   },
   {
-    path: '/blogs/posts',
+    path: '/blog/posts',
     name: 'BlogPostList',
     component: BlogPostList,
   },
   {
-    path: '/blogs/post',
+    path: '/blog/post',
     name: 'BlogPostDetail',
     component: BlogPostDetail,
   },

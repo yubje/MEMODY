@@ -77,6 +77,11 @@ export const blog = {
         commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
+    },
+
+    // 블로그 게시글 삭제 (API 문서 - 65D)
+    deletePost(pid) {
+      BlogService.deletePost(pid)
     }
   }
 }
