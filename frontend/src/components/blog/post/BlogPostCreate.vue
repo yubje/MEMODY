@@ -1,10 +1,10 @@
 <template>
   <div>
     <div>
-      <input v-model="postData.pTitle" type="text" placeholder="제목">
+      <input v-model="postData.ptitle" type="text" placeholder="제목">
     </div>
     <div>
-      <editor ref="toastuiEditor" :value="postData.pContent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
+      <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
     <div> 
       <a>카테고리</a>
@@ -26,7 +26,7 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/vue-editor';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostCreate',
@@ -41,26 +41,25 @@ export default {
       }
     }
   },
+  created() {
+    this.initPostData
+  },
   computed: {
-    ...mapState('blog', ['postData'])
+    ...mapState('blog', ['postData']),
+    ...mapMutations('blog', ['initPostData'])
   },
   methods: {
-    ...mapActions('blog', ['postCreate']),
+    ...mapActions('blog', ['createPost']),
 
     typeChange() {
-      this.postData.type = 'SAVE'
+      this.postData.ptype = 'SAVE'
       this.blogPostCreate()
     },
 
     blogPostCreate() {
-      this.postData.pContent = this.$refs.toastuiEditor.invoke("getMarkdown")
-      this.postCreate(this.postData)
-
+      this.postData.pcontent = this.$refs.toastuiEditor.invoke("getMarkdown")
+      this.createPost()
     }
   }
 }
 </script>
-
-<style>
-
-</style>
