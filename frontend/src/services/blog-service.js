@@ -34,8 +34,13 @@ class BlogService {
   }
 
   // 블로그 게시글 수정 (API 문서 - 54D)
-  updatePost() {
-
+  updatePost(response) {
+    axios.put(`${SERVER}/blogs/post`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
+    .then((result) => {
+      alert(result.data.message)
+      router.push({ name: 'BlogPostList'})
+    })
+    .catch(error => console.log(error.response.data.message))
   }
 
   // 블로그 게시글 삭제 (API 문서 - 65D)

@@ -79,6 +79,11 @@ export const blog = {
       .catch(error => console.log(error.data.message))
     },
 
+    // 블로그 게시글 수정 (API 문서 - 54D)
+    updatePost(response) {
+      BlogService.updatePost(response)
+    },
+
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(pid) {
       BlogService.deletePost(pid)
