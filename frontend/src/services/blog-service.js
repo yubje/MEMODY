@@ -17,11 +17,20 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
-    console.log(cookies.get('auth-token'))
     axios.post(`${SERVER}/blogs/1/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
         router.push({ name: 'BlogView'})
+      })
+      .catch(error => console.log(error.data.message))
+  }
+
+  // 블로그 게시글 전체 조회 (API 문서 - 58D)
+  lookupPostList() {
+    axios.get(`${SERVER}/blogs/1/posts/`, {headers: {"auth": cookies.get('auth-token')}})
+      .then((result) => {
+        console.log(result.data.data)
+        return result.data.data
       })
       .catch(error => console.log(error.data.message))
   }
