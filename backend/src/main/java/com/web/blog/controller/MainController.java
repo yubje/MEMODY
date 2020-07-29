@@ -81,8 +81,10 @@ public class MainController {
 		String token = req.getHeader("auth");
 		String email = jwtTokenProvider.getUserPk(token);
 		if (jwtTokenProvider.validateToken(token)) {
+			System.out.println("BlogController");
 			List<Blog> recommendList = blogService.recommendBlogs();
 			
+			System.out.println("BlogController>>>>");
 			List<Blog> myList = blogService.myBlogList(email);
 			
 			List<Blog> mainList = new ArrayList<Blog>();

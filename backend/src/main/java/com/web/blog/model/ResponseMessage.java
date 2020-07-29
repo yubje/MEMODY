@@ -44,6 +44,8 @@ public class ResponseMessage {
     public static final String SEARCH_ALLPOST_SUCCESS = "전체 게시글 목록 조회 성공";
     public static final String SEARCH_POST_SUCCESS = "게시글 상세 조회 성공";
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
+    public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
+    public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
     
 
     public static final String AUTHORIZED = "인증 성공";
