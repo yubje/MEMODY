@@ -19,15 +19,15 @@ public class CommentService {
 
 	private final CommentRepository commentRepository;
 	
-	public int createComments(Comments comment) {
+	public void createComments(Comments comment) {
 		System.out.println(comment);
-		return commentRepository.save(Comments.builder()
+		commentRepository.save(Comments.builder()
 				.pid(comment.getPid())
 				.comment(comment.getComment())
 				.email(comment.getEmail())
 				.comment_time(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
-				.build()).getPid();
+				.build());
 	}
 	
 	public List<Comments> listAllComments(int pid){

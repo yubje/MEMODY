@@ -100,7 +100,7 @@ public class PostController {
 			List<Post> list = postService.listAllPost(bid);
 			System.out.println(list);
 			if(list.size()==0) {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
 			}
