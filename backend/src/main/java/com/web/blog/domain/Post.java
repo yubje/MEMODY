@@ -75,6 +75,23 @@ public class Post {
 				+ ", ptype=" + ptype + "]";
 	}
 
+	public void setPtitle(String ptitle) {
+    	this.ptitle = ptitle;
+    }
+	public void setPcontent(String pcontent) {
+		this.pcontent = pcontent;
+	}
+	public void setUpdate_time(LocalDateTime update_time) {
+		this.update_time = update_time;
+	}
+	public void setPtype(String ptype) {
+		this.ptype = ptype;
+	}
+//	public void setPcontent(String pcontent) {
+//		this.pcontent = pcontent;
+//	}
+	
+	
 //	public void setManager(String manager) {
 //		this.manager = manager;
 //	}

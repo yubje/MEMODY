@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,10 +97,10 @@ public class PostController {
 		String token = req.getHeader("auth");
 		System.out.println("블로그 내 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			List<Post> list = postService.postListAll(bid);
+			List<Post> list = postService.listAllPost(bid);
 			System.out.println(list);
 			if(list.size()==0) {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
 			}
@@ -145,12 +146,42 @@ public class PostController {
 	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("게시글 수정 ");
-		if (jwtTokenProvider.validateToken(token)) {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		System.out.println(post);
+		
+		// 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(post.getAuthor())) {
+			
+			postService.updatePost(post);
+			System.out.println("수정 성공");
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, post),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
 	}
 	
+	/**
+	 * 게시글 삭제 - 게시글을 삭제한다.
+	 * 
+	 * @param String Email
+	 * @return ResponseEntity<Response> - 
+	 * @exception RestException - NOT_FOUND
+	 */
+	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class)
+	@DeleteMapping(value = "/blogs/posts")
+	public ResponseEntity deletePost(int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("게시글 삭제 ");
+		System.out.println(pid);
+		
+//		 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
+			
+			postService.deletePost(pid);
+			System.out.println("삭제 성공");
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
 	
 }

@@ -87,6 +87,7 @@ public class BlogService {
 			}
 		});
 		int len = list.size();
+		System.out.println("blogService >> "+len);
 		for(int i=0;i<len;i++) {
 			List<Blogtag> hashtags = blogtagRepository.findByBid(list.get(i).getBid());
 			for(Blogtag tag:hashtags) {
