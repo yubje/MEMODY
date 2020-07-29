@@ -11,7 +11,7 @@
       class="text-left"
     >
       <a v-for="hashtag in blog.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-      <router-link :to="{ name: 'BlogView' }" ><h3>{{ blog.btitle }}</h3></router-link>
+      <router-link :to="{ name: 'BlogView', query: { bid: blog.bid} }" ><h3>{{ blog.btitle }}</h3></router-link>
       <p>{{ blog.bcontent }}</p>
       <hr>
     </div>
