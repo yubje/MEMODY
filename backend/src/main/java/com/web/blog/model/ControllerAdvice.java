@@ -1,4 +1,4 @@
-package com.web.blog.advice;
+package com.web.blog.model;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.web.blog.config;
+package com.web.blog.config.security;
 
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
