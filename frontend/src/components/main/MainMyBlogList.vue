@@ -1,38 +1,33 @@
 <template>
   <div>
     <h3>내 블로그</h3>
-    <div style="border:1px solid; height:150px; width:85%; margin:auto">
-      내 블로그 들어갈 자리!
-      <button @click="show" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlogModal">블로그 생성</button>
+    <div style="border:1px solid;  width:85%; margin:auto" class="container-fluid">
+      
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlogModal">블로그 생성</button>
+      <div class="row">
+      <MainMyBlogItem class="col-md-4" v-for="myblog in myBlogs" :key="myblog.bid" :myblog="myblog"/>
+
+      </div>
       <MainCreateBlog/>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import MainCreateBlog from '@/components/main/MainCreateBlog.vue'
+import MainMyBlogItem from '@/components/main/MainMyBlogItem.vue'
+
 export default {
   name: 'MainMyBlogList',
+  props: {
+    myBlogs : Array,
+  },
   components: {
     MainCreateBlog,
+    MainMyBlogItem
   },
-  
-  data() {
-    return {
-      myBlog: []
-    }
-  },
-  created() {
-    // 로그인 후 내 블로그 목록 조회 (API 문서 - 62D)
-    axios.get(`${process.env.VUE_APP_SERVER}/main/after`)
-      .then(response => {
-        console.log(response.data)
-        this.myBlog = response.data
-      })
-      .catch(error => console.log(error.response.data))
-  },
-
+  mounted() {
+  }
 }
 </script>
 
