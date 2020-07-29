@@ -34,7 +34,6 @@ public class BlogService {
 	private final BlogTagRepository blogtagRepository;
 	
 	public int createBlog(Blog blog) {
-		System.out.println(blog);
 		return blogRepository.save(Blog.builder()
 				.btitle(blog.getBtitle())
 				.bsubtitle(blog.getBsubtitle())
@@ -66,6 +65,15 @@ public class BlogService {
 		return result;
 	}
 
+	public boolean checkBlog(int bid) {
+		Blog blog = blogRepository.findByBid(bid);
+		if(blog==null) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
 	public Blog blogInfo(int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		blog.setViews(blog.getViews()+1);
@@ -100,4 +108,43 @@ public class BlogService {
 			return list;
 		}
 	}
+	
+	//////////////////////////////
+	
+	// 수정
+	//blogService.updateBlog(user, changeBlog,changeTag,bid))
+	public boolean updateBlog(String user,Blog changeBlog,String changeTag, int bid) {
+		Blog blog = blogRepository.findByBid(bid);
+		System.out.println(blog);
+		if(user.equals(blog.getManager())) {
+			System.out.println("수정 시작");
+			blogRepository.save(Blog.builder()
+					.bid(bid)
+					.btitle(changeBlog.getBtitle())
+					.bsubtitle(changeBlog.getBsubtitle())
+					.bcontent(changeBlog.getBcontent())
+					.manager(blog.getManager())
+					.views(blog.getViews())
+					.build());
+			
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	// 삭제
+	public boolean deleteBlog(String user,int bid) {
+		Blog blog = blogRepository.findByBid(bid);
+		if(user.equals(blog.getManager())) {
+			System.out.println("수정 시작");
+			blogRepository.deleteByBid(bid);
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
+	
+	
 }

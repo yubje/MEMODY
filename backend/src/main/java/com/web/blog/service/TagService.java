@@ -16,7 +16,6 @@ public class TagService {
 	private final TagRepository tagRepository;
 
 	public int createTag(String tname) {
-		System.out.println(tname);
 		return tagRepository.save(Tag.builder()
 				.tname(tname).build()).getTid();
 	}
