@@ -19,11 +19,18 @@ export default new Vuex.Store({
     //이메일 인증
     emailValidationNumber: '',
     isValid: false,
+    // 아이디 중복 확인 
+    uniqueId: false,
   },
 
   getters: {
     isLoggedIn: state => !!state.authToken,
     config: state => ({ headers: { "auth": state.authToken } }), 
+    userUpdateInfo: state => ({
+      "uid": state.userInfo.uid,
+      "email": state.userInfo.email,
+      "password": null,
+    })
   },
 
   mutations: {
@@ -43,7 +50,14 @@ export default new Vuex.Store({
 
     SET_ISVALID(state) {
       state.isValid = true
+    },
+
+    // 아이디 중복 확인 
+    SET_UNIQUEID(state) {
+      state.uniqueId = !state.uniqueId
     }
+
+
   },
 
   actions: {
@@ -103,7 +117,7 @@ export default new Vuex.Store({
     },
 
     //인증번호 매칭확인
-    checkValidation( {commit} ,validationNumber) {
+    checkValidation( { commit } ,validationNumber) {
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
         commit('SET_ISVALID')
@@ -112,7 +126,37 @@ export default new Vuex.Store({
       } else {
         alert("인증번호가 틀립니다.")
       }
-    }  
+    },
+    // 회원 검색(닉네임) (API 문서 - 21 D)
+    lookUpNickname({ commit }, uid) {
+      console.log(uid)
+      axios.get(`${SERVER}/users/${uid}/nickname`)
+        .then(response => {
+          if (response.data.status == 200) {
+            alert("닉네임을 변경할 수 있습니다!")
+            console.log(response.getters.userUpdateInfo)
+            commit('SET_UNIQUEID')
+          } else {
+            alert("닉네임을 변경할 수 없습니다.")
+          }
+        })
+        .catch(error => alert(error.response.data.message))
+    },
+    // 회원 정보 수정 (API 문서 - 15~17 D)
+    // updateUserInfo({ getters }, response) {
+    updateUserInfo({ state, getters, commit, dispatch }, updateInfo) {
+      commit('SET_UNIQUEID')
+      if (state.uniqueId) {
+        console.log(updateInfo)
+        axios.put(`${SERVER}/users`, updateInfo, getters.config)
+          .then(response => {
+            commit('SET_USERINFO', response.data.data)
+            commit('SET_UNIQUEID')
+            dispatch('logout')
+          })
+          .catch(error => alert(error))
+      }
+    }
   },
 
   modules: {
