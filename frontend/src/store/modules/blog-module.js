@@ -15,7 +15,7 @@ export const blog = {
     //전체 카테고리
     categoryListData: [],
 
-    //선택한 카테고리에 대한 전체 글 목록
+    //전체 글 목록
     postListData: [],
 
     //블로그 게시글 상세정보
@@ -33,7 +33,6 @@ export const blog = {
   },
   getters: {
     getpostListData(state) {
-      console.log(state.postListData)
       return state.postListData;
     }
   },
@@ -67,11 +66,13 @@ export const blog = {
       BlogService.createPost(response)
     },
 
-    // 블로그 게시글 전체 조회 (API 문서 - 58D)
+    // 블로그 게시글 전체 조회 (API 문서 - 62D)
     lookupPostList({commit}) {
-      //postList = BlogService.lookupPostList()
-      commit('setpostListData', BlogService.lookupPostList())
-      console.log("1")
+      return BlogService.lookupPostList()
+      .then(postListData => {
+        commit('setpostListData', postListData)
+      })
+      .catch(error => console.log(error.data.message))
     }
   }
 }

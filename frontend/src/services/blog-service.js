@@ -25,14 +25,13 @@ class BlogService {
       .catch(error => console.log(error.data.message))
   }
 
-  // 블로그 게시글 전체 조회 (API 문서 - 58D)
+  // 블로그 게시글 전체 조회 (API 문서 - 62D)
   lookupPostList() {
-    axios.get(`${SERVER}/blogs/1/posts/`, {headers: {"auth": cookies.get('auth-token')}})
+    return axios.get(`${SERVER}/blogs/1/posts/`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         console.log(result.data.data)
         return result.data.data
       })
-      .catch(error => console.log(error.data.message))
   }
 }
 
