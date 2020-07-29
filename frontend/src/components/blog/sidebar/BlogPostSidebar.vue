@@ -4,13 +4,18 @@
     <div>
       <router-link :to="{ name: 'BlogPostCreate' }">새글쓰기</router-link>
     </div>
-    <router-link :to="{ name: 'BlogView' }">Blog Home</router-link>
+    <div>
+      <router-link :to="{ name: 'BlogView' }">Blog Home</router-link>
+    </div>
+    <div>
+      <router-link :to="{ name: 'BlogPostList' }">전체글조회</router-link>
+    </div>
     <div v-for="category in categories" :key="category">
       <router-link :to="{ name: 'BlogCategory' }">{{ category }}</router-link>
     </div>
-    <router-link :to="{name: 'BlogSettingsInfo'}"> 
-      Settings
-    </router-link>
+    <div>
+      <router-link :to="{name: 'BlogSettingsInfo'}">Settings</router-link>
+    </div>
   </div>
 </template>
 
@@ -22,11 +27,6 @@ export default {
   components: {
     
   },
-  // props: {
-  //   categories: {
-  //     type: String,
-  //   }
-  // }
   data() {
     return {
       categories: ['category1', 'category2']
@@ -43,7 +43,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>
