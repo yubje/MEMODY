@@ -15,4 +15,6 @@ public interface BlogTagRepository extends JpaRepository<Blogtag, Long> {
 	List<Blogtag> findByBid(int bid);
 	@Transactional
 	void deleteByBid(int bid);
+	
+	List<Blogtag> findDistinctByTnameContaining(String tname);
 }
