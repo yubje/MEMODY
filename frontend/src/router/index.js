@@ -13,7 +13,7 @@ import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
-
+import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 
 Vue.use(VueRouter)
 
@@ -74,9 +74,14 @@ Vue.use(VueRouter)
   },
   // blog post
   {
-    path: '/blogs/posts',
+    path: '/blogs/post',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
+  },
+  {
+    path: '/blogs/posts',
+    name: 'BlogPostList',
+    component: BlogPostList,
   },
 ]
 
