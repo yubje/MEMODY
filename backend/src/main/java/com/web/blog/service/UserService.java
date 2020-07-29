@@ -59,14 +59,6 @@ public class UserService implements UserDetailsService {
 		});
 	}
 	
-//	public void userUpdate(Users user, String password) {
-//		Optional<Users> updateUser = userRepository.findByEmail(user.getEmail());
-//		updateUser.ifPresent(selectUser->{
-//			selectUser.setUid(user.getUid());
-//			selectUser.setPassword(password);
-//			userRepository.save(selectUser);
-//		});
-//	}
 	public void userUpdate(String email, String uid, String password) {
 		Optional<Users> updateUser = userRepository.findByEmail(email);
 		updateUser.ifPresent(selectUser->{
@@ -74,5 +66,10 @@ public class UserService implements UserDetailsService {
 			selectUser.setPassword(password);
 			userRepository.save(selectUser);
 		});
+	}
+	
+	@Transactional
+	public Optional<Users> findByUid(String uid) {
+		return userRepository.findByUid(uid);
 	}
 }
