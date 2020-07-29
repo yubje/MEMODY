@@ -1,12 +1,12 @@
 <template>
   <div>
     <div>
-      <input v-model="postData.pTitle" type="text" placeholder="제목">
+      <input v-model="postData.ptitle" type="text" placeholder="제목">
     </div>
     <div>
-      <editor ref="toastuiEditor" :value="postData.pContent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
+      <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
-    <div>
+    <div> 
       <a>카테고리</a>
       <select>
         <option value=""></option>
@@ -26,7 +26,8 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/vue-editor';
 
-import axios from 'axios'
+import { mapState, mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'BlogPostCreate',
   components: {
@@ -35,48 +36,30 @@ export default {
   data() {
     return {
       categories: ['category1', 'category2'],
-      postData: {
-        pid: '',
-        pTitle: '',
-        pContent: '',
-        author: '',
-        post_time: '',
-        update_time: '',
-        type: '' //게시글 작성인지 임시저장인지
-      },
       editorOptions: {
         hideModeSwitch: true
       }
     }
   },
+  created() {
+    this.initPostData
+  },
+  computed: {
+    ...mapState('blog', ['postData']),
+    ...mapMutations('blog', ['initPostData'])
+  },
   methods: {
+    ...mapActions('blog', ['createPost']),
+
     typeChange() {
-      this.postData.type = 'SAVE'
+      this.postData.ptype = 'SAVE'
       this.blogPostCreate()
     },
 
-    // 블로그 게시글 작성 (API 문서 - 42D)
     blogPostCreate() {
-      this.postData.pContent = this.$refs.toastuiEditor.invoke("getMarkdown")
-
-      axios.post(`${process.env.VUE_APP_SERVER}/blogs/posts`, this.postData)
-        .then(response => {
-          console.log(response.data)
-          this.goHome()
-          })
-        .catch(error => console.log(error.response.data))
-    },
-
-    goHome() {
-      if (this.postData.type == 'SAVE') alert('임시저장 되었습니다.')
-      else alert('정상적으로 글을 등록하였습니다.')
-
-      this.$router.push('/blog')
+      this.postData.pcontent = this.$refs.toastuiEditor.invoke("getMarkdown")
+      this.createPost()
     }
   }
 }
 </script>
-
-<style>
-
-</style>

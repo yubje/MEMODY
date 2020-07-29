@@ -14,16 +14,19 @@
               <h1>회원 정보 수정</h1>
             </div>
             <div class="row cols p-2">
-              <p class="col-3 my-1">닉네임</p> 
-              <input class="col-9 my-1" type="text">
-              <!-- <input type="text" v-model="userInfo.uid" value="userInfo.uid"> -->  
+              <p class="col-3 my-1">이메일</p> 
+              <p class="col-9 my-1">{{ userUpdateInfo.email }}</p>
             </div>
             <div class="row cols p-2">
-              <p class="col-3 my-1">이메일</p>
-              <input class="col-9 my-1" type="text">
-              <!-- <input type="text" v-model="userInfo.email" value="userInfo.email"> -->
+              <p class="col-3 my-1">닉네임</p> 
+              <input v-model="userUpdateInfo.uid" value="userUpdateInfo.uid" class="col-6 my-1" type="text">
+              <button class="col-3 my-1 btn btn-primary" @click="lookUpNickname(userUpdateInfo.uid)">중복 확인</button>
             </div>
-            <button class="btn btn-sm btn-primary">수정</button>
+            <div class="row cols p-2">
+              <p class="col-3 my-1">비밀번호</p>
+              <input v-model="userUpdateInfo.password" value="userUpdateInfo.password" class="col-9 my-1" type="password">
+            </div>
+            <button class="btn btn-sm btn-primary" @click="updateUserInfo(userUpdateInfo)">수정</button>
           </div>
         </div>
       </div>
@@ -32,17 +35,16 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'UserInfoUpdateView',
-  props: {
-    userInfo: {  
-      type: Object,
-    },
+  computed: {
+    ...mapGetters(['userUpdateInfo'])
   },
-  // mounted() {
-  //   this.$bvModal.show('info-update-modal')
 
-  // },
+  methods: {
+    ...mapActions(['lookUpNickname', 'updateUserInfo'])
+  }
 }
 </script>
 
