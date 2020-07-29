@@ -13,7 +13,9 @@ import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
+import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 
+import MainSearchResultView from '@/views/main/MainSearchResultView'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,9 @@ Vue.use(VueRouter)
     path: '/blog',
     name: 'BlogView',
     component: BlogView,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   // users
   {
@@ -74,9 +79,23 @@ Vue.use(VueRouter)
   },
   // blog post
   {
-    path: '/blogs/posts',
+    path: '/blogs/post',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
+  },
+  {
+    path: '/blogs/posts',
+    name: 'BlogPostList',
+    component: BlogPostList,
+  },
+  // main
+  {
+    path: '/main',
+    name: 'MainSearchResultView',
+    component: MainSearchResultView,
+    props(route) {
+      return { search: route.query.search }
+    }
   },
 ]
 
