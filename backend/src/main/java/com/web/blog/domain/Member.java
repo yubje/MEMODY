@@ -10,7 +10,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,13 +30,19 @@ import lombok.NoArgsConstructor;
 public class Member {
 	
 	@Id
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int mid;
 	
+	
 	@Column(nullable = false)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private int bid;
 	
-	@Column(length = 45, nullable = false)
+	
+	@Column(name="email", nullable = true)
 	private String email;
+	
+	
 
 }

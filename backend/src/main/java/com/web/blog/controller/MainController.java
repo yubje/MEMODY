@@ -87,10 +87,6 @@ public class MainController {
 			System.out.println("BlogController>>>>");
 			List<Blog> myList = blogService.myBlogList(email);
 			
-			List<Blog> mainList = new ArrayList<Blog>();
-			
-			mainList.addAll(myList);
-			mainList.addAll(recommendList);
 			Map<String,List<Blog>> result = new HashMap<String, List<Blog>>();
 			result.put("myBlog",myList);
 			result.put("recommendBlog",recommendList);
@@ -107,7 +103,7 @@ public class MainController {
 	 * 로그인 전 메인 - 조회수 기반의 블로그를 추천.
 	 * 
 	 * @param 
-	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(RECOMMEND_BLOG_SUCCESS), HttpStatus, data(사용자 정보)
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(RECOMMEND_BLOG_SUCCESS), HttpStatus, data(블로그 목록 정보)
 	 * 
 	 */
 	@ApiOperation(value = "로그인 전 메인", response = ResponseEntity.class)

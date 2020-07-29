@@ -3,6 +3,7 @@ package com.web.blog.service;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -27,6 +28,14 @@ public class BlogTagService {
 	private final BlogTagRepository blogtagRepository;
 
 	public void blogAndTag(int bid, int tid, String tname) {
+		blogtagRepository.save(Blogtag.builder().bid(bid).tid(tid).tname(tname).build());
+	}
+	
+	public void deleteByBid(int bid) {
+		blogtagRepository.deleteByBid(bid);	
+	}
+	
+	public void updateTag(int bid,int tid,String tname) {
 		blogtagRepository.save(Blogtag.builder().bid(bid).tid(tid).tname(tname).build());
 	}
 
