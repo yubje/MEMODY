@@ -30,6 +30,9 @@ Vue.use(VueRouter)
     path: '/blog',
     name: 'BlogView',
     component: BlogView,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   // users
   {

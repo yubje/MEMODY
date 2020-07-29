@@ -48,7 +48,7 @@ export const main = {
           // dummy data
           const data = [
             {
-              "bid": "09554499",
+              "bid": "1",
               "hashtags": [
                 {
                         "tname": "생명"
