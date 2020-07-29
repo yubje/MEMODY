@@ -15,6 +15,8 @@ import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 
+import MainSearchResultView from '@/views/main/MainSearchResultView'
+
 Vue.use(VueRouter)
 
   const routes = [
@@ -82,6 +84,15 @@ Vue.use(VueRouter)
     path: '/blogs/posts',
     name: 'BlogPostList',
     component: BlogPostList,
+  },
+  // main
+  {
+    path: '/main',
+    name: 'MainSearchResultView',
+    component: MainSearchResultView,
+    props(route) {
+      return { search: route.query.search }
+    }
   },
 ]
 
