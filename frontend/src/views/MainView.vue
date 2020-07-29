@@ -38,22 +38,14 @@ export default {
   },
   methods: {
     fetchBlogs() {
-      console.log(this.myBlogs)
       if (cookies.get('auth-token')) {
-        console.log('After 입니다 - ')
         axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
           console.log('조회성공')
-          var temp = response.data.data
-          console.log(temp.myBlog)
-          this.myBlogs.push(...temp.myBlog)
-          console.log(this.myBlogs)
+          this.myBlogs = response.data.data.myBlog
+          this.recommendBlog = response.data.data.recommendBlog
           return response
         })
-        // .then(response => {
-        //   this.recommendBlog = response.data.data.recommendBlog
-        //   console.log(this.myBlogs)
-        // })
         .catch(error => {
           console.log('실패 ㅠㅠ')
           console.log(error)

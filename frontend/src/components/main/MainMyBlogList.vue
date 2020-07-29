@@ -3,7 +3,7 @@
     <h3>내 블로그</h3>
     <div style="border:1px solid;  width:85%; margin:auto" class="container-fluid">
       
-      <button @click="show" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlogModal">블로그 생성</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlogModal">블로그 생성</button>
       <div class="row">
       <MainMyBlogItem class="col-md-4" v-for="myblog in myBlogs" :key="myblog.bid" :myblog="myblog"/>
 
@@ -26,6 +26,8 @@ export default {
     MainCreateBlog,
     MainMyBlogItem
   },
+  mounted() {
+  }
 }
 </script>
 
