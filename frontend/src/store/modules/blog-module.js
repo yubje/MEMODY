@@ -43,11 +43,12 @@ export const blog = {
       author: '',
       postTime: '',
       update_time: '',
-      ptype: null
+      ptype: null,
     },
 
     // 블로그 멤버
     members: null,
+
   },
   getters: {
     getpostListData(state) {
@@ -109,9 +110,11 @@ export const blog = {
       console.log(state.blogData)
     },
 
+
     SET_DATACATEGORIES(state, dataCategories){
       state.dataCategories = dataCategories
-    }
+    },
+
 
   },
   actions: {
@@ -146,6 +149,7 @@ export const blog = {
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
+
     },
 
     // 대분류 추가 
@@ -158,6 +162,7 @@ export const blog = {
     },
     getBlogCategory({ commit },bid) {
       BlogService.getBlogCategory({ commit },bid)
+
     },
 
     updateBlogInfo({ state, commit }) {
@@ -176,16 +181,20 @@ export const blog = {
       .catch(error => console.log(error.response.data.message))
     },
 
+
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(response) {
       BlogService.deletePost(response)
     },
 
-    // 블로그 내 참여자 목록조회 (API 문서 - 79D)
+
     getBlogMembers({ state }) {
       console.log(state)
       // console.log(response)
       BlogService.getBlogMembers({ state })
     },
   },
+
+
+
 }

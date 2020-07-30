@@ -48,8 +48,16 @@ class BlogService {
   }
 
 
-
-
+  // 블로그 정보 조회 (API 문서 - 28D)
+  getBlogInfo({ commit }, bid) {
+    axios.get(`${SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
+        .then(response => {
+          commit('SET_BID', bid)
+          commit('SET_BLOGDATA', response.data.data)
+          router.push({ name: 'BlogView', query: { bid: bid }})
+        })
+        .catch(error => console.log(error.response.data))
+  }
   // 블로그 게시글 상세 조회 (API 문서 - 70D)
   lookupPostDetail(response) {
     return axios.get(`${SERVER}/blogs/1/posts/`+response.pid, {headers: {"auth": cookies.get('auth-token')}})
@@ -65,6 +73,17 @@ class BlogService {
     .then((result) => {
       return result.data
     })
+  }
+
+
+  // 블로그 게시글 삭제 (API 문서 - 65D)
+  deletePost(response) {
+    axios.delete(`${SERVER}/blogs/posts/`+response.state.postData.pid, {headers: {"auth": cookies.get('auth-token')}})
+    .then((result) => {
+      alert(result.data.message)
+      router.push({ name: 'BlogPostList'})
+    })
+    .catch(error => console.log(error.response.data.message))
   }
 
   //카테고리 불러오기
