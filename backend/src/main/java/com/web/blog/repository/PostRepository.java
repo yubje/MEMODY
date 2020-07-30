@@ -23,5 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	
 	// 임시저장 글 조회
 	List<Post> findAllByBidAndPtypeIsNotNullAndAuthorOrderByPostTimeDesc(int bid, String author);
-	
+
+	// 카테고리 내 전체 게시글 조회 (임시저장글 제외)
+	List<Post> findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(int bid, int mcid);
 }

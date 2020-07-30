@@ -1,6 +1,8 @@
 package com.web.blog.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,4 +39,12 @@ public class LCategory {
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="medium_dir")
 	private Collection<MCategory> mcategory;
+	
+	public void addMCategory(List<MCategory> list) {
+		if(mcategory == null) {
+			mcategory = new ArrayList<MCategory>();
+		}
+//		mcategory.add(list);
+		mcategory = list;
+	}
 }
