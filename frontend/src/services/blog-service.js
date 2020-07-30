@@ -12,21 +12,22 @@ class BlogService {
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
-        router.push({ name: 'Main'})
+        router.push({ name: 'Main' })
       })
       .catch(error => console.log(error.response.data.message))
   }
-
-  // 블로그 정보 조회 (API 문서 - 28D)
+    // 블로그 정보 조회 (API 문서 - 28D)
   getBlogInfo({ commit }, bid) {
-    axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
+      axios.get(`${SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
           commit('SET_BID', bid)
           commit('SET_BLOGDATA', response.data.data)
           router.push({ name: 'BlogView', query: { bid: bid }})
         })
         .catch(error => console.log(error.response.data))
-  }
+    }
+
+
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
@@ -47,15 +48,7 @@ class BlogService {
   }
 
 
-  // 블로그 정보 조회 (API 문서 - 28D)
-  getBlogInfo({ commit }, bid) {
-    axios.get(`${SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
-        .then(response => {
-          commit('SET_BID', bid)
-          commit('SET_BLOGDATA', response.data.data)
-          router.push({ name: 'BlogView', query: { bid: bid }})
-        })
-        .catch(error => console.log(error.response.data))
+
 
   // 블로그 게시글 상세 조회 (API 문서 - 70D)
   lookupPostDetail(response) {
@@ -110,7 +103,7 @@ class BlogService {
       "btitle": state.blogData.btitle,
       "bsubtitle": state.blogData.bsubtitle,
       "bcontent": state.blogData.bcontent,
-      "hashtag": tagString,
+      "hashtags": tagString,
     }
     console.log(data)
     axios.put(`${SERVER}/blogs`, data, {headers: {"auth": cookies.get('auth-token')}})
@@ -135,7 +128,7 @@ class BlogService {
 
   // 블로그 게시글 삭제 (API 문서 - 65D)
   deletePost(response) {
-    axios.delete(`${SERVER}/blogs/posts/`+response.state.postData.pid, {headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${SERVER}/blogs/posts/`+response.state.post)
     .then((result) => {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})
@@ -143,9 +136,17 @@ class BlogService {
     .catch(error => console.log(error.response.data.message))
   }
 
-  
-
+  getBlogMembers({ state }) {
+    console.log(state)
+    axios.get(`${SERVER}/blogs/${state.bid}/members`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+        state.members = response.data.data
+      })
+      .catch(error => console.log(error.response.data))
+  }
 
 }
+
 
 export default new BlogService()
