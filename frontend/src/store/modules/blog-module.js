@@ -44,7 +44,10 @@ export const blog = {
       postTime: '',
       update_time: '',
       ptype: null
-    }
+    },
+
+    // 블로그 멤버
+    members: null,
   },
   getters: {
     getpostListData(state) {
@@ -176,6 +179,13 @@ export const blog = {
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(response) {
       BlogService.deletePost(response)
-    }
+    },
+
+    // 블로그 내 참여자 목록조회 (API 문서 - 79D)
+    getBlogMembers({ state }) {
+      console.log(state)
+      // console.log(response)
+      BlogService.getBlogMembers({ state })
+    },
   },
 }

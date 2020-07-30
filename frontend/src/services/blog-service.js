@@ -12,7 +12,7 @@ class BlogService {
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
-        router.push({ name: 'Main'})
+        router.push({ name: 'Main' })
       })
       .catch(error => console.log(error.response.data.message))
   }
@@ -103,7 +103,7 @@ class BlogService {
       "btitle": state.blogData.btitle,
       "bsubtitle": state.blogData.bsubtitle,
       "bcontent": state.blogData.bcontent,
-      "hashtag": tagString,
+      "hashtags": tagString,
     }
     console.log(data)
     axios.put(`${SERVER}/blogs`, data, {headers: {"auth": cookies.get('auth-token')}})
@@ -128,12 +128,22 @@ class BlogService {
 
   // 블로그 게시글 삭제 (API 문서 - 65D)
   deletePost(response) {
-    axios.delete(`${SERVER}/blogs/posts/`+response.state.postData.pid, {headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${SERVER}/blogs/posts/`+response.state.post)
     .then((result) => {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})
     })
     .catch(error => console.log(error.response.data.message))
+  }
+
+  getBlogMembers({ state }) {
+    console.log(state)
+    axios.get(`${SERVER}/blogs/${state.bid}/members`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+        state.members = response.data.data
+      })
+      .catch(error => console.log(error.response.data))
   }
 
 }
