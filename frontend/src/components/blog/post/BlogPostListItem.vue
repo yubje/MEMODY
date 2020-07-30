@@ -1,9 +1,15 @@
 <template>
   <div>
-    <div id="post" v-for="post in this.getpostListData" :key="post.pid" @click="blogPostDetail(post)">
+    <div v-if="this.getpostListData.length">
+      <div id="post" v-for="post in this.getpostListData" :key="post.pid" @click="blogPostDetail(post)">
+        <hr style="margin-top: 0; margin-bottom:0">
+        <a>{{post.ptitle}}</a>
+        <a style="float:right">{{post.postTime}}</a>
+      </div>
+    </div>
+    <div v-else>
       <hr style="margin-top: 0; margin-bottom:0">
-      <a>{{post.ptitle}}</a>
-      <a style="float:right">{{post.postTime}}</a>
+      <a>작성하신 글이 없습니다.</a>
     </div>
   </div>
 </template>
