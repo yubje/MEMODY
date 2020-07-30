@@ -79,6 +79,8 @@ public class ResponseMessage {
     public static final String DELETE_CATEGORY_FAIL = "카테고리 삭제 실패";
     public static final String SEARCH_CATEGORY_SUCCESS = "카테고리 조회 성공";
     public static final String SEARCH_CATEGORY_FAIL = "카테고리 조회 실패";
+    public static final String SEARCH_POSTBYCATEGORY_SUCCESS = "카테고리 내 전체 게시글 조회 성공";
+    public static final String SEARCH_POSTBYCATEGORY_FAIL = "카테고리 내 전체 게시글 조회 실패";
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
