@@ -13,28 +13,34 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <b-nav-item>
+        <!-- <b-nav-item>
           <router-link :to="{ name: 'BlogView' }" class="text-decoration-none text-light">Blog</router-link>
-        </b-nav-item>
-        <b-nav-item-dropdown right>
-          <template v-slot:button-content >알람</template>
-          <b-dropdown-item href="#">Alarm1</b-dropdown-item>
-        </b-nav-item-dropdown>
+        </b-nav-item> -->
+        <div v-if="authToken" class="row">
+          <b-nav-item-dropdown right>
+            <template v-slot:button-content >알람</template>
+            <b-dropdown-item href="#">Alarm1</b-dropdown-item>
+          </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown right>
-          <template v-slot:button-content>로그인·회원가입</template>
-          <b-dropdown-item>
-            <router-link v-if="authToken" data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
-            <router-link v-else data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
+          <b-nav-item-dropdown right>
+            <template v-slot:button-content>User</template>
+            <b-dropdown-item>
+              <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+              <br>
+              <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+        </div>
 
-        <b-nav-item-dropdown right v-if="authToken">
-          <template v-slot:button-content>User</template>
-          <b-dropdown-item>
-            <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
+        <div v-else>
+          <b-nav-item-dropdown right>
+            <template v-slot:button-content>로그인·회원가입</template>
+            <b-dropdown-item>
+              <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+        </div>
+
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
