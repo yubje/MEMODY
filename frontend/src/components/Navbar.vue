@@ -24,15 +24,15 @@
         <b-nav-item-dropdown right>
           <template v-slot:button-content>로그인·회원가입</template>
           <b-dropdown-item>
-            <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
+            <router-link v-if="authToken" data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <router-link v-else data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown right v-if="authToken">
           <template v-slot:button-content>User</template>
           <b-dropdown-item>
-            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
-            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -42,7 +42,14 @@
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+
 export default {
+  name: 'NavBar',
+  computed: {
+      ...mapState(['authToken'])
+  },
 
 }
 </script>
