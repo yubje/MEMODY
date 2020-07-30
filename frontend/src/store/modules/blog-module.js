@@ -5,11 +5,15 @@ export const blog = {
   namespaced: true,
   state: {
     //블로그 정보
+    bid: null,
+    // blogData: null,
     blogData: {
+      bid: null,
       btitle: null,
       bsubtitle: null,
       bcontent: null,
-      hashtag: null,
+      hashtags: null,
+      
     },
 
     //전체 카테고리
@@ -34,7 +38,8 @@ export const blog = {
   getters: {
     getpostListData(state) {
       return state.postListData;
-    }
+    },
+
   },
   mutations: {
     initPostData(state) {
@@ -57,12 +62,25 @@ export const blog = {
 
     setPostDetailData(state, postData) {
       state.postData = postData;
+    },
+    
+    SET_BID(state, bid) {
+      state.bid = bid
+    },
+
+    SET_BLOGDATA(state, blogData) {
+      state.blogData = blogData
     }
   },
   actions: {
     // 블로그 추가 (API 문서 - 26~29 D)
     createBlog(response) {
       BlogService.createBlog(response)
+    },
+    
+    // 블로그 정보 조회 (API 문서 - 28D)
+    getBlogInfo({ commit }, bid) {
+      BlogService.getBlogInfo({ commit }, bid)
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)

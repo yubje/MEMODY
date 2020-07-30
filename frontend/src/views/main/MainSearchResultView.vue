@@ -11,7 +11,8 @@
       class="text-left"
     >
       <a v-for="hashtag in blog.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-      <router-link :to="{ name: 'BlogView', query: { bid: blog.bid} }" ><h3>{{ blog.btitle }}</h3></router-link>
+      
+      <h3 @click="getBlogInfo(blog.bid)">{{ blog.btitle }}</h3>
       <p>{{ blog.bcontent }}</p>
       <hr>
     </div>
@@ -22,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import MainSearchTab from  '@/components/main/MainSearchTab.vue'
 export default {
   name: 'MainSearchResultView',
@@ -38,6 +39,9 @@ export default {
 
   computed: {
     ...mapState('main', ['searchedBlogs'])
+  },
+  methods: {
+    ...mapActions('blog', ['getBlogInfo'])
   },
 
 }
