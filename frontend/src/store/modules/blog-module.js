@@ -97,9 +97,23 @@ export const blog = {
       .catch(error => console.log(error.data.message))
     },
 
+    // 블로그 게시글 상세 조회 (API 문서 - 70D)
+    lookupPostDetail({commit}, response) {
+      return BlogService.lookupPostDetail(response)
+      .then(postDetailData => {
+        commit('setPostDetailData', postDetailData)
+      })
+      .catch(error => console.log(error.data.message))
+    },
+
     // 블로그 게시글 수정 (API 문서 - 54D)
-    updatePost(response) {
-      BlogService.updatePost(response)
+    updatePost({commit}, response) {
+      return BlogService.updatePost(response)
+      .then(result => {
+        commit('setPostDatailData', result.data)
+        alert(result.message)
+      })
+      .catch(error => console.log(error.response.data.message))
     },
 
     // 블로그 게시글 삭제 (API 문서 - 65D)

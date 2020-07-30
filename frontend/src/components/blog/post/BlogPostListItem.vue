@@ -9,22 +9,21 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'BlogPostListItem',
   created() {
-    this.lookupPostList
+    this.lookupPostList()
   },
   computed: {
-    ...mapGetters('blog', ['getpostListData']),
-    ...mapActions('blog', ['lookupPostList'])
+    ...mapGetters('blog', ['getpostListData'])
   },
   methods: {
-    ...mapMutations('blog', ['setPostDetailData']),
+    ...mapActions('blog', ['lookupPostList', 'lookupPostDetail']),
 
     blogPostDetail(post) {
-      this.setPostDetailData(post)
+      this.lookupPostDetail(post)
       this.$router.push({ name: 'BlogPostDetail'})
     }
   }

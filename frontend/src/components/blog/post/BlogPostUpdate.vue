@@ -62,6 +62,7 @@ export default {
       this.postData.mcid = this.postForm.mcid
 
       this.updatePost
+      this.$router.push({ name: 'BlogPostList'})
     }
   }
 }
