@@ -14,7 +14,7 @@
             <p>가입한 이메일 정보를 입력한 후, 인증 메일 받기를 클릭하세요.</p>
             <input v-model="resetpwData.email" placeholder="이메일을 입력하세요">
             <br>
-            <button @click="checkForm">인증 메일 받기</button>
+            <button @click="checkForm" data-dismiss="modal">인증 메일 받기</button>
           </div>
         </div>
       </div>
