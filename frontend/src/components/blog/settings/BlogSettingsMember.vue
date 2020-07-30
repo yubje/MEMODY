@@ -13,8 +13,11 @@
           </div>
           <div>
             <p>멤버 목록</p>
+            <div v-for="member in members" :key="member">
+              <p>{{ member.email }}</p>
+            </div>
+            
           </div>
-
       </div>
       </div>
     </div>
@@ -23,11 +26,22 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
 export default {
   name: 'BlogSettingsMember',
   components: {
     BlogSettingsSidebar,
+  },
+  computed: {
+    ...mapState('blog', ['members']),
+    // ...mapActions('blog''getBlogMembers')
+  },
+  methods: {
+    ...mapActions('blog', ['getBlogMembers'])
+  },
+  created() {
+    this.getBlogMembers()
   },
 
 }
