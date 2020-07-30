@@ -6,8 +6,6 @@ import axios from 'axios'
 import router from '@/router'
 import cookies from 'vue-cookies'
 
-import createPersistedState from 'vuex-persistedstate';
-
 import { blog } from './modules/blog-module.js'
 import { main } from './modules/main-module.js'
 

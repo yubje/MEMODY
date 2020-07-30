@@ -16,17 +16,18 @@ class BlogService {
       })
       .catch(error => console.log(error.response.data.message))
   }
-
-  // 블로그 정보 조회 (API 문서 - 28D)
+    // 블로그 정보 조회 (API 문서 - 28D)
   getBlogInfo({ commit }, bid) {
-    axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
+      axios.get(`${SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
           commit('SET_BID', bid)
           commit('SET_BLOGDATA', response.data.data)
           router.push({ name: 'BlogView', query: { bid: bid }})
         })
         .catch(error => console.log(error.response.data))
-  }
+    }
+
+
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
@@ -47,15 +48,7 @@ class BlogService {
   }
 
 
-  // 블로그 정보 조회 (API 문서 - 28D)
-  getBlogInfo({ commit }, bid) {
-    axios.get(`${SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
-        .then(response => {
-          commit('SET_BID', bid)
-          commit('SET_BLOGDATA', response.data.data)
-          router.push({ name: 'BlogView', query: { bid: bid }})
-        })
-        .catch(error => console.log(error.response.data))
+
 
   // 블로그 게시글 상세 조회 (API 문서 - 70D)
   lookupPostDetail(response) {
@@ -143,9 +136,7 @@ class BlogService {
     .catch(error => console.log(error.response.data.message))
   }
 
-  
-
-
 }
+
 
 export default new BlogService()

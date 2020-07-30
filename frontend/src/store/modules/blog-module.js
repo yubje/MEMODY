@@ -162,7 +162,6 @@ export const blog = {
       
     },
 
-  },
 
     // 블로그 게시글 수정 (API 문서 - 54D)
     updatePost({commit}, response) {
@@ -178,5 +177,5 @@ export const blog = {
     deletePost(response) {
       BlogService.deletePost(response)
     }
-  }
+  },
 }
