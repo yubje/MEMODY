@@ -40,6 +40,6 @@ export default {
 <style scoped>
 .card {
   width: 18rem;
-  background-color: #ffb6c1;
+  background-color: #ece9e6;
 }
 </style>

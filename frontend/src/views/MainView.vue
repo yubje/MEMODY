@@ -51,10 +51,9 @@ export default {
           console.log(error)
         })
       }else {
-        console.log("before 입니다 -- ")
         axios.get(`${SERVER}/main/before/`)
         .then(response => {
-          console.log(response)
+          this.recommendBlog = response.data.data
         })
       }
     }

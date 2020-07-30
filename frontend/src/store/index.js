@@ -111,7 +111,7 @@ export default new Vuex.Store({
       axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
         commit('SET_VALIDATION', response.data.data )
-        
+        console.log(response.data.data )
       })
       .catch(error => alert(error.response.data.message))
     },
