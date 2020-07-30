@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div id="login">
    <router-view/>
     <b-modal id="login-modal" title="Login" hide-footer="true" >
-      <h1>로그인</h1>
+      <h1 style="font-family: BMHANNAPro;">로그인</h1>
       <input v-model="loginData.email" type="text" id="email" placeholder="이메일 입력">
       <br>
       <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
@@ -39,6 +39,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+@font-face { font-family: 'BMHANNAPro'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_seven@1.0/BMHANNAPro.woff') format('woff'); font-weight: normal; font-style: normal; }
+
+#login {
+  font-family: BMHANNAPro, Avenir, Helvetica, Arial, sans-serif;
+}
 
 </style>
