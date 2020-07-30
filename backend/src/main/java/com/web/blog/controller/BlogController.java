@@ -77,7 +77,6 @@ public class BlogController {
 		if (jwtTokenProvider.validateToken(token)) {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
-//			System.out.println(email);
 			if (blogService.countBlogByUser(email)) {
 				Blog temp = new Blog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email, 0);
 				System.out.println(temp);
@@ -243,6 +242,7 @@ public class BlogController {
 			String bsubtitle = blog.get("bsubtitle");
 			String bcontent = blog.get("bcontent");
 			Blog changeBlog = new Blog(btitle, bsubtitle, bcontent, "temp", 0);
+
 			String changeTag = blog.get("hashtags");
 
 			if (blogService.updateBlog(user, changeBlog, changeTag, bid)) {

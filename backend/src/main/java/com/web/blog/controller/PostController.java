@@ -64,7 +64,6 @@ public class PostController {
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		System.out.println("포스트 생성 ");
 		System.out.println(post);
-//		System.out.println(post.get("ptype"));
 		String token = req.getHeader("auth");
 //		System.out.println("POST>>>>>>>>>>>>>>>"+token);
 		if (jwtTokenProvider.validateToken(token)) {
@@ -129,7 +128,6 @@ public class PostController {
 		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			String author = jwtTokenProvider.getUserPk(token);
-//			System.out.println("로그인한 사람>>>"+author);
 			List<Post> list = postService.listAllSavePost(bid, author);
 			System.out.println(list);
 			if(list.size()==0) {

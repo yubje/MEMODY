@@ -289,23 +289,19 @@ public class CategoryController {
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(bid)){
-//				System.out.println("**");
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-//				System.out.println("--");
 				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
 				if(list.size()!=0) {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
-//					System.out.println("++");
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
 							HttpStatus.FORBIDDEN);
 				}
 			}
 		} else {
-//			System.out.println("==");
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}
