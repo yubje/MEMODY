@@ -70,8 +70,6 @@ class BlogService {
     })
     .catch(error => console.log(error.response.data.message))
   }
-
-  
 }
 
 export default new BlogService()
