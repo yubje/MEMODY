@@ -96,6 +96,9 @@ Vue.use(VueRouter)
     path: '/blog/post/create',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid,lcid: route.query.lcid }
+    }
   },
   {
     path: '/blog/posts',
@@ -107,7 +110,7 @@ Vue.use(VueRouter)
     name: 'BlogPostCategoryList',
     component: BlogPostCategoryList,
     props(route) {
-      return { bid: route.query.bid, mcid: route.query.mcid }
+      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid }
     }
   },
   {

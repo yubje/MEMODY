@@ -36,15 +36,16 @@ export const blog = {
     //블로그 게시글 상세정보
     postData: {
       pid: '',
-      lcid: '1', /***나중에 수정***/
-      mcid: '1', /***나중에 수정***/
+      lcid: '', /***나중에 수정***/
+      mcid: '', /***나중에 수정***/
       ptitle: '',
       pcontent: '',
       author: '',
       postTime: '',
       update_time: '',
       ptype: null
-    }
+    },
+    posts: [],
   },
   getters: {
     getpostListData(state) {
@@ -108,6 +109,10 @@ export const blog = {
 
     SET_DATACATEGORIES(state, dataCategories){
       state.dataCategories = dataCategories
+    },
+
+    SET_POSTS(state, posts){
+      state.posts= posts
     }
 
   },
@@ -123,7 +128,7 @@ export const blog = {
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
-    createPost({response}) {
+    createPost(response) {
       BlogService.createPost(response)
     },
 
@@ -156,9 +161,6 @@ export const blog = {
     getBlogCategory({ commit },bid) {
       BlogService.getBlogCategory({ commit },bid)
     },
-<<<<<<< HEAD
-    
-=======
 
     updateBlogInfo({ state, commit }) {
       BlogService.updateBlogInfo({ state, commit })
@@ -167,7 +169,6 @@ export const blog = {
 
 
     // 블로그 게시글 수정 (API 문서 - 54D)
->>>>>>> 56f985ed3648da041ba7a14ece74fb59387a5c67
     updatePost({commit}, response) {
       return BlogService.updatePost(response)
       .then(result => {
@@ -184,13 +185,10 @@ export const blog = {
     moveToPosts({commit}, categoryData) {
       console.log(categoryData)
       BlogService.moveToPosts({commit}, categoryData)
-    }
-<<<<<<< HEAD
-      // 블로그 게시글 수정 (API 문서 - 54D)
-  },
+    },
 
-  }
-=======
+    fetchPosts({commit}, info) {
+      BlogService.fetchPosts({commit},info)
+    }
   },
 }
->>>>>>> 56f985ed3648da041ba7a14ece74fb59387a5c67

@@ -31,6 +31,7 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
+    console.log(response)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
@@ -138,8 +139,17 @@ class BlogService {
   //카테고리 별 글목록 조회
   moveToPosts({commit},categoryData) {
     console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid }},)
+    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},)
   }
+
+  fetchPosts({commit},info) {
+    
+
+    axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      commit('SET_POSTS', response.data.data)
+    })
+    }
 
 }
 
