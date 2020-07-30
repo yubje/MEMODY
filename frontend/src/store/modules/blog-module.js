@@ -1,7 +1,4 @@
 // blog 상태 관리 모듈
-import axios from 'axios'
-import cookies from 'vue-cookies'
-import router from '../../router'
 import BlogService from '@/services/blog-service'
 
 export const blog = {
@@ -16,8 +13,9 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
-      
     },
+    dataCategories: null,
+
 
     //전체 카테고리
     categoryListData: [],
@@ -71,6 +69,9 @@ export const blog = {
     SET_BLOGDATA(state, blogData) {
       state.blogData = blogData
     },
+    SET_DATACATEGORIES(state, dataCategories){
+      state.dataCategories = dataCategories
+    }
   },
   actions: {
     // 블로그 추가 (API 문서 - 26~29 D)
@@ -92,15 +93,21 @@ export const blog = {
 
     // 블로그 정보 조회 (API 문서 - 28D)
     getBlogInfo({ commit }, bid) {
-      axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}`, {headers: {"auth": cookies.get('auth-token')}})
-        .then(response => {
-          commit('SET_BID', bid)
-          commit('SET_BLOGDATA', response.data.data)
-          router.push({ name: 'BlogView', query: { bid: bid }})
-        })
-        .catch(error => console.log(error.response.data))
-
+      BlogService.getBlogInfo({ commit }, bid)
     },
+
+    // 대분류 추가 
+    addParentCategory({commit},largeCategoryData) {
+      BlogService.addParentCategory({commit},largeCategoryData)
+    },
+    // 소분류 추가 
+    addChildCategory({commit},mediumCategoryData) {
+      BlogService.addChildCategory({commit},mediumCategoryData)
+    },
+    getBlogCategory({ commit },bid) {
+      BlogService.getBlogCategory({ commit },bid)
+    },
+
   },
 
 }

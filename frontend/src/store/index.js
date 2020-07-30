@@ -17,7 +17,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     userInfo: null,
     //이메일 인증
-    emailValidationNumber: '',
+    emailValidationNumber: null,
     isValid: false,
     // 아이디 중복 확인 
     uniqueId: false,
@@ -111,7 +111,7 @@ export default new Vuex.Store({
       axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
         commit('SET_VALIDATION', response.data.data )
-        console.log(response.data.data )
+        console.log(response.data.data)
       })
       .catch(error => alert(error.response.data.message))
     },

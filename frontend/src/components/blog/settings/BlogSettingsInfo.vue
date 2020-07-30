@@ -51,6 +51,12 @@ export default {
   components : {
     BlogSettingsSidebar,
   },
+  props: {
+    bid : Number
+  },
+  created() {
+    console.log(this.bid)
+  }
 }
 </script>
 
