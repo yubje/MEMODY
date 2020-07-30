@@ -9,7 +9,6 @@
         <div class="col">
           <div class="row">
             <p>블로그명</p>
-            <p>{{ blogData }}</p>
             <input 
               type="text" 
               v-model="blogData.btitle"
