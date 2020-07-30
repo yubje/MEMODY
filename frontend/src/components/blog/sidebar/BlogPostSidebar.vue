@@ -32,7 +32,6 @@
     <div class="row justify-content-end my-5 mx-3">
       <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
     </div>
-    
   </div>
 </template>
 

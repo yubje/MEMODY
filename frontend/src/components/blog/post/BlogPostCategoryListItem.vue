@@ -1,37 +1,34 @@
 <template>
   <div>
-    <div v-if="posts">
-      <div id="post" v-for="post in posts" :key="post.pid" @click="blogPostDetail()">
-        <hr style="margin-top: 0; margin-bottom:0">
-        <a>{{post.ptitle}}</a>
-        <a style="float:right">{{post.postTime}}</a>
-      </div>
-    </div>
-    <div v-else>
+    <div id="post"  @click="blogPostDetail(post)">
       <hr style="margin-top: 0; margin-bottom:0">
-      <a>작성하신 글이 없습니다.</a>
+      <a>{{post.ptitle}}</a>
+      <a style="float:right">{{post.postTime}}</a>
     </div>
   </div>
 </template>
 
 <script>
 
-
+import { mapState, mapActions } from 'vuex'
 export default {
-  name: 'BlogPostListItem',
+  name: 'BlogPostCategoryListItem',
   props: {
-    posts: {
-      type: Array,
+    post: {
+      type: Object,
     },
   },
-  craeted() {
-    console.log(this.posts)
-  },
   methods: {
-    blogPostDetail() {
+    ...mapActions('blog',['lookupPostDetail']),
+    blogPostDetail(post) {
+      this.lookupPostDetail(post)
       this.$router.push({ name: 'BlogPostDetail'})
     }
-  }
+  },
+  computed: {
+    ...mapState('blog', ['posts'])
+  },
+
 }
 </script>
 
