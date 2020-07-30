@@ -7,8 +7,13 @@
         </router-link>
       </div>
       <div class="row">
-        <router-link :to="{ name: 'BlogSettingsCategory' }"> 
+        <router-link :to="{ name: 'BlogSettingsCategory',  query: {bid: blogData.bid } }"> 
           블로그 카테고리 설정
+        </router-link>
+      </div>
+      <div class="row">
+        <router-link :to="{ name: 'BlogSettingsMember' }"> 
+          블로그 멤버 설정
         </router-link>
       </div>
       <div class="row">
@@ -19,8 +24,20 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'BlogSettingsSidebar',
+  computed: {
+    ...mapState('blog', ['blogData'])
+  },
+  methods: {
+    ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory']),
+  },
+  created() {
+    this.getBlogCategory(this.blogData.bid)
+  }
+
+  
   
 }
 </script>

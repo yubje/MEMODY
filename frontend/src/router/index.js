@@ -9,7 +9,7 @@ import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 
-
+import BlogSettingsMember from '@/components/blog/settings/BlogSettingsMember.vue'
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
@@ -73,11 +73,22 @@ Vue.use(VueRouter)
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
     component: BlogSettingsInfo,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   {
     path: '/blog/settings/category',
     name: 'BlogSettingsCategory',
     component: BlogSettingsCategory,
+    props(route) {
+      return { bid: route.query.bid }
+    }
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsMember',
+    component: BlogSettingsMember,
   },
   // blog post
   {
