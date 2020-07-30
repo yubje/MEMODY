@@ -26,7 +26,7 @@
               <p class="col-3 my-1">비밀번호</p>
               <input v-model="userUpdateInfo.password" value="userUpdateInfo.password" class="col-9 my-1" type="password">
             </div>
-            <button class="btn btn-sm btn-primary" @click="updateUserInfo(userUpdateInfo)">수정</button>
+            <button class="btn btn-sm btn-primary" @click="updateUserInfo(userUpdateInfo)" data-dismiss="modal">수정</button>
           </div>
         </div>
       </div>
