@@ -1,5 +1,4 @@
-package com.web.blog.dao.user;
-
+package com.web.blog.model;
 import java.sql.SQLException;
 
 import org.apache.ibatis.annotations.Mapper;

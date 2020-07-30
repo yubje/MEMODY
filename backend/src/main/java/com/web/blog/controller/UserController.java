@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.web.blog.config.security.JwtTokenProvider;
-import com.web.blog.config.security.Users;
-import com.web.blog.config.security.UsersRepository;
+import com.web.blog.config.jwt.JwtTokenProvider;
+import com.web.blog.domain.Users;
 import com.web.blog.model.UserDto;
+import com.web.blog.repository.UsersRepository;
 import com.web.blog.service.JwtService;
-import com.web.blog.service.UserService;
+import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class UserController {
 	private static final String DUPLICATE = "duplicate";
 
 	@Autowired
-	private UserService userService;
+	private UserService2 userService;
 
 	@Autowired
 	private JwtService jwtService;
@@ -112,7 +112,7 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Req.6-1 로그인", response = UserDto.class)
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/in")
 	public ResponseEntity login(@RequestBody UserDto user, HttpSession session) {
 		UserDto login = userService.login(user);
 		if (login == null) {
@@ -127,13 +127,6 @@ public class UserController {
 
 			return new ResponseEntity<UserDto>(login, HttpStatus.OK);
 		}
-	}
-
-	@ApiOperation(value = "Req.6-2 로그아웃", response = UserDto.class)
-	@GetMapping(value = "/logout")
-	public ResponseEntity logout(HttpSession session) {
-		session.invalidate();
-		return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 	}
 
 	// 회원가입 시 이메일 인증 보내기

@@ -1,4 +1,4 @@
-package com.web.blog.common;
+package com.web.blog.config.jwt;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
