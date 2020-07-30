@@ -11,7 +11,7 @@
       <br>
       <button @click="login">로그인</button>
       <br>
-      <a href="">아직 회원이 아니세요?</a>
+      <p>아직 회원이 아니세요?</p>
       <br>
       <router-link :to="{ name: 'Signup' }" >회원 가입</router-link>
     </b-modal>
