@@ -29,7 +29,7 @@
             <input v-model="newBlogData.hashtags" class="input-text" type="text">
           </div>
         </div>
-        <button type="button" class="btn btn-primary w-100" @click="createBlog">블로그 추가</button>
+        <button type="button" class="btn btn-primary w-100" @click="createBlog" data-dismiss="modal">블로그 추가</button>
       </div>
     </div>
   </div>

@@ -1,11 +1,11 @@
 <template>
   <div id="blog" >
     <div class="container-fluid">
-      <div class="row">
+      <div class="row ">
         <!-- Sidebar -->
         <BlogPostSidebar/>
-        <div class="col col-lg-10">
-          <div>
+        <div class="col col-lg-10 align-self-center" style="height: 60%;">
+          <div class="col">
             <h1>{{ blogData.btitle }}</h1>
             <h3>{{ blogData.bsubtitle }}</h3>
             <p>{{ blogData.bcontent }}</p>

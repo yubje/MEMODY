@@ -12,7 +12,7 @@ class BlogService {
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
-        router.push({ name: 'Main'}).catch((error)=>console.log(error))
+        router.push({ name: 'Main'})
       })
       .catch(error => console.log(error.response.data.message))
   }
@@ -24,7 +24,11 @@ class BlogService {
           commit('SET_BLOGDATA', response.data.data)
           router.push({ name: 'BlogView', query: { bid: bid }})
         })
-        .catch(error => console.log(error.response.data))
+        .catch(error => {
+          if (error.response.data.status === 403) {
+            alert('로그인이 핗요한 서비스 입니다.')
+          }
+        })
     }
 
 
@@ -152,12 +156,14 @@ class BlogService {
   }
 
   fetchPosts({commit},info) {
-    
-
-    axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
-    .then(response => {
-      commit('SET_POSTS', response.data.data)
-    })
+      axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_POSTS', response.data.data)
+        
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
 
 }

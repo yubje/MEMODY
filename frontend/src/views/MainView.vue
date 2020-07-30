@@ -1,9 +1,13 @@
 <template>
   <div id="main">
-    <div>
-      <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px">
+    <div class="m-5">
+      <h1>MEMODY</h1>
+      <!-- <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px"> -->
     </div>
-    <MainSearchTab/>
+    <div class="container w-75">
+      <MainSearchTab/>
+    </div>
+    
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="myBlogs"/>
     </div>
