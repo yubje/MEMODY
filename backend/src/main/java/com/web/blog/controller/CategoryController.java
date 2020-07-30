@@ -279,4 +279,29 @@ public class CategoryController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class)
+	@GetMapping("/blogs/{bid}/categories/{mcid}")
+	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+			if(!blogService.checkBlog(bid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
+				if(list.size()!=0) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
+						HttpStatus.CREATED);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
+							HttpStatus.FORBIDDEN);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 }
