@@ -71,11 +71,17 @@ Vue.use(VueRouter)
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
     component: BlogSettingsInfo,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   {
     path: '/blog/settings/category',
     name: 'BlogSettingsCategory',
     component: BlogSettingsCategory,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   // blog post
   {

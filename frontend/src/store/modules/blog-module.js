@@ -13,8 +13,9 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
-      
     },
+    dataCategories: null,
+
 
     //전체 카테고리
     categoryListData: [],
@@ -68,6 +69,9 @@ export const blog = {
     SET_BLOGDATA(state, blogData) {
       state.blogData = blogData
     },
+    SET_DATACATEGORIES(state, dataCategories){
+      state.dataCategories = dataCategories
+    }
   },
   actions: {
     // 블로그 추가 (API 문서 - 26~29 D)
@@ -91,6 +95,19 @@ export const blog = {
     getBlogInfo({ commit }, bid) {
       BlogService.getBlogInfo({ commit }, bid)
     },
+
+    // 대분류 추가 
+    addParentCategory({commit},largeCategoryData) {
+      BlogService.addParentCategory({commit},largeCategoryData)
+    },
+    // 소분류 추가 
+    addChildCategory({commit},mediumCategoryData) {
+      BlogService.addChildCategory({commit},mediumCategoryData)
+    },
+    getBlogCategory({ commit },bid) {
+      BlogService.getBlogCategory({ commit },bid)
+    },
+
   },
 
 }

@@ -46,6 +46,37 @@ class BlogService {
         .catch(error => console.log(error.response.data))
 
   }
+  //카테고리 불러오기
+  getBlogCategory({commit}, bid) {
+   
+    axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}/categories`,{ headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_DATACATEGORIES', response.data.data)
+      })
+      .catch(error => console.log(error.response.data))
+  }
+
+  // 대분류 추가 
+  addParentCategory({commit},largeCategoryData) {
+    console.log(largeCategoryData)
+    axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      console.log({commit})
+      console.log(response)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+  }
+
+  // 소분류 추가 
+  addChildCategory({commit},mediumCategoryData) {
+    console.log({commit},mediumCategoryData)
+    axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      console.log(response)
+    })
+  }
 }
 
 export default new BlogService()
