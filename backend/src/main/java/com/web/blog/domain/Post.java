@@ -45,7 +45,7 @@ public class Post {
 	private String author;
 	
 	@Column
-	private LocalDateTime post_time;
+	private LocalDateTime postTime;
 	
 	@Column
 	private LocalDateTime update_time;
@@ -54,14 +54,14 @@ public class Post {
 	private String ptype;
 	
 	@Builder
-	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime post_time, LocalDateTime update_time, String ptype) {
+	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype) {
 		this.bid = bid;
 		this.lcid = lcid;
 		this.mcid = mcid;
 		this.ptitle = ptitle;
 		this.pcontent = pcontent;
 		this.author = author;
-		this.post_time = post_time;
+		this.postTime = postTime;
 		this.update_time = update_time;
 //		this.post_time = LocalDateTime.now();
 //		this.update_time = LocalDateTime.now();
@@ -71,7 +71,7 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [pid=" + pid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle + ", pcontent="
-				+ pcontent + ", author=" + author + ", post_time=" + post_time + ", update_time=" + update_time
+				+ pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time=" + update_time
 				+ ", ptype=" + ptype + "]";
 	}
 
