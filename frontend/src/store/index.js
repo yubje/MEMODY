@@ -167,6 +167,7 @@ export default new Vuex.Store({
     blog: blog,
     main: main,
   },
+
   plugins: [
     createPersistedState()
   ]
