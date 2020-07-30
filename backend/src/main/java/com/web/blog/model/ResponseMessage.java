@@ -68,6 +68,14 @@ public class ResponseMessage {
     public static final String UPDATE_COMMENT_SUCCESS = "댓글 수정 성공";
     public static final String DELETE_COMMENT_SUCCESS = "댓글 삭제 성공";
     
+    // Category
+    public static final String CREATE_CATEGORY_SUCCESS = "카테고리 추가 성공";
+    public static final String CREATE_CATEGORY_FAIL = "카테고리 추가 실패";
+    public static final String UPDATE_CATEGORY_SUCCESS = "카테고리 수정 성공";
+    public static final String UPDATE_CATEGORY_FAIL = "카테고리 수정 실패";
+    public static final String DELETE_CATEGORY_SUCCESS = "카테고리 삭제 성공";
+    public static final String DELETE_CATEGORY_FAIL = "카테고리 삭제 실패";
+    
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
