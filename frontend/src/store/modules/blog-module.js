@@ -202,15 +202,12 @@ export const blog = {
     },
 
 
-
     getBlogMembers({ state }) {
       console.log(state)
       // console.log(response)
       BlogService.getBlogMembers({ state })
     },
   },
-
-
 
 }
 
