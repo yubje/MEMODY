@@ -53,7 +53,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-07-28, 메인 관리 Controller(메인 페이지 데이터 response)
+ * @version 0.1, 2020-07-30, 메인 관리 Controller(메인 페이지 데이터 response)
  * @see None
  * 
  */

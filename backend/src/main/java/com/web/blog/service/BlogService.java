@@ -129,8 +129,6 @@ public class BlogService {
 		}
 	}
 
-	//////////////////////////////
-
 	// 수정
 	// blogService.updateBlog(user, changeBlog,changeTag,bid))
 	public boolean updateBlog(String user, Blog changeBlog, String changeTag, int bid) {
@@ -152,7 +150,6 @@ public class BlogService {
 	public boolean deleteBlog(String user, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
-			System.out.println("수정 시작");
 			blogRepository.deleteByBid(bid);
 			return true;
 		} else {

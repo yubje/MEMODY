@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-07-28, Blog 관리 Controller
+ * @version 0.1, 2020-07-30, Blog 관리 Controller
  * @see None
  * 
  */
