@@ -5,8 +5,8 @@
       <div class="col col-lg-10">
         <h1>{{this.postData.ptitle}}</h1>
         <div v-if="this.$store.state.userInfo.email == this.postData.author" style="float: right">
-          <button class="btn btn-primary">수정</button>
-          <button class="btn btn-primary" @click="deletePost()">삭제</button>
+          <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
+          <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
         <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
@@ -28,13 +28,16 @@ export default {
     BlogPostSidebar
   },
   computed: {
-    ...mapState('blog', ['postData'])
+    ...mapState('blog', ['postData']),
+    ...mapActions('blog', ['deletePost'])
   },
   methods: {
-    ...mapActions('blog', ['deletePost']),
+    blogPostUpdate() {
+      this.$router.push({ name: 'BlogPostUpdate'})
+    },
 
-    deletePost() {
-      this.deletePost(this.postData.pid)
+    blogPostDelete() {
+      this.deletePost
     }
   }
 }

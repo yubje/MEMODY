@@ -35,7 +35,7 @@ class BlogService {
 
   // 블로그 게시글 수정 (API 문서 - 54D)
   updatePost(response) {
-    axios.put(`${SERVER}/blogs/post`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
+    axios.put(`${SERVER}/blogs/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})
@@ -44,8 +44,8 @@ class BlogService {
   }
 
   // 블로그 게시글 삭제 (API 문서 - 65D)
-  deletePost(pid) {
-    axios.delete(`${SERVER}/blogs/posts`, pid, {headers: {"auth": cookies.get('auth-token')}})
+  deletePost(response) {
+    axios.delete(`${SERVER}/blogs/posts/`+response.state.postData.pid, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})

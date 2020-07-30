@@ -85,8 +85,8 @@ export const blog = {
     },
 
     // 블로그 게시글 삭제 (API 문서 - 65D)
-    deletePost(pid) {
-      BlogService.deletePost(pid)
+    deletePost(response) {
+      BlogService.deletePost(response)
     }
   }
 }

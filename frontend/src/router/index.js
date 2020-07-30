@@ -15,6 +15,7 @@ import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
+import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
 import MainSearchResultView from '@/views/main/MainSearchResultView'
 
@@ -93,6 +94,11 @@ Vue.use(VueRouter)
     path: '/blog/post',
     name: 'BlogPostDetail',
     component: BlogPostDetail,
+  },
+  {
+    path: '/blog/post/update',
+    name: 'BlogPostUpdate',
+    component: BlogPostUpdate,
   },
   // main
   {
