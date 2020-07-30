@@ -30,7 +30,12 @@ export default {
   background-color: #25374F !important;
 }
 
+
 input {
+  font-family: Avenir !important;
+}
+
+textarea {
   font-family: Avenir !important;
 }
 </style>

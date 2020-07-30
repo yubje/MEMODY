@@ -1,33 +1,53 @@
 <template>
-  <div>
-    <input v-model="searchData.hashtag" type="text" id="hashtag">
-    <button @click="checkHashtag()" class="btn btn-primary">검색</button>
+<div class="container input-group my-3">
+  <div class="input-group-prepend">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchBy] }}</button>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" @click="changeSearchBy(1)">블로그명</a>
+      <a class="dropdown-item" @click="changeSearchBy(2)">해쉬태그</a>
+    </div>
   </div>
+  <input type="text" class="form-control" aria-label="input" v-model="searchInput">
+  <div class="input-group-append">
+    <button class="btn btn-primary" type="button" id="button-addon2" @click="search({searchBy, searchInput})">Button</button>
+  </div>
+</div>
+
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'MainSearchTab',
   data() {
     return {
-      searchData: {
-        hashtag: ''
-      }
+      searchTab: {
+        '0': '선택',
+        '1': '블로그명',
+        '2': '해쉬태그'
+      },
+      searchBy: '0',
+      searchInput: null,
     }
   },
-  methods: {
-    checkHashtag() {
-      if (this.searchData.hashtag)
-        this.getBlogListByHashtagSearch(this.searchData.hashtag);
-    },
+  computed: {
 
-    // 해쉬태그로 블로그 목록 검색 및 조회 (API 문서 - 23D)
-    getBlogListByHashtagSearch(hashtag) {
-      axios.get(`${process.env.VUE_APP_SERVER}/tags/${hashtag}`)
-        .then(response => console.log(response.data))
-        .catch(error => console.log(error.response.data))
-    }
+  },
+
+  methods: {
+    // 검색 
+    // 블로그 이름으로 블로그 목록 조회 (API 문서 - 24D)
+    // 해쉬태그로 블로그 목록 검색 및 조회 (API 문서 - 25D)
+    ...mapActions('main', ['search']),
+
+
+    // 검색 카테고리 변경 
+    changeSearchBy(n) {
+      this.searchBy = n
+      console.log(this.searchBy)
+    },
   }
 }
 </script>

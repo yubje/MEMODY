@@ -6,37 +6,55 @@
         <div>
           <h1>블로그 정보 수정</h1>
         </div>
-        <div class="col">
-          <div class="row">
+        <div class="col w-75 mx-auto">
+          <div class="row justify-content-between">
             <p>블로그명</p>
-            <input type="text">
+            <input 
+              type="text" 
+              v-model="blogData.btitle"
+              class="w-50 m-2"
+            >
           </div>
-          <div class="row">
+          <div class="row justify-content-between">
             <p>블로그 부제</p>
-            <input type="text">
+            <input 
+              type="text" 
+              v-model="blogData.bsubtitle"
+              class="w-50 m-2"
+            >
           </div>
-          <div class="row">
+          <div class="row justify-content-between">
             <p>블로그 설명</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
+            <textarea 
+              name="blogDataContent"
+              cols="30" rows="10"
+              v-model="blogData.bcontent"
+              class="w-50 m-2"
+            ></textarea>
           </div>
-          <div class="row">
+          <div class="row justify-content-between">
             <p>해시태그</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-          </div>
-          <div class="row">
-            <p>멤버 관리</p>
             <div>
+              <form @submit.prevent="ADD_HASHTAG(newHashtag)" style="width: 336.75px;">
+                <input type="text" v-model="newHashtag" class="w-75 m-2 align-middle">
+                <button class="btn btn-sm btn-primary m-2">추가</button>
+              </form>
               <div>
-                <!--사용자 검색-->
-                <input type="text">
-                <button>추가</button>
+                <button 
+                class="btn btn-sm btn-primary rounded-pill m-2"
+                v-for="(item, key) in blogData.hashtags"
+                @click="REMOVE_HASHTAG(key)"
+                :key="item"
+                >  # {{ item.tname }}  X</button>
               </div>
-              <div>
-                <p>멤버 목록</p>
-                <!-- 멤버 목록 -->
-              </div>
+              
             </div>
           </div>
+          
+          <button 
+            class="btn btn-primary mt-5"
+            @click="updateBlogInfo"
+          >수정하기</button>
         </div>
       </div>
     </div>
@@ -44,12 +62,25 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
 
 export default {
   name: 'BlogSettingsInfo',
   components : {
     BlogSettingsSidebar,
+  },
+  data() {
+    return {
+      newHashtag: null,
+    }
+  },
+  computed: {
+    ...mapState('blog', ['blogData'])
+  },
+  methods: {
+    ...mapMutations('blog', ['REMOVE_HASHTAG', 'ADD_HASHTAG']),
+    ...mapActions('blog', ['updateBlogInfo'])
   },
 }
 </script>

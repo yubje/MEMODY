@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
 
 import axios from 'axios'
 import router from '@/router'
@@ -17,7 +18,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     userInfo: null,
     //이메일 인증
-    emailValidationNumber: '',
+    emailValidationNumber: null,
     isValid: false,
     // 아이디 중복 확인 
     uniqueId: false,
@@ -77,12 +78,12 @@ export default new Vuex.Store({
         location: '/login'
       }
       axios.post(SERVER + info.location, info.data)
-        .then((response) => {
-          commit('SET_TOKEN', response.headers.auth)
-          commit('SET_USERINFO', response.data.data)
-          router.push({ name: 'Main'})
-        })
-        .catch(error => alert(error.response.data.message))
+      .then((response) => {
+        commit('SET_TOKEN', response.headers.auth)
+        commit('SET_USERINFO', response.data.data)
+        router.push({ name: 'Main'})
+      })
+      .catch(error => alert(error.response.data.message))
     },
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
@@ -110,8 +111,8 @@ export default new Vuex.Store({
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
-        commit('SET_VALIDATION', response.data.data )
-        
+        commit('SET_VALIDATION', response.data.data)
+        console.log(response.data.data)
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -121,6 +122,8 @@ export default new Vuex.Store({
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
         commit('SET_ISVALID')
+        console.log(this.state.emailValidationNumber)
+        console.log(validationNumber)
         window.$('#email-validation').modal('hide')
         
       } else {
@@ -156,11 +159,25 @@ export default new Vuex.Store({
           })
           .catch(error => alert(error))
       }
+    },
+
+    //회원 탈퇴 (API 문서 - 19D)
+    deleteUserInfo({getters}) {
+      axios.delete(`${SERVER}/users/${getters.userUpdateInfo.email}`, getters.config)
+        .then(response => {
+          alert(response.data.message)
+          router.go()
+        })
+        .catch(error => alert(error))
     }
   },
 
   modules: {
     blog: blog,
     main: main,
-  }
+  },
+
+  plugins: [
+    createPersistedState()
+  ]
 })

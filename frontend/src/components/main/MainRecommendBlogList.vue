@@ -1,30 +1,24 @@
 <template>
   <div>
     <h3>추천 블로그</h3>
-    <div style="border:1px solid; height:150px; width:85%; margin:auto">
-      추천 블로그 들어갈 자리!
+    <div style="width:85%; margin:auto" class="container-fluid">
+      <div class="row">
+        <MainMyBlogItem class="col-md-4 mt-2" v-for="myblog in recommendBlog" :key="myblog.bid" :myblog="myblog"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import MainMyBlogItem from '@/components/main/MainMyBlogItem.vue'
 export default {
   name: 'MainRecommendBlogList',
-  data() {
-    return {
-      recommendBlogList: []
-    }
+  props: {
+    recommendBlog: Array,
   },
-  created() {
-    // 로그인 후 내 블로그 목록 조회 (API 문서 - 61D)
-    axios.get(`${process.env.VUE_APP_SERVER}/main/before`)
-      .then(response => {
-        console.log(response.data)
-        this.recommendBlogList = response.data
-      })
-      .catch(error => console.log(error.response.data))
-  }
+  components: {
+    MainMyBlogItem
+  },
 }
 </script>
 

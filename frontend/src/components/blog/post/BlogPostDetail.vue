@@ -1,30 +1,47 @@
 <template>
-  <div>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col col-lg-10">
-          <p>블로그 게시글 상세조회</p>
+  <div class="container-fluid">
+    <div class="row">
+      <BlogPostSidebar/>     
+      <div class="col col-lg-10">
+        <h1>{{this.postData.ptitle}}</h1>
+        <div v-if="this.$store.state.userInfo.email == this.postData.author" style="float: right">
+          <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
+          <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
+        <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
+        <p style="text-align: left">수정날짜: {{this.postData.update_time}}</p>
+        <hr>
+        <p>{{this.postData.pcontent}}</p>
       </div>
+      <!-- <BlogCommentCreate/> -->
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
+// import BlogCommentCreate from '@/components/blog/comment/BlogCommentCreate.vue'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'BlogPostDetail',
-  methods: {
-    getBlogPostDetail(bid, pid) {
-      axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}/posts/${pid}/`)
-        .then(response => console.log(response.data))
-        .catch(error => console.log(error.response.data))
-    }
+  components: {
+    BlogPostSidebar,
+    //BlogCommentCreate
   },
-  
+  computed: {
+    ...mapState('blog', ['postData']),
+    ...mapActions('blog', ['deletePost'])
+  },
+  methods: {
+    blogPostUpdate() {
+      this.$router.push({ name: 'BlogPostUpdate'})
+    },
+
+    blogPostDelete() {
+      this.deletePost
+    }
+  }
 }
 </script>
-
-<style>
-
-</style>
