@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate';
 
 import axios from 'axios'
 import router from '@/router'
@@ -168,6 +169,7 @@ export default new Vuex.Store({
     blog: blog,
     main: main,
   },
+
   plugins: [
     createPersistedState()
   ]
