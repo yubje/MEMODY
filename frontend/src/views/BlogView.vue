@@ -6,15 +6,15 @@
         <BlogPostSidebar/>
         <div class="col col-lg-10">
           <div>
-            <p>{{ bid }}</p>
+            <!-- <p>{{ bid }}</p>
             <h1>{{ blogData.btitle }}</h1>
             <h3>{{ blogData.bsubtitle }}</h3>
             <p>{{ blogData.bcontent }}</p>
             <p>관리자: {{ blogData.manager }}</p>
-            <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-            <!-- <h1>BLOG TITLE</h1>
+            <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a> -->
+            <h1>BLOG TITLE</h1>
             <h3>Subtitle</h3>
-            <p>Description</p> -->
+            <p>Description</p>
           </div>
         </div>
       </div>
