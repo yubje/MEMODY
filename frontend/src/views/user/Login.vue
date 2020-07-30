@@ -12,7 +12,7 @@
       
       <router-link v-b-modal.resetpw-modal :to="{ name: 'ResetPW' }" class="text-dark text-decoration-none">비밀번호 찾기</router-link>
       <br>
-      <button class="btn btn-primary" @click="login">로그인</button>
+      <button class="btn btn-primary" @click="login" data-dismiss="modal">로그인</button>
       <br>
       <p>아직 회원이 아니세요?</p>
       <br>
