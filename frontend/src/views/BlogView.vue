@@ -10,7 +10,6 @@
             <h3>{{ blogData.bsubtitle }}</h3>
             <p>{{ blogData.bcontent }}</p>
             <p>관리자: {{ blogData.manager }}</p>
-
             <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
           </div>
         </div>

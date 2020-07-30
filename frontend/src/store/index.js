@@ -5,6 +5,8 @@ import axios from 'axios'
 import router from '@/router'
 import cookies from 'vue-cookies'
 
+import createPersistedState from 'vuex-persistedstate';
+
 import { blog } from './modules/blog-module.js'
 import { main } from './modules/main-module.js'
 
@@ -17,7 +19,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     userInfo: null,
     //이메일 인증
-    emailValidationNumber: '',
+    emailValidationNumber: null,
     isValid: false,
     // 아이디 중복 확인 
     uniqueId: false,
@@ -110,8 +112,8 @@ export default new Vuex.Store({
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/${email}`)
       .then(response => {
-        commit('SET_VALIDATION', response.data.data )
-        console.log(response.data.data )
+        commit('SET_VALIDATION', response.data.data)
+        console.log(response.data.data)
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -121,6 +123,8 @@ export default new Vuex.Store({
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
         commit('SET_ISVALID')
+        console.log(this.state.emailValidationNumber)
+        console.log(validationNumber)
         window.$('#email-validation').modal('hide')
         
       } else {
@@ -156,11 +160,15 @@ export default new Vuex.Store({
           })
           .catch(error => alert(error))
       }
-    }
+    },
+
   },
 
   modules: {
     blog: blog,
     main: main,
-  }
+  },
+  plugins: [
+    createPersistedState()
+  ]
 })
