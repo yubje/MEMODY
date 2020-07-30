@@ -199,9 +199,7 @@ export const blog = {
 
     fetchPosts({commit}, info) {
       BlogService.fetchPosts({commit},info)
-    }
-  },
-}
+    },
 
 
 
