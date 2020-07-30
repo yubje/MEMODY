@@ -30,6 +30,17 @@ public class ResponseMessage {
     public static final String SEARCH_MYBLOG_SUCCESS = "내 블로그가 조회 성공.";
     public static final String SEARCH_BLOG_SUCCESS = "블로그 조회 성공";
     public static final String SEARCH_BLOG_FAIL = "블로그 조회 실패";
+    public static final String UPDATE_BLOG_SUCCESS = "블로그 수정 성공";
+    public static final String UPDATE_BLOG_FAIL = "블로그 수정 실패";
+    public static final String DELETE_BLOG_SUCCESS = "블로그 삭제 성공";
+    public static final String DELETE_BLOG_FAIL = "블로그 삭제 실패";
+    public static final String BLOG_MEMBER_SUCCESS = "블로그 멤버 조회 성공";
+    public static final String BLOG_MEMBER_FAIL = "블로그 멤버 조회  실패";
+    public static final String INVITE_MEMBER_SUCCESS = "블로그 멤버 추가 성공";
+    public static final String INVITE_MEMBER_FAIL = "블로그 멤버 추가 실패";
+    public static final String DELETE_MEMBER_SUCCESS = "블로그 멤버 삭제 성공";
+    public static final String DELETE_MEMBER_FAIL = "블로그 멤버 삭제 실패";
+    
     
     public static final String RECOMMEND_BLOG_SUCCESS = "추천 블로그 목록 조회 성공";
     public static final String MAIN_SUCCESS = "메인 페이지 성공";
@@ -42,6 +53,8 @@ public class ResponseMessage {
     public static final String CREATE_POST_FAIL = "게시글 작성 실패";
     public static final String SEARCH_ALLPOST_NONE = "게시글이 없습니다.";
     public static final String SEARCH_ALLPOST_SUCCESS = "전체 게시글 목록 조회 성공";
+    public static final String SEARCH_ALLSAVEPOST_NONE = "임시저장한 게시글이 없습니다.";
+    public static final String SEARCH_ALLSAVEPOST_SUCCESS = "전체 임시저장 게시글 목록 조회 성공";
     public static final String SEARCH_POST_SUCCESS = "게시글 상세 조회 성공";
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
     public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
@@ -57,6 +70,14 @@ public class ResponseMessage {
     public static final String UPDATE_COMMENT_SUCCESS = "댓글 수정 성공";
     public static final String DELETE_COMMENT_SUCCESS = "댓글 삭제 성공";
     
+    // Category
+    public static final String CREATE_CATEGORY_SUCCESS = "카테고리 추가 성공";
+    public static final String CREATE_CATEGORY_FAIL = "카테고리 추가 실패";
+    public static final String UPDATE_CATEGORY_SUCCESS = "카테고리 수정 성공";
+    public static final String UPDATE_CATEGORY_FAIL = "카테고리 수정 실패";
+    public static final String DELETE_CATEGORY_SUCCESS = "카테고리 삭제 성공";
+    public static final String DELETE_CATEGORY_FAIL = "카테고리 삭제 실패";
+
     
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";

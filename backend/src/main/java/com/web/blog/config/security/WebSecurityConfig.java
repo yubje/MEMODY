@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,15 +19,18 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
 import com.web.blog.config.jwt.JwtAuthenticationFilter;
 import com.web.blog.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 
 
-
+@Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -50,6 +54,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+
+        filter.setEncoding("UTF-8");
+
+        filter.setForceEncoding(true);
+
+//        http.addFilterBefore(filter,CsrfFilter.class);
 		http.httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
 				.csrf().disable() // csrf 보안 토큰 disable처리.
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지
@@ -60,6 +71,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/logout").hasRole("USER")
 				.anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
 				.and()
+				.addFilterBefore(filter,CsrfFilter.class)
 				.addFilterBefore(new CorsFilter(),SecurityContextPersistenceFilter.class)
 				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 						UsernamePasswordAuthenticationFilter.class);

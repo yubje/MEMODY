@@ -122,18 +122,20 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class)
 	@GetMapping(value = "/blogs/{bid}/tmpposts/")
 	public ResponseEntity readTmpPostListAll(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 게시글 목록 조회 ");
+		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			List<Post> list = postService.listAllPost(bid);
+			String author = jwtTokenProvider.getUserPk(token);
+			System.out.println("로그인한 사람>>>"+author);
+			List<Post> list = postService.listAllSavePost(bid, author);
 			System.out.println(list);
 			if(list.size()==0) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLSAVEPOST_NONE),HttpStatus.OK);
 			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLSAVEPOST_SUCCESS, list),HttpStatus.OK);
 			}
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);

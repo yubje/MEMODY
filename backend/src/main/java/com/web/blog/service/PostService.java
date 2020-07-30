@@ -50,6 +50,13 @@ public class PostService {
 		result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid);
 		return result;
 	}
+
+	public List<Post> listAllSavePost(int bid, String author){
+		List<Post> result = new ArrayList<Post>();
+		// 최신글 순서로 조회 
+		result = postRepository.findAllByBidAndPtypeIsNotNullAndAuthorOrderByPostTimeDesc(bid, author);
+		return result;
+	}
 	
 	@Transactional
 	public Post findByPid(int pid) {
