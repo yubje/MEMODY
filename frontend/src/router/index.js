@@ -9,11 +9,16 @@ import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 
-
+import BlogSettingsMember from '@/components/blog/settings/BlogSettingsMember.vue'
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
+import BlogPostList from '@/components/blog/post/BlogPostList.vue'
+import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vue'
+import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
+import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
+import MainSearchResultView from '@/views/main/MainSearchResultView'
 
 Vue.use(VueRouter)
 
@@ -28,6 +33,9 @@ Vue.use(VueRouter)
     path: '/blog',
     name: 'BlogView',
     component: BlogView,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   // users
   {
@@ -66,17 +74,63 @@ Vue.use(VueRouter)
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
     component: BlogSettingsInfo,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   {
     path: '/blog/settings/category',
     name: 'BlogSettingsCategory',
     component: BlogSettingsCategory,
+    props(route) {
+      return { bid: route.query.bid }
+    }
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsMember',
+    component: BlogSettingsMember,
   },
   // blog post
   {
-    path: '/blogs/posts',
+    path: '/blog/post/create',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid,lcid: route.query.lcid }
+    }
+  },
+  {
+    path: '/blog/posts',
+    name: 'BlogPostList',
+    component: BlogPostList,
+  },
+  {
+    path: '/blog/posts',
+    name: 'BlogPostCategoryList',
+    component: BlogPostCategoryList,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid }
+    }
+  },
+  {
+    path: '/blog/post',
+    name: 'BlogPostDetail',
+    component: BlogPostDetail,
+  },
+  {
+    path: '/blog/post/update',
+    name: 'BlogPostUpdate',
+    component: BlogPostUpdate,
+  },
+  // main
+  {
+    path: '/main',
+    name: 'MainSearchResultView',
+    component: MainSearchResultView,
+    props(route) {
+      return { search: route.query.search }
+    }
   },
 ]
 

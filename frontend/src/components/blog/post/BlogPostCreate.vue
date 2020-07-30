@@ -6,17 +6,17 @@
     <div>
       <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
-    <div> 
+    <!-- <div> 
       <a>카테고리</a>
       <select>
         <option value=""></option>
         <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
       </select>
-    </div>
+    </div> -->
     <div>
       <button @click="blogPostCreate()">등록</button>
       <button @click="typeChange()">취소</button>
-    </div>
+    </div>  
   </div>
 </template>
 
@@ -30,6 +30,11 @@ import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostCreate',
+  props: {
+    bid: Number,
+    mcid: Number,
+    lcid: Number,
+  },
   components: {
     'editor': Editor
   },
@@ -43,13 +48,17 @@ export default {
   },
   created() {
     this.initPostData
+    console.log(this.bid, this.mcid)
+    this.postData.bid = this.bid
+    this.postData.mcid = this.mcid
+    this.postData.lcid = this.lcid
   },
   computed: {
-    ...mapState('blog', ['postData']),
+    ...mapState('blog', ['postData', 'dataCategories']),
     ...mapMutations('blog', ['initPostData'])
   },
   methods: {
-    ...mapActions('blog', ['createPost']),
+    ...mapActions('blog', ['createPost','getBlogCategory']),
 
     typeChange() {
       this.postData.ptype = 'SAVE'

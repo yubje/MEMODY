@@ -1,12 +1,17 @@
 <template>
   <div id="main">
-    <div>
-      <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px">
+    <div class="m-5">
+      <h1>MEMODY</h1>
+      <!-- <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px"> -->
     </div>
-    <MainSearchTab/>
-    <MainMyBlogList :myBlogs="myBlogs"/>
+    <div class="container w-75">
+      <MainSearchTab/>
+    </div>
+    
+    <div v-if="authToken">
+      <MainMyBlogList :myBlogs="myBlogs"/>
+    </div>
     <MainRecommendBlogList :recommendBlog="recommendBlog"/>
-    <button @click="fetchBlogs">클릭</button>
   </div>
 </template>
 
@@ -18,10 +23,15 @@ import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
 
+import { mapState } from 'vuex'
+
 const SERVER = process.env.VUE_APP_SERVER
 
 export default {
   name: 'MainView',
+  computed: {
+      ...mapState(['authToken'])
+  },
   data() {
     return {
       myBlogs: [],
@@ -51,10 +61,9 @@ export default {
           console.log(error)
         })
       }else {
-        console.log("before 입니다 -- ")
         axios.get(`${SERVER}/main/before/`)
         .then(response => {
-          console.log(response)
+          this.recommendBlog = response.data.data
         })
       }
     }

@@ -1,12 +1,11 @@
 <template>
   <div>
     <h3>내 블로그</h3>
-    <div style="border:1px solid;  width:85%; margin:auto" class="container-fluid">
+    <div style="width:85%; margin:auto" class="container-fluid">
       
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addBlogModal">블로그 생성</button>
-      <div class="row">
-      <MainMyBlogItem class="col-md-4" v-for="myblog in myBlogs" :key="myblog.bid" :myblog="myblog"/>
-
+      <div class="row justify-content-between">
+        <MainMyBlogItem class="col-md-4 mt-2" v-for="myblog in myBlogs" :key="myblog.bid" :myblog="myblog" />
       </div>
       <MainCreateBlog/>
     </div>
