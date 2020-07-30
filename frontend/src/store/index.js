@@ -78,12 +78,12 @@ export default new Vuex.Store({
         location: '/login'
       }
       axios.post(SERVER + info.location, info.data)
-        .then((response) => {
-          commit('SET_TOKEN', response.headers.auth)
-          commit('SET_USERINFO', response.data.data)
-          router.push({ name: 'Main'})
-        })
-        .catch(error => alert(error.response.data.message))
+      .then((response) => {
+        commit('SET_TOKEN', response.headers.auth)
+        commit('SET_USERINFO', response.data.data)
+        router.push({ name: 'Main'})
+      })
+      .catch(error => alert(error.response.data.message))
     },
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
@@ -167,6 +167,7 @@ export default new Vuex.Store({
     blog: blog,
     main: main,
   },
+
   plugins: [
     createPersistedState()
   ]
