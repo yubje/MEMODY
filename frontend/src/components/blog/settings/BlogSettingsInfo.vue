@@ -9,34 +9,50 @@
         <div class="col">
           <div class="row">
             <p>블로그명</p>
-            <input type="text">
+            <p>{{ blogData }}</p>
+            <input 
+              type="text" 
+              v-model="blogData.btitle"
+            >
           </div>
           <div class="row">
             <p>블로그 부제</p>
-            <input type="text">
+            <input 
+              type="text" 
+              v-model="blogData.bsubtitle"
+            >
           </div>
           <div class="row">
             <p>블로그 설명</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
+            <textarea 
+              name="blogDataContent"
+              cols="30" rows="10"
+              v-model="blogData.bcontent"
+            ></textarea>
           </div>
           <div class="row">
             <p>해시태그</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-          </div>
-          <div class="row">
-            <p>멤버 관리</p>
-            <div>
+            <div class="col">
+              <form @submit.prevent="ADD_HASHTAG(newHashtag)">
+                <input type="text" v-model="newHashtag">
+                <button class="btn btn-sm btn-primary">추가</button>
+              </form>
               <div>
-                <!--사용자 검색-->
-                <input type="text">
-                <button>추가</button>
+                <button 
+                class="btn btn-sm btn-primary rounded-pill"
+                v-for="(item, key) in blogData.hashtags"
+                @click="REMOVE_HASHTAG(key)"
+                :key="item"
+                >  # {{ item.tname }}  X</button>
               </div>
-              <div>
-                <p>멤버 목록</p>
-                <!-- 멤버 목록 -->
-              </div>
+              
             </div>
           </div>
+          
+          <button 
+            class="btn btn-primary"
+            @click="updateBlogInfo"
+          >수정하기</button>
         </div>
       </div>
     </div>
@@ -44,6 +60,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
 
 export default {
@@ -51,12 +68,18 @@ export default {
   components : {
     BlogSettingsSidebar,
   },
-  props: {
-    bid : Number
+  data() {
+    return {
+      newHashtag: null,
+    }
   },
-  created() {
-    console.log(this.bid)
-  }
+  computed: {
+    ...mapState('blog', ['blogData'])
+  },
+  methods: {
+    ...mapMutations('blog', ['REMOVE_HASHTAG', 'ADD_HASHTAG']),
+    ...mapActions('blog', ['updateBlogInfo'])
+  },
 }
 </script>
 
