@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="this.getpostListData.length">
-      <div id="post" v-for="post in this.getpostListData" :key="post.pid" @click="blogPostDetail(post)">
+    <div v-if="posts">
+      <div id="post" v-for="post in posts" :key="post.pid" @click="blogPostDetail()">
         <hr style="margin-top: 0; margin-bottom:0">
         <a>{{post.ptitle}}</a>
         <a style="float:right">{{post.postTime}}</a>
@@ -15,21 +15,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+
 
 export default {
   name: 'BlogPostListItem',
-  created() {
-    this.lookupPostList()
+  props: {
+    posts: {
+      type: Array,
+    },
   },
-  computed: {
-    ...mapGetters('blog', ['getpostListData'])
+  craeted() {
+    console.log(this.posts)
   },
   methods: {
-    ...mapActions('blog', ['lookupPostList', 'lookupPostDetail']),
-
-    blogPostDetail(post) {
-      this.lookupPostDetail(post)
+    blogPostDetail() {
       this.$router.push({ name: 'BlogPostDetail'})
     }
   }

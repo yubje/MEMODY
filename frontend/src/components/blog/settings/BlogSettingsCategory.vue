@@ -9,7 +9,7 @@
         <div>
           <p>카테고리 보여주기</p>
           <input type="text" v-model="largeCategoryData.large_dir">
-          <button @click="addParentCategory(largeCategoryData)">대분류 +</button>
+          <button @click="addParentCategory(largeCategoryData), getBlogCategory(bid)">대분류 +</button>
           <div v-for="categories in dataCategories" :key="categories.lcid" class="row justify-content-end">
             <div class="col-12">
               <h4 class="d-flex">
@@ -34,7 +34,7 @@
                 </div>
               </div>
               <input type="text" v-model="mediumCategoryData.medium_dir">
-              <button @click="addChildCategory(mediumCategoryData)">소분류+</button>
+              <button @click="addChildCategory(mediumCategoryData), getBlogCategory(bid)">소분류+</button>
           </div>
         </div>
       </div>
@@ -73,7 +73,6 @@ export default {
   methods: {
     ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory']),
     setLcid(lcid,large_dir) {
-      console.log(lcid)
       this.selectedLargeDir=large_dir
       this.mediumCategoryData.lcid = lcid
     }
