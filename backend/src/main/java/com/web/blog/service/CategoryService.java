@@ -1,5 +1,8 @@
 package com.web.blog.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Blog;
@@ -101,5 +104,19 @@ public class CategoryService {
 		} else {
 			return false;
 		}
+	}
+	
+	// 내블로그 디렉토리 구조 조회
+	public List<LCategory> searchCategory(int bid){
+		List<LCategory> list = lcategoryRepository.findByBid(bid);
+		List<LCategory> result = new ArrayList<LCategory>();
+		
+		for(LCategory L:list) {
+			int lcid = L.getLcid();
+			L.addMCategory(mcategoryRepository.findByLcid(lcid));
+			result.add(L);
+		}
+		return result;
+		
 	}
 }
