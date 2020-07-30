@@ -20,7 +20,7 @@ export const blog = {
     //전체 카테고리
     categoryListData: [],
 
-    //선택한 카테고리에 대한 전체 글 목록
+    //전체 글 목록
     postListData: [],
 
     //블로그 게시글 상세정보
@@ -31,14 +31,13 @@ export const blog = {
       ptitle: '',
       pcontent: '',
       author: '',
-      post_time: '',
+      postTime: '',
       update_time: '',
-      ptype: ''
+      ptype: null
     }
   },
   getters: {
     getpostListData(state) {
-      console.log(state.postListData)
       return state.postListData;
     },
 
@@ -52,16 +51,20 @@ export const blog = {
         ptitle: '',
         pcontent: '',
         author: '',
-        post_time: '',
+        postTime: '',
         update_time: '',
         ptype: ''
       }
     },
 
-    setpostListData(state, postList) {
+    setPostListData(state, postList) {
       state.postListData = postList;
     },
 
+    setPostDetailData(state, postData) {
+      state.postData = postData;
+    },
+    
     SET_BID(state, bid) {
       state.bid = bid
     },
@@ -78,22 +81,33 @@ export const blog = {
     createBlog(response) {
       BlogService.createBlog(response)
     },
+    
+    // 블로그 정보 조회 (API 문서 - 28D)
+    getBlogInfo({ commit }, bid) {
+      BlogService.getBlogInfo({ commit }, bid)
+    },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
     createPost(response) {
       BlogService.createPost(response)
     },
 
-    // 블로그 게시글 전체 조회 (API 문서 - 58D)
+    // 블로그 게시글 전체 조회 (API 문서 - 62D)
     lookupPostList({commit}) {
-      //postList = BlogService.lookupPostList()
-      commit('setpostListData', BlogService.lookupPostList())
-      console.log("1")
+      return BlogService.lookupPostList()
+      .then(postListData => {
+        commit('setPostListData', postListData)
+      })
+      .catch(error => console.log(error.data.message))
     },
 
-    // 블로그 정보 조회 (API 문서 - 28D)
-    getBlogInfo({ commit }, bid) {
-      BlogService.getBlogInfo({ commit }, bid)
+    // 블로그 게시글 상세 조회 (API 문서 - 70D)
+    lookupPostDetail({commit}, response) {
+      return BlogService.lookupPostDetail(response)
+      .then(postDetailData => {
+        commit('setPostDetailData', postDetailData)
+      })
+      .catch(error => console.log(error.data.message))
     },
 
     // 대분류 추가 
@@ -110,4 +124,19 @@ export const blog = {
 
   },
 
+    // 블로그 게시글 수정 (API 문서 - 54D)
+    updatePost({commit}, response) {
+      return BlogService.updatePost(response)
+      .then(result => {
+        commit('setPostDatailData', result.data)
+        alert(result.message)
+      })
+      .catch(error => console.log(error.response.data.message))
+    },
+
+    // 블로그 게시글 삭제 (API 문서 - 65D)
+    deletePost(response) {
+      BlogService.deletePost(response)
+    }
+  }
 }
