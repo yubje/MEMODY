@@ -28,7 +28,8 @@
             :userInfo="userInfo"
             class="btn btn-sm btn-primary"
             >
-            회원 정보 수정</router-link>
+            수정</router-link>
+            <button class="btn btn-sm btn-primary" @click="userInfoDelete()">탈퇴</button>
           </div>
         </div>
       </div>
@@ -37,13 +38,25 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'UserInfoView',
   computed: {
       ...mapState(['userInfo'])
   },
+  methods: {
+    ...mapActions(['logout', 'deleteUserInfo']),
+
+    userInfoDelete() {
+      var result = confirm("정말로 탈퇴하시겠습니까?")
+
+      if(result) {
+        this.deleteUserInfo()
+        this.logout()
+      }
+    }
+  }
 }
 </script>
 
