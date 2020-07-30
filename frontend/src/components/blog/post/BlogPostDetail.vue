@@ -14,18 +14,21 @@
         <hr>
         <p>{{this.postData.pcontent}}</p>
       </div>
+      <!-- <BlogCommentCreate/> -->
     </div>
   </div>
 </template>
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
+// import BlogCommentCreate from '@/components/blog/comment/BlogCommentCreate.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'BlogPostDetail',
   components: {
-    BlogPostSidebar
+    BlogPostSidebar,
+    //BlogCommentCreate
   },
   computed: {
     ...mapState('blog', ['postData']),

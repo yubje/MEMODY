@@ -12,6 +12,11 @@
         </router-link>
       </div>
       <div class="row">
+        <router-link :to="{ name: 'BlogSettingsMember' }"> 
+          블로그 멤버 설정
+        </router-link>
+      </div>
+      <div class="row">
         <router-link :to="{ name: 'BlogView' }">블로그 홈</router-link>
       </div>
     </div>
