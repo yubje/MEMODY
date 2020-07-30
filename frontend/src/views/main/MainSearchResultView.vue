@@ -11,10 +11,8 @@
       class="text-left"
     >
       <a v-for="hashtag in blog.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-      <router-link 
-        :to="{ name: 'BlogView', query: { bid: blog.bid} }"
-        @click="getBlogInfo(blog.bid)"
-      ><h3>{{ blog.btitle }}</h3></router-link>
+      
+      <h3 @click="getBlogInfo(blog.bid)">{{ blog.btitle }}</h3>
       <p>{{ blog.bcontent }}</p>
       <hr>
     </div>
@@ -43,7 +41,7 @@ export default {
     ...mapState('main', ['searchedBlogs'])
   },
   methods: {
-    ...mapActions('blog', 'getBlogInfo')
+    ...mapActions('blog', ['getBlogInfo'])
   },
 
 }
