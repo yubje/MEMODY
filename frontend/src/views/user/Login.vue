@@ -1,15 +1,18 @@
 <template>
   <div id="login">
    <router-view/>
-    <b-modal id="login-modal" title="Login" hide-footer="true" >
-      <h1 style="font-family: BMHANNAPro;">로그인</h1>
-      <input v-model="loginData.email" type="text" id="email" placeholder="이메일 입력">
+    <b-modal id="login-modal" title="Login" hide-footer="true">
+      <div>
+        <h1 style="font-family: BMHANNAPro;" class="m-5">로그인</h1>
+      </div>
+      <div class="row">
+        <input v-model="loginData.email" type="text" id="email" placeholder="이메일 입력">
+        <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
+      </div>
+      
+      <router-link v-b-modal.resetpw-modal :to="{ name: 'ResetPW' }" class="text-dark text-decoration-none">비밀번호 찾기</router-link>
       <br>
-      <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
-      <br>
-      <router-link v-b-modal.resetpw-modal :to="{ name: 'ResetPW' }" >비밀번호 찾기</router-link>
-      <br>
-      <button @click="login">로그인</button>
+      <button class="btn btn-primary" @click="login" data-dismiss="modal">로그인</button>
       <br>
       <p>아직 회원이 아니세요?</p>
       <br>
