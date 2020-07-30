@@ -22,7 +22,10 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
+
     },
+    dataCategories: null,
+
 
     //전체 카테고리
     categoryListData: [],
@@ -40,8 +43,12 @@ export const blog = {
       author: '',
       postTime: '',
       update_time: '',
-      ptype: null
-    }
+      ptype: null,
+    },
+
+    // 블로그 멤버
+    members: null,
+
   },
   getters: {
     getpostListData(state) {
@@ -68,6 +75,7 @@ export const blog = {
       state.postListData = postList;
     },
 
+
     CLEAR_NEWBLOGDATA(state) {
       state.newBlogData= {
         btitle: null,
@@ -77,10 +85,12 @@ export const blog = {
       }
     },
     
+
     setPostDetailData(state, postData) {
       state.postData = postData;
     },
     
+
     SET_BID(state, bid) {
       state.bid = bid
     },
@@ -88,6 +98,7 @@ export const blog = {
     SET_BLOGDATA(state, blogData) {
       state.blogData = blogData
     },
+
 
     REMOVE_HASHTAG(state, key) {
       state.blogData.hashtags.splice(key, 1)
@@ -97,6 +108,11 @@ export const blog = {
     ADD_HASHTAG(state, hashtag) {
       state.blogData.hashtags.push({"tname": hashtag})
       console.log(state.blogData)
+    },
+
+
+    SET_DATACATEGORIES(state, dataCategories){
+      state.dataCategories = dataCategories
     },
 
 
@@ -133,14 +149,27 @@ export const blog = {
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
+
+    },
+
+    // 대분류 추가 
+    addParentCategory({commit},largeCategoryData) {
+      BlogService.addParentCategory({commit},largeCategoryData)
+    },
+    // 소분류 추가 
+    addChildCategory({commit},mediumCategoryData) {
+      BlogService.addChildCategory({commit},mediumCategoryData)
+    },
+    getBlogCategory({ commit },bid) {
+      BlogService.getBlogCategory({ commit },bid)
+
     },
 
     updateBlogInfo({ state, commit }) {
       BlogService.updateBlogInfo({ state, commit })
       
-
     },
-  },
+
 
     // 블로그 게시글 수정 (API 문서 - 54D)
     updatePost({commit}, response) {
@@ -152,9 +181,20 @@ export const blog = {
       .catch(error => console.log(error.response.data.message))
     },
 
+
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(response) {
       BlogService.deletePost(response)
-    }
-  }
+    },
+
+
+    getBlogMembers({ state }) {
+      console.log(state)
+      // console.log(response)
+      BlogService.getBlogMembers({ state })
+    },
+  },
+
+
+
 }
