@@ -121,10 +121,7 @@ export const blog = {
     getBlogCategory({ commit },bid) {
       BlogService.getBlogCategory({ commit },bid)
     },
-
-  },
-
-    // 블로그 게시글 수정 (API 문서 - 54D)
+    
     updatePost({commit}, response) {
       return BlogService.updatePost(response)
       .then(result => {
@@ -133,10 +130,16 @@ export const blog = {
       })
       .catch(error => console.log(error.response.data.message))
     },
-
+  
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(response) {
       BlogService.deletePost(response)
+    },
+    moveToPosts({commit}, categoryData) {
+      console.log(categoryData)
+      BlogService.moveToPosts({commit}, categoryData)
     }
+      // 블로그 게시글 수정 (API 문서 - 54D)
+  },
+
   }
-}

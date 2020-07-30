@@ -22,7 +22,7 @@
         </h4>
       </div>
       <div v-for="child in categories.mcategory" :key="child.mcid" class="col-11">
-        <p>
+        <p @click="moveToPost(child.mcid, blogData.bid)">
           {{child.medium_dir}} 
         </p>
       </div>
@@ -50,10 +50,24 @@ export default {
     ...mapState('blog', ['blogData','dataCategories'])
   },
   methods: {
-    ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory']),
+    ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory','moveToPosts']),
+    moveToPost(mcid,bid) {
+      const categoryData = {
+        "bid": bid,
+        "mcid": mcid
+      }
+      this.moveToPosts(categoryData)
+    }
   },
   created() {
     this.getBlogCategory(this.blogData.bid)
   }
 }
 </script>
+
+
+<style scoped>
+p {
+  cursor: pointer;
+}
+</style>

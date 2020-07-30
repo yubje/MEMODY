@@ -104,7 +104,11 @@ class BlogService {
     .catch(error => console.log(error.response.data.message))
   }
 
-  
+  //카테고리 별 글목록 조회
+  moveToPosts({commit},categoryData) {
+    console.log(commit)
+    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid }},)
+  }
 
 }
 

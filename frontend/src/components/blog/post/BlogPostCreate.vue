@@ -46,10 +46,11 @@ export default {
   },
   computed: {
     ...mapState('blog', ['postData']),
-    ...mapMutations('blog', ['initPostData']),
-    ...mapActions('blog', ['createPost'])
+    ...mapMutations('blog', ['initPostData'])
   },
   methods: {
+    ...mapActions('blog', ['createPost']),
+
     typeChange() {
       this.postData.ptype = 'SAVE'
       this.blogPostCreate()
@@ -57,7 +58,7 @@ export default {
 
     blogPostCreate() {
       this.postData.pcontent = this.$refs.toastuiEditor.invoke("getMarkdown")
-      this.createPost
+      this.createPost()
     }
   }
 }

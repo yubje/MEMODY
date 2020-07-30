@@ -14,6 +14,7 @@ import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategor
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 import BlogPostList from '@/components/blog/post/BlogPostList.vue'
+import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vue'
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
@@ -95,6 +96,14 @@ Vue.use(VueRouter)
     path: '/blog/posts',
     name: 'BlogPostList',
     component: BlogPostList,
+  },
+  {
+    path: '/blog/posts',
+    name: 'BlogPostCategoryList',
+    component: BlogPostCategoryList,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid }
+    }
   },
   {
     path: '/blog/post',
