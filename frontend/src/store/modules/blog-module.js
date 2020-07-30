@@ -199,11 +199,7 @@ export const blog = {
 
     fetchPosts({commit}, info) {
       BlogService.fetchPosts({commit},info)
-    }
-  },
-}
-
-
+    },
 
     getBlogMembers({ state }) {
       console.log(state)
@@ -211,8 +207,6 @@ export const blog = {
       BlogService.getBlogMembers({ state })
     },
   },
-
-
 
 }
 
