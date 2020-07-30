@@ -250,4 +250,33 @@ public class CategoryController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	/////////////////////////////////////////////////////////// 조회
+	/**
+	 * 카테고리 조회 - 블로그 내의 카테고리를 구조를 조회하는 기능. 
+	 * 
+	 * @param MCategory int lcid, int mcid
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(DELETE_CATEGORY_SUCCESS,DELETE_CATEGORY_FAIL), HttpStatus
+	 * @exception FORBIDDEN
+	 * 			  
+	 */
+	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class)
+	@GetMapping("/blogs/{bid}/categories")
+	public ResponseEntity searchCategory(@PathVariable int bid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+			if(!blogService.checkBlog(bid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				List<LCategory> list = categoryService.searchCategory(bid);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_CATEGORY_SUCCESS,list),
+						HttpStatus.CREATED);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 }

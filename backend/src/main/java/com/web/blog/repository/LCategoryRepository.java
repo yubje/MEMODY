@@ -17,4 +17,6 @@ public interface LCategoryRepository extends JpaRepository<LCategory, Long> {
 
 	@Transactional
 	void deleteByLcid(int lcid);
+	
+	List<LCategory> findByBid(int bid);
 }
