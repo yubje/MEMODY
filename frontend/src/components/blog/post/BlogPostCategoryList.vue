@@ -12,7 +12,7 @@
             <a>글제목</a>
             <a style="float:right">작성일</a>
           </div>
-          <BlogPostCategoryListItem :posts="posts"/>
+          <BlogPostCategoryListItem v-for="post in posts" :key="post.pid" :post="post"/>
         </div>
       </div>
     </div>
@@ -45,12 +45,6 @@ export default {
   },
   methods: {
     ...mapActions('blog',['fetchPosts'])
-    // fetchPosts() {
-    // axios.get(`${SERVER}/blogs/${this.blogData.bid}/categories/${this.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
-    // .then(response => {
-    //   this.posts= response.data.data
-    // })
-    // }
   },
  
   created() {
@@ -59,6 +53,7 @@ export default {
       "mcid": this.mcid
     }
     this.fetchPosts(info)
+    console.log(this.posts)
   },
    
 }
