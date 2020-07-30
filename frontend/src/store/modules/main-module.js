@@ -45,33 +45,6 @@ export const main = {
         .then(response => {
           console.log(response.data)
           commit('SET_SEARCHEDBLOGS', response.data.data)
-          // dummy data
-          // const data = [
-          //   {
-          //     "bid": "09554499",
-          //     "hashtags": [
-          //       {
-          //               "tname": "생명"
-          //        },
-          //        {
-          //                "tname": "BIGDATA"
-          //         }],
-          //     "btitle":"기술 면접 블로그",
-          //     "bcontent":"블로그 Content",
-          //   },
-          //   {
-          //     "bid": "01139531",
-          //     "hashtags": [
-          //       {
-          //               "tname": "생명"
-          //        },
-          //        {
-          //                "tname": "BIGDATA"
-          //         }],
-          //     "btitle":"기술 면접 블로그",
-          //     "bcontent":"자바 관련 정보 수집 블로그",
-          //   }
-          //   ]
           router.push({ name: 'MainSearchResultView', query: { search: info.searchInput }})
         })
         .catch(error => console.log(error.response.data))
