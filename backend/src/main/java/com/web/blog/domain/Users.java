@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Users implements UserDetails {
 	
+	
 	@Id
 	private String email;
 

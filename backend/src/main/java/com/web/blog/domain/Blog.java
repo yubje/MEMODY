@@ -50,6 +50,10 @@ public class Blog {
 	@JoinColumn(name="tname")
 	private Collection<Blogtag> hashtags;
 	
+	@OneToMany(fetch=FetchType.LAZY)
+	@JoinColumn(name="email")
+	private Collection<Member> member;
+	
 	@Builder
 	public Blog(String btitle,String bsubtitle, String bcontent, String manager, int views) {
 		this.btitle = btitle;
@@ -67,9 +71,9 @@ public class Blog {
 		this.views = views;
 	}
 	
-	public void setHashtags(List<Blogtag> hashtags) {
-		this.hashtags = hashtags;
-	}
+//	public void setHashtags(List<Blogtag> hashtags) {
+//		this.hashtags = hashtags;
+//	}
 	
 	public void addHashTag(Blogtag tag) {
 		if(hashtags == null) {
@@ -78,11 +82,25 @@ public class Blog {
 		hashtags.add(tag);
 	}
 
+//	public void setMember(List<Member> member) {
+//		this.member = member;
+//	}
+	
+	public void addMember(Member mem) {
+		if(member == null) {
+			member = new ArrayList<Member>();
+		}
+		member.add(mem);
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Blog [bid=" + bid + ", btitle=" + btitle + ", bsubtitle=" + bsubtitle + ", bcontent=" + bcontent
 				+ ", manager=" + manager + "]";
 	}
+
+	
 
 	
 
