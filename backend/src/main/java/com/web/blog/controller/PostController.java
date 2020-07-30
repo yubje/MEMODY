@@ -64,9 +64,8 @@ public class PostController {
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		System.out.println("포스트 생성 ");
 		System.out.println(post);
-		System.out.println(post.get("ptype"));
 		String token = req.getHeader("auth");
-		System.out.println("POST>>>>>>>>>>>>>>>"+token);
+//		System.out.println("POST>>>>>>>>>>>>>>>"+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
@@ -106,7 +105,7 @@ public class PostController {
 			List<Post> list = postService.listAllPost(bid);
 			System.out.println(list);
 			if(list.size()==0) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE, list),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
 			}
@@ -129,7 +128,6 @@ public class PostController {
 		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			String author = jwtTokenProvider.getUserPk(token);
-			System.out.println("로그인한 사람>>>"+author);
 			List<Post> list = postService.listAllSavePost(bid, author);
 			System.out.println(list);
 			if(list.size()==0) {
@@ -182,11 +180,12 @@ public class PostController {
 		System.out.println(post);
 		
 		// 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(post.getAuthor())) {
+		if (jwtTokenProvider.validateToken(token)) {
 			
 			postService.updatePost(post);
 			System.out.println("수정 성공");
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, post),HttpStatus.OK);
+			Post updatePost = postService.findByPid(post.getPid());
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}

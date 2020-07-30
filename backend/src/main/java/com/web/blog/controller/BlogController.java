@@ -71,14 +71,18 @@ public class BlogController {
 	public ResponseEntity createBlog(@RequestBody Map<String, String> blog, HttpServletRequest req) {
 
 		String token = req.getHeader("auth");
+		System.out.println("블로그생성");
+//		System.out.println(blog.get("btitle")+" "+blog.get("bsubtitle")+" "+blog.get("bcontent"));
+//		System.out.println("해시태그들 보여주셈 >>>>> "+blog.get("hashtags"));
 		if (jwtTokenProvider.validateToken(token)) {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
 			if (blogService.countBlogByUser(email)) {
 				Blog temp = new Blog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email, 0);
+				System.out.println(temp);
 				bid = blogService.createBlog(temp);
 
-				String hashtags[] = blog.get("hashtag").split("#");
+				String hashtags[] = blog.get("hashtags").split("#");
 				String tname;
 				int tid;
 				for (int i = 1; i < hashtags.length; i++) {
@@ -238,7 +242,8 @@ public class BlogController {
 			String bsubtitle = blog.get("bsubtitle");
 			String bcontent = blog.get("bcontent");
 			Blog changeBlog = new Blog(btitle, bsubtitle, bcontent, "temp", 0);
-			String changeTag = blog.get("hashtag");
+
+			String changeTag = blog.get("hashtags");
 
 			if (blogService.updateBlog(user, changeBlog, changeTag, bid)) {
 
@@ -320,7 +325,7 @@ public class BlogController {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.BLOG_MEMBER_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.BLOG_MEMBER_SUCCESS,user),
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.BLOG_MEMBER_SUCCESS,list),
 						HttpStatus.OK);
 			}
 		} else {

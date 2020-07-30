@@ -263,6 +263,7 @@ public class CategoryController {
 	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class)
 	@GetMapping("/blogs/{bid}/categories")
 	public ResponseEntity searchCategory(@PathVariable int bid, HttpServletRequest req) {
+		System.out.println(bid);
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
@@ -284,6 +285,7 @@ public class CategoryController {
 	@GetMapping("/blogs/{bid}/categories/{mcid}")
 	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(bid)){
@@ -295,7 +297,7 @@ public class CategoryController {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
-					return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
+					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
 							HttpStatus.FORBIDDEN);
 				}
 			}
