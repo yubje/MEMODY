@@ -12,7 +12,7 @@
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
         <p style="text-align: left">수정날짜: {{this.postData.update_time}}</p>
         <hr>
-        <p>{{this.postData.pcontent}}</p>
+        <textarea style="height:80%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
       </div>
       <!-- <BlogCommentCreate/> -->
     </div>
