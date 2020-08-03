@@ -99,6 +99,14 @@ Vue.use(VueRouter)
     }
   },
   {
+    path: '/blog/settings/member',
+    name: 'BlogSettingsMember',
+    component: BlogSettingsMember,
+    props(route) {
+      return { bid: route.query.bid }
+    }
+  },
+  {
     path: '/blog/settings/category',
     name: 'BlogSettingsMember',
     component: BlogSettingsMember,
