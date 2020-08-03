@@ -15,12 +15,11 @@
             <br>
             <input v-model="loginData.password" type="password" id="password" placeholder="비밀번호 입력">
             <br>
-            <router-link data-toggle="modal" data-target="#resetpw-modal" :to="{ name: 'UserResetPWView' }" >비밀번호 찾기</router-link>
+            <router-link :to="{ name: 'UserResetPWCheckEmailView' }" data-dismiss="modal" data-toggle="modal" data-target="#resetpwcheckemail-modal" >비밀번호 찾기</router-link>
             <br>
             <button @click="login(loginData)" data-dismiss="modal" >로그인</button>
             <br>
-            <a href="">아직 회원이 아니세요?</a>
-            <br>
+            <a>아직 회원이 아니세요? </a>
             <router-link :to="{ name: 'UserSignupView' }" data-dismiss="modal" data-toggle="modal" data-target="#signup-modal" >회원 가입</router-link>
           </div>
         </div>

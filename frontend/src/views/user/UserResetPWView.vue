@@ -10,11 +10,19 @@
             </button>
           </div>
           <div class="modal-body">
-            <h1>비밀번호 찾기</h1>
-            <p>가입한 이메일 정보를 입력한 후, 인증 메일 받기를 클릭하세요.</p>
-            <input v-model="resetpwData.email" placeholder="이메일을 입력하세요">
-            <br>
-            <button @click="checkForm" data-dismiss="modal">인증 메일 받기</button>
+            <h1>비밀번호 재설정</h1>
+            <p>새로운 비밀번호를 입력하세요.</p>
+
+            <div class="row col mt-2">
+              <span class="col-4">비밀번호</span>
+              <input class="col-8" v-model="resetPWData.password" type="password" placeholder="비밀번호를 입력하세요">
+            </div>
+            <div class="row col mt-2">
+              <span class="col-4">비밀번호 확인</span>
+              <input class="col-8" v-model="password2" type="password" placeholder="비밀번호 확인">
+            </div>
+
+            <button @click="resetPW(resetPWData)" class="btn btn-primary" data-dismiss="modal" data-toggle="modal">비밀번호 재설정</button>
           </div>
         </div>
       </div>
@@ -23,28 +31,24 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'UserResetPWView',
   data() {
     return {
-      resetpwData: {
-        email: ''
+      password2: '',
+      resetPWData: {
+        email: '',
+        password: ''
       }
     }
   },
-  methods: {
-    checkForm() {
-      if (!this.resetpwData.email) alert("이메일을 입력해주세요.");
-      else;
-    }
-  },
   mounted() {
-      //비밀번호 찾기 모달 창 띄우기
-      this.$bvModal.show('resetpw-modal')
-    }
+    window.$('#resetpw-modal').modal('show')
+  },
+  methods: {
+    ...mapActions(['resetPW'])
+  }
 }
 </script>
-
-<style>
-
-</style>
