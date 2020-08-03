@@ -21,4 +21,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 	
 	List<Blog> findDistinctByBtitleContaining(String bname);
 	
+	List<Blog> findByManager(String manager);
+	
 }
