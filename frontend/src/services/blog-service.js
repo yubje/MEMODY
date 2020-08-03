@@ -12,7 +12,7 @@ class BlogService {
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
-        router.push({ name: 'Main'}).catch((error)=>console.log(error))
+        router.push({ name: 'Main'})
       })
       .catch(error => console.log(error.response.data.message))
   }
@@ -24,7 +24,11 @@ class BlogService {
           commit('SET_BLOGDATA', response.data.data)
           router.push({ name: 'BlogView', query: { bid: bid }})
         })
-        .catch(error => console.log(error.response.data))
+        .catch(error => {
+          if (error.response.data.status === 403) {
+            alert('로그인이 필요한 서비스 입니다.')
+          }
+        })
     }
 
 
@@ -89,14 +93,22 @@ class BlogService {
 
   // 대분류 추가 
   addParentCategory({commit},largeCategoryData) {
-    console.log(largeCategoryData)
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
-    .then(response => {
-      console.log({commit})
-      console.log(response)
+    .then(() => {
+      this.getBlogCategory({commit}, largeCategoryData.bid)
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error)
+    })
+  }
+
+  // 대분류 삭제
+  deleteParentCategory({commit},largeCategoryData) {
+    console.log(commit)
+    console.log(largeCategoryData)
+    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,{data: largeCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, largeCategoryData.bid)
     })
   }
 
@@ -127,10 +139,18 @@ class BlogService {
 
   // 소분류 추가 
   addChildCategory({commit},mediumCategoryData) {
-    console.log({commit},mediumCategoryData)
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
-    .then(response => {
-      console.log(response)
+    .then(() => {
+      this.getBlogCategory({commit}, mediumCategoryData.bid)
+    })
+  }
+
+  // 소분류 삭제
+  deleteChildCategory({state,commit},mediumCategoryData) {
+    console.log(mediumCategoryData)
+    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,{data: mediumCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, state.bid)
     })
   }
 
@@ -152,12 +172,14 @@ class BlogService {
   }
 
   fetchPosts({commit},info) {
-    
-
-    axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
-    .then(response => {
-      commit('SET_POSTS', response.data.data)
-    })
+      axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_POSTS', response.data.data)
+        
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
 
 }

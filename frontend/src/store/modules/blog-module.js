@@ -61,8 +61,8 @@ export const blog = {
     initPostData(state) {
       state.postData = {
         pid: '',
-        lcid: '1', /***나중에 수정***/
-        mcid: '1', /***나중에 수정***/
+        lcid: '', /***나중에 수정***/
+        mcid: '', /***나중에 수정***/
         ptitle: '',
         pcontent: '',
         author: '',
@@ -162,10 +162,26 @@ export const blog = {
     addParentCategory({commit},largeCategoryData) {
       BlogService.addParentCategory({commit},largeCategoryData)
     },
+    // 대분류 삭제
+    deleteParentCategory({commit},Category) {
+      const largeCategoryData = {
+        'bid' : Category.bid,
+        'lcid' : Category.lcid
+      }
+      BlogService.deleteParentCategory({commit},largeCategoryData)
+    },
+
     // 소분류 추가 
     addChildCategory({commit},mediumCategoryData) {
       BlogService.addChildCategory({commit},mediumCategoryData)
     },
+    
+    // 소분류 삭제
+    deleteChildCategory({commit,state}, mediumCategoryData) {
+      console.log(mediumCategoryData)
+      BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
+    },
+
     getBlogCategory({ commit },bid) {
       BlogService.getBlogCategory({ commit },bid)
 
@@ -203,7 +219,6 @@ export const blog = {
 
     getBlogMembers({ state }) {
       console.log(state)
-      // console.log(response)
       BlogService.getBlogMembers({ state })
     },
   },

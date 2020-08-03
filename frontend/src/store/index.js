@@ -161,6 +161,15 @@ export default new Vuex.Store({
       }
     },
 
+    //회원 탈퇴 (API 문서 - 19D)
+    deleteUserInfo({getters}) {
+      axios.delete(`${SERVER}/users/${getters.userUpdateInfo.email}`, getters.config)
+        .then(response => {
+          alert(response.data.message)
+          router.go()
+        })
+        .catch(error => alert(error))
+    }
   },
 
   modules: {

@@ -9,7 +9,7 @@
         ><h5>{{myblog.btitle}}</h5></a>
         <h6 class="card-subtitle mb-2 text-muted">{{myblog.bsubtitle}}</h6>
         <p class="card-text">{{myblog.bcontent}}</p>
-        <a href="#" class="card-link">{{myblog.views}}</a>
+        <a href="#" class="card-link text-decoration-none text-dark">views: {{myblog.views}}</a>
       </div>
     </div>
   </div>
