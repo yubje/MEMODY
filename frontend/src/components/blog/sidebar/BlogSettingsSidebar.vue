@@ -12,7 +12,7 @@
         </router-link>
       </div>
       <div class="row py-2">
-        <router-link :to="{ name: 'BlogSettingsMember' }"> 
+        <router-link :to="{ name: 'BlogSettingsMember', query: {bid: blogData.bid } }"> 
           블로그 멤버 설정
         </router-link>
       </div>
