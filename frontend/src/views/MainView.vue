@@ -57,6 +57,7 @@ export default {
           return response
         })
         .catch(error => {
+          console.log('실패 ㅠㅠ')
           console.log(error)
         })
       }else {

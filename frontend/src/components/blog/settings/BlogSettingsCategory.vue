@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <BlogSettingsSidebar />
+      <BlogSettingsSidebar/>
       <div class="col col-lg-10">
         <div>
           <h1>카테고리 설정 </h1>

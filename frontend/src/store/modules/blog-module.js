@@ -221,6 +221,14 @@ export const blog = {
       console.log(state)
       BlogService.getBlogMembers({ state })
     },
+
+    addBlogMember({ state }, email) {
+      BlogService.addBlogMember({ state }, email)
+    },
+
+    deleteBlogMember({ state }, email) {
+      BlogService.deleteBlogMember({ state }, email)
+    },
   },
 
 }
