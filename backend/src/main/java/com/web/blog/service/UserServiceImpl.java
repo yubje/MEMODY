@@ -1,5 +1,4 @@
 package com.web.blog.service;
-
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +7,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.BlogException;
-import com.web.blog.dao.user.UserDao2;
+import com.web.blog.model.UserDao2;
 import com.web.blog.model.UserDto;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService2 {
 
 	@Autowired
 	UserDao2 dao;
