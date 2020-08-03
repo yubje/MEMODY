@@ -8,7 +8,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.web.blog.domain.Member;
 import com.web.blog.domain.Post;
+import com.web.blog.repository.BlogRepository;
+import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.PostRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository postRepository;
-//	private final MemberRepository memberRepository;
+	private final BlogRepository blogRepository;
+	private final MemberRepository memberRepository;
 	
 	public int createPost(Post Post) {
 		System.out.println(Post);
@@ -82,5 +86,24 @@ public class PostService {
 		// 최신글 순서로 조회 
 		result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid);
 		return result;
+	}
+	
+	// bid, lcid, mcid, pid
+	public void forkPost(Post post) {
+		// 내 블로그 목록 조회
+		// 내 카테고리 조회
+		// 선택한 후 lcid, mcid 랑 같이 
+		Post post2 = postRepository.findByPid(post.getPid());
+		postRepository.save(Post.builder()
+				.bid(post.getBid())
+				.lcid(post.getLcid())
+				.mcid(post.getMcid())
+				.ptitle(post2.getPtitle())
+				.pcontent(post2.getPcontent())
+				.author(post2.getAuthor())
+				.postTime(LocalDateTime.now())
+				.update_time(LocalDateTime.now())
+				.ptype(post2.getPtype())
+				.build());
 	}
 }

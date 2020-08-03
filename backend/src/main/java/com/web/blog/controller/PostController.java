@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
+import com.web.blog.domain.Blog;
 import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
@@ -35,8 +36,8 @@ import lombok.RequiredArgsConstructor;
  *			조민경, ver.0.1 , 2020-07-28, (First Commit)
  * </pre>
  * 
- * @author 조민경
- * @version 0.1, 2020-07-28, Post 관리 Controller
+ * @author 김형택
+ * @version 0.1, 2020-08-03, 게시글 Fork
  * @see None
  * 
  */
@@ -213,6 +214,31 @@ public class PostController {
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	/**
+	 * 게시글 Fork - 나의 블로그로 원하는 게시글을 fork한다.
+	 * 
+	 * @param Post post (int bid, int lcid, int mcid, int pid)
+	 * @return ResponseEntity<Response> - CREATE_POST_SUCCESS
+	 * @exception RestException - NOT_FOUND
+	 */
+	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
+	@DeleteMapping(value = "/blogs/fork")
+	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+
+			postService.forkPost(post);
+			
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
 		}
 	}
 	
