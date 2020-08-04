@@ -234,7 +234,7 @@ public class PostController {
 			postService.forkPost(post);
 			
 			return new ResponseEntity<Response>(
-					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
+					new Response(StatusCode.CREATED, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
 
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
