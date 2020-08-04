@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -46,23 +47,23 @@ public class Blog {
 	@Column(nullable = true)
 	private int views;
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="tname")
 	private Collection<Blogtag> hashtags;
 	
-	@OneToMany(fetch=FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name="email")
 	private Collection<Member> member;
 	
 	@Builder
-	public Blog(String btitle,String bsubtitle, String bcontent, String manager, int views) {
+	public Blog( String btitle,String bsubtitle, String bcontent, String manager, int views) {
 		this.btitle = btitle;
 		this.bsubtitle = bsubtitle;
 		this.bcontent = bcontent;
 		this.manager = manager;
 		this.views = views;
 	}
-
+	
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
@@ -71,10 +72,6 @@ public class Blog {
 		this.views = views;
 	}
 	
-//	public void setHashtags(List<Blogtag> hashtags) {
-//		this.hashtags = hashtags;
-//	}
-	
 	public void addHashTag(Blogtag tag) {
 		if(hashtags == null) {
 			hashtags = new ArrayList<Blogtag>();
@@ -82,10 +79,6 @@ public class Blog {
 		hashtags.add(tag);
 	}
 
-//	public void setMember(List<Member> member) {
-//		this.member = member;
-//	}
-	
 	public void addMember(Member mem) {
 		if(member == null) {
 			member = new ArrayList<Member>();
@@ -98,6 +91,18 @@ public class Blog {
 	public String toString() {
 		return "Blog [bid=" + bid + ", btitle=" + btitle + ", bsubtitle=" + bsubtitle + ", bcontent=" + bcontent
 				+ ", manager=" + manager + "]";
+	}
+
+	public void setBtitle(String btitle) {
+		this.btitle = btitle;
+	}
+
+	public void setBsubtitle(String bsubtitle) {
+		this.bsubtitle = bsubtitle;
+	}
+
+	public void setBcontent(String bcontent) {
+		this.bcontent = bcontent;
 	}
 
 	
