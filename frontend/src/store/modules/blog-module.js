@@ -187,9 +187,15 @@ export const blog = {
 
     },
 
+    // 블로그 정보 수정 (API 문서 - 32~36D)
     updateBlogInfo({ state, commit }) {
       BlogService.updateBlogInfo({ state, commit })
       
+    },
+    
+     // 블로그 삭제 (API 문서 - 37D)
+    deleteBlog({ state }) {
+      BlogService.deleteBlog({ state })
     },
 
 
