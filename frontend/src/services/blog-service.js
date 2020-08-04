@@ -212,14 +212,16 @@ class BlogService {
   //카테고리 별 글목록 조회
   moveToPosts({commit},categoryData) {
     console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},)
+    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},
+    
+    )
   }
 
   fetchPosts({commit},info) {
+      
       axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_POSTS', response.data.data)
-        
       })
       .catch(error => {
         console.log(error)
