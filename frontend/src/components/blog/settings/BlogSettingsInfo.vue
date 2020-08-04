@@ -44,7 +44,7 @@
                 class="btn btn-sm btn-primary rounded-pill m-2"
                 v-for="(item, key) in blogData.hashtags"
                 @click="REMOVE_HASHTAG(key)"
-                :key="item"
+                :key="item.tname"
                 >  # {{ item.tname }}  X</button>
               </div>
               
@@ -52,9 +52,13 @@
           </div>
           
           <button 
-            class="btn btn-primary mt-5"
+            class="btn btn-primary mt-5 mr-3"
             @click="updateBlogInfo"
           >수정하기</button>
+          <button 
+            class="btn btn-danger mt-5"
+            @click="deleteBlog"
+          >블로그 삭제</button>
         </div>
       </div>
     </div>
@@ -80,7 +84,7 @@ export default {
   },
   methods: {
     ...mapMutations('blog', ['REMOVE_HASHTAG', 'ADD_HASHTAG']),
-    ...mapActions('blog', ['updateBlogInfo'])
+    ...mapActions('blog', ['updateBlogInfo', 'deleteBlog'])
   },
 }
 </script>
