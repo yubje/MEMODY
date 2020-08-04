@@ -53,8 +53,11 @@ public class Post {
 	@Column(length = 10, nullable = true)
 	private String ptype;
 	
+	@Column(nullable = true)
+	private int postlikecnt;
+	
 	@Builder
-	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype) {
+	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype, int postlikecnt) {
 		this.bid = bid;
 		this.lcid = lcid;
 		this.mcid = mcid;
@@ -66,13 +69,7 @@ public class Post {
 //		this.post_time = LocalDateTime.now();
 //		this.update_time = LocalDateTime.now();
 		this.ptype = ptype;
-	}
-
-	@Override
-	public String toString() {
-		return "Post [pid=" + pid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle + ", pcontent="
-				+ pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time=" + update_time
-				+ ", ptype=" + ptype + "]";
+		this.postlikecnt = postlikecnt;
 	}
 
 	public void setPtitle(String ptitle) {
@@ -87,19 +84,16 @@ public class Post {
 	public void setPtype(String ptype) {
 		this.ptype = ptype;
 	}
-//	public void setPcontent(String pcontent) {
-//		this.pcontent = pcontent;
-//	}
-	
-	
-//	public void setManager(String manager) {
-//		this.manager = manager;
-//	}
+	public void setPostlikecnt(int postlikecnt) {
+		this.postlikecnt = postlikecnt;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "Blog [bid=" + pid + ", btitle=" + btitle + ", bsubtitle=" + bsubtitle + ", bcontent=" + bcontent
-//				+ ", manager=" + manager + "]";
-//	}
+
+	@Override
+	public String toString() {
+		return "Post [pid=" + pid + ", bid=" + bid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle
+				+ ", pcontent=" + pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time="
+				+ update_time + ", ptype=" + ptype + ", postlikecnt=" + postlikecnt + "]";
+	}
 
 }

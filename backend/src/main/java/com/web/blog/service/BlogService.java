@@ -48,11 +48,6 @@ public class BlogService {
 			return true;
 		}
 	}
-	// 내가 manager인 블로그 번호 조회
-	public List<Blog> myBlog(String email){
-		return blogRepository.findByManager(email);
-	}
-	
 
 	// 내 블로그 목록 조회
 	public List<Blog> myBlogList(String email) {

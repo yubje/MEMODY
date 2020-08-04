@@ -166,6 +166,7 @@ public class CategoryController {
 	@PutMapping("/blogs/categories/child")
 	public ResponseEntity updateCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		System.out.println(mcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!categoryService.checkCategory(mcategory.getLcid())){
@@ -305,7 +306,7 @@ public class CategoryController {
 				}else {
 					System.out.println(5);
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
-							HttpStatus.FORBIDDEN);
+							HttpStatus.NO_CONTENT);
 				}
 			}
 		} else {
