@@ -92,7 +92,8 @@ class BlogService {
 
 
   // 대분류 추가 
-  addParentCategory({commit},largeCategoryData) {
+  addParentCategory({commit, state},largeCategoryData) {
+    largeCategoryData.bid = state.bid
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
@@ -104,9 +105,15 @@ class BlogService {
 
   // 대분류 삭제
   deleteParentCategory({commit},largeCategoryData) {
-    console.log(commit)
-    console.log(largeCategoryData)
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,{data: largeCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, largeCategoryData.bid)
+    })
+  }
+  
+  //대분류 업데이트 
+  updateParentCategory({commit},largeCategoryData) {
+    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
     })
@@ -114,8 +121,6 @@ class BlogService {
 
 
   updateBlogInfo({ state, commit }) {
-    console.log(state)
-    console.log(commit)
     var tagString = ''
     state.blogData.hashtags.forEach((item) => tagString += '#'+item.tname.trim())
     console.log(tagString)
@@ -126,10 +131,8 @@ class BlogService {
       "bcontent": state.blogData.bcontent,
       "hashtags": tagString,
     }
-    console.log(data)
     axios.put(`${SERVER}/blogs`, data, {headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        console.log(response)
+      .then(() => {
         commit('SET_BLOGDATA', state.blogData)
         router.push({ name: 'BlogView', query: { bid: state.blogData.bid }})
 
@@ -147,8 +150,15 @@ class BlogService {
 
   // 소분류 삭제
   deleteChildCategory({state,commit},mediumCategoryData) {
-    console.log(mediumCategoryData)
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,{data: mediumCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, state.bid)
+    })
+  }
+
+  // 소분류 업데이트 
+  updateChildCategory({commit, state}, childData) {
+    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,childData, {headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, state.bid)
     })

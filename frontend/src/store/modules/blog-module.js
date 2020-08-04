@@ -159,8 +159,8 @@ export const blog = {
     },
 
     // 대분류 추가 
-    addParentCategory({commit},largeCategoryData) {
-      BlogService.addParentCategory({commit},largeCategoryData)
+    addParentCategory({commit, state},largeCategoryData) {
+      BlogService.addParentCategory({commit,state},largeCategoryData)
     },
     // 대분류 삭제
     deleteParentCategory({commit},Category) {
@@ -169,6 +169,10 @@ export const blog = {
         'lcid' : Category.lcid
       }
       BlogService.deleteParentCategory({commit},largeCategoryData)
+    },
+    //대분류 업데이트
+    updateParentCategory({commit},largeCategoryData) {
+      BlogService.updateParentCategory({commit},largeCategoryData)
     },
 
     // 소분류 추가 
@@ -180,6 +184,10 @@ export const blog = {
     deleteChildCategory({commit,state}, mediumCategoryData) {
       console.log(mediumCategoryData)
       BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
+    },
+    //소분류 업데이트
+    updateChildCategory({commit, state}, childData) {
+      BlogService.updateChildCategory({commit, state}, childData)
     },
 
     getBlogCategory({ commit },bid) {
