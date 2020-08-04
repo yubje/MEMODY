@@ -47,9 +47,14 @@ export const blog = {
     },
     posts: [],
 
-
     // 블로그 멤버
     members: null,
+
+    // 댓글
+    comment_id: null,
+    commentData: null,
+
+    
   },
   getters: {
     getpostListData(state) {
@@ -119,6 +124,10 @@ export const blog = {
 
     SET_POSTS(state, posts){
       state.posts= posts
+    },
+
+    SET_COMMENTDATA(state, commentData) {
+      state.commentData = commentData
     }
 
 
@@ -234,6 +243,16 @@ export const blog = {
 
     deleteBlogMember({ state }, email) {
       BlogService.deleteBlogMember({ state }, email)
+    },
+
+    // 댓글 작성 (API 문서 87~88D)
+    createComment({ state }, comment) {
+      BlogService.createComment({ state }, comment)
+
+    },
+
+    getCommentData({ commit, state }) {
+      BlogService.getCommentData({ commit, state })
     },
   },
 

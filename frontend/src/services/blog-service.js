@@ -225,6 +225,33 @@ class BlogService {
       })
     }
 
+  createComment({ state }, comment) {
+    console.log(state)
+    console.log(comment)
+    const commentData = {
+      "pid": state.postData.pid,
+      "comment": comment
+    }
+    console.log(commentData)
+    axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => console.log(error.response.data))
+  }
+
+  getCommentData({ commit, state }) {
+    console.log(commit)
+    console.log(state)
+    axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data.data)
+        commit('SET_COMMENTDATA', response.data.data)
+      })
+      .catch(error => console.log(error.response.data))
+    
+  }
+
 }
 
 
