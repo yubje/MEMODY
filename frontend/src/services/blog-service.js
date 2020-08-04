@@ -112,7 +112,7 @@ class BlogService {
     })
   }
 
-
+  // 블로그 정보 수정 (API 문서 - 32~36D)
   updateBlogInfo({ state, commit }) {
     console.log(state)
     console.log(commit)
@@ -135,6 +135,16 @@ class BlogService {
 
         
       })
+  }
+  // 블로그 삭제 (API 문서 - 37D)
+  deleteBlog({ state }) {
+    console.log(state.blogData.bid)
+    axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        alert(response.data.message)
+        router.push({ name: 'MainView' })
+      })
+      .catch(error => console.log(error.response.data))
   }
 
   // 소분류 추가 
