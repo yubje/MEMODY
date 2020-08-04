@@ -4,15 +4,9 @@
       <input v-model="postData.ptitle" type="text" placeholder="제목">
     </div>
     <div>
+      <BlogEditor />
       <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
-    <!-- <div> 
-      <a>카테고리</a>
-      <select>
-        <option value=""></option>
-        <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-      </select>
-    </div> -->
     <div>
       <button @click="blogPostCreate()">등록</button>
       <button @click="typeChange()">취소</button>
@@ -26,6 +20,8 @@ import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/vue-editor';
 
+import BlogEditor from '../editor/BlogEditor.vue'
+
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
@@ -36,7 +32,8 @@ export default {
     lcid: Number,
   },
   components: {
-    'editor': Editor
+    'editor': Editor,
+    BlogEditor
   },
   data() {
     return {
