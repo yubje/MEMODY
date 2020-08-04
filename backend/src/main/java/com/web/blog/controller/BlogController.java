@@ -71,18 +71,16 @@ public class BlogController {
 	public ResponseEntity createBlog(@RequestBody Map<String, String> blog, HttpServletRequest req) {
 
 		String token = req.getHeader("auth");
-		System.out.println("블로그생성");
 //		System.out.println(blog.get("btitle")+" "+blog.get("bsubtitle")+" "+blog.get("bcontent"));
 //		System.out.println("해시태그들 보여주셈 >>>>> "+blog.get("hashtags"));
 		if (jwtTokenProvider.validateToken(token)) {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
 			if (blogService.countBlogByUser(email)) {
-				Blog temp = new Blog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email, 0);
-				System.out.println(temp);
-				bid = blogService.createBlog(temp);
-
-				String hashtags[] = blog.get("hashtags").trim().split("#");
+				bid = blogService.createBlog(blog.get("btitle"),blog.get("bsubtitle"),blog.get("bcontent"),email);
+				
+				System.out.println("블로그생성");
+				String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
 				String tname;
 				int tid;
 				for (int i = 1; i < hashtags.length; i++) {
@@ -241,13 +239,11 @@ public class BlogController {
 			String btitle = blog.get("btitle");
 			String bsubtitle = blog.get("bsubtitle");
 			String bcontent = blog.get("bcontent");
-			Blog changeBlog = new Blog(btitle, bsubtitle, bcontent, "temp", 0);
+			String changeTag = blog.get("hashtags").trim();
 
-			String changeTag = blog.get("hashtags");
+			if (blogService.updateBlog(user, btitle,bsubtitle,bcontent, changeTag, bid)) {
 
-			if (blogService.updateBlog(user, changeBlog, changeTag, bid)) {
-
-				String hashtags[] = changeTag.trim().split("#");
+				String hashtags[] = changeTag.replaceAll(" ", "").split("#");
 				String tname;
 				int tid;
 
@@ -287,6 +283,7 @@ public class BlogController {
 	@DeleteMapping(value = "/blogs/{bid}")
 	public ResponseEntity blogDelete(@PathVariable int bid, HttpServletRequest req) {
 
+		System.out.println(bid);
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);

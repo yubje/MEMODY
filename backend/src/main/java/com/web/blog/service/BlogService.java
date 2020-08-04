@@ -36,9 +36,9 @@ public class BlogService {
 	private final BlogTagRepository blogtagRepository;
 	private final TagRepository tagRepository;
 
-	public int createBlog(Blog blog) {
-		return blogRepository.save(Blog.builder().btitle(blog.getBtitle()).bsubtitle(blog.getBsubtitle())
-				.bcontent(blog.getBcontent()).manager(blog.getManager()).build()).getBid();
+	public int createBlog(String title,String subtitle,String content, String email) {
+		return blogRepository.save(Blog.builder().btitle(title).bsubtitle(subtitle)
+				.bcontent(content).manager(email).build()).getBid();
 	}
 
 	public boolean countBlogByUser(String email) {
@@ -136,14 +136,13 @@ public class BlogService {
 
 	// 수정
 	// blogService.updateBlog(user, changeBlog,changeTag,bid))
-	public boolean updateBlog(String user, Blog changeBlog, String changeTag, int bid) {
+	public boolean updateBlog(String user,String btitle,String bsubtitle,String bcontent, String changeTag, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
-		System.out.println(blog);
 		if (user.equals(blog.getManager())) {
 			System.out.println("수정 시작");
-			blogRepository.save(Blog.builder().bid(bid).btitle(changeBlog.getBtitle())
-					.bsubtitle(changeBlog.getBsubtitle()).bcontent(changeBlog.getBcontent()).manager(blog.getManager())
-					.views(blog.getViews()).build());
+			blog.setBtitle(bsubtitle);
+			blog.setBcontent(bcontent);
+			blogRepository.save(blog);
 
 			return true;
 		} else {
@@ -155,6 +154,7 @@ public class BlogService {
 	public boolean deleteBlog(String user, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
+//			blogRepository.deleteById(bid);
 			blogRepository.deleteByBid(bid);
 			return true;
 		} else {
