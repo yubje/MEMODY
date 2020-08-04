@@ -82,7 +82,7 @@ public class BlogController {
 				System.out.println(temp);
 				bid = blogService.createBlog(temp);
 
-				String hashtags[] = blog.get("hashtags").split("#");
+				String hashtags[] = blog.get("hashtags").trim().split("#");
 				String tname;
 				int tid;
 				for (int i = 1; i < hashtags.length; i++) {
@@ -247,7 +247,7 @@ public class BlogController {
 
 			if (blogService.updateBlog(user, changeBlog, changeTag, bid)) {
 
-				String hashtags[] = changeTag.split("#");
+				String hashtags[] = changeTag.trim().split("#");
 				String tname;
 				int tid;
 
