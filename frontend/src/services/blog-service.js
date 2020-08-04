@@ -142,6 +142,7 @@ class BlogService {
 
   // 소분류 추가 
   addChildCategory({commit},mediumCategoryData) {
+    console.log(mediumCategoryData)
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, mediumCategoryData.bid)
