@@ -47,4 +47,11 @@ public class LCategory {
 //		mcategory.add(list);
 		mcategory = list;
 	}
+
+	@Override
+	public String toString() {
+		return "LCategory [lcid=" + lcid + ", bid=" + bid + ", large_dir=" + large_dir + ", mcategory=" + mcategory
+				+ "]";
+	}
+	
 }

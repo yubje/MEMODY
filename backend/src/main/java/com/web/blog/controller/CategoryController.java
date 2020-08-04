@@ -68,8 +68,10 @@ public class CategoryController {
 	@PostMapping("/blogs/categories/parent")
 	public ResponseEntity createCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		System.out.println(lcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
+			System.out.println(user);
 			if(!blogService.checkBlog(lcategory.getBid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CREATE_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
@@ -288,20 +290,26 @@ public class CategoryController {
 		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
+			System.out.println(1);
 			if(!blogService.checkBlog(bid)){
+				System.out.println(2);
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
+				System.out.println(3);
 				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
 				if(list.size()!=0) {
+					System.out.println(4);
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
+					System.out.println(5);
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
 							HttpStatus.FORBIDDEN);
 				}
 			}
 		} else {
+			System.out.println(6);
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}
