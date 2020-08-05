@@ -3,14 +3,17 @@
     <div class="editor-header">
       <ul class="editor-header-main">
         <li>
-          <select>
-            <option value="Arial">Arial</option>
-            <option value="굴림">굴림</option>
-            <option value="Nanum Gothic">나눔고딕</option>
-            <option value="Nanum Myeongjo">나눔명조</option>
-            <option value="Nanum Pen Script">나눔펜</option>
+          <select v-model="fontName" @click="test()">
+            <option id="font-arial" value="Arial">Arial</option>
+            <option id="font-gullim" value="굴림">굴림</option>
+            <option id="font-gothic" value="Nanum Gothic">나눔고딕</option>
+            <option id="font-myeongjo" value="Nanum Myeongjo">나눔명조</option>
+            <option id="font-pen" value="Nanum Pen Script">나눔펜</option>
           </select>
         </li>
+        <!-- <a onclick="document.execCommand('fontName', false, 'Arial')"> -->
+          <span>Selected: {{ fontName }}</span>
+
 
         <li>
           <select>
@@ -26,16 +29,34 @@
           </select>
         </li>
 
-
-        <!-- <a onclick="document.execCommand('fontName', false, 'Arial')"> -->
-
+        <li><span class="editor-header-partition" /></li>
+        
         <li><font-awesome-icon class="icon" :icon="['fas','bold']" /></li>
         <li><font-awesome-icon :icon="['fas','italic']" /></li>
         <li><font-awesome-icon :icon="['fas','underline']" /></li>
         <li><font-awesome-icon :icon="['fas','strikethrough']" /></li>
+
+        <li><span class="editor-header-partition" /></li>
+
+
+
         <li></li>
       </ul>
     </div>
+
+    <br>
+
+
+
+        <div>
+        <div style="border:1px solid" class="editorDIV" contenteditable="true">
+        </div>
+    </div>
+
+
+
+
+    <br><br>
 
     <div class="buttons">
       <font-awesome-icon :icon="['fas','link']" />
@@ -64,6 +85,17 @@
 
 <script>
 export default {
+  name: 'BlogEditor',
+  data() {
+    return {
+      fontName: 'Arial'
+    }
+  },
+  methods: {
+    test() {
+      document.execCommand('fontName', false, this.fontName)
+    }
+  }
 
 }
 </script>
@@ -86,7 +118,7 @@ select {
 
 select:focus {
   outline: none;
-  }
+}
 
 .editor-header {
   width: 100%;
@@ -107,6 +139,31 @@ select:focus {
 }
 
 .editor-header ul li:hover {
-  color: rgb(0, 94, 202);
+  color: rgb(0, 105, 224);
 }
+
+.editor-header-partition {
+  border-left: 1px solid #9394a7;
+}
+
+#font-arial {
+  font-family: Arial;
+}
+
+#font-gullim {
+  font-family: 굴림;
+}
+
+#font-gothic {
+  font-family: Nanum Gothic;
+}
+
+#font-myeongjo {
+  font-family: Nanum Myeongjo;
+}
+
+#font-pen {
+  font-family: Nanum Pen Script;
+}
+
 </style>
