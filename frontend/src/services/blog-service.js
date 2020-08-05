@@ -238,7 +238,6 @@ class BlogService {
       })
     }
 
-
   // Fork용 블로그 목록 불러오기 
   getBlogs({commit}) {
     axios.get(`${SERVER}/blogs/manager`, {headers: {"auth": cookies.get('auth-token')}})
@@ -253,6 +252,7 @@ class BlogService {
       console.log(commit)
       console.log(response)
     })
+  }
 
   createComment({ state }, comment) {
     console.log(state)

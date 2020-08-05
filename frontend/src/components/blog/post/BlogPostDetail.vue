@@ -28,9 +28,7 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
 import BlogForkBlogList from '@/components/blog/fork/BlogForkBlogList.vue'
-// import BlogCommentCreate from '@/components/blog/comment/BlogCommentCreate.vue'
 import BlogCommentForm from '@/components/blog/comment/BlogCommentForm.vue'
 import BlogCommentList from '@/components/blog/comment/BlogCommentList.vue'
 
@@ -41,8 +39,6 @@ export default {
   components: {
     BlogPostSidebar,
     BlogForkBlogList,
-    //BlogCommentCreate
-    BlogPostSidebar,
     BlogCommentForm,
     BlogCommentList,
   },
