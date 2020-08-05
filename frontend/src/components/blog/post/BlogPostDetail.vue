@@ -4,7 +4,7 @@
       <BlogPostSidebar/>     
       <div class="col col-lg-10">
         <h1>{{this.postData.ptitle}}</h1>
-        <div v-if="this.$store.state.userInfo.email == this.postData.author" style="float: right">
+        <div v-if="userInfo.email == this.postData.author" style="float: right">
           <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
           <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
@@ -37,7 +37,8 @@ export default {
     BlogCommentList,
   },
   computed: {
-    ...mapState('blog', ['postData', ]),
+    ...mapState(['userInfo']),
+    ...mapState('blog', ['postData']),
     
   },
   methods: {
@@ -50,6 +51,9 @@ export default {
     blogPostDelete() {
       this.deletePost
     }
-  }
+  },
+  created() {
+    this.getCommentData()
+  },
 }
 </script>
