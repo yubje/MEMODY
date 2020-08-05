@@ -51,7 +51,7 @@ export const blog = {
     members: null,
 
     // 내가 속한 블로그 리스트
-    myBlogs: []
+    myBlogs: [],
     // 댓글
     comment_id: null,
     commentData: null,
@@ -132,7 +132,7 @@ export const blog = {
     //내가 속한 블로그 리스트 
     SET_MYBLOGS(state, blogs) {
       state.myBlogs = blogs
-    }
+    },
 
 
     SET_COMMENTDATA(state, commentData) {
@@ -280,7 +280,7 @@ export const blog = {
     //fork
     forkPost({commit},forkData) {
       BlogService.forkPost({commit},forkData)
-    }
+    },
 
     // 댓글 작성 (API 문서 87~88D)
     createComment({ state }, comment) {

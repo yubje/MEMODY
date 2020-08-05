@@ -253,7 +253,7 @@ class BlogService {
       console.log(commit)
       console.log(response)
     })
-
+  }
   createComment({ state }, comment) {
     console.log(state)
     console.log(comment)
@@ -305,7 +305,7 @@ class BlogService {
         router.push({ name: 'BlogPostDetail' })
       })
       .catch(error => console.log(error.response.data))
-
+    
   }
 
 }
