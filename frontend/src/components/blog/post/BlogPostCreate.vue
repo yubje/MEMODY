@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div>
+    <BlogEditor />
+    <!-- <div>
       <input v-model="postData.ptitle" type="text" placeholder="제목">
-    </div>
+    </div> -->
     <div>
-      <BlogEditor />
       <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
     <div>

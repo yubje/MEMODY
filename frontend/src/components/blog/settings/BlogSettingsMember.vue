@@ -23,10 +23,42 @@
             <div v-for="member in members" :key="member.email" >
               <div class="d-flex justify-content-between align-items-center my-1">
                 <a>{{ member.email }}</a>
-                <button 
-                  v-if="member.email!==userInfo.email" 
-                  class="btn btn-primary btn-sm"
-                  @click="deleteBlogMember(member.email)">삭제</button>
+                <div v-if="blogData.manager!==member.email">
+                  <button
+                    v-if="member.email===userInfo.email"
+                    class="btn btn-primary btn-sm"
+                    data-toggle="modal" data-target="#leaveBlogModal"
+                  >탈퇴</button>
+                  <button 
+                    v-if="member.email!==userInfo.email" 
+                    class="btn btn-primary btn-sm"
+                    @click="deleteBlogMember(member.email)">삭제</button>
+
+                </div>
+                
+                
+                
+
+                    <!-- Modal -->
+                <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="leaveBlogModalLabel">블로그 탈퇴</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        블로그 회원 탈퇴를 하시겠습니까?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-danger" @click="leaveBlog(member.email)">탈퇴하기</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <hr>
             </div>
@@ -34,6 +66,9 @@
         </div>
       </div>
     </div>
+
+
+
 
   </div>
 </template>
@@ -52,12 +87,16 @@ export default {
     }
   },
   computed: {
-    ...mapState('blog', ['members']),
+    ...mapState('blog', ['members', 'blogData']),
     ...mapState(['userInfo'])
     // ...mapActions('blog''getBlogMembers')
   },
   methods: {
-    ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember'])
+    ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember']),
+
+    leaveBlog(email) {
+      this.deleteBlogMember(email)
+    }
   },
   created() {
     this.getBlogMembers()
