@@ -1,52 +1,76 @@
 package com.web.blog.service;
 
-import com.web.blog.model.UserDto;
+import lombok.RequiredArgsConstructor;
 
-public interface UserService {
-	
-	/**
-	 * 회원가입 - userId 겹치는지 확인하고 회원가입시키기
-	 * @param User	회원가입할 정보
-	 * @return		회원가입 성공 여부, 회원가입 성공시 true return
-	 */
-	public boolean register(UserDto user);
-	
-	/**
-	 * 이메일 체크 - userEmail로 이메일 중복 체크 
-	 * @param userEmail 사용자 이메일
-	 * @return 해당 Email의 사용자 return, 없을 경우 null return
-	 */
-	public UserDto emailcheck(String email);
-	
-	/**
-	 * 회원정보 조회 	
-	 * @param userId	id로 사용자 검색
-	 * @return			해당 user 반환
-	 */
-	public UserDto search(UserDto user);
-	
-	
-	/**
-	 * 회원정보 수정 - userId로 회원찾아서 정보수정
-	 * @param User	수정할 정보
-	 * @return		수정 성공 여부, 수정 성공시 true return
-	 */
-	public boolean modify(UserDto user);
-	
-	/**
-	 * 회원 탈퇴
-	 * @param userId 	id로 사용자 검색
-	 * @return 			삭제 성공 여부, 삭제 성공시 false return
-	 */
-	public boolean delete(UserDto user);
-	
-	/**
-	 * 로그인 - userId와 userPw로 회원 확인 
-	 * @param userId 사용자 아이디
-	 * @param uwerPw 사용자 패스워드
-	 * @return 로그인 성공 여부, 로그인 성공시 true return
-	 */
-	public UserDto login(UserDto user);
+import java.util.Collections;
+import java.util.Optional;
 
-	boolean send(String subject, String text, String from, String to, String filePath);
+import javax.transaction.Transactional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.web.blog.domain.Users;
+import com.web.blog.repository.UsersRepository;
+
+@RequiredArgsConstructor
+@Service
+public class UserService implements UserDetailsService {
+
+	private final UsersRepository userRepository;
+//	private final PasswordEncoder passwordEncoder;
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+	}
+
+	@Transactional
+	public Optional<Users> findByEmail(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Transactional
+	public void deleteUser(String email) {
+		userRepository.deleteByEmail(email);
+	}
+
+//	public void join(String email, String uid, String password) {
+//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
+//				.roles(Collections.singletonList("ROLE_USER")).build());
+//	}
+//	public void join(String email, String uid, String password) {
+//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
+//				.roles(Collections.singletonList("ROLE_USER")).build());
+//	}
+	public void join(Users user,String password) {
+		userRepository.save(Users.builder().email(user.getEmail()).uid(user.getUid()).password(password)
+				.roles(Collections.singletonList("ROLE_USER")).build());
+	}
+
+	public void pwdUpdate(String email, String password) {
+		Optional<Users> updateUser = userRepository.findByEmail(email);
+		updateUser.ifPresent(selectUser->{
+			selectUser.setPassword(password);
+			userRepository.save(selectUser);
+		});
+	}
+	
+	public void userUpdate(String email, String uid, String password) {
+		Optional<Users> updateUser = userRepository.findByEmail(email);
+		updateUser.ifPresent(selectUser->{
+			selectUser.setUid(uid);
+			selectUser.setPassword(password);
+			userRepository.save(selectUser);
+		});
+	}
+	
+	@Transactional
+	public Optional<Users> findByUid(String uid) {
+		return userRepository.findByUid(uid);
+	}
+
 }

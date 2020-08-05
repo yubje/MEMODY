@@ -1,5 +1,6 @@
 // blog 상태 관리 모듈
 import BlogService from '@/services/blog-service'
+// import { delete } from 'vue/types/umd';
 
 export const blog = {
   namespaced: true,
@@ -13,8 +14,18 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
-      
     },
+
+    // 새 블로그 추가를 위한 새 정보
+    newBlogData: {
+      btitle: null,
+      bsubtitle: null,
+      bcontent: null,
+      hashtags: null,
+
+    },
+    dataCategories: null,
+
 
     //전체 카테고리
     categoryListData: [],
@@ -25,15 +36,23 @@ export const blog = {
     //블로그 게시글 상세정보
     postData: {
       pid: '',
-      lcid: '1', /***나중에 수정***/
-      mcid: '1', /***나중에 수정***/
+      lcid: '', /***나중에 수정***/
+      mcid: '', /***나중에 수정***/
       ptitle: '',
       pcontent: '',
       author: '',
       postTime: '',
       update_time: '',
       ptype: null
-    }
+    },
+    posts: [],
+
+
+    // 블로그 멤버
+    members: null,
+
+    // 내가 속한 블로그 리스트
+    myBlogs: []
   },
   getters: {
     getpostListData(state) {
@@ -45,8 +64,8 @@ export const blog = {
     initPostData(state) {
       state.postData = {
         pid: '',
-        lcid: '1', /***나중에 수정***/
-        mcid: '1', /***나중에 수정***/
+        lcid: '', /***나중에 수정***/
+        mcid: '', /***나중에 수정***/
         ptitle: '',
         pcontent: '',
         author: '',
@@ -60,22 +79,62 @@ export const blog = {
       state.postListData = postList;
     },
 
+
+    CLEAR_NEWBLOGDATA(state) {
+      state.newBlogData= {
+        btitle: null,
+        bsubtitle: null,
+        bcontent: null,
+        hashtags: null,
+      }
+    },
+    
+
     setPostDetailData(state, postData) {
       state.postData = postData;
     },
     
+
     SET_BID(state, bid) {
       state.bid = bid
     },
 
     SET_BLOGDATA(state, blogData) {
       state.blogData = blogData
+    },
+
+
+    REMOVE_HASHTAG(state, key) {
+      state.blogData.hashtags.splice(key, 1)
+      // delete state.blogData.hashtags[key];
+      console.log(state.blogData)
+    },
+    ADD_HASHTAG(state, hashtag) {
+      state.blogData.hashtags.push({"tname": hashtag})
+      console.log(state.blogData)
+    },
+
+
+    SET_DATACATEGORIES(state, dataCategories){
+      state.dataCategories = dataCategories
+    },
+
+
+    SET_POSTS(state, posts){
+      state.posts= posts
+    },
+    
+    //내가 속한 블로그 리스트 
+    SET_MYBLOGS(state, blogs) {
+      state.myBlogs = blogs
     }
+
+
   },
   actions: {
     // 블로그 추가 (API 문서 - 26~29 D)
-    createBlog(response) {
-      BlogService.createBlog(response)
+    createBlog({ state, commit }) {
+      BlogService.createBlog({ state, commit })
     },
     
     // 블로그 정보 조회 (API 문서 - 28D)
@@ -89,8 +148,8 @@ export const blog = {
     },
 
     // 블로그 게시글 전체 조회 (API 문서 - 62D)
-    lookupPostList({commit}) {
-      return BlogService.lookupPostList()
+    lookupPostList({commit, state}) {
+      return BlogService.lookupPostList(state.bid)
       .then(postListData => {
         commit('setPostListData', postListData)
       })
@@ -104,13 +163,57 @@ export const blog = {
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
+
     },
+
+    // 대분류 추가 
+    addParentCategory({commit, state},largeCategoryData) {
+      BlogService.addParentCategory({commit,state},largeCategoryData)
+    },
+    // 대분류 삭제
+    deleteParentCategory({commit},Category) {
+      const largeCategoryData = {
+        'bid' : Category.bid,
+        'lcid' : Category.lcid
+      }
+      BlogService.deleteParentCategory({commit},largeCategoryData)
+    },
+    //대분류 업데이트
+    updateParentCategory({commit},largeCategoryData) {
+      BlogService.updateParentCategory({commit},largeCategoryData)
+    },
+
+    // 소분류 추가 
+    addChildCategory({commit},mediumCategoryData) {
+      BlogService.addChildCategory({commit},mediumCategoryData)
+    },
+    
+    // 소분류 삭제
+    deleteChildCategory({commit,state}, mediumCategoryData) {
+      console.log(mediumCategoryData)
+      BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
+    },
+    //소분류 업데이트
+    updateChildCategory({commit, state}, childData) {
+      BlogService.updateChildCategory({commit, state}, childData)
+    },
+
+    getBlogCategory({ commit },bid) {
+      BlogService.getBlogCategory({ commit },bid)
+
+    },
+
+    updateBlogInfo({ state, commit }) {
+      BlogService.updateBlogInfo({ state, commit })
+      
+    },
+
 
     // 블로그 게시글 수정 (API 문서 - 54D)
     updatePost({commit}, response) {
       return BlogService.updatePost(response)
       .then(result => {
-        commit('setPostDatailData', result.data)
+        commit('setPostDetailData', result.data)
         alert(result.message)
       })
       .catch(error => console.log(error.response.data.message))
@@ -119,6 +222,40 @@ export const blog = {
     // 블로그 게시글 삭제 (API 문서 - 65D)
     deletePost(response) {
       BlogService.deletePost(response)
+    },
+
+    moveToPosts({commit}, categoryData) {
+      console.log(categoryData)
+      BlogService.moveToPosts({commit}, categoryData)
+    },
+
+    fetchPosts({commit}, info) {
+      BlogService.fetchPosts({commit},info)
+    },
+
+    getBlogMembers({ state }) {
+      console.log(state)
+      BlogService.getBlogMembers({ state })
+    },
+
+    addBlogMember({ state }, email) {
+      BlogService.addBlogMember({ state }, email)
+    },
+
+    deleteBlogMember({ state }, email) {
+      BlogService.deleteBlogMember({ state }, email)
+    },
+
+    //Fork 용 블로그 목록 불러오기 
+    getBlogs({commit}) {
+      BlogService.getBlogs({commit})
+    },
+
+    //fork
+    forkPost({commit},forkData) {
+      BlogService.forkPost({commit},forkData)
     }
-  }
+  },
+
 }
+

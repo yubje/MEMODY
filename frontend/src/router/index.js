@@ -5,15 +5,18 @@ import BlogView from '@/views/BlogView.vue'
 import UserLoginView from '@/views/user/UserLoginView.vue'
 import UserLogout from '@/components/user/UserLogout.vue'
 import UserSignupView from '@/views/user/UserSignupView.vue'
+import UserResetPWCheckEmailView from '@/views/user/UserResetPWCheckEmailView.vue'
+import UserResetPWCheckValidView from '@/views/user/UserResetPWCheckValidView.vue'
 import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 
-
+import BlogSettingsMember from '@/components/blog/settings/BlogSettingsMember.vue'
 import BlogSettingsCategory from '@/components/blog/settings/BlogSettingsCategory.vue'
 import BlogSettingsInfo from '@/components/blog/settings/BlogSettingsInfo.vue'
 import BlogPostCreate from '@/components/blog/post/BlogPostCreate.vue'
 import BlogPostList from '@/components/blog/post/BlogPostList.vue'
+import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vue'
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
@@ -63,7 +66,17 @@ Vue.use(VueRouter)
     component: UserSignupView,
   },
   {
-    path: '/users/pw',
+    path: '/users/resetpw/emailcheck',
+    name: 'UserResetPWCheckEmailView',
+    component: UserResetPWCheckEmailView,
+  },
+  {
+    path: '/users/resetpw/validcheck',
+    name: 'UserResetPWCheckValidView',
+    component: UserResetPWCheckValidView,
+  },
+  {
+    path: '/users/resetpw',
     name: 'UserResetPWView',
     component: UserResetPWView,
   },
@@ -73,22 +86,52 @@ Vue.use(VueRouter)
     path: '/blog/settings',
     name: 'BlogSettingsInfo',
     component: BlogSettingsInfo,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   {
     path: '/blog/settings/category',
     name: 'BlogSettingsCategory',
     component: BlogSettingsCategory,
+    props(route) {
+      return { bid: route.query.bid }
+    }
+  },
+  {
+    path: '/blog/settings/member',
+    name: 'BlogSettingsMember',
+    component: BlogSettingsMember,
+    props(route) {
+      return { bid: route.query.bid }
+    }
+  },
+  {
+    path: '/blog/settings/category',
+    name: 'BlogSettingsMember',
+    component: BlogSettingsMember,
   },
   // blog post
   {
     path: '/blog/post/create',
     name: 'BlogPostCreate',
     component: BlogPostCreate,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid,lcid: route.query.lcid }
+    }
   },
   {
     path: '/blog/posts',
     name: 'BlogPostList',
     component: BlogPostList,
+  },
+  {
+    path: '/blog/posts',
+    name: 'BlogPostCategoryList',
+    component: BlogPostCategoryList,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid }
+    }
   },
   {
     path: '/blog/post',
