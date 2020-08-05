@@ -238,6 +238,22 @@ class BlogService {
       })
     }
 
+
+  // Fork용 블로그 목록 불러오기 
+  getBlogs({commit}) {
+    axios.get(`${SERVER}/blogs/manager`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      commit('SET_MYBLOGS', response.data.data)
+    })
+  }
+  // fork
+  forkPost({commit},forkData) {
+    axios.post(`${SERVER}/blogs/fork`, forkData, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response =>{
+      console.log(commit)
+      console.log(response)
+    })
+
   createComment({ state }, comment) {
     console.log(state)
     console.log(comment)
@@ -289,6 +305,7 @@ class BlogService {
         router.push({ name: 'BlogPostDetail' })
       })
       .catch(error => console.log(error.response.data))
+
   }
 
 }
