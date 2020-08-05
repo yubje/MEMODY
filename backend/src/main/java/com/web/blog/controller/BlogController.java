@@ -77,18 +77,10 @@ public class BlogController {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
 			if (blogService.countBlogByUser(email)) {
-<<<<<<< HEAD
-				Blog temp = new Blog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email, 0);
-				System.out.println(temp);
-				bid = blogService.createBlog(temp);
-
-				String hashtags[] = blog.get("hashtags").split("#");
-=======
 				bid = blogService.createBlog(blog.get("btitle"),blog.get("bsubtitle"),blog.get("bcontent"),email);
 				
 				System.out.println("블로그생성");
 				String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
->>>>>>> 09737d434fd9391774eb93ff968c294ec7d2d883
 				String tname;
 				int tid;
 				for (int i = 1; i < hashtags.length; i++) {
@@ -251,11 +243,7 @@ public class BlogController {
 
 			if (blogService.updateBlog(user, btitle,bsubtitle,bcontent, changeTag, bid)) {
 
-<<<<<<< HEAD
-				String hashtags[] = changeTag.split("#");
-=======
 				String hashtags[] = changeTag.replaceAll(" ", "").split("#");
->>>>>>> 09737d434fd9391774eb93ff968c294ec7d2d883
 				String tname;
 				int tid;
 
