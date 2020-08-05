@@ -119,7 +119,7 @@ class BlogService {
     })
   }
 
-
+  // 블로그 정보 수정 (API 문서 - 32~36D)
   updateBlogInfo({ state, commit }) {
     var tagString = ''
     state.blogData.hashtags.forEach((item) => tagString += '#'+item.tname.trim())
@@ -138,6 +138,16 @@ class BlogService {
 
         
       })
+  }
+  // 블로그 삭제 (API 문서 - 37D)
+  deleteBlog({ state }) {
+    console.log(state.blogData.bid)
+    axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        alert(response.data.message)
+        router.push({ name: 'MainView' })
+      })
+      .catch(error => console.log(error.response.data))
   }
 
   // 소분류 추가 
@@ -228,6 +238,7 @@ class BlogService {
       })
     }
 
+
   // Fork용 블로그 목록 불러오기 
   getBlogs({commit}) {
     axios.get(`${SERVER}/blogs/manager`, {headers: {"auth": cookies.get('auth-token')}})
@@ -242,6 +253,59 @@ class BlogService {
       console.log(commit)
       console.log(response)
     })
+
+  createComment({ state }, comment) {
+    console.log(state)
+    console.log(comment)
+    const commentData = {
+      "pid": state.postData.pid,
+      "comment": comment
+    }
+    console.log(commentData)
+    axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => console.log(error.response.data))
+  }
+
+  getCommentData({ commit, state }) {
+    axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_COMMENTDATA', response.data.data)
+      })
+      .catch(error => console.log(error.response.data))
+    
+  }
+
+  updateComment({ commit }, comment) {
+    console.log(comment)
+    const info = {
+      "cmid": comment.cmid,
+      "comment": comment.comment
+    }
+    axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        commit('SET_COMMENTID', null)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error))
+  }
+
+  deleteComment({ state }, comment_id) {
+    console.log(state)
+    console.log(comment_id)
+    const info = {
+      "cmid": comment_id,
+    }
+    console.log(info)
+    axios.delete(`${SERVER}/comments`, { data: info, headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error.response.data))
+
   }
 
 }
