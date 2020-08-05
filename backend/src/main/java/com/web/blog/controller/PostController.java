@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Post;
+import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
+import com.web.blog.service.PostLikeService;
 import com.web.blog.service.PostService;
 
 import io.swagger.annotations.ApiOperation;
@@ -35,8 +37,8 @@ import lombok.RequiredArgsConstructor;
  *			조민경, ver.0.1 , 2020-07-28, (First Commit)
  * </pre>
  * 
- * @author 조민경
- * @version 0.1, 2020-07-28, Post 관리 Controller
+ * @author 김형택
+ * @version 0.1, 2020-08-03, 게시글 Fork
  * @see None
  * 
  */
@@ -47,9 +49,7 @@ public class PostController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	PostService 		postService;
-//	private final 	TagService 			tagService;
-//	private final 	BlogTagService 		blogtagService;
-//	private final 	MemberService 		memberService;
+	private final 	PostLikeService 	postLikeService;
 
 	/**
 	 * 게시글 작성 - 사용자가 게시글을 작성하는 기능. 
@@ -72,10 +72,10 @@ public class PostController {
 			Post temp = null;
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), null);
+						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"));
+						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
 			pid = postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
@@ -156,6 +156,7 @@ public class PostController {
 			Post post = postService.findByPid(pid);
 			System.out.println(post);
 			if(post != null) {
+				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
@@ -215,5 +216,84 @@ public class PostController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	/**
+	 * 게시글 Fork - 나의 블로그로 원하는 게시글을 fork한다.
+	 * 
+	 * @param Post post (int bid, int lcid, int mcid, int pid)
+	 * @return ResponseEntity<Response> - CREATE_POST_SUCCESS
+	 * @exception RestException - NOT_FOUND
+	 */
+	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
+	@DeleteMapping(value = "/blogs/fork")
+	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+
+			postService.forkPost(post);
+			
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	/**
+	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
+	@PostMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity increasePostLike(@PathVariable int pid, HttpServletRequest req) {
+		System.out.println("게시글 좋아요");
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			System.out.println(loginuser);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				postLikeService.increasePostLike(pid, loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	/**
+	 * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
+	@DeleteMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity decreasePostLike(@PathVariable int pid, HttpServletRequest req) {
+		System.out.println("게시글 좋아요 취소");
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			System.out.println(loginuser);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				postLikeService.decreasePostLike(pid, loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
+	
 	
 }

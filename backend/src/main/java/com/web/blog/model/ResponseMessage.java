@@ -59,6 +59,9 @@ public class ResponseMessage {
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
     public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
     public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
+    public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
+    public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
+    
     
     // Comments
     public static final String CREATE_COMMENT_SUCCESS = "성공적으로 댓글을 작성하였습니다.";

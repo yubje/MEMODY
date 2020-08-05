@@ -168,10 +168,10 @@ public class LoginController {
 		}
 	}
 	
-	
-	@ApiOperation(value = "이메일 인증", response = ResponseEntity.class)
-	@GetMapping(value = "/auth/{email}")
-	public ResponseEntity authEmail(@PathVariable String email) {
+	// 회원가입시 이메일 인증 
+	@ApiOperation(value = "회원가입시 이메일 인증", response = ResponseEntity.class)
+	@GetMapping(value = "/auth/join/{email}")
+	public ResponseEntity authEmailJoin(@PathVariable String email) {
 		
 		if(!userService.findByEmail(email).isPresent()) {
 			// 인증코드 생성
@@ -179,7 +179,7 @@ public class LoginController {
 			code = code.substring(0, 10);
 			
 			final String SEND_EMAIL_ID = "kimhyungtaik@gmail.com"; // 관리자 email
-			String subject = "인증코드 발급 안내 입니다.";
+			String subject = "회원가입 인증코드 발급 안내 입니다.";
 			StringBuilder sb = new StringBuilder();
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
@@ -193,6 +193,32 @@ public class LoginController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.ALREADY_USER),HttpStatus.FORBIDDEN);
 		}
 
+	}
+	// 비밀번호 재설정 시 이메일 인증 
+	@ApiOperation(value = "비밀번호 재설정 시 이메일 인증", response = ResponseEntity.class)
+	@GetMapping(value = "/auth/pwd/{email}")
+	public ResponseEntity authEmailPWD(@PathVariable String email) {
+		
+		if(userService.findByEmail(email).isPresent()) {
+			// 인증코드 생성
+			String code = UUID.randomUUID().toString().replaceAll("-", "");
+			code = code.substring(0, 10);
+			
+			final String SEND_EMAIL_ID = "kimhyungtaik@gmail.com"; // 관리자 email
+			String subject = "비밀번호 재설정 인증코드 발급 안내 입니다.";
+			StringBuilder sb = new StringBuilder();
+			sb.append("귀하의 인증코드 입니다.\n");
+			sb.append("인증코드 : " + code);
+			
+			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.NOT_FOUND_USER),HttpStatus.FORBIDDEN);
+		}
+		
 	}
 
 	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
@@ -212,12 +238,13 @@ public class LoginController {
 	}
 	
 	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
-	@PutMapping(value = "/users/{email}/pw")
-	public ResponseEntity resetPassword(@PathVariable String email, String password, HttpServletRequest req) {
-		String ecdPwd = passwordEncoder.encode(password);
-		userService.pwdUpdate(email, ecdPwd);
+	@PutMapping(value = "/users/pw")
+	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
 		
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, email),HttpStatus.OK);
+		String ecdPwd = passwordEncoder.encode(user.getPassword());
+		userService.pwdUpdate(user.getEmail(), ecdPwd);
+		
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, user.getEmail()),HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)

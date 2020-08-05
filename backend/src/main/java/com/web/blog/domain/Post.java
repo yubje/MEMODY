@@ -1,13 +1,17 @@
 package com.web.blog.domain;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -53,8 +57,15 @@ public class Post {
 	@Column(length = 10, nullable = true)
 	private String ptype;
 	
+	@Column(nullable = true)
+	private int postlikecnt;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name="email")
+	private Collection<PostLike> liker;
+	
 	@Builder
-	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype) {
+	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype, int postlikecnt) {
 		this.bid = bid;
 		this.lcid = lcid;
 		this.mcid = mcid;
@@ -66,13 +77,7 @@ public class Post {
 //		this.post_time = LocalDateTime.now();
 //		this.update_time = LocalDateTime.now();
 		this.ptype = ptype;
-	}
-
-	@Override
-	public String toString() {
-		return "Post [pid=" + pid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle + ", pcontent="
-				+ pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time=" + update_time
-				+ ", ptype=" + ptype + "]";
+		this.postlikecnt = postlikecnt;
 	}
 
 	public void setPtitle(String ptitle) {
@@ -87,19 +92,22 @@ public class Post {
 	public void setPtype(String ptype) {
 		this.ptype = ptype;
 	}
-//	public void setPcontent(String pcontent) {
-//		this.pcontent = pcontent;
-//	}
-	
-	
-//	public void setManager(String manager) {
-//		this.manager = manager;
-//	}
+	public void setPostlikecnt(int postlikecnt) {
+		this.postlikecnt = postlikecnt;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "Blog [bid=" + pid + ", btitle=" + btitle + ", bsubtitle=" + bsubtitle + ", bcontent=" + bcontent
-//				+ ", manager=" + manager + "]";
-//	}
+	public void addLiker(PostLike lik) {
+		if(liker == null) {
+			liker = new ArrayList<PostLike>();
+		}
+		liker.add(lik);
+	}
+
+	@Override
+	public String toString() {
+		return "Post [pid=" + pid + ", bid=" + bid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle
+				+ ", pcontent=" + pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time="
+				+ update_time + ", ptype=" + ptype + ", postlikecnt=" + postlikecnt + ", liker=" + liker + "]";
+	}
 
 }
