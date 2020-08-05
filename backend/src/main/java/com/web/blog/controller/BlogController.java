@@ -199,7 +199,7 @@ public class BlogController {
 	public ResponseEntity listByHashtag(@PathVariable String hashtag) {
 		System.out.println(hashtag);
 		List<Blog> list = blogService.searchListByTag(hashtag);
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS,list),
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
 				HttpStatus.OK);
 	}
 
@@ -217,7 +217,7 @@ public class BlogController {
 		System.out.println(btitle);
 		List<Blog> list = blogService.searchListByBlog(btitle);
 		
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS,list),
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
 				HttpStatus.OK);
 	}
 
@@ -287,15 +287,15 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(bid)){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_BLOG_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else if(blogService.deleteBlog(user, bid)) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_BLOG_SUCCESS),
-						HttpStatus.OK);
-			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_BLOG_FAIL),
-						HttpStatus.FORBIDDEN);
+			if (!blogService.checkBlog(bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_BLOG_FAIL), HttpStatus.FORBIDDEN);
+			} else if (blogService.deleteBlog(user, bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_BLOG_SUCCESS), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_BLOG_FAIL), HttpStatus.FORBIDDEN);
 			}
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
@@ -313,17 +313,17 @@ public class BlogController {
 	 */
 	@ApiOperation(value = "블로그 내 참여자 목록조회", response = ResponseEntity.class)
 	@GetMapping(value = "/blogs/{bid}/members")
-	public ResponseEntity blogMember(@PathVariable int bid,HttpServletRequest req) {
+	public ResponseEntity blogMember(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			List<Member> list = blogService.searchMember(bid);
-			if(!blogService.checkBlog(bid)){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.BLOG_MEMBER_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.BLOG_MEMBER_SUCCESS,list),
-						HttpStatus.OK);
+			if (!blogService.checkBlog(bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.BLOG_MEMBER_FAIL), HttpStatus.FORBIDDEN);
+			} else {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.OK, ResponseMessage.BLOG_MEMBER_SUCCESS, list), HttpStatus.OK);
 			}
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
@@ -341,17 +341,17 @@ public class BlogController {
 	 */
 	@ApiOperation(value = "블로그 내 참여자 추가", response = ResponseEntity.class)
 	@PostMapping(value = "/blogs/{bid}/members")
-	public ResponseEntity inviteMember(@PathVariable int bid,@RequestBody Users member,HttpServletRequest req) {
+	public ResponseEntity inviteMember(@PathVariable int bid, @RequestBody Users member, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(bid)){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.INVITE_MEMBER_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
+			if (!blogService.checkBlog(bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.INVITE_MEMBER_FAIL), HttpStatus.FORBIDDEN);
+			} else {
 				blogService.inviteMember(bid, member.getEmail(), user);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.INVITE_MEMBER_SUCCESS,user),
-						HttpStatus.OK);
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.CREATED, ResponseMessage.INVITE_MEMBER_SUCCESS, user), HttpStatus.OK);
 			}
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
@@ -374,14 +374,31 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(bid)){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_MEMBER_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
+			if (!blogService.checkBlog(bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_MEMBER_FAIL), HttpStatus.FORBIDDEN);
+			} else {
 				blogService.deleteMember(bid, member.getEmail(), user);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS),
-						HttpStatus.OK);
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS), HttpStatus.OK);
 			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@ApiOperation(value = "manager 블로그", response = ResponseEntity.class)
+	@GetMapping(value = "/blogs/manager")
+	public ResponseEntity managerBlog(HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+
+			List<Blog> list = blogService.myBlog(user);
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list), HttpStatus.OK);
+
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
