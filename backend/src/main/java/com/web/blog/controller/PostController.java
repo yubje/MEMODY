@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Post;
-import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
@@ -97,14 +99,17 @@ public class PostController {
 	 * @exception RestException - NOT_FOUND
 	 */
 	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
-	@GetMapping(value = "/blogs/{bid}/posts/")
-	public ResponseEntity readPostListAll(@PathVariable int bid, HttpServletRequest req) {
+	@GetMapping(value = "/blogs/{bid}/posts")
+	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=5) Pageable pageable,HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("블로그 내 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			List<Post> list = postService.listAllPost(bid);
+//			List<Post> list = postService.listAllPost(bid, pageable);
+			Page<Post> list = postService.listAllPost(bid, pageable);
 			System.out.println(list);
-			if(list.size()==0) {
+			System.out.println(pageable);
+//			if(list.size()==0) {
+			if(list.getSize()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE, list),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
@@ -225,7 +230,7 @@ public class PostController {
 	 * @exception RestException - NOT_FOUND
 	 */
 	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
-	@DeleteMapping(value = "/blogs/fork")
+	@PostMapping(value = "/blogs/fork")
 	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
