@@ -254,15 +254,41 @@ class BlogService {
   }
 
   getCommentData({ commit, state }) {
-    console.log(commit)
-    console.log(state)
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response.data.data)
         commit('SET_COMMENTDATA', response.data.data)
       })
       .catch(error => console.log(error.response.data))
     
+  }
+
+  updateComment({ commit }, comment) {
+    console.log(comment)
+    const info = {
+      "cmid": comment.cmid,
+      "comment": comment.comment
+    }
+    axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        commit('SET_COMMENTID', null)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error))
+  }
+
+  deleteComment({ state }, comment_id) {
+    console.log(state)
+    console.log(comment_id)
+    const info = {
+      "cmid": comment_id,
+    }
+    console.log(info)
+    axios.delete(`${SERVER}/comments`, { data: info, headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error.response.data))
   }
 
 }

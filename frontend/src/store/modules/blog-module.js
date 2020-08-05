@@ -128,7 +128,15 @@ export const blog = {
 
     SET_COMMENTDATA(state, commentData) {
       state.commentData = commentData
-    }
+    },
+
+    SET_COMMENTID(state, comment_id) {
+      state.comment_id = comment_id
+    },
+    
+    RESET_COMMENTID(state) {
+      state.comment_id = null
+    },
 
 
   },
@@ -261,6 +269,15 @@ export const blog = {
 
     getCommentData({ commit, state }) {
       BlogService.getCommentData({ commit, state })
+    },
+    
+
+    updateComment({ commit }, comment) {
+      BlogService.updateComment({ commit }, comment) 
+    },
+
+    deleteComment({ state }, comment_id) {
+      BlogService.deleteComment({ state }, comment_id)
     },
   },
 
