@@ -50,6 +50,9 @@ export const blog = {
 
     // 블로그 멤버
     members: null,
+
+    // 내가 속한 블로그 리스트
+    myBlogs: []
   },
   getters: {
     getpostListData(state) {
@@ -119,6 +122,11 @@ export const blog = {
 
     SET_POSTS(state, posts){
       state.posts= posts
+    },
+    
+    //내가 속한 블로그 리스트 
+    SET_MYBLOGS(state, blogs) {
+      state.myBlogs = blogs
     }
 
 
@@ -237,6 +245,16 @@ export const blog = {
     deleteBlogMember({ state }, email) {
       BlogService.deleteBlogMember({ state }, email)
     },
+
+    //Fork 용 블로그 목록 불러오기 
+    getBlogs({commit}) {
+      BlogService.getBlogs({commit})
+    },
+
+    //fork
+    forkPost({commit},forkData) {
+      BlogService.forkPost({commit},forkData)
+    }
   },
 
 }

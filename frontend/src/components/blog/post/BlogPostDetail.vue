@@ -8,6 +8,10 @@
           <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
           <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
+        <div v-else>
+          <BlogForkBlogList :pid="postData.pid"/>
+          <button data-toggle="modal" data-target="#fork-modal" >퍼가기</button>
+        </div>
         <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
         <p style="text-align: left">수정날짜: {{this.postData.update_time}}</p>
@@ -21,13 +25,14 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
+import BlogForkBlogList from '@/components/blog/fork/BlogForkBlogList.vue'
 // import BlogCommentCreate from '@/components/blog/comment/BlogCommentCreate.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'BlogPostDetail',
   components: {
-    BlogPostSidebar,
+    BlogPostSidebar,BlogForkBlogList
     //BlogCommentCreate
   },
   computed: {
