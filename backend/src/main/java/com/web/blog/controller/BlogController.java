@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +23,7 @@ import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.StatusCode;
-import com.web.blog.repository.BlogTagRepository;
+import com.web.blog.service.BlogFollowService;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.BlogTagService;
 import com.web.blog.service.MemberService;
@@ -55,6 +54,7 @@ public class BlogController {
 	private final TagService tagService;
 	private final BlogTagService blogtagService;
 	private final MemberService memberService;
+	private final BlogFollowService blogFollowService;
 
 	/**
 	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능.
@@ -77,18 +77,10 @@ public class BlogController {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
 			if (blogService.countBlogByUser(email)) {
-<<<<<<< HEAD
-				Blog temp = new Blog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email, 0);
-				System.out.println(temp);
-				bid = blogService.createBlog(temp);
-
-				String hashtags[] = blog.get("hashtags").split("#");
-=======
 				bid = blogService.createBlog(blog.get("btitle"),blog.get("bsubtitle"),blog.get("bcontent"),email);
 				
 				System.out.println("블로그생성");
 				String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
->>>>>>> 09737d434fd9391774eb93ff968c294ec7d2d883
 				String tname;
 				int tid;
 				for (int i = 1; i < hashtags.length; i++) {
@@ -251,11 +243,7 @@ public class BlogController {
 
 			if (blogService.updateBlog(user, btitle,bsubtitle,bcontent, changeTag, bid)) {
 
-<<<<<<< HEAD
-				String hashtags[] = changeTag.split("#");
-=======
 				String hashtags[] = changeTag.replaceAll(" ", "").split("#");
->>>>>>> 09737d434fd9391774eb93ff968c294ec7d2d883
 				String tname;
 				int tid;
 
@@ -392,6 +380,57 @@ public class BlogController {
 			}else {
 				blogService.deleteMember(bid, member.getEmail(), user);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	/**
+	 * 블로그 팔로우 - 
+	 * 
+	 */
+	@ApiOperation(value = "블로그 팔로우", response = ResponseEntity.class)
+	@PostMapping(value = "/blogs/{bid}/follows")
+	public ResponseEntity increaseBlogFollow(@PathVariable int bid, HttpServletRequest req) {
+		System.out.println("블로그 팔로우");
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			System.out.println(loginuser);
+			if(!blogService.checkBlog(bid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				blogFollowService.increaseBlogFollow(bid, loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	/**
+	 * 블로그 팔로우 취소 - 
+	 * 
+	 */
+	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class)
+	@DeleteMapping(value = "/blogs/{bid}/follows")
+	public ResponseEntity decreaseBlogFollow(@PathVariable int bid, HttpServletRequest req) {
+		System.out.println("블로그 팔로우 취소");
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			System.out.println(loginuser);
+			if(!blogService.checkBlog(bid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				blogFollowService.decreaseBlogFollow(bid, loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
 		} else {
