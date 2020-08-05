@@ -92,7 +92,8 @@ class BlogService {
 
 
   // 대분류 추가 
-  addParentCategory({commit},largeCategoryData) {
+  addParentCategory({commit, state},largeCategoryData) {
+    largeCategoryData.bid = state.bid
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
@@ -104,9 +105,15 @@ class BlogService {
 
   // 대분류 삭제
   deleteParentCategory({commit},largeCategoryData) {
-    console.log(commit)
-    console.log(largeCategoryData)
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,{data: largeCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, largeCategoryData.bid)
+    })
+  }
+  
+  //대분류 업데이트 
+  updateParentCategory({commit},largeCategoryData) {
+    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
     })
@@ -114,8 +121,6 @@ class BlogService {
 
   // 블로그 정보 수정 (API 문서 - 32~36D)
   updateBlogInfo({ state, commit }) {
-    console.log(state)
-    console.log(commit)
     var tagString = ''
     state.blogData.hashtags.forEach((item) => tagString += '#'+item.tname.trim())
     console.log(tagString)
@@ -126,10 +131,8 @@ class BlogService {
       "bcontent": state.blogData.bcontent,
       "hashtags": tagString,
     }
-    console.log(data)
     axios.put(`${SERVER}/blogs`, data, {headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        console.log(response)
+      .then(() => {
         commit('SET_BLOGDATA', state.blogData)
         router.push({ name: 'BlogView', query: { bid: state.blogData.bid }})
 
@@ -149,6 +152,7 @@ class BlogService {
 
   // 소분류 추가 
   addChildCategory({commit},mediumCategoryData) {
+    console.log(mediumCategoryData)
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, mediumCategoryData.bid)
@@ -157,8 +161,15 @@ class BlogService {
 
   // 소분류 삭제
   deleteChildCategory({state,commit},mediumCategoryData) {
-    console.log(mediumCategoryData)
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,{data: mediumCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    .then(() => {
+      this.getBlogCategory({commit}, state.bid)
+    })
+  }
+
+  // 소분류 업데이트 
+  updateChildCategory({commit, state}, childData) {
+    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,childData, {headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, state.bid)
     })
@@ -211,14 +222,16 @@ class BlogService {
   //카테고리 별 글목록 조회
   moveToPosts({commit},categoryData) {
     console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},)
+    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},
+    
+    )
   }
 
   fetchPosts({commit},info) {
+      
       axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_POSTS', response.data.data)
-        
       })
       .catch(error => {
         console.log(error)
@@ -241,15 +254,41 @@ class BlogService {
   }
 
   getCommentData({ commit, state }) {
-    console.log(commit)
-    console.log(state)
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response.data.data)
         commit('SET_COMMENTDATA', response.data.data)
       })
       .catch(error => console.log(error.response.data))
     
+  }
+
+  updateComment({ commit }, comment) {
+    console.log(comment)
+    const info = {
+      "cmid": comment.cmid,
+      "comment": comment.comment
+    }
+    axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        commit('SET_COMMENTID', null)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error))
+  }
+
+  deleteComment({ state }, comment_id) {
+    console.log(state)
+    console.log(comment_id)
+    const info = {
+      "cmid": comment_id,
+    }
+    console.log(info)
+    axios.delete(`${SERVER}/comments`, { data: info, headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        console.log(response.data)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error.response.data))
   }
 
 }
