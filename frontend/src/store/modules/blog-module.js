@@ -50,11 +50,15 @@ export const blog = {
     // 블로그 멤버
     members: null,
 
+
+    // 내가 속한 블로그 리스트
+    myBlogs: [],
+
     // 댓글
     comment_id: null,
     commentData: null,
 
-    
+  
   },
   getters: {
     getpostListData(state) {
@@ -126,9 +130,25 @@ export const blog = {
       state.posts= posts
     },
 
+    
+    //내가 속한 블로그 리스트 
+    SET_MYBLOGS(state, blogs) {
+      state.myBlogs = blogs
+    },
+
+
     SET_COMMENTDATA(state, commentData) {
       state.commentData = commentData
-    }
+    },
+
+    SET_COMMENTID(state, comment_id) {
+      state.comment_id = comment_id
+    },
+    
+    RESET_COMMENTID(state) {
+      state.comment_id = null
+    },
+
 
 
   },
@@ -253,6 +273,16 @@ export const blog = {
       BlogService.deleteBlogMember({ state }, email)
     },
 
+    //Fork 용 블로그 목록 불러오기 
+    getBlogs({commit}) {
+      BlogService.getBlogs({commit})
+    },
+
+    //fork
+    forkPost({commit},forkData) {
+      BlogService.forkPost({commit},forkData)
+    },
+
     // 댓글 작성 (API 문서 87~88D)
     createComment({ state }, comment) {
       BlogService.createComment({ state }, comment)
@@ -262,6 +292,16 @@ export const blog = {
     getCommentData({ commit, state }) {
       BlogService.getCommentData({ commit, state })
     },
+    
+
+    updateComment({ commit }, comment) {
+      BlogService.updateComment({ commit }, comment) 
+    },
+
+    deleteComment({ state }, comment_id) {
+      BlogService.deleteComment({ state }, comment_id)
+    },
+
   },
 
 }
