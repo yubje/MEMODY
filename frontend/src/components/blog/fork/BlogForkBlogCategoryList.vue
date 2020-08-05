@@ -1,9 +1,17 @@
 <template>
   <div>
-    <div id="btitle" @click="clickBtitle()">{{myBlog.btitle}}</div>
-    <div v-if="showCategories">
-      <BlogForkBlogLargeCategoryItem v-for="dataCategory in dataCategories" :key="dataCategory.bid" :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid"/>
-    </div>
+    <thead class="text-left">
+      <tr>
+        <th>
+          <h1 id="btitle" @click="clickBtitle()">{{myBlog.btitle}}</h1>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <div v-if="showCategories">
+        <BlogForkBlogLargeCategoryItem v-for="dataCategory in dataCategories" :key="dataCategory.bid" :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid"/>
+      </div>
+    </tbody>
   </div>
 </template>
 

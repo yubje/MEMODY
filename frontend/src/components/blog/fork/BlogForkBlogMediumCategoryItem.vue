@@ -1,7 +1,6 @@
 <template>
   <div @click="clickMediumDir()">
-    {{mcategory.medium_dir}}
-    
+    |{{mcategory.medium_dir}}
   </div>
 </template>
 
@@ -30,6 +29,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  div {
+    cursor: pointer;
+  }
 </style>

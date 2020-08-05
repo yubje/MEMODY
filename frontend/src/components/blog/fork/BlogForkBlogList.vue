@@ -10,9 +10,11 @@
             </button>
           </div>
           <div class="modal-body">
+            <table class="table">
             <div v-for="myBlog in myBlogs" :key="myBlog.bid">
               <BlogForkBlogCategoryList :myBlog="myBlog" :pid="pid"/>
             </div>
+            </table>
           </div>
         </div>
       </div>
