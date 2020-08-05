@@ -12,7 +12,12 @@
             <a>글제목</a>
             <a style="float:right">작성일</a>
           </div>
-          <BlogPostCategoryListItem v-for="post in posts" :key="post.pid" :post="post"/>
+          <div v-if="posts">
+            <BlogPostCategoryListItem v-for="post in posts" :key="post.pid" :post="post"/>
+          </div>
+          <div v-else>
+            작성한 글이 없습니다.
+          </div>
         </div>
       </div>
     </div>
