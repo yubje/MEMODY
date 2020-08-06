@@ -53,7 +53,6 @@ export const blog = {
 
     // 내가 속한 블로그 리스트
     myBlogs: [],
-
     // 댓글
     comment_id: null,
     commentData: null,
