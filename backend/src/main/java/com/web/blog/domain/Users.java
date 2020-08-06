@@ -22,17 +22,18 @@ import java.util.stream.Collectors;
 @Builder
 @Entity
 public class Users implements UserDetails {
-	
-	
 	@Id
 	private String email;
 
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 45, nullable = false, unique = true)
     private String uid;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(length = 30, nullable = false)
+    @Column(length = 128, nullable = false)
     private String password;
+    
+    @Column(length = 300, nullable = true)
+    private String profile;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default

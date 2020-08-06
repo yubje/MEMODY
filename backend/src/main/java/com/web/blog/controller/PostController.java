@@ -215,7 +215,7 @@ public class PostController {
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 
-			postService.forkPost(post);
+			postService.forkPost(post,user);
 			
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
