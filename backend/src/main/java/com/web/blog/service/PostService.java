@@ -97,7 +97,7 @@ public class PostService {
 		}
 	}
 	
-	public void forkPost(Post post) {
+	public void forkPost(Post post,String user) {
 		// 내 블로그 목록 조회
 		// 내 카테고리 조회
 		// 선택한 후 lcid, mcid 랑 같이 
@@ -108,7 +108,7 @@ public class PostService {
 				.mcid(post.getMcid())
 				.ptitle(post2.getPtitle())
 				.pcontent(post2.getPcontent())
-				.author(post2.getAuthor())
+				.author(user)
 				.postTime(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
 				.ptype(post2.getPtype())

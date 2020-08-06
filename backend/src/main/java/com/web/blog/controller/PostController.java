@@ -225,13 +225,13 @@ public class PostController {
 	 * @exception RestException - NOT_FOUND
 	 */
 	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
-	@DeleteMapping(value = "/blogs/fork")
+	@PostMapping(value = "/blogs/fork")
 	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 
-			postService.forkPost(post);
+			postService.forkPost(post,user);
 			
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
