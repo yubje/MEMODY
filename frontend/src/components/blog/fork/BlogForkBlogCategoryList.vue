@@ -3,13 +3,13 @@
     <thead class="text-left">
       <tr>
         <th>
-          <h1 id="btitle" @click="clickBtitle()">{{myBlog.btitle}}</h1>
+          <h3 id="btitle" @click="clickBtitle()">{{myBlog.btitle}}</h3>
         </th>
       </tr>
     </thead>
     <tbody>
       <div v-if="showCategories">
-        <BlogForkBlogLargeCategoryItem v-for="dataCategory in dataCategories" :key="dataCategory.bid" :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid"/>
+        <BlogForkBlogLargeCategoryItem v-for="dataCategory in dataCategories" :key="dataCategory.lcid" :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid"/>
       </div>
     </tbody>
   </div>
@@ -48,7 +48,7 @@ export default {
   computed: {
 
   },
-  created() {
+  mounted() {
     axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.myBlog.bid}/categories`,{ headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         this.dataCategories = response.data.data
