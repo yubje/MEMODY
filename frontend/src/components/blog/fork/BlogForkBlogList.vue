@@ -10,7 +10,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <table class="table">
+            <table class="table text-left ">
             <div v-for="myBlog in myBlogs" :key="myBlog.bid">
               <BlogForkBlogCategoryList :myBlog="myBlog" :pid="pid"/>
             </div>
@@ -36,6 +36,8 @@ export default {
   },
   computed: {
     ...mapState('blog',['myBlogs']),
+  },
+  methods: {
     ...mapActions('blog', ['getBlogs'])
   },
   created() {
