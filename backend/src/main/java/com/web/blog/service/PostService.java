@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Post;
@@ -47,11 +49,13 @@ public class PostService {
 //		}
 //	}
 //	
-	public List<Post> listAllPost(int bid){
-		List<Post> result = new ArrayList<Post>();
+	public Page<Post> listAllPost(int bid, Pageable pageable){
+//		List<Post> result = new ArrayList<Post>();
+//		Page<Post> result = new ArrayList<Post>();
 //		result = postRepository.findAllByBid(bid);
 		// 최신글 순서로 조회 
-		result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid);
+//		result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid);
+		Page<Post> result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid, pageable);
 		return result;
 	}
 

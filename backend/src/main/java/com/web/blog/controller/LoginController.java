@@ -168,7 +168,6 @@ public class LoginController {
 	@DeleteMapping(value = "/users/{email}")
 	public ResponseEntity findAllUser(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("DELETE>>>>>");
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 			userService.deleteUser(email);
 

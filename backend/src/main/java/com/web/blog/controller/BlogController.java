@@ -71,8 +71,6 @@ public class BlogController {
 	public ResponseEntity createBlog(@RequestBody Map<String, String> blog, HttpServletRequest req) {
 
 		String token = req.getHeader("auth");
-//		System.out.println(blog.get("btitle")+" "+blog.get("bsubtitle")+" "+blog.get("bcontent"));
-//		System.out.println("해시태그들 보여주셈 >>>>> "+blog.get("hashtags"));
 		if (jwtTokenProvider.validateToken(token)) {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
@@ -121,7 +119,6 @@ public class BlogController {
 	@GetMapping(value = "/blogs/")
 	public ResponseEntity userBlogList(HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("to Front: " + token);
 		String email = jwtTokenProvider.getUserPk(token);
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Blog> list = blogService.myBlogList(email);
@@ -214,7 +211,6 @@ public class BlogController {
 	@ApiOperation(value = "블로그 이름으로 블로그 목록 조회", response = ResponseEntity.class)
 	@GetMapping(value = "/blogs/{btitle}/list")
 	public ResponseEntity listByBtitle(@PathVariable String btitle) {
-		System.out.println(btitle);
 		List<Blog> list = blogService.searchListByBlog(btitle);
 		
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
@@ -282,8 +278,6 @@ public class BlogController {
 	@ApiOperation(value = "블로그 정보 삭제", response = ResponseEntity.class)
 	@DeleteMapping(value = "/blogs/{bid}")
 	public ResponseEntity blogDelete(@PathVariable int bid, HttpServletRequest req) {
-
-		System.out.println(bid);
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
@@ -416,7 +410,6 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
 			if(!blogService.checkBlog(bid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
@@ -441,7 +434,6 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
 			if(!blogService.checkBlog(bid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
