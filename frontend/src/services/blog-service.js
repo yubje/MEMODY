@@ -238,17 +238,32 @@ class BlogService {
       })
     }
 
+  // Fork용 블로그 목록 불러오기 
+  getBlogs({commit}) {
+    axios.get(`${SERVER}/blogs/manager`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      commit('SET_MYBLOGS', response.data.data)
+    })
+  }
+  // fork
+  forkPost({commit},forkData) {
+    axios.post(`${SERVER}/blogs/fork`, forkData, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response =>{
+      console.log(commit)
+      console.log(response)
+    })
+  }
+
   createComment({ state }, comment) {
-    console.log(state)
-    console.log(comment)
+
     const commentData = {
       "pid": state.postData.pid,
       "comment": comment
     }
     console.log(commentData)
     axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        console.log(response.data)
+      .then(() => {
+        router.go()
       })
       .catch(error => console.log(error.response.data))
   }
@@ -263,7 +278,6 @@ class BlogService {
   }
 
   updateComment({ commit }, comment) {
-    console.log(comment)
     const info = {
       "cmid": comment.cmid,
       "comment": comment.comment
@@ -276,19 +290,15 @@ class BlogService {
       .catch(error => console.log(error))
   }
 
-  deleteComment({ state }, comment_id) {
+  deleteComment({ state }, comment) {
     console.log(state)
-    console.log(comment_id)
-    const info = {
-      "cmid": comment_id,
-    }
-    console.log(info)
-    axios.delete(`${SERVER}/comments`, { data: info, headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        console.log(response.data)
+    axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {    
         router.push({ name: 'BlogPostDetail' })
+        router.go()
       })
       .catch(error => console.log(error.response.data))
+
   }
 
 }
