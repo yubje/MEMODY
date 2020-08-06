@@ -14,7 +14,22 @@
       </div>
       
       <div v-for="categories in dataCategories" :key="categories.lcid" class="row justify-content-end">
-        <div class="col-12">
+        <table class="table text-left">
+          <thead>
+            <tr>
+              {{categories.large_dir}}
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="child in categories.mcategory" :key="child.mcid">
+              <th scope="row" @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
+              | {{child.medium_dir}} 
+              </th>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- <div class="col-12">
           <h4 class="d-flex my-2">
           {{categories.large_dir}}
           </h4>
@@ -23,7 +38,7 @@
           <p @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
             {{child.medium_dir}} 
           </p>
-        </div>
+        </div> -->
       </div>
     <!-- <div class="row justify-content-end">
       <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
@@ -77,5 +92,10 @@ export default {
 <style scoped>
 p {
   cursor: pointer;
+}
+th {
+  cursor: pointer;
+  color: #313D4F;
+
 }
 </style>

@@ -14,7 +14,7 @@
             >update</button>
             <button
               class="dropdown-item"
-              @click="deleteComment(comment.cmid)"
+              @click="deleteComment(comment)"
             >delete</button>
           </div>
         </li>
