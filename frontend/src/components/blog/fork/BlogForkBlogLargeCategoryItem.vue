@@ -1,12 +1,15 @@
 <template>
-  <tr class="text-left">
+<div>
+
+  <tr>
     <th>
        {{dataCategory.large_dir}}
     </th>
-    <th>
-      <BlogForkBlogMediumCategoryItem v-for="mcategory in dataCategory.mcategory" :key="mcategory.mcid" :mcategory="mcategory" :bid="bid" :pid="pid"/>
-    </th>
   </tr>
+  <tr>
+    <BlogForkBlogMediumCategoryItem v-for="mcategory in dataCategory.mcategory" :key="mcategory.mcid" :mcategory="mcategory" :bid="bid" :pid="pid"/>
+  </tr>
+</div>
 </template>
 
 <script>

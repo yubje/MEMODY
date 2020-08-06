@@ -305,7 +305,7 @@ class BlogService {
         router.push({ name: 'BlogPostDetail' })
       })
       .catch(error => console.log(error.response.data))
-
+    
   }
 
 }
