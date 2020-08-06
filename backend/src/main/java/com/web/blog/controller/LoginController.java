@@ -77,7 +77,7 @@ public class LoginController {
 		
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
-		System.out.println("LOGIN>>>>>>>>"+token);
+		System.out.println(user.getEmail()+" >>>LOGIN>>>>>>>>"+token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
@@ -134,7 +134,6 @@ public class LoginController {
 	@GetMapping(value = "/users/{email}")
 	public ResponseEntity userInfo(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println(email+" "+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			Users member = userService.findByEmail(email)
 					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
@@ -157,7 +156,6 @@ public class LoginController {
 	@DeleteMapping(value = "/users/{email}")
 	public ResponseEntity findAllUser(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("DELETE>>>>>");
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 			userService.deleteUser(email);
 			
@@ -225,8 +223,6 @@ public class LoginController {
 	@PutMapping(value = "/users")
 	public ResponseEntity updateUser(@RequestBody Users user, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("회원정보 수정");
-		System.out.println(user.getEmail()+" "+user.getUid()+" "+user.getPassword());
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(user.getEmail())) {
 			String ecdPwd = passwordEncoder.encode(user.getPassword());
 			userService.userUpdate(user.getEmail(), user.getUid(), ecdPwd);

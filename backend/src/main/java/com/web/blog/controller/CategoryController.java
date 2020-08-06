@@ -71,7 +71,6 @@ public class CategoryController {
 		System.out.println(lcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			System.out.println(user);
 			if(!blogService.checkBlog(lcategory.getBid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.CREATE_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);

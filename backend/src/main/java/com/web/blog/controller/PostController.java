@@ -64,10 +64,7 @@ public class PostController {
 	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class)
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
-		System.out.println("포스트 생성 ");
-		System.out.println(post);
 		String token = req.getHeader("auth");
-//		System.out.println("POST>>>>>>>>>>>>>>>"+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
@@ -102,7 +99,6 @@ public class PostController {
 	@GetMapping(value = "/blogs/{bid}/posts")
 	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=5) Pageable pageable,HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 //			List<Post> list = postService.listAllPost(bid, pageable);
 			Page<Post> list = postService.listAllPost(bid, pageable);
@@ -130,11 +126,9 @@ public class PostController {
 	@GetMapping(value = "/blogs/{bid}/tmpposts/")
 	public ResponseEntity readTmpPostListAll(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			String author = jwtTokenProvider.getUserPk(token);
 			List<Post> list = postService.listAllSavePost(bid, author);
-			System.out.println(list);
 			if(list.size()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLSAVEPOST_NONE),HttpStatus.OK);
 			}else {
@@ -156,12 +150,9 @@ public class PostController {
 	@GetMapping(value = "/blogs/{bid}/posts/{pid}")
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			Post post = postService.findByPid(pid);
-			System.out.println(post);
 			if(post != null) {
-				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
@@ -182,14 +173,8 @@ public class PostController {
 	@PutMapping(value = "/blogs/posts")
 	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 수정 ");
-		System.out.println(post);
-		
-		// 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
 		if (jwtTokenProvider.validateToken(token)) {
-			
 			postService.updatePost(post);
-			System.out.println("수정 성공");
 			Post updatePost = postService.findByPid(post.getPid());
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
@@ -208,14 +193,8 @@ public class PostController {
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 삭제 ");
-		System.out.println(pid);
-		
-//		 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
-			
 			postService.deletePost(pid);
-			System.out.println("삭제 성공");
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
@@ -254,11 +233,9 @@ public class PostController {
 	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
 	@PostMapping(value = "/posts/{pid}/likes")
 	public ResponseEntity increasePostLike(@PathVariable int pid, HttpServletRequest req) {
-		System.out.println("게시글 좋아요");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
 			if(!postService.checkPost(pid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
@@ -279,11 +256,9 @@ public class PostController {
 	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
 	@DeleteMapping(value = "/posts/{pid}/likes")
 	public ResponseEntity decreasePostLike(@PathVariable int pid, HttpServletRequest req) {
-		System.out.println("게시글 좋아요 취소");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
 			if(!postService.checkPost(pid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
