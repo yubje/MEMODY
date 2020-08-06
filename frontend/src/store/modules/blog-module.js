@@ -298,8 +298,8 @@ export const blog = {
       BlogService.updateComment({ commit }, comment) 
     },
 
-    deleteComment({ state }, comment_id) {
-      BlogService.deleteComment({ state }, comment_id)
+    deleteComment({ state }, comment) {
+      BlogService.deleteComment({ state }, comment)
     },
 
   },
