@@ -3,7 +3,7 @@
     <div class="editor-header">
       <ul class="editor-header-main">
         <li>
-          <select v-model="fontName" @click="test()">
+          <select v-model="fontName" v-on:change="test()">
             <option id="font-arial" value="Arial">Arial</option>
             <option id="font-gullim" value="굴림">굴림</option>
             <option id="font-gothic" value="Nanum Gothic">나눔고딕</option>
@@ -93,6 +93,7 @@ export default {
   },
   methods: {
     test() {
+      console.log()
       document.execCommand('fontName', false, this.fontName)
     }
   }
