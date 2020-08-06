@@ -83,7 +83,7 @@ class BlogService {
   //카테고리 불러오기
   getBlogCategory({commit}, bid) {
    
-    axios.get(`${process.env.VUE_APP_SERVER}/blogs/${bid}/categories`,{ headers: {"auth": cookies.get('auth-token')}})
+    axios.get(`${SERVER}/blogs/${bid}/categories`,{ headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_DATACATEGORIES', response.data.data)
       })
@@ -94,7 +94,7 @@ class BlogService {
   // 대분류 추가 
   addParentCategory({commit, state},largeCategoryData) {
     largeCategoryData.bid = state.bid
-    axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
+    axios.post(`${SERVER}/blogs/categories/parent`,largeCategoryData,{ headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
     })
@@ -105,7 +105,7 @@ class BlogService {
 
   // 대분류 삭제
   deleteParentCategory({commit},largeCategoryData) {
-    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,{data: largeCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${SERVER}/blogs/categories/parent`,{data: largeCategoryData, headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
     })
@@ -113,7 +113,7 @@ class BlogService {
   
   //대분류 업데이트 
   updateParentCategory({commit},largeCategoryData) {
-    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/parent`,largeCategoryData, { headers: {"auth": cookies.get('auth-token')}})
+    axios.put(`${SERVER}/blogs/categories/parent`,largeCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, largeCategoryData.bid)
     })
@@ -141,7 +141,6 @@ class BlogService {
   }
   // 블로그 삭제 (API 문서 - 37D)
   deleteBlog({ state }) {
-    console.log(state.blogData.bid)
     axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         alert(response.data.message)
@@ -153,7 +152,7 @@ class BlogService {
   // 소분류 추가 
   addChildCategory({commit},mediumCategoryData) {
     console.log(mediumCategoryData)
-    axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
+    axios.post(`${SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, mediumCategoryData.bid)
     })
@@ -161,7 +160,7 @@ class BlogService {
 
   // 소분류 삭제
   deleteChildCategory({state,commit},mediumCategoryData) {
-    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,{data: mediumCategoryData, headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${SERVER}/blogs/categories/child`,{data: mediumCategoryData, headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, state.bid)
     })
@@ -169,7 +168,7 @@ class BlogService {
 
   // 소분류 업데이트 
   updateChildCategory({commit, state}, childData) {
-    axios.put(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,childData, {headers: {"auth": cookies.get('auth-token')}})
+    axios.put(`${SERVER}/blogs/categories/child`,childData, {headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, state.bid)
     })
@@ -177,11 +176,8 @@ class BlogService {
 
 
   getBlogMembers({ state }) {
-    console.log(state)
     axios.get(`${SERVER}/blogs/${state.bid}/members`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log('getBlogMembers')
-        console.log(response.data)
         state.members = response.data.data
       })
       .catch(error => console.log(error.response.data))
