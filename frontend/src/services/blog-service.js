@@ -238,28 +238,64 @@ class BlogService {
       })
     }
 
+  // Fork용 블로그 목록 불러오기 
+  getBlogs({commit}) {
+    axios.get(`${SERVER}/blogs/manager`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      commit('SET_MYBLOGS', response.data.data)
+    })
+  }
+  // fork
+  forkPost({commit},forkData) {
+    axios.post(`${SERVER}/blogs/fork`, forkData, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response =>{
+      console.log(commit)
+      console.log(response)
+    })
+  }
+
   createComment({ state }, comment) {
-    console.log(state)
-    console.log(comment)
+
     const commentData = {
       "pid": state.postData.pid,
       "comment": comment
     }
     console.log(commentData)
     axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        console.log(response.data)
+      .then(() => {
+        router.go()
       })
       .catch(error => console.log(error.response.data))
   }
 
   getCommentData({ commit, state }) {
-    console.log(commit)
-    console.log(state)
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response.data.data)
         commit('SET_COMMENTDATA', response.data.data)
+      })
+      .catch(error => console.log(error.response.data))
+    
+  }
+
+  updateComment({ commit }, comment) {
+    const info = {
+      "cmid": comment.cmid,
+      "comment": comment.comment
+    }
+    axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        commit('SET_COMMENTID', null)
+        router.push({ name: 'BlogPostDetail' })
+      })
+      .catch(error => console.log(error))
+  }
+
+  deleteComment({ state }, comment) {
+    console.log(state)
+    axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {    
+        router.push({ name: 'BlogPostDetail' })
+        router.go()
       })
       .catch(error => console.log(error.response.data))
     

@@ -2,19 +2,19 @@
     <div>
     <div class="navbar navbar-expand-lg navbar-light justify-content-between p-0">
       <b>{{ comment.email }}</b>
-      <ul class="navbar-nav ml-auto">
+      <ul v-if="userInfo.email === comment.email" class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-ellipsis-v"></i>
+            <font-awesome-icon :icon="['fas','ellipsis-v']" />
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <button
               class="dropdown-item"
-              @click="onUpdate()"
+              @click="SET_COMMENTID(comment.cmid)"
             >update</button>
             <button
               class="dropdown-item"
-              @click="onDelete()"
+              @click="deleteComment(comment)"
             >delete</button>
           </div>
         </li>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'BlogCommentItem',
   props: {
@@ -36,13 +37,12 @@ export default {
       type: Object,
     },
   },
+  computed: {
+    ...mapState(['userInfo']),
+  },
   methods: {
-    onUpdate() {
-
-    },
-    onDelete() {
-
-    },
+    ...mapActions('blog', ['deleteComment']),
+    ...mapMutations('blog', ['SET_COMMENTID']),
 
   },
 }

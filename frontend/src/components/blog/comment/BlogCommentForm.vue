@@ -1,32 +1,48 @@
 <template>
   <div>
-    <div v-if="!comment_id">
+    <div v-if="!comment">
       <div class="inputbox d-flex flex-column m-3">
-        <input class="textbox" v-model="comment"><br>
+        <input class="textbox" v-model="newComment"><br>
         <button 
-          @click="createComment(comment)"
+          @click="createComment(newComment)"
           class="btn btn-sm d-flex justify-content-end m-1"
-          >SUBMIT</button>
+          >댓글 작성</button>
+      </div>
+    </div>
+
+    <div v-else>
+      <div class="inputbox d-flex flex-column m-3">
+        <input class="textbox" v-model="comment.comment"><br>
+        <button 
+          @click="updateComment(comment)"
+          class="btn btn-sm d-flex justify-content-end m-1"
+          >댓글 수정</button>
       </div>
     </div>
   </div> 
 </template>
 
+
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
   name: 'BlogCommentForm',
-    data() {
+  data() {
     return {
-      comment: null,
+      newComment: null,
     }
+  },
+  props: {
+    comment: {
+      type: Object,
+    },
   },
   computed: {
     ...mapState('blog', ['comment_id'])
   },
 
   methods: {
-    ...mapActions('blog', ['createComment']),
+    ...mapActions('blog', ['createComment', 'updateComment']),
   },
   
 }
