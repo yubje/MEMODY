@@ -3,8 +3,8 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col col-lg-10">
-        <h1>{{this.postData.ptitle}}</h1>
-        <div v-if="userInfo.email == this.postData.author" style="float: right">
+        <h1>{{postData.ptitle}}</h1>
+        <div v-if="userInfo.email == postData.author" style="float: right">
           <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
           <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
@@ -12,11 +12,11 @@
           <BlogForkBlogList :pid="postData.pid"/>
           <button data-toggle="modal" data-target="#fork-modal" >퍼가기</button>
         </div>
-        <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
-        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
-        <p style="text-align: left">수정날짜: {{this.postData.update_time}}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성자: {{postData.author}}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{postData.postTime}}</p>
+        <p style="text-align: left">수정날짜: {{postData.update_time}}</p>
         <hr>
-        <textarea style="height:60%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
+        <textarea style="height:60%; width:100%" v-text="postData.pcontent" readonly></textarea>
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
@@ -28,9 +28,7 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
 import BlogForkBlogList from '@/components/blog/fork/BlogForkBlogList.vue'
-// import BlogCommentCreate from '@/components/blog/comment/BlogCommentCreate.vue'
 import BlogCommentForm from '@/components/blog/comment/BlogCommentForm.vue'
 import BlogCommentList from '@/components/blog/comment/BlogCommentList.vue'
 
@@ -41,8 +39,6 @@ export default {
   components: {
     BlogPostSidebar,
     BlogForkBlogList,
-    //BlogCommentCreate
-    BlogPostSidebar,
     BlogCommentForm,
     BlogCommentList,
   },
@@ -63,7 +59,7 @@ export default {
     }
   },
   created() {
-    this.getCommentData()
+    
   },
 }
 </script>

@@ -51,7 +51,7 @@ export default {
       if (cookies.get('auth-token')) {
         axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
-          console.log('조회성공')
+          console.log(response.data.data.myBlog)
           this.myBlogs = response.data.data.myBlog
           this.recommendBlog = response.data.data.recommendBlog
           return response
