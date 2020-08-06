@@ -97,7 +97,7 @@ public class PostController {
 	 */
 	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
 	@GetMapping(value = "/blogs/{bid}/posts")
-	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=5) Pageable pageable,HttpServletRequest req) {
+	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable,HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 //			List<Post> list = postService.listAllPost(bid, pageable);
