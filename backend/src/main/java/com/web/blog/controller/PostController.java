@@ -234,15 +234,15 @@ public class PostController {
 	 */
 	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
 	@PostMapping(value = "/posts/likes")
-	public ResponseEntity increasePostLike(@RequestBody int pid, HttpServletRequest req) {
+	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.increasePostLike(pid, loginuser);
+				postLikeService.increasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -257,15 +257,15 @@ public class PostController {
 	 */
 	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
 	@DeleteMapping(value = "/posts/likes")
-	public ResponseEntity decreasePostLike(@RequestBody int pid, HttpServletRequest req) {
+	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.decreasePostLike(pid, loginuser);
+				postLikeService.decreasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}

@@ -58,7 +58,7 @@ public class MainController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(MAIN_SUCCESS), HttpStatus, data(블로그 목록 정보)
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "로그인 후 메인", response = ResponseEntity.class)
+	@ApiOperation(value = "로그인 후 메인", response = ResponseEntity.class, notes = "로그인 후에는 내가 참여하고 있는 블로그와 추천 블로그를 메인화면에 보여줍니다.")
 	@GetMapping(value = "/main/after")
 	public ResponseEntity loginAfter(HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -66,11 +66,12 @@ public class MainController {
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Blog> recommendList = blogService.recommendBlogs();
 			List<Blog> myList = blogService.myBlogList(email);
-
+			List<Blog> followList = blogService.followBlogList(email);
 			Map<String,List<Blog>> result = new HashMap<String, List<Blog>>();
 			
 			result.put("myBlog",myList);
 			result.put("recommendBlog",recommendList);
+			result.put("followBlog",followList);
 			
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.MAIN_SUCCESS, result),HttpStatus.OK);
 		}else {
@@ -86,7 +87,7 @@ public class MainController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(RECOMMEND_BLOG_SUCCESS), HttpStatus, data(블로그 목록 정보)
 	 * 
 	 */
-	@ApiOperation(value = "로그인 전 메인", response = ResponseEntity.class)
+	@ApiOperation(value = "로그인 전 메인", response = ResponseEntity.class, notes = "로그인 전에는 조회수 기반의 블로그를 추천하여 메인화면에 보여줍니다.")
 	@GetMapping(value = "/main/before")
 	public ResponseEntity loginBefore() {
 			List<Blog> list = blogService.recommendBlogs();

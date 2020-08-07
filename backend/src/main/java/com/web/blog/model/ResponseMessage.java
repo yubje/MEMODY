@@ -40,6 +40,8 @@ public class ResponseMessage {
     public static final String INVITE_MEMBER_FAIL = "블로그 멤버 추가 실패";
     public static final String DELETE_MEMBER_SUCCESS = "블로그 멤버 삭제 성공";
     public static final String DELETE_MEMBER_FAIL = "블로그 멤버 삭제 실패";
+    public static final String FOLLOW_BLOG_SUCCESS = "블로그 팔로우 성공";
+    public static final String UNFOLLOW_BLOG_SUCCESS = "블로그 팔로우 취소 성공";
     public static final String SEARCH_BLOGFOLLOW_SUCCESS = "블로그 팔로우 조회 성공";
     
     

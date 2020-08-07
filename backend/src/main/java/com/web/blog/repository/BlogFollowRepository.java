@@ -12,8 +12,8 @@ import com.web.blog.domain.Users;
 
 public interface BlogFollowRepository extends JpaRepository<BlogFollow, Long> {
 	
-	List<Users> findByEmail(String email);
-	List<Users> findByBid(int bid);
+	List<BlogFollow> findByEmail(String email);
+	List<BlogFollow> findByBid(int bid);
 	
 	@Transactional
 	void deleteByEmailAndBid(String email, int bid);
