@@ -240,47 +240,39 @@ public class LoginController {
 	}
 
 	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
-	@PutMapping(value = "/users")
-	public ResponseEntity updateUser(@RequestBody Users user, HttpServletRequest req) {
+	@PutMapping(value = "/users", produces = "application/json;charset=UTF-8", consumes = {
+			"multipart/form-data"})
+	public ResponseEntity updateUser(@RequestBody Users user,MultipartFile file, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		String email = jwtTokenProvider.getUserPk(token);
 		System.out.println("회원정보 수정");
 		System.out.println(user.getEmail() + " " + user.getUid() + " " + user.getPassword());
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(user.getEmail())) {
 			String ecdPwd = passwordEncoder.encode(user.getPassword());
 			userService.userUpdate(user.getEmail(), user.getUid(), ecdPwd);
-
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),
-					HttpStatus.OK);
+			
+			if (file == null) {
+				System.out.println("[SYSTEM] 파일 없음");
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_PROFILE_FAIL), HttpStatus.FORBIDDEN);
+			}
+			System.out.println("[FILE] " + file);
+			String url = s3Service.profileUpload(file);
+			System.out.println("URL: "+url);
+			if (url != null) {
+				userService.profileUpdate(email, url);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_PROFILE_FAIL), HttpStatus.FORBIDDEN);
+			}
+			
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),
 					HttpStatus.FORBIDDEN);
 		}
 	}
-
-	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
-	@PutMapping(value = "/users/pw")
-	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
-
-		String ecdPwd = passwordEncoder.encode(user.getPassword());
-		userService.pwdUpdate(user.getEmail(), ecdPwd);
-
-		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, user.getEmail()),
-				HttpStatus.OK);
-	}
-
-	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)
-	@GetMapping(value = "/users/{uid}/nickname")
-	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
-		if (!userService.findByUid(uid).isPresent()) {
-			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),
-					HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Response>(
-					new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST), HttpStatus.FORBIDDEN);
-		}
-
-	}
-	
 	
 	@ApiOperation(value = "프로필 이미지 변경", response = ResponseEntity.class)
 	@PutMapping(value = "/users/{email}/profile", produces = "application/json;charset=UTF-8", consumes = {
@@ -308,6 +300,31 @@ public class LoginController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}
+	}
+	
+
+	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
+	@PutMapping(value = "/users/pw")
+	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
+
+		String ecdPwd = passwordEncoder.encode(user.getPassword());
+		userService.pwdUpdate(user.getEmail(), ecdPwd);
+
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, user.getEmail()),
+				HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)
+	@GetMapping(value = "/users/{uid}/nickname")
+	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
+		if (!userService.findByUid(uid).isPresent()) {
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST), HttpStatus.FORBIDDEN);
+		}
+
 	}
 
 }
