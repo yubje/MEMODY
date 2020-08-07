@@ -1,9 +1,13 @@
 <template>
   <div>
     <BlogEditor />
-    <!-- <div>
+    <div>
       <input v-model="postData.ptitle" type="text" placeholder="제목">
-    </div> -->
+    </div>
+    <div>
+      <div style="border:1px solid" contenteditable="true" v-focus />
+    </div>
+
     <div>
       <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
     </div>
