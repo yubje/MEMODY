@@ -298,7 +298,7 @@ class BlogService {
         router.go()
       })
       .catch(error => console.log(error.response.data))
-
+    
   }
 
 }
