@@ -10,8 +10,12 @@
     
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="myBlogs"/>
+      팔로잉 블로그
+      <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
-    <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      추천 블로그
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      
   </div>
 </template>
 
@@ -36,6 +40,7 @@ export default {
     return {
       myBlogs: [],
       recommendBlog: null,
+      followBlog: null,
     }
   },
   components: {
@@ -51,9 +56,10 @@ export default {
       if (cookies.get('auth-token')) {
         axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
-          console.log(response.data.data.myBlog)
+          console.log(response.data.data)
           this.myBlogs = response.data.data.myBlog
           this.recommendBlog = response.data.data.recommendBlog
+          this.followBlog =response.data.data.followBlog
           return response
         })
         .catch(error => {
