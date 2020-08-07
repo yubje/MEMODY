@@ -450,4 +450,35 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	/**
+	 * 블로그 팔로우 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 
+	 */
+	@ApiOperation(value = "블로그 팔로우 조회", response = ResponseEntity.class)
+	@GetMapping(value = "/blogs/{bid}/follows")
+	public ResponseEntity searchPostLike(@PathVariable int bid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("블로그 팔로우 조회");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!blogService.checkBlog(bid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				boolean followed = blogFollowService.searchBlogFollow(bid, loginuser);
+				System.out.println(followed);
+				if(followed) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+							HttpStatus.OK);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 }

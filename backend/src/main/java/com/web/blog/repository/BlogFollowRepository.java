@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.web.blog.domain.BlogFollow;
+import com.web.blog.domain.PostLike;
 import com.web.blog.domain.Users;
 
 public interface BlogFollowRepository extends JpaRepository<BlogFollow, Long> {
@@ -19,6 +20,6 @@ public interface BlogFollowRepository extends JpaRepository<BlogFollow, Long> {
 	
 	int countByBid(int bid);
 	
-	
+	List<BlogFollow> findByBidAndEmail(int bid, String email);
 
 }

@@ -40,6 +40,7 @@ public class ResponseMessage {
     public static final String INVITE_MEMBER_FAIL = "블로그 멤버 추가 실패";
     public static final String DELETE_MEMBER_SUCCESS = "블로그 멤버 삭제 성공";
     public static final String DELETE_MEMBER_FAIL = "블로그 멤버 삭제 실패";
+    public static final String SEARCH_BLOGFOLLOW_SUCCESS = "블로그 팔로우 조회 성공";
     
     
     public static final String RECOMMEND_BLOG_SUCCESS = "추천 블로그 목록 조회 성공";
@@ -61,6 +62,7 @@ public class ResponseMessage {
     public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
     public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
+    public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
     
     
     // Comments
