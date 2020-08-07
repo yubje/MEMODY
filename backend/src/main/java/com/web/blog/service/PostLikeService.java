@@ -1,5 +1,7 @@
 package com.web.blog.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Post;
@@ -29,6 +31,14 @@ public class PostLikeService {
 		updatePost.setPostlikecnt(postLikeRepository.countByPid(pid));
 		postRepository.save(updatePost);
 	}
-
+	
+	public boolean searchPostLike(int pid, String email) {
+		List<PostLike> list = postLikeRepository.findByPidAndEmail(pid, email);
+		if(list.size()==1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
 }

@@ -1,31 +1,23 @@
 package com.web.blog.service;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Blog;
+import com.web.blog.domain.BlogFollow;
 import com.web.blog.domain.Blogtag;
 import com.web.blog.domain.Member;
-import com.web.blog.domain.Tag;
-import com.web.blog.domain.Users;
+import com.web.blog.repository.BlogFollowRepository;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.BlogTagRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.TagRepository;
-import com.web.blog.repository.UsersRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +27,8 @@ public class BlogService {
 	private final MemberRepository memberRepository;
 	private final BlogTagRepository blogtagRepository;
 	private final TagRepository tagRepository;
+	private final BlogFollowRepository blogFollowRepository;
+	
 
 	public int createBlog(String title,String subtitle,String content, String email) {
 		return blogRepository.save(Blog.builder().btitle(title).bsubtitle(subtitle)
@@ -73,6 +67,26 @@ public class BlogService {
 				List<Member> members = memberRepository.findByBid(bid);
 				for(Member mem:members) {
 					blog.addMember(mem);
+				}
+			}
+			
+			result.add(blog);
+		}
+		return result;
+	}
+
+	// 내가 팔로우한 블로그 목록 조회
+	public List<Blog> followBlogList(String email) {
+		List<BlogFollow> list = blogFollowRepository.findByEmail(email);
+		List<Blog> result = new ArrayList<Blog>();
+		for (BlogFollow blogFollow : list) {
+			int bid = blogFollow.getBid();
+			Blog blog = blogRepository.findByBid(bid);
+			
+			if(blog.getFollower().size()==0) {
+				List<BlogFollow> followers = blogFollowRepository.findByBid(bid);
+				for(BlogFollow fol:followers) {
+					blog.addFollower(fol);
 				}
 			}
 			

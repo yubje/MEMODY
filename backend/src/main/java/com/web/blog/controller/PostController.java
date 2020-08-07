@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -47,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class PostController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
@@ -231,16 +233,16 @@ public class PostController {
 	 * 
 	 */
 	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
-	@PostMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity increasePostLike(@PathVariable int pid, HttpServletRequest req) {
+	@PostMapping(value = "/posts/likes")
+	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.increasePostLike(pid, loginuser);
+				postLikeService.increasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -254,16 +256,16 @@ public class PostController {
 	 * 
 	 */
 	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
-	@DeleteMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity decreasePostLike(@PathVariable int pid, HttpServletRequest req) {
+	@DeleteMapping(value = "/posts/likes")
+	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.decreasePostLike(pid, loginuser);
+				postLikeService.decreasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -274,6 +276,36 @@ public class PostController {
 	}
 	
 	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
+	/**
+	 * 게시글 좋아요 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 조회", response = ResponseEntity.class)
+	@GetMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity searchPostLike(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("게시글 좋아요 조회");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				boolean liked = postLikeService.searchPostLike(pid, loginuser);
+				System.out.println(liked);
+				if(liked) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 	
 	
 }

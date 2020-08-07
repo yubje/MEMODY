@@ -44,12 +44,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         		Date now = new Date();
         		// 사용자 요청마다 토큰 유효기간 확인
         		long min = (jwtTokenProvider.getExpirationDate(token).getTime() - now.getTime())/60000;
-        		System.out.println(jwtTokenProvider.getExpirationDate(token)+" "+now+" >> "+min);
+//        		System.out.println(jwtTokenProvider.getExpirationDate(token)+" "+now+" >> "+min);
         		if(min<5) {
         			String email = jwtTokenProvider.getUserPk(token);
         			String newToken = jwtTokenProvider.createToken(email, roles);
         			res.setHeader("auth", newToken);
-        			System.out.println("갱신된만료기한>>"+jwtTokenProvider.getExpirationDate(newToken));
+//        			System.out.println("갱신된만료기한>>"+jwtTokenProvider.getExpirationDate(newToken));
+//        			System.out.println(newToken);
         		}
         	}
 			
