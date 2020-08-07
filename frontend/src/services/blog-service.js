@@ -292,6 +292,7 @@ class BlogService {
 
   deleteComment({ state }, comment) {
     console.log(state)
+    console.log(comment)
     axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {    
         router.push({ name: 'BlogPostDetail' })
