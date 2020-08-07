@@ -69,8 +69,6 @@ export default {
     },
 
     clickLike() {
-      
-      
       if (this.liked) {
         axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :this.postData,headers: {"auth": cookies.get('auth-token')}})
         this.liked = false
@@ -83,7 +81,6 @@ export default {
   async mounted() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`,{headers: {"auth": cookies.get('auth-token')}})
     this.liked = data.data
-    console.log(this.liked)
   }   
 }
 </script>
