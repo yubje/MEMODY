@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -47,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class BlogController {
 
 	private final JwtTokenProvider jwtTokenProvider;
@@ -408,6 +410,7 @@ public class BlogController {
 	public ResponseEntity increaseBlogFollow(@PathVariable int bid, HttpServletRequest req) {
 		System.out.println("블로그 팔로우");
 		String token = req.getHeader("auth");
+		System.out.println(token);
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(bid)){

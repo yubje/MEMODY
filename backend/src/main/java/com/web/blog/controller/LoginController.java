@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -31,7 +30,11 @@ import com.web.blog.model.StatusCode;
 import com.web.blog.service.UserService;
 import com.web.blog.service.UserService2;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 /*
@@ -49,6 +52,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class LoginController {
 
 	private final 	PasswordEncoder 	passwordEncoder;
@@ -64,7 +68,17 @@ public class LoginController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(LOGIN_SUCCESS,LOGIN_FAIL), HttpStatus
 	 * @exception RestException - NOT_FOUND_USER
 	 */
-	@ApiOperation(value = "로그인", response = ResponseEntity.class)
+	@ApiOperation(value = "로그인", response = ResponseEntity.class, notes="가입한 Email과 Password를 입력하여 로그인합니다. 성공시 Header에 토큰 값을 전달합니다.")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name = "email", value = "이메일", required = true, dataType = "String"),
+//		@ApiImplicitParam(name = "password", value = "비밀번호", required = true, dataType = "String"),
+//	})
+	@ApiImplicitParam(name = "user", value = "users 객체", required = true, dataType = "Users")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "로그인 성공"),
+		@ApiResponse(code = 403, message = "로그인 실패"),
+		@ApiResponse(code = 404, message = "사용자 없음"),
+	})
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody Users user, HttpServletResponse res) {
 		Users member = userService.findByEmail(user.getEmail())

@@ -50,6 +50,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         			String newToken = jwtTokenProvider.createToken(email, roles);
         			res.setHeader("auth", newToken);
         			System.out.println("갱신된만료기한>>"+jwtTokenProvider.getExpirationDate(newToken));
+        			System.out.println(newToken);
         		}
         	}
 			
