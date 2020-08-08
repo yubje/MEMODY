@@ -40,8 +40,8 @@ export default {
   methods: {
     ...mapActions('blog', ['getBlogs'])
   },
-  created() {
-    this.getBlogs()
+  async mounted() {
+    await this.getBlogs()
   }
   
 }
