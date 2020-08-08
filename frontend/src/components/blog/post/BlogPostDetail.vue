@@ -18,7 +18,7 @@
         <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" /> 
         <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" /> 
         <hr>
-        <textarea style="height:60%; width:100%" v-text="postData.pcontent" readonly></textarea>
+        <div id="post-content" />
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
@@ -52,6 +52,9 @@ export default {
     BlogCommentForm,
     BlogCommentList,
   },
+  mounted() {
+    this.setPostContent()
+  },
   computed: {
     ...mapState(['userInfo']),
     ...mapState('blog', ['postData']),
@@ -59,6 +62,10 @@ export default {
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
+
+    setPostContent() {
+      document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
+    },
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
@@ -81,6 +88,12 @@ export default {
   async mounted() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`,{headers: {"auth": cookies.get('auth-token')}})
     this.liked = data.data
-  }   
+  }
 }
 </script>
+
+<style>
+#post-content {
+  border: 1px solid gray;
+
+</style>

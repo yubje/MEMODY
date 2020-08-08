@@ -193,6 +193,7 @@ pre {
   width: 100%;
   height: 33px;
   outline: 1px solid #9394a7;
+  box-shadow: 0px 1px 4px 0px #bcbccc;
 }
 
 .editor-header ul {
@@ -214,6 +215,7 @@ pre {
 .editor-header-button {
   border: 0;
   background-color: white;
+  height: 33px;
 }
 
 .editor-header-button:focus {
