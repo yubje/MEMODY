@@ -1,29 +1,30 @@
 <template>
   <div>
-    <BlogEditor />
-    <div>
-      <input v-model="postData.ptitle" type="text" placeholder="제목">
-    </div>
-    <div>
-      <div style="border:1px solid" contenteditable="true" v-focus />
+    <div class="post-button">
+      <button id="post-save" @click="typeChange()">저장</button>
+      <button id="post-create" @click="blogPostCreate()">등록</button>
     </div>
 
-    <div>
-      <editor ref="toastuiEditor" :value="postData.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
+    <BlogEditor />
+
+    <div class="editor-background">
+      <div class="editor-body">
+        <div class="editor-body-padding">
+          <div class="editor-title-area">
+            <input id="editor-title" v-model="postData.ptitle" type="text" placeholder="제목">
+            <hr>
+          </div>
+
+          <div>
+            <div id="editor-content" contenteditable="true" placeholder="본문 내용을 입력해주세요." v-focus></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <button @click="blogPostCreate()">등록</button>
-      <button @click="typeChange()">취소</button>
-    </div>  
   </div>
 </template>
 
 <script>
-//editor
-import 'codemirror/lib/codemirror.css';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor } from '@toast-ui/vue-editor';
-
 import BlogEditor from '../editor/BlogEditor.vue'
 
 import { mapState, mapMutations, mapActions } from 'vuex';
@@ -36,12 +37,10 @@ export default {
     lcid: Number,
   },
   components: {
-    'editor': Editor,
     BlogEditor
   },
   data() {
     return {
-      categories: ['category1', 'category2'],
       editorOptions: {
         hideModeSwitch: true
       }
@@ -49,7 +48,6 @@ export default {
   },
   created() {
     this.initPostData
-    console.log(this.bid, this.mcid)
     this.postData.bid = this.bid
     this.postData.mcid = this.mcid
     this.postData.lcid = this.lcid
@@ -67,9 +65,81 @@ export default {
     },
 
     blogPostCreate() {
-      this.postData.pcontent = this.$refs.toastuiEditor.invoke("getMarkdown")
+      this.postData.pcontent = document.getElementById('editor-content').innerHTML
       this.createPost()
     }
   }
 }
 </script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.post-button {
+  margin: 10px 10px;
+  text-align: right;
+}
+
+#post-save {
+  margin: 1px 10px;
+  background-color: white;
+}
+
+#post-create {
+  background-color: rgb(0, 141, 127);
+  color: white;
+}
+
+#post-save, #post-create {
+  padding: 2px 15px;
+  border: 1px solid #9394a7;
+  box-shadow: 0px 1px 4px 0px #bcbccc;
+  border-radius: 2px;
+}
+
+.editor-background {
+  width: 100%;
+  height: 790px;
+  background-color: rgb(249, 249, 249);
+}
+
+.editor-body {
+  width: 893px;
+  height: 790px;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.editor-body-padding {
+  padding: 100px 90px;
+  text-align: left;
+}
+
+.editor-title-area {
+  padding-bottom: 20px;
+}
+
+#editor-title {
+  border: 0;
+  width: 100%;
+  height: 50px;
+  font-size: 35px;
+}
+
+#editor-title::placeholder {
+  color: rgb(160, 160, 160);
+}
+
+#editor-title:focus, #editor-content:focus {
+  outline: none;
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(placeholder);
+  color: rgb(160, 160, 160);
+}
+
+</style>

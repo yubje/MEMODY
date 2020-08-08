@@ -16,7 +16,7 @@
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{postData.postTime}}</p>
         <p style="text-align: left">수정날짜: {{postData.update_time}}</p>
         <hr>
-        <textarea style="height:60%; width:100%" v-text="postData.pcontent" readonly></textarea>
+        <div id="post-content" />
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
@@ -42,6 +42,9 @@ export default {
     BlogCommentForm,
     BlogCommentList,
   },
+  mounted() {
+    this.setPostContent()
+  },
   computed: {
     ...mapState(['userInfo']),
     ...mapState('blog', ['postData']),
@@ -49,6 +52,10 @@ export default {
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
+
+    setPostContent() {
+      document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
+    },
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
@@ -57,9 +64,13 @@ export default {
     blogPostDelete() {
       this.deletePost
     }
-  },
-  created() {
-    
-  },
+  }
 }
 </script>
+
+<style>
+#post-content {
+  border: 1px solid gray;
+}
+
+</style>
