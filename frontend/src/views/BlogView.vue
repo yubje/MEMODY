@@ -11,6 +11,12 @@
             <p>{{ blogData.bcontent }}</p>
             <p>관리자: {{ blogData.manager }}</p>
             <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
+            <p> 팔로우: {{blogData.followers}} 명</p>
+
+            <div v-if="userInfo.email !== blogData.manager">
+              <button v-if="following" @click="clickFollow()" >팔로우 취소</button>
+              <button v-else @click="clickFollow()" >팔로우 </button>
+            </div>           
           </div>
         </div>
       </div>
@@ -22,18 +28,39 @@
 import { mapState } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
+import axios from 'axios'
+import cookies from 'vue-cookies'
+
 export default {
   name: 'BlogView',
   components: {
     BlogPostSidebar,
   },
-
-  // props: {
-  //   bid: {},
-  // },
-  computed: {
-    ...mapState('blog', ['bid', 'blogData'])
+  data() {
+    return {
+      following: null,
+    }
   },
+  methods: {
+    clickFollow() {
+      if (this.following) {
+        axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`,{data :this.blogData,headers: {"auth": cookies.get('auth-token')}})
+        this.following = false
+      }else {
+        axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`,this.blogData,{headers: {"auth": cookies.get('auth-token')}})
+        this.following = true
+      }
+    }
+  },
+  computed: {
+    ...mapState('blog', ['bid', 'blogData']),
+    ...mapState(['userInfo'])
+  },
+  async mounted() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
+    this.following = data.data
+    console.log(this.following)
+  }  
 }
 </script>
 

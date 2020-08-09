@@ -15,13 +15,13 @@
         <p style="text-align: left; margin-bottom: 0px">작성자: {{postData.author}}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{postData.postTime}}</p>
         <p style="text-align: left">수정날짜: {{postData.update_time}}</p>
+        <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" /> 
+        <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" /> 
         <hr>
         <div id="post-content" />
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
-      <!-- <BlogCommentCreate/> -->
-      
     </div>
   </div>
 </template>
@@ -34,8 +34,16 @@ import BlogCommentList from '@/components/blog/comment/BlogCommentList.vue'
 
 import { mapState, mapActions } from 'vuex'
 
+import axios from 'axios'
+import cookies from 'vue-cookies'
+
 export default {
   name: 'BlogPostDetail',
+  data() {
+    return {
+      liked: null,
+    }
+  },
   components: {
     BlogPostSidebar,
     BlogForkBlogList,
@@ -63,7 +71,21 @@ export default {
 
     blogPostDelete() {
       this.deletePost
+    },
+
+    clickLike() {
+      if (this.liked) {
+        axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :this.postData,headers: {"auth": cookies.get('auth-token')}})
+        this.liked = false
+      }else {
+        axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,this.postData,{headers: {"auth": cookies.get('auth-token')}})
+        this.liked = true
+      }
     }
+  },
+  async created() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`,{headers: {"auth": cookies.get('auth-token')}})
+    this.liked = data.data
   }
 }
 </script>
@@ -71,6 +93,6 @@ export default {
 <style>
 #post-content {
   border: 1px solid gray;
+  text-align: left;
 }
-
 </style>
