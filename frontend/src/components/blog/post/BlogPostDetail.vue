@@ -22,8 +22,6 @@
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
-      <!-- <BlogCommentCreate/> -->
-      
     </div>
   </div>
 </template>
@@ -85,7 +83,7 @@ export default {
       }
     }
   },
-  async mounted() {
+  async created() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`,{headers: {"auth": cookies.get('auth-token')}})
     this.liked = data.data
   }
@@ -95,5 +93,6 @@ export default {
 <style>
 #post-content {
   border: 1px solid gray;
-
+  text-align: left;
+}
 </style>
