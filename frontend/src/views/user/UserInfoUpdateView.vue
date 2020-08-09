@@ -26,6 +26,10 @@
               <p class="col-3 my-1">비밀번호</p>
               <input v-model="userUpdateInfo.password" value="userUpdateInfo.password" class="col-9 my-1" type="password">
             </div>
+            <div class="row cols p-2">
+              <p class="col-3 my-1">프로필 사진 변경</p>
+              <input value="userUpdateInfo.password" class="col-9 my-1" type="file" image="image/*" @change="uploadImage">
+            </div>
             <button class="btn btn-sm btn-primary" @click="updateUserInfo(userUpdateInfo)" data-dismiss="modal">수정</button>
           </div>
         </div>
@@ -38,12 +42,17 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'UserInfoUpdateView',
+  data () {
+    return {
+      dialog:false,
+    }
+  },
   computed: {
     ...mapGetters(['userUpdateInfo'])
   },
 
   methods: {
-    ...mapActions(['lookUpNickname', 'updateUserInfo'])
+    ...mapActions(['lookUpNickname', 'updateUserInfo']),
   }
 }
 </script>

@@ -3,7 +3,11 @@
     <div id="post"  @click="blogPostDetail(post)">
       <hr style="margin-top: 0; margin-bottom:0">
       <a>{{post.ptitle}}</a>
-      <a style="float:right">{{post.postTime}}</a>
+      <div style="float:right"> {{post.postTime}}
+        
+      <font-awesome-icon  :icon="['fas','heart']" /> {{post.postlikecnt}}
+      </div>
+
     </div>
   </div>
 </template>
@@ -11,6 +15,9 @@
 <script>
 
 import { mapState, mapActions } from 'vuex'
+
+
+
 export default {
   name: 'BlogPostCategoryListItem',
   props: {
@@ -18,6 +25,7 @@ export default {
       type: Object,
     },
   },
+
   methods: {
     ...mapActions('blog',['lookupPostDetail']),
     blogPostDetail(post) {
@@ -26,8 +34,11 @@ export default {
     }
   },
   computed: {
-    ...mapState('blog', ['posts'])
+    ...mapState('blog', ['posts']),
   },
+ 
+
+  
 
 }
 </script>
