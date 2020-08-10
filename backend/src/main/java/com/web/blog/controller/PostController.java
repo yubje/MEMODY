@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -83,7 +82,6 @@ public class PostController {
 	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class, notes = "사용자가 게시글을 작성합니다.")
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
-		System.out.println("게시글 작성!!!");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			System.out.println("게시글 작성!!!");
@@ -152,7 +150,8 @@ public class PostController {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
 						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
-			pid = postService.createPost(temp);
+//			pid = postService.createPost(temp);
+			postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS,pid),HttpStatus.CREATED);
 			}else {
@@ -290,7 +289,8 @@ public class PostController {
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-			Post post = postService.findByPid(pid);
+//			Post post = postService.findByPid(pid);
+			Post post = postService.postInfo(pid);
 			if(post != null) {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
 			}else {
