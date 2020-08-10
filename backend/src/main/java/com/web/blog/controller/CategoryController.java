@@ -66,7 +66,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/parent")
 	public ResponseEntity createCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -98,7 +98,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/child")
 	public ResponseEntity createCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -132,7 +132,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/parent")
 	public ResponseEntity updateCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -163,7 +163,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/child")
 	public ResponseEntity updateCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -200,7 +200,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/parent")
 	public ResponseEntity deleteCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -231,7 +231,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/child")
 	public ResponseEntity deleteCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -264,7 +264,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class, notes = "블로그 내의 카테고리 구조를 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories")
 	public ResponseEntity searchCategory(@PathVariable int bid, HttpServletRequest req) {
 		System.out.println(bid);
@@ -285,33 +285,27 @@ public class CategoryController {
 		}
 	}
 	
-	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class, notes = "중분류 카테고리내의 게시글을 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories/{mcid}")
 	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			System.out.println(1);
 			if(!blogService.checkBlog(bid)){
-				System.out.println(2);
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				System.out.println(3);
 				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
 				if(list.size()!=0) {
-					System.out.println(4);
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
-					System.out.println(5);
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
 							HttpStatus.NO_CONTENT);
 				}
 			}
 		} else {
-			System.out.println(6);
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}

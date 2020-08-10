@@ -68,7 +68,7 @@ public class BlogController {
 	 * @exception FORBIDDEN
 	 * 
 	 */
-	@ApiOperation(value = "블로그 생성", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 생성", response = ResponseEntity.class, notes = "사용자가 블로그를 생성할 수 있습니다.")
 	@PostMapping("/blogs")
 	public ResponseEntity createBlog(@RequestBody Map<String, String> blog, HttpServletRequest req) {
 
@@ -117,7 +117,7 @@ public class BlogController {
 	 *         HttpStatus, data(블로그 목록 정보)
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "내 블로그 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "내 블로그 목록 조회", response = ResponseEntity.class, notes = "내가 참여하고 있는 블로그를 조회합니다.")
 	@GetMapping(value = "/blogs/")
 	public ResponseEntity userBlogList(HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -147,7 +147,7 @@ public class BlogController {
 	 *         data(블로그 정보)
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "블로그 정보 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 정보 조회", response = ResponseEntity.class, notes = "블로그 클릭 시 블로그의 메인화면(Home)이 보여집니다.")
 	@GetMapping(value = "/blogs/{bid}")
 	public ResponseEntity blogInfo(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -175,7 +175,7 @@ public class BlogController {
 	 *         ResponseMessage(RECOMMEND_BLOG_SUCCESS), HttpStatus, data(블로그 정보 목록)
 	 * 
 	 */
-	@ApiOperation(value = "추천 블로그 목록", response = ResponseEntity.class)
+	@ApiOperation(value = "추천 블로그 목록", response = ResponseEntity.class, notes = "조회수 기반으로 블로그를 추천합니다.")
 	@GetMapping(value = "/blogs/views")
 	public ResponseEntity recommendBlog() {
 		List<Blog> list = blogService.recommendBlogs();
@@ -193,7 +193,7 @@ public class BlogController {
 	 *         ResponseMessage(SEARCH_BLOG_SUCCESS), HttpStatus, data(블로그 목록 정보)
 	 * 
 	 */
-	@ApiOperation(value = "해쉬태그로 블로그 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "해쉬태그로 블로그 목록 조회", response = ResponseEntity.class, notes = "해쉬태그를 입력하여 해당 해쉬태그를 가진 블로그 목록을 조회합니다.")
 	@GetMapping(value = "/tags/{hashtag}/list")
 	public ResponseEntity listByHashtag(@PathVariable String hashtag) {
 		System.out.println(hashtag);
@@ -210,7 +210,7 @@ public class BlogController {
 	 *         ResponseMessage(SEARCH_BLOG_SUCCESS), HttpStatus, data(블로그 목록 정보)
 	 * 
 	 */
-	@ApiOperation(value = "블로그 이름으로 블로그 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 이름으로 블로그 목록 조회", response = ResponseEntity.class, notes = "블로그 이름을 입력하여 해당 블로그 이름을 가진 블로그 목록을 조회합니다.")
 	@GetMapping(value = "/blogs/{btitle}/list")
 	public ResponseEntity listByBtitle(@PathVariable String btitle) {
 		List<Blog> list = blogService.searchListByBlog(btitle);
@@ -227,7 +227,7 @@ public class BlogController {
 	 *         ResponseMessage(UPDATE_BLOG_SUCCESS,UPDATE_BLOG_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "블로그 정보 수정", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 정보 수정", response = ResponseEntity.class, notes = "블로그의 블로그정보를 수정합니다.")
 	@PutMapping(value = "/blogs")
 	public ResponseEntity blogUpdate(@RequestBody Map<String, String> blog, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -277,7 +277,7 @@ public class BlogController {
 	 *         ResponseMessage(DELETE_BLOG_SUCCESS,DELETE_BLOG_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "블로그 정보 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 정보 삭제", response = ResponseEntity.class, notes = "블로그를 삭제합니다.")
 	@DeleteMapping(value = "/blogs/{bid}")
 	public ResponseEntity blogDelete(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -307,7 +307,7 @@ public class BlogController {
 	 *         ResponseMessage(BLOG_MEMBER_SUCCESS,BLOG_MEMBER_FAIL), HttpStatus, data(멤버 리스트)
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "블로그 내 참여자 목록조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 내 참여자 목록조회", response = ResponseEntity.class, notes = "블로그 내에 참여하고 있는 참여자들의 정보를 출력합니다.")
 	@GetMapping(value = "/blogs/{bid}/members")
 	public ResponseEntity blogMember(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -335,7 +335,7 @@ public class BlogController {
 	 *         ResponseMessage(INVITE_MEMBER_SUCCESS,INVITE_MEMBER_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "블로그 내 참여자 추가", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 내 참여자 추가", response = ResponseEntity.class, notes = "블로그에 게시글을 작성 할 수 있도록 사용자를 추가합니다.")
 	@PostMapping(value = "/blogs/{bid}/members")
 	public ResponseEntity inviteMember(@PathVariable int bid, @RequestBody Users member, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -364,7 +364,7 @@ public class BlogController {
 	 *         ResponseMessage(DELETE_MEMBER_SUCCESS,DELETE_MEMBER_FAIL), HttpStatus, data(멤버 리스트)
 	 * 
 	 */
-	@ApiOperation(value = "블로그 내 참여자 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그 내 참여자 삭제", response = ResponseEntity.class, notes = "블로그 내 사용자를 탈퇴시킵니다.")
 	@DeleteMapping(value = "/blogs/{bid}/members")
 	public ResponseEntity deleteMember(@PathVariable int bid, @RequestBody Users member, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -384,7 +384,14 @@ public class BlogController {
 		}
 	}
 	
-	@ApiOperation(value = "manager 블로그", response = ResponseEntity.class)
+	/**
+	 * 매니저 블로그 조회 - 내가 매니저인 블로그 번호 조회.
+	 * 
+	 * @return ResponseEntity<Response> - StatusCode,
+	 *         ResponseMessage(SEARCH_BLOG_SUCCESS), HttpStatus, data(블로그 리스트)
+	 *         
+	 */
+	@ApiOperation(value = "manager 블로그", response = ResponseEntity.class, notes = "내가 매니저인 블로그 번호를 조회합니다.")
 	@GetMapping(value = "/blogs/manager")
 	public ResponseEntity managerBlog(HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -402,23 +409,23 @@ public class BlogController {
 	}
 	
 	/**
-	 * 블로그 팔로우 - 
+	 * 블로그 팔로우 - 블로그 팔로우하기
 	 * 
 	 */
-	@ApiOperation(value = "블로그 팔로우", response = ResponseEntity.class)
-	@PostMapping(value = "/blogs/{bid}/follows")
-	public ResponseEntity increaseBlogFollow(@PathVariable int bid, HttpServletRequest req) {
+	@ApiOperation(value = "블로그 팔로우", response = ResponseEntity.class, notes = "블로그를 팔로우 합니다.")
+	@PostMapping(value = "/blogs/follows")
+	public ResponseEntity increaseBlogFollow(@RequestBody Blog blog, HttpServletRequest req) {
 		System.out.println("블로그 팔로우");
 		String token = req.getHeader("auth");
 		System.out.println(token);
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(bid)){
+			if(!blogService.checkBlog(blog.getBid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				blogFollowService.increaseBlogFollow(bid, loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
+				blogFollowService.increaseBlogFollow(blog.getBid(), loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.FOLLOW_BLOG_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
 		} else {
@@ -427,23 +434,54 @@ public class BlogController {
 		}
 	}
 	/**
-	 * 블로그 팔로우 취소 - 
+	 * 블로그 팔로우 취소 - 블로그 팔로우를 취소합니다.
 	 * 
 	 */
-	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class)
-	@DeleteMapping(value = "/blogs/{bid}/follows")
-	public ResponseEntity decreaseBlogFollow(@PathVariable int bid, HttpServletRequest req) {
+	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class, notes = "블로그 팔로우를 취소합니다.")
+	@DeleteMapping(value = "/blogs/follows")
+	public ResponseEntity decreaseBlogFollow(@RequestBody Blog blog, HttpServletRequest req) {
 		System.out.println("블로그 팔로우 취소");
 		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!blogService.checkBlog(blog.getBid())){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				blogFollowService.decreaseBlogFollow(blog.getBid(), loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNFOLLOW_BLOG_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	/**
+	 * 블로그 팔로우 조회 - 블로그를 팔로우 했는지 여부를 알려준다. 팔로우 했을경우 파란색 / 안했을경우 회색 
+	 * 
+	 */
+	@ApiOperation(value = "블로그 팔로우 조회", response = ResponseEntity.class, notes = "블로그를 팔로우 했는지 여부를 알려줍니다. 팔로우 했을경우 파란색 / 안했을경우 회색 ")
+	@GetMapping(value = "/blogs/{bid}/follows")
+	public ResponseEntity searchPostLike(@PathVariable int bid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("블로그 팔로우 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(bid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				blogFollowService.decreaseBlogFollow(bid, loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
-						HttpStatus.OK);
+				boolean followed = blogFollowService.searchBlogFollow(bid, loginuser);
+				System.out.println(followed);
+				if(followed) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+							HttpStatus.OK);
+				}
 			}
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),

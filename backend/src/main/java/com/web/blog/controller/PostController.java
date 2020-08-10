@@ -63,7 +63,7 @@ public class PostController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class, notes = "사용자가 게시글을 작성합니다.")
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -97,7 +97,7 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 전체 게시글 목록 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/posts")
 	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable,HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -118,13 +118,13 @@ public class PostController {
 	}
 	
 	/**
-	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
+	 * 블로그의 임시저장 게시글 목록 조회 - 해당 블로그에 있는 임시저장 게시글 목록 조회
 	 * 
 	 * @param String Email
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 임시저장 게시글 목록 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/tmpposts/")
 	public ResponseEntity readTmpPostListAll(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -148,7 +148,7 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class, notes = "게시글의 상세내용을 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/posts/{pid}")
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -171,7 +171,7 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class, notes = "게시글을 수정합니다.")
 	@PutMapping(value = "/blogs/posts")
 	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -191,7 +191,7 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class, notes = "게시글을 삭제합니다.")
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -210,7 +210,7 @@ public class PostController {
 	 * @return ResponseEntity<Response> - CREATE_POST_SUCCESS
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class, notes = "나의 블로그로 원하는 게시글을 fork합니다.")
 	@PostMapping(value = "/blogs/fork")
 	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -232,17 +232,17 @@ public class PostController {
 	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
 	 * 
 	 */
-	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
-	@PostMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity increasePostLike(@PathVariable int pid, HttpServletRequest req) {
+	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class, notes = "게시글에 좋아요를 누르면 좋아요가 증가합니다.")
+	@PostMapping(value = "/posts/likes")
+	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.increasePostLike(pid, loginuser);
+				postLikeService.increasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -255,17 +255,17 @@ public class PostController {
 	 * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
 	 * 
 	 */
-	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
-	@DeleteMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity decreasePostLike(@PathVariable int pid, HttpServletRequest req) {
+	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class, notes = "게시글에 좋아요를 다시 누르면 좋아요가 취소됩니다.")
+	@DeleteMapping(value = "/posts/likes")
+	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.decreasePostLike(pid, loginuser);
+				postLikeService.decreasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -276,6 +276,36 @@ public class PostController {
 	}
 	
 	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
+	/**
+	 * 게시글 좋아요 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 조회", response = ResponseEntity.class, notes = "게시글에 좋아요 했는지 여부를 알려줍니다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트")
+	@GetMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity searchPostLike(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("게시글 좋아요 조회");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				boolean liked = postLikeService.searchPostLike(pid, loginuser);
+				System.out.println(liked);
+				if(liked) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 	
 	
 }
