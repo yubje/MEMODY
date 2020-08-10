@@ -3,24 +3,35 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col col-lg-10">
-        <h1>{{postData.ptitle}}</h1>
+        <h1>{{ postData.ptitle }}</h1>
         <div v-if="userInfo.email == postData.author" style="float: right">
-          <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
-          <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
+          <v-btn-toggle>
+            <v-btn text color="teal" @click="blogPostUpdate()"><v-icon>mdi-pencil</v-icon> 수정</v-btn>
+            <v-btn text color="error" @click="blogPostDelete()"><v-icon>mdi-delete</v-icon>삭제</v-btn>
+          </v-btn-toggle>
         </div>
         <div v-else>
           <BlogForkBlogList :pid="postData.pid"/>
-          <button data-toggle="modal" data-target="#fork-modal" >퍼가기</button>
+          <v-btn absolute right data-toggle="modal" data-target="#fork-modal" >퍼가기</v-btn>
         </div>
-        <p style="text-align: left; margin-bottom: 0px">작성자: {{postData.author}}</p>
-        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{postData.postTime}}</p>
-        <p style="text-align: left">수정날짜: {{postData.update_time}}</p>
-        <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" /> 
-        <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" /> 
+        <p style="text-align: left; margin-bottom: 0px">작성자: {{ postData.author }}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
+        <p style="text-align: left">수정날짜: {{ postData.update_time.slice(0,10) }}</p>
+        <!-- <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" style="color:red;"/> 
+        <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" style="color:red;"/>  -->
+        <v-btn icon v-if="liked" @click="clickLike()">
+          <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
+        </v-btn>
+        <v-btn icon v-else @click="clickLike()">
+          <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
+        </v-btn>
         <hr>
-        <div id="post-content" />
+
+        <div id="post-content"/>
+        <hr>
         <BlogCommentForm/>
         <BlogCommentList/>
+        
       </div>
     </div>
   </div>
@@ -52,6 +63,7 @@ export default {
   },
   mounted() {
     this.setPostContent()
+    console.log(this.postData)
   },
   computed: {
     ...mapState(['userInfo']),
@@ -92,7 +104,8 @@ export default {
 
 <style>
 #post-content {
-  border: 1px solid gray;
   text-align: left;
+  min-height: 300px;
+  padding: 1.5rem;
 }
 </style>

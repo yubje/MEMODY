@@ -1,10 +1,14 @@
 <template>
-  <div>
+  <v-container>
     <div>
-      <input v-model="postForm.ptitle" type="text" placeholder="제목">
+      <center><h1>게시글 수정</h1></center>
+      <h3>
+        제목: 
+        <input v-model="postForm.ptitle" type="text" placeholder="제목">
+      </h3>
     </div>
     <div>
-      <editor ref="toastuiEditor" :value="postForm.pcontent" :initialValue="postForm.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
+      <editor ref="toastuiEditor" :value="postForm.pcontent" :initialValue="postForm.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical"/>
     </div>
     <div> 
       <a>카테고리</a>
@@ -17,7 +21,7 @@
       <button @click="blogPostUpdate()">수정</button>
       <button @click="$router.go(-1)">취소</button>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>
