@@ -32,6 +32,9 @@ public class Users implements UserDetails {
     @Column(length = 128, nullable = false)
     private String password;
     
+	@Column(nullable = true)
+	private int exp;
+
     @Column(length = 300, nullable = true)
     private String profile;
 
@@ -85,4 +88,7 @@ public class Users implements UserDetails {
     	this.uid = uid;
     }
 
+    public void setExp(int exp) {
+		this.exp = exp;
+	}
 }

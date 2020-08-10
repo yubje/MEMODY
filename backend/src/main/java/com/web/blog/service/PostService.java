@@ -3,6 +3,7 @@ package com.web.blog.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Fork;
 import com.web.blog.domain.Post;
+import com.web.blog.domain.Users;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.ForkRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.PostRepository;
+import com.web.blog.repository.UsersRepository;
 import com.web.blog.util.S3Util;
 
 import lombok.RequiredArgsConstructor;
@@ -28,12 +31,12 @@ public class PostService {
 	private final BlogRepository blogRepository;
 	private final ForkRepository forkRepository;
 	private final MemberRepository memberRepository;
-	
+	private final UsersRepository userRepository;
 
 	
-	public int createPost(Post post) {
+	public void createPost(Post post) {
 		System.out.println(post);
-		return postRepository.save(Post.builder()
+		postRepository.save(Post.builder()
 				.bid(post.getBid())
 				.lcid(post.getLcid())
 				.mcid(post.getMcid())
@@ -45,6 +48,12 @@ public class PostService {
 				.update_time(LocalDateTime.now())
 				.ptype(post.getPtype())
 				.build()).getPid();
+		// 게시글 작성 시 작성자 경험치 상승
+		Optional<Users> user = userRepository.findByEmail(post.getAuthor());
+		user.ifPresent(selectUser->{
+			selectUser.setExp(selectUser.getExp()+2);
+			userRepository.save(selectUser);
+		});
 	}
 	
 //	public boolean countBlogByUser(String email) {
@@ -75,6 +84,17 @@ public class PostService {
 	@Transactional
 	public Post findByPid(int pid) {
 		return postRepository.findByPid(pid);
+	}
+	
+	public Post postInfo(int pid) {
+		Post post = postRepository.findByPid(pid);
+		// 게시글 조회 시 작성자의 경험치 상승
+		Optional<Users> user = userRepository.findByEmail(post.getAuthor());
+		user.ifPresent(selectUser->{
+			selectUser.setExp(selectUser.getExp()+1);
+			userRepository.save(selectUser);
+		});
+		return post;
 	}
 	
 	public void updatePost(Post post,String bucketName, String accessKey, String secretKey) {
@@ -157,8 +177,13 @@ public class PostService {
 				.update_time(LocalDateTime.now())
 				.ptype(post2.getPtype())
 				.build());
-		
-		// author의 경험치 증가 +5
+
+		// 게시글 fork 시 원작자 경험치 상승
+		Optional<Users> author = userRepository.findByEmail(post2.getAuthor());
+		author.ifPresent(selectUser->{
+			selectUser.setExp(selectUser.getExp()+5);
+			userRepository.save(selectUser);
+		});
 	}
 
 }
