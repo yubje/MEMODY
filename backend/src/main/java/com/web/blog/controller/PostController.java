@@ -1,11 +1,18 @@
 package com.web.blog.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,6 +36,8 @@ import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.PostLikeService;
 import com.web.blog.service.PostService;
+import com.web.blog.util.FileUpload;
+import com.web.blog.util.S3Util;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +64,13 @@ public class PostController {
 	private final 	PostService 		postService;
 	private final 	PostLikeService 	postLikeService;
 
+	@Value("${cloud.aws.s3.bucket}")
+	String bucketName;
+	@Value("${cloud.aws.credentials.accessKey}")
+	String accessKey; // 엑세스 키
+	@Value("${cloud.aws.credentials.secretKey}")
+	String secretKey;
+	
 	/**
 	 * 게시글 작성 - 사용자가 게시글을 작성하는 기능. 
 	 * 
@@ -68,15 +84,75 @@ public class PostController {
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
+			String input = post.get("pcontent");
+			if(input.contains("img")) {
+				String base64String = null;
+				String[] inputArr = post.get("pcontent").split("'");
+				for(int i=0;i<inputArr.length;i++) {
+					if(inputArr[i].contains("data:image/")) {
+						base64String = inputArr[i];
+						String[] strings = base64String.split(",");
+				        String extension;
+				        switch (strings[0]) {//check image's extension
+				            case "data:image/jpeg;base64":
+				                extension = "jpeg";
+				                break;
+				            case "data:image/png;base64":
+				                extension = "png";
+				                break;
+				            default://should write cases for more images types
+				                extension = "jpg";
+				                break;
+				        }
+				        //convert base64 string to binary data
+				        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+				        
+				        String uploadpath = "post";
+						S3Util s3 = new S3Util(accessKey, secretKey);
+						System.out.println("1");
+						String img_path;
+						String url = null;
+						try {
+							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
+							System.out.println("*****   "+img_path);
+							String img_url = img_path;
+							System.out.println(img_url);
+							System.out.println(bucketName);
+							url = s3.getFileURL(bucketName, uploadpath+img_url);
+							System.out.println("Service: "+url);
+							System.out.println(url);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						inputArr[i] = url;
+					}
+				}
+				String result = "";
+				for(int i=0;i<inputArr.length;i++) {
+					result+=inputArr[i];
+					if(i!=inputArr.length-1) {
+						result+="'";
+					}
+				}
+				input = result;
+			}
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
+			System.out.println("*****************");
+			System.out.println(bid);
+			System.out.println(post.get("lcid"));
+			System.out.println(post.get("mcid"));
+			System.out.println(post.get("ptitle"));
+			System.out.println(input);
+			System.out.println("*****************");
 			Post temp = null;
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
+						, input, email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
+						, input, email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
 			pid = postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
@@ -89,6 +165,69 @@ public class PostController {
 		}
 	}
 
+	// test
+	@PostMapping("/image/test")
+	public ResponseEntity img_url(@RequestBody Map<String,String> post, HttpServletRequest req) {
+		String input = post.get("pcontent");
+		if(input.contains("img")) {
+			String base64String = null;
+			String[] inputArr = post.get("pcontent").split("'");
+			for(int i=0;i<inputArr.length;i++) {
+				if(inputArr[i].contains("data:image/")) {
+					base64String = inputArr[i];
+					String[] strings = base64String.split(",");
+			        String extension;
+			        switch (strings[0]) {//check image's extension
+			            case "data:image/jpeg;base64":
+			                extension = "jpeg";
+			                break;
+			            case "data:image/png;base64":
+			                extension = "png";
+			                break;
+			            default://should write cases for more images types
+			                extension = "jpg";
+			                break;
+			        }
+			        //convert base64 string to binary data
+			        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+			        
+			        String uploadpath = "post";
+					S3Util s3 = new S3Util(accessKey, secretKey);
+					System.out.println("1");
+					String img_path;
+					String url = null;
+					try {
+						img_path = FileUpload.uploadFile(uploadpath, "post넘버_number", data,bucketName, accessKey, secretKey);
+						System.out.println("*****   "+img_path);
+						String img_url = img_path;
+						System.out.println(img_url);
+						System.out.println(bucketName);
+						url = s3.getFileURL(bucketName, uploadpath+img_url);
+						System.out.println("Service: "+url);
+						System.out.println(url);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					inputArr[i] = url;
+				}
+			}
+			String result = "";
+			for(int i=0;i<inputArr.length;i++) {
+				result+=inputArr[i];
+				if(i!=inputArr.length-1) {
+					result+="'";
+				}
+			}
+			System.out.println(result);
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
+		}
+	}
+	
+	
+	
 	
 	/**
 	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
@@ -176,7 +315,61 @@ public class PostController {
 	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-			postService.updatePost(post);
+			String input = post.getPcontent();
+			if(input.contains("img")) {
+				String base64String = null;
+				String[] inputArr = input.split("'");
+				for(int i=0;i<inputArr.length;i++) {
+					if(inputArr[i].contains("data:image/")) {
+						base64String = inputArr[i];
+						String[] strings = base64String.split(",");
+				        String extension;
+				        switch (strings[0]) {//check image's extension
+				            case "data:image/jpeg;base64":
+				                extension = "jpeg";
+				                break;
+				            case "data:image/png;base64":
+				                extension = "png";
+				                break;
+				            default://should write cases for more images types
+				                extension = "jpg";
+				                break;
+				        }
+				        //convert base64 string to binary data
+				        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+				        
+				        String uploadpath = "post";
+						S3Util s3 = new S3Util(accessKey, secretKey);
+						System.out.println("1");
+						String img_path;
+						String url = null;
+						try {
+							img_path = FileUpload.uploadFile(uploadpath, post.getPid()+"_"+post.getPtitle(), data,bucketName, accessKey, secretKey);
+							System.out.println("*****   "+img_path);
+							String img_url = img_path;
+							System.out.println(img_url);
+							System.out.println(bucketName);
+							url = s3.getFileURL(bucketName, uploadpath+img_url);
+							System.out.println("Service: "+url);
+							System.out.println(url);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						inputArr[i] = url;
+					}
+				}
+				String result = "";
+				for(int i=0;i<inputArr.length;i++) {
+					result+=inputArr[i];
+					if(i!=inputArr.length-1) {
+						result+="'";
+					}
+				}
+				input = result;
+			}
+			post.setPcontent(input);
+			postService.updatePost(post,bucketName,accessKey, secretKey);
 			Post updatePost = postService.findByPid(post.getPid());
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
