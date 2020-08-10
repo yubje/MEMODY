@@ -70,6 +70,9 @@ public class ResponseMessage {
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
     public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
     
+    public static final String FORK_USER_LIST_SUCCESS = "Fork한 유저 목록 조회 성공";
+    public static final String FORK_USER_LIST_FAIL = "Fork한 유저 목록 조회 실패";
+    
     
     // Comments
     public static final String CREATE_COMMENT_SUCCESS = "성공적으로 댓글을 작성하였습니다.";

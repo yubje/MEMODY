@@ -71,9 +71,6 @@ public class S3Util {
 
 	// 파일 URL
 	public String getFileURL(String bucketName, String fileName) {
-		System.out.println("start");
-		System.out.println(bucketName);
-		System.out.println("넘어오는 파일명 : " + fileName);
 		String imgName = "https://memody-repo.s3.ap-northeast-2.amazonaws.com/"
 				+ fileName.replace(File.separatorChar, '/');
 		System.out.println(imgName);

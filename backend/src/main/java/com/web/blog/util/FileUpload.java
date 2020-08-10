@@ -17,14 +17,11 @@ public class FileUpload {
 	
 
 	public static String uploadFile(String uploadPath, String originalName, byte[] byteData,String bucketName, String accessKey, String secretKey) throws Exception {
-		System.out.println("uploadFile");
 		S3Util s3 = new S3Util(accessKey, secretKey);
-		System.out.println("3");
 
 		// 랜덤의 uid 를 만들어준다.
 		UUID uid = UUID.randomUUID();
 
-		System.out.println("4");
 		// savedName : 570d570a-7af1-4afe-8ed5-391d660084b7_g.JPG 같은 형식으로 만들어준다.
 		String savedName = "/" + uid.toString().substring(0, 10) + "_" + originalName;
 
@@ -35,11 +32,9 @@ public class FileUpload {
 		String uploadedFileName = null;
 		uploadedFileName = (savedPath + savedName).replace(File.separatorChar, '/');
 		// S3Util 의 fileUpload 메서드로 파일을 업로드한다.
-		System.out.println("5");
 		s3.fileUpload(bucketName, uploadPath + uploadedFileName, byteData);
 		System.out.println(uploadedFileName);
 		logger.info(uploadedFileName);
-		System.out.println("6");
 		return uploadedFileName;
 
 	}

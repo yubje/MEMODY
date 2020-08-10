@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
+import com.web.blog.domain.Fork;
 import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
@@ -82,12 +83,17 @@ public class PostController {
 	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class, notes = "사용자가 게시글을 작성합니다.")
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
+		System.out.println("게시글 작성!!!");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
+			System.out.println("게시글 작성!!!");
 			String input = post.get("pcontent");
+			System.out.println("*********************");
+			System.out.println(input);
+			System.out.println("*********************");
 			if(input.contains("img")) {
 				String base64String = null;
-				String[] inputArr = post.get("pcontent").split("'");
+				String[] inputArr = post.get("pcontent").split("\"");
 				for(int i=0;i<inputArr.length;i++) {
 					if(inputArr[i].contains("data:image/")) {
 						base64String = inputArr[i];
@@ -109,7 +115,6 @@ public class PostController {
 				        
 				        String uploadpath = "post";
 						S3Util s3 = new S3Util(accessKey, secretKey);
-						System.out.println("1");
 						String img_path;
 						String url = null;
 						try {
@@ -139,26 +144,19 @@ public class PostController {
 			}
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
-			System.out.println("*****************");
-			System.out.println(bid);
-			System.out.println(post.get("lcid"));
-			System.out.println(post.get("mcid"));
-			System.out.println(post.get("ptitle"));
-			System.out.println(input);
-			System.out.println("*****************");
 			Post temp = null;
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, input, email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
+						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, input, email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
+						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
 			pid = postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS,pid),HttpStatus.CREATED);
 			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.CREATE_POST_SUCCESS),HttpStatus.CREATED);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.CREATE_POST_SUCCESS,pid),HttpStatus.CREATED);
 			}
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
@@ -312,17 +310,23 @@ public class PostController {
 	 */
 	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class, notes = "게시글을 수정합니다.")
 	@PutMapping(value = "/blogs/posts")
-	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
+	public ResponseEntity updatePost(@RequestBody Map<String,String> post, HttpServletRequest req) {
+		System.out.println("게시글 수정");
 		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token)) {
-			String input = post.getPcontent();
+		String email = jwtTokenProvider.getUserPk(token);
+		if (jwtTokenProvider.validateToken(token) && email.equals(postService.findByPid(Integer.parseInt(post.get("pid"))).getManager())) {
+			String input = post.get("pcontent");
+			
 			if(input.contains("img")) {
 				String base64String = null;
-				String[] inputArr = input.split("'");
+				String[] inputArr = input.split("\"");
 				for(int i=0;i<inputArr.length;i++) {
 					if(inputArr[i].contains("data:image/")) {
 						base64String = inputArr[i];
 						String[] strings = base64String.split(",");
+						System.out.println("!!!!!!!!!!");
+						System.out.println(strings[0]);
+						System.out.println(strings.length);
 				        String extension;
 				        switch (strings[0]) {//check image's extension
 				            case "data:image/jpeg;base64":
@@ -344,7 +348,7 @@ public class PostController {
 						String img_path;
 						String url = null;
 						try {
-							img_path = FileUpload.uploadFile(uploadpath, post.getPid()+"_"+post.getPtitle(), data,bucketName, accessKey, secretKey);
+							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
 							System.out.println("*****   "+img_path);
 							String img_url = img_path;
 							System.out.println(img_url);
@@ -368,9 +372,12 @@ public class PostController {
 				}
 				input = result;
 			}
-			post.setPcontent(input);
-			postService.updatePost(post,bucketName,accessKey, secretKey);
-			Post updatePost = postService.findByPid(post.getPid());
+			Post result = postService.findByPid(Integer.parseInt(post.get("pid")));
+			result.setPtitle(post.get("ptitle"));
+			result.setPcontent(input);
+			postService.updatePost(result,bucketName,accessKey, secretKey);
+			Post updatePost = postService.findByPid(Integer.parseInt(post.get("pid")));
+			System.out.println(updatePost);
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
@@ -420,6 +427,23 @@ public class PostController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	@ApiOperation(value = "게시글 Fork한 사용자 리스트", response = ResponseEntity.class)
+	@GetMapping(value = "/blogs/fork/{pid}")
+	public ResponseEntity blogForkUserList(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			List<Fork> list = postService.forkList(pid);
+			
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.FORK_USER_LIST_SUCCESS,list), HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
 	
 	/**
 	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.

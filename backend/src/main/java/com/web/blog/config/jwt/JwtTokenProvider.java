@@ -53,6 +53,10 @@ public class JwtTokenProvider {
 				.compact();
 	}
 	
+//	public void updateToken(String token) {
+//		Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().setExpiration(new Date(now.getTime() + tokenValidTime));
+//	}
+	
 	// JWT 토큰에서 인증 정보 조회
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
