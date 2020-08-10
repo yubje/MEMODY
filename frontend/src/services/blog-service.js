@@ -34,7 +34,7 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
-    console.log(response)
+    console.log(response.state.postData)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
@@ -63,7 +63,9 @@ class BlogService {
 
   // 블로그 게시글 수정 (API 문서 - 54D)
   updatePost(response) {
-    return axios.put(`${SERVER}/blogs/posts`, response.postData, {headers: {"auth": cookies.get('auth-token')}})
+    console.log("#####")
+    console.log(response)
+    return axios.put(`${SERVER}/blogs/posts`, response, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       return result.data
     })
