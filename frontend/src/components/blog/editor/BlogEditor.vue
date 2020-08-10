@@ -93,9 +93,10 @@
         </li>
 
         <li>
-          <button class="editor-header-button">
+          <label class="editor-header-button" @click="addImage()">
             <font-awesome-icon :icon="['fas','image']" />
-          </button>
+            <input id="add-img" type="file" multiple="multiple" accept="image/*">
+          </label>
         </li>
         <li>
           <button class="editor-header-button" @click="createLink()">
@@ -147,6 +148,24 @@ export default {
 
     makeBlock(tagType) {
       document.execCommand('formatBlock', false, tagType)
+    },
+
+    addImage() {
+      var imgTag = document.getElementById('add-img')
+
+      imgTag.onchange = function() {
+        var imgList = imgTag.files;
+
+        for(var img of imgList) {
+          var reader = new FileReader();
+          reader.readAsDataURL(img);
+          
+          reader.onload = function(e) {
+            document.getElementById('editor-content').focus()
+            document.execCommand('insertImage', false, e.target.result)
+          };
+        }
+      };
     },
 
     createLink() {
@@ -224,6 +243,7 @@ pre {
 
 .editor-header-button:hover {
   color: rgb(0, 212, 195);
+  cursor: pointer;
 }
 
 #font-arial {
@@ -244,6 +264,15 @@ pre {
 
 #font-pen {
   font-family: Nanum Pen Script;
+}
+
+#add-img {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
 }
 
 </style>

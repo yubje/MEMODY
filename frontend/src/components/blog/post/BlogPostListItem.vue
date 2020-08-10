@@ -30,7 +30,6 @@ export default {
 
     blogPostDetail(post) {
       this.lookupPostDetail(post)
-      this.$router.push({ name: 'BlogPostDetail'})
     }
   }
 }
