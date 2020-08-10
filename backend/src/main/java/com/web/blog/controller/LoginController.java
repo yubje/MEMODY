@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -31,7 +30,11 @@ import com.web.blog.model.StatusCode;
 import com.web.blog.service.UserService;
 import com.web.blog.service.UserService2;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 
 /*
@@ -49,6 +52,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class LoginController {
 
 	private final 	PasswordEncoder 	passwordEncoder;
@@ -64,7 +68,17 @@ public class LoginController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(LOGIN_SUCCESS,LOGIN_FAIL), HttpStatus
 	 * @exception RestException - NOT_FOUND_USER
 	 */
-	@ApiOperation(value = "로그인", response = ResponseEntity.class)
+	@ApiOperation(value = "로그인", response = ResponseEntity.class, notes = "가입한 Email과 Password를 입력하여 로그인합니다. 성공시 Header에 토큰 값을 전달합니다.")
+//	@ApiImplicitParams({
+//		@ApiImplicitParam(name = "email", value = "이메일", required = true, dataType = "String"),
+//		@ApiImplicitParam(name = "password", value = "비밀번호", required = true, dataType = "String"),
+//	})
+	@ApiImplicitParam(name = "user", value = "users 객체", required = true, dataType = "Users")
+	@ApiResponses({
+		@ApiResponse(code = 200, message = "로그인 성공"),
+		@ApiResponse(code = 403, message = "로그인 실패"),
+		@ApiResponse(code = 404, message = "사용자 없음"),
+	})
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody Users user, HttpServletResponse res) {
 		Users member = userService.findByEmail(user.getEmail())
@@ -77,7 +91,7 @@ public class LoginController {
 		
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
-		System.out.println("LOGIN>>>>>>>>"+token);
+		System.out.println(user.getEmail()+" >>>LOGIN>>>>>>>>"+token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
@@ -86,10 +100,10 @@ public class LoginController {
 	 * 회원가입 - Email, Password, NickName을 입력하여 회원가입을 한다.
 	 * 
 	 * @param Users user - String email, String uid(NickName), password 
-	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(LOGIN_SUCCESS,LOGIN_FAIL), HttpStatus
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATED_USER,ALREADY_USER), HttpStatus
 	 * @exception RestException - ALREADY_USER
 	 */
-	@ApiOperation(value = "회원 가입", response = ResponseEntity.class)
+	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "Email, Password, NickName을 입력하여 회원가입을 합니다.")
 	@PostMapping("/users")
 	public ResponseEntity signUp(@RequestBody Users user) {
 		if (userService.findByEmail(user.getEmail()).isPresent()) {
@@ -108,7 +122,7 @@ public class LoginController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(LOGOUT_SUCCESS,LOGOUT_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "로그아웃", response = ResponseEntity.class)
+	@ApiOperation(value = "로그아웃", response = ResponseEntity.class, notes = "토큰을 만료시키고 redis에 저장하여 블랙리스트를 생성합니다.(토큰만료시간까지 저장시켜두고 추후 자동 삭제)")
 	@GetMapping(path = "/logout")
 	public ResponseEntity logout(HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -130,11 +144,10 @@ public class LoginController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(READ_USER,NOT_FOUND_USER), HttpStatus, data(사용자 정보)
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "회원 정보 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "회원 정보 조회", response = ResponseEntity.class, notes = "로그인하고 있는 회원의 회원정보를 조회합니다.")
 	@GetMapping(value = "/users/{email}")
 	public ResponseEntity userInfo(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println(email+" "+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			Users member = userService.findByEmail(email)
 					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
@@ -153,11 +166,10 @@ public class LoginController {
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(READ_USER,NOT_FOUND_USER), HttpStatus
 	 * @exception FORBIDDEN
 	 */
-	@ApiOperation(value = "회원 탈퇴", response = ResponseEntity.class)
+	@ApiOperation(value = "회원 탈퇴", response = ResponseEntity.class, notes = "현재 로그인되어있는 사용자의 회원 정보를 삭제합니다.")
 	@DeleteMapping(value = "/users/{email}")
 	public ResponseEntity findAllUser(@PathVariable String email, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("DELETE>>>>>");
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(email)) {
 			userService.deleteUser(email);
 			
@@ -168,8 +180,13 @@ public class LoginController {
 		}
 	}
 	
-	// 회원가입시 이메일 인증 
-	@ApiOperation(value = "회원가입시 이메일 인증", response = ResponseEntity.class)
+	/**
+	 * 회원가입시 이메일 인증 - 회원가입시 이메일 중복 방지와 본인확인을 위한 인증 과정입니다.
+	 * 
+	 * @param String email
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_CODE,ALREADY_USER), HttpStatus
+	 */
+	@ApiOperation(value = "회원가입시 이메일 인증", response = ResponseEntity.class, notes = "회원가입시 이메일 중복 방지와 본인확인을 위한 인증 과정입니다.")
 	@GetMapping(value = "/auth/join/{email}")
 	public ResponseEntity authEmailJoin(@PathVariable String email) {
 		
@@ -194,8 +211,14 @@ public class LoginController {
 		}
 
 	}
-	// 비밀번호 재설정 시 이메일 인증 
-	@ApiOperation(value = "비밀번호 재설정 시 이메일 인증", response = ResponseEntity.class)
+	
+	/**
+	 * 비밀번호 재설정 시 이메일 인증 - 비밀번호 재설정 시 본인 확인을 위한 이메일 인증 과정입니다.
+	 * 
+	 * @param String email
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_CODE,NOT_FOUND_USER), HttpStatus
+	 */
+	@ApiOperation(value = "비밀번호 재설정 시 이메일 인증", response = ResponseEntity.class, notes = "비밀번호 재설정 시 본인 확인을 위한 이메일 인증 과정입니다.")
 	@GetMapping(value = "/auth/pwd/{email}")
 	public ResponseEntity authEmailPWD(@PathVariable String email) {
 		
@@ -221,12 +244,15 @@ public class LoginController {
 		
 	}
 
-	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
+	/**
+	 * 회원 정보 수정 - 로그인한 사용자의 회원 정보를 수정합니다. 
+	 * @param Users user - String uid, String password
+	 * @return
+	 */
+	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class, notes = "로그인한 사용자의 회원 정보를 수정합니다.")
 	@PutMapping(value = "/users")
 	public ResponseEntity updateUser(@RequestBody Users user, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("회원정보 수정");
-		System.out.println(user.getEmail()+" "+user.getUid()+" "+user.getPassword());
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(user.getEmail())) {
 			String ecdPwd = passwordEncoder.encode(user.getPassword());
 			userService.userUpdate(user.getEmail(), user.getUid(), ecdPwd);
@@ -237,7 +263,13 @@ public class LoginController {
 		}
 	}
 	
-	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class)
+	/**
+	 * 비밀번호 재설정 - 사용자의 비밀번호를 재설정합니다.
+	 * 
+	 * @param Users - String email, String password
+	 * @return
+	 */
+	@ApiOperation(value = "비밀번호 재설정", response = ResponseEntity.class, notes = "사용자의 비밀번호를 재설정합니다.")
 	@PutMapping(value = "/users/pw")
 	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
 		
@@ -247,7 +279,12 @@ public class LoginController {
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.RESET_PWD, user.getEmail()),HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class)
+	/**
+	 * 닉네임으로 회원정보 조회 - 닉네임 중복 방지를 위해 닉네임으로 회원정보를 조회합니다.
+	 * @param String uid
+	 * @return
+	 */
+	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class, notes = "닉네임 중복 방지를 위해 닉네임으로 회원정보를 조회합니다.")
 	@GetMapping(value = "/users/{uid}/nickname")
 	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
 		if(!userService.findByUid(uid).isPresent()) {

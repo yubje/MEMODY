@@ -33,6 +33,9 @@ public class Users implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = 30, nullable = false)
     private String password;
+    
+	@Column(nullable = true)
+	private int exp;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
@@ -84,4 +87,7 @@ public class Users implements UserDetails {
     	this.uid = uid;
     }
 
+    public void setExp(int exp) {
+		this.exp = exp;
+	}
 }

@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,11 +18,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Post;
-import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
@@ -45,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class PostController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
@@ -59,13 +63,10 @@ public class PostController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class, notes = "사용자가 게시글을 작성합니다.")
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
-		System.out.println("포스트 생성 ");
-		System.out.println(post);
 		String token = req.getHeader("auth");
-//		System.out.println("POST>>>>>>>>>>>>>>>"+token);
 		if (jwtTokenProvider.validateToken(token)) {
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
@@ -77,7 +78,8 @@ public class PostController {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
 						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
-			pid = postService.createPost(temp);
+//			pid = postService.createPost(temp);
+			postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
 			}else {
@@ -96,15 +98,17 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
-	@GetMapping(value = "/blogs/{bid}/posts/")
-	public ResponseEntity readPostListAll(@PathVariable int bid, HttpServletRequest req) {
+	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 전체 게시글 목록 조회합니다.")
+	@GetMapping(value = "/blogs/{bid}/posts")
+	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable,HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			List<Post> list = postService.listAllPost(bid);
+//			List<Post> list = postService.listAllPost(bid, pageable);
+			Page<Post> list = postService.listAllPost(bid, pageable);
 			System.out.println(list);
-			if(list.size()==0) {
+			System.out.println(pageable);
+//			if(list.size()==0) {
+			if(list.getSize()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE, list),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
@@ -115,21 +119,19 @@ public class PostController {
 	}
 	
 	/**
-	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
+	 * 블로그의 임시저장 게시글 목록 조회 - 해당 블로그에 있는 임시저장 게시글 목록 조회
 	 * 
 	 * @param String Email
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 임시저장 게시글 목록 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/tmpposts/")
 	public ResponseEntity readTmpPostListAll(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			String author = jwtTokenProvider.getUserPk(token);
 			List<Post> list = postService.listAllSavePost(bid, author);
-			System.out.println(list);
 			if(list.size()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLSAVEPOST_NONE),HttpStatus.OK);
 			}else {
@@ -147,16 +149,14 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class, notes = "게시글의 상세내용을 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/posts/{pid}")
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			Post post = postService.findByPid(pid);
-			System.out.println(post);
+//			Post post = postService.findByPid(pid);
+			Post post = postService.postInfo(pid);
 			if(post != null) {
-				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
@@ -173,18 +173,12 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class, notes = "게시글을 수정합니다.")
 	@PutMapping(value = "/blogs/posts")
 	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 수정 ");
-		System.out.println(post);
-		
-		// 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
 		if (jwtTokenProvider.validateToken(token)) {
-			
 			postService.updatePost(post);
-			System.out.println("수정 성공");
 			Post updatePost = postService.findByPid(post.getPid());
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
@@ -199,18 +193,12 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class, notes = "게시글을 삭제합니다.")
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 삭제 ");
-		System.out.println(pid);
-		
-//		 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
-			
 			postService.deletePost(pid);
-			System.out.println("삭제 성공");
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
@@ -224,8 +212,8 @@ public class PostController {
 	 * @return ResponseEntity<Response> - CREATE_POST_SUCCESS
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class)
-	@DeleteMapping(value = "/blogs/fork")
+	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class, notes = "나의 블로그로 원하는 게시글을 fork합니다.")
+	@PostMapping(value = "/blogs/fork")
 	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
@@ -246,19 +234,17 @@ public class PostController {
 	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
 	 * 
 	 */
-	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class)
-	@PostMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity increasePostLike(@PathVariable int pid, HttpServletRequest req) {
-		System.out.println("게시글 좋아요");
+	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class, notes = "게시글에 좋아요를 누르면 좋아요가 증가합니다.")
+	@PostMapping(value = "/posts/likes")
+	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.increasePostLike(pid, loginuser);
+				postLikeService.increasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -271,19 +257,17 @@ public class PostController {
 	 * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
 	 * 
 	 */
-	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class)
-	@DeleteMapping(value = "/posts/{pid}/likes")
-	public ResponseEntity decreasePostLike(@PathVariable int pid, HttpServletRequest req) {
-		System.out.println("게시글 좋아요 취소");
+	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class, notes = "게시글에 좋아요를 다시 누르면 좋아요가 취소됩니다.")
+	@DeleteMapping(value = "/posts/likes")
+	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			System.out.println(loginuser);
-			if(!postService.checkPost(pid)){
+			if(!postService.checkPost(post.getPid())){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				postLikeService.decreasePostLike(pid, loginuser);
+				postLikeService.decreasePostLike(post.getPid(), loginuser);
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
@@ -294,6 +278,36 @@ public class PostController {
 	}
 	
 	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
+	/**
+	 * 게시글 좋아요 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 조회", response = ResponseEntity.class, notes = "게시글에 좋아요 했는지 여부를 알려줍니다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트")
+	@GetMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity searchPostLike(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("게시글 좋아요 조회");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				boolean liked = postLikeService.searchPostLike(pid, loginuser);
+				System.out.println(liked);
+				if(liked) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 	
 	
 }
