@@ -14,6 +14,7 @@ import com.web.blog.domain.Post;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.PostRepository;
+import com.web.blog.util.S3Util;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,20 +25,21 @@ public class PostService {
 	private final PostRepository postRepository;
 	private final BlogRepository blogRepository;
 	private final MemberRepository memberRepository;
+	
 
 	
-	public int createPost(Post Post) {
-		System.out.println(Post);
+	public int createPost(Post post) {
+		System.out.println(post);
 		return postRepository.save(Post.builder()
-				.bid(Post.getBid())
-				.lcid(Post.getLcid())
-				.mcid(Post.getMcid())
-				.ptitle(Post.getPtitle())
-				.pcontent(Post.getPcontent())
-				.author(Post.getAuthor())
+				.bid(post.getBid())
+				.lcid(post.getLcid())
+				.mcid(post.getMcid())
+				.ptitle(post.getPtitle())
+				.pcontent(post.getPcontent())
+				.author(post.getAuthor())
 				.postTime(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
-				.ptype(Post.getPtype())
+				.ptype(post.getPtype())
 				.build()).getPid();
 	}
 	
@@ -71,8 +73,24 @@ public class PostService {
 		return postRepository.findByPid(pid);
 	}
 	
-	public void updatePost(Post post) {
+	public void updatePost(Post post,String bucketName, String accessKey, String secretKey) {
 		Post updatePost = postRepository.findByPid(post.getPid());
+		
+		String content = updatePost.getPcontent();
+		if(content.contains("img")) {
+			String[] inputArr = content.split("'");
+			for(int i=0;i<inputArr.length;i++) {
+				if(inputArr[i].contains("https://memody")) {
+					String[] temp = inputArr[i].split("/");
+					S3Util s3 = new S3Util(accessKey, secretKey);
+					String temp2 = temp[3]+"/"+temp[4]+"/"+temp[5]+"/"+temp[6]+"/"+temp[7];
+					System.out.println(temp2);
+					System.out.println(temp[temp.length-1]);
+					s3.fileDelete(bucketName, temp2);
+				}
+			}
+		}
+		
 		updatePost.setPtitle(post.getPtitle());
 		updatePost.setPcontent(post.getPcontent());
 		updatePost.setUpdate_time(LocalDateTime.now());
