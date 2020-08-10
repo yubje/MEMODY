@@ -17,6 +17,7 @@ import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.PostRepository;
 import com.web.blog.repository.UsersRepository;
+import com.web.blog.util.S3Util;
 
 import lombok.RequiredArgsConstructor;
 
@@ -92,8 +93,24 @@ public class PostService {
 		return post;
 	}
 	
-	public void updatePost(Post post) {
+	public void updatePost(Post post,String bucketName, String accessKey, String secretKey) {
 		Post updatePost = postRepository.findByPid(post.getPid());
+		
+		String content = updatePost.getPcontent();
+		if(content.contains("img")) {
+			String[] inputArr = content.split("'");
+			for(int i=0;i<inputArr.length;i++) {
+				if(inputArr[i].contains("https://memody")) {
+					String[] temp = inputArr[i].split("/");
+					S3Util s3 = new S3Util(accessKey, secretKey);
+					String temp2 = temp[3]+"/"+temp[4]+"/"+temp[5]+"/"+temp[6]+"/"+temp[7];
+					System.out.println(temp2);
+					System.out.println(temp[temp.length-1]);
+					s3.fileDelete(bucketName, temp2);
+				}
+			}
+		}
+		
 		updatePost.setPtitle(post.getPtitle());
 		updatePost.setPcontent(post.getPcontent());
 		updatePost.setUpdate_time(LocalDateTime.now());
@@ -122,7 +139,7 @@ public class PostService {
 		}
 	}
 	
-	public void forkPost(Post post) {
+	public void forkPost(Post post,String user) {
 		// 내 블로그 목록 조회
 		// 내 카테고리 조회
 		// 선택한 후 lcid, mcid 랑 같이 
@@ -133,7 +150,7 @@ public class PostService {
 				.mcid(post.getMcid())
 				.ptitle(post2.getPtitle())
 				.pcontent(post2.getPcontent())
-				.author(post2.getAuthor())
+				.author(user)
 				.postTime(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
 				.ptype(post2.getPtype())

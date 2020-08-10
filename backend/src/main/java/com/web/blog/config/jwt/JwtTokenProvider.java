@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -28,7 +29,7 @@ public class JwtTokenProvider {
 	private final RedisTemplate redisTemplate;
 
 	// 토큰 유효시간 30분
-//	private long tokenValidTime = 30 * 60 * 1000L;
+//	private long tokenValidTime = 6 * 60 * 1000L;
 	private long tokenValidTime = 8 * 60 * 60 * 1000L;
 
 	private final UserDetailsService userDetailsService;
@@ -51,7 +52,11 @@ public class JwtTokenProvider {
 																// signature 에 들어갈 secret값 세팅
 				.compact();
 	}
-
+	
+//	public void updateToken(String token) {
+//		Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().setExpiration(new Date(now.getTime() + tokenValidTime));
+//	}
+	
 	// JWT 토큰에서 인증 정보 조회
 	public Authentication getAuthentication(String token) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
@@ -87,6 +92,12 @@ public class JwtTokenProvider {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	// 정보 확인
+	public List<String> getRole(String token) {
+		Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+		return (List<String>) claims.getBody().get("roles");
 	}
 
 }

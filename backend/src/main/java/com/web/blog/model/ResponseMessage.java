@@ -23,6 +23,10 @@ public class ResponseMessage {
     public static final String FAIL_UPDATE_USER = "회원 정보 수정 실패";
     public static final String DELETE_USER = "회원 탈퇴 성공";
     
+    public static final String UPDATE_PROFILE_SUCCESS = "프로필 변경 성공";
+    public static final String UPDATE_PROFILE_FAIL = "프로필 변경 실패";
+    
+    
     // Blog
     public static final String CREATE_BLOG_SUCCESS = "블로그 생성 성공";
     public static final String CREATE_BLOG_FAIL = "블로그 생성 실패";
@@ -65,6 +69,9 @@ public class ResponseMessage {
     public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
     public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
+    
+    public static final String FORK_USER_LIST_SUCCESS = "Fork한 유저 목록 조회 성공";
+    public static final String FORK_USER_LIST_FAIL = "Fork한 유저 목록 조회 실패";
     
     
     // Comments

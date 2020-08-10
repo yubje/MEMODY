@@ -10,6 +10,8 @@ import com.web.blog.domain.Blog;
 import com.web.blog.domain.BlogFollow;
 import com.web.blog.domain.Member;
 import com.web.blog.domain.Users;
+import com.web.blog.domain.Post;
+import com.web.blog.domain.PostLike;
 import com.web.blog.repository.BlogFollowRepository;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.UsersRepository;
