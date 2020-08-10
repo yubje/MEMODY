@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -153,9 +154,9 @@ public class PostController {
 //			pid = postService.createPost(temp);
 			postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS,pid),HttpStatus.CREATED);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
 			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.CREATE_POST_SUCCESS,pid),HttpStatus.CREATED);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.CREATE_POST_SUCCESS),HttpStatus.CREATED);
 			}
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
