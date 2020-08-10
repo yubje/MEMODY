@@ -11,8 +11,10 @@
           </v-btn-toggle>
         </div>
         <div v-else>
-          <BlogForkBlogList :pid="postData.pid"/>
-          <v-btn absolute right data-toggle="modal" data-target="#fork-modal" >퍼가기</v-btn>
+           <v-dialog v-model="dialog" persistent max-width="300">
+            <BlogForkBlogList  :pid="postData.pid" @closeModal="closeModal()" />
+           </v-dialog>
+          <button @click="dialog=true" >퍼가기</button>
         </div>
         <p style="text-align: left; margin-bottom: 0px">작성자: {{ postData.author }}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
@@ -53,6 +55,7 @@ export default {
   data() {
     return {
       liked: null,
+      dialog: false,
     }
   },
   components: {
@@ -66,7 +69,7 @@ export default {
     console.log(this.postData)
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo',]),
     ...mapState('blog', ['postData']),
     
   },
@@ -93,6 +96,9 @@ export default {
         axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,this.postData,{headers: {"auth": cookies.get('auth-token')}})
         this.liked = true
       }
+    },
+    closeModal(flag) {
+      this.dialog = flag
     }
   },
   async created() {

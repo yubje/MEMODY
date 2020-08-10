@@ -58,11 +58,14 @@ export const blog = {
     commentData: null,
 
   
+
+  
   },
   getters: {
     getpostListData(state) {
       return state.postListData;
     },
+
 
   },
   mutations: {
@@ -128,6 +131,7 @@ export const blog = {
     SET_POSTS(state, posts){
       state.posts= posts
     },
+
 
     
     //내가 속한 블로그 리스트 
@@ -300,6 +304,10 @@ export const blog = {
     deleteComment({ state }, comment) {
       BlogService.deleteComment({ state }, comment)
     },
+
+    changeDialogState({commit}) {
+      BlogService.changeDialogState({commit})
+    }
 
   },
 
