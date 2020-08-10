@@ -36,14 +36,18 @@ export const blog = {
 
     //블로그 게시글 상세정보
     postData: {
+      bid: '',
       pid: '',
-      lcid: '', /***나중에 수정***/
-      mcid: '', /***나중에 수정***/
+      lcid: '',
+      mcid: '',
       ptitle: '',
       pcontent: '',
       author: '',
+      manager: '',
       postTime: '',
       update_time: '',
+      fork: '',
+      postlikecnt: '',
       ptype: null
     },
     posts: [],
@@ -97,7 +101,19 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      state.postData = postData;
+      state.postData.bid = postData.bid
+      state.postData.pid = postData.pid
+      state.postData.lcid = postData.lcid
+      state.postData.mcid = postData.mcid
+      state.postData.ptitle = postData.ptitle
+      state.postData.pcontent = postData.pcontent
+      state.postData.author = postData.author
+      state.postData.manager = postData.manager
+      state.postData.postTime = postData.postTime
+      state.postData.update_time = postData.update_time
+      state.postData.fork = postData.fork
+      state.postData.postlikecnt = postData.postlikecnt
+      state.postData.ptype = postData.ptype
     },
     
 
@@ -240,8 +256,8 @@ export const blog = {
 
 
     // 블로그 게시글 수정 (API 문서 - 54D)
-    updatePost({commit}, response) {
-      return BlogService.updatePost(response)
+    updatePost({state, commit}) {
+      return BlogService.updatePost(state.postData)
       .then(result => {
         commit('setPostDetailData', result.data)
         alert(result.message)
