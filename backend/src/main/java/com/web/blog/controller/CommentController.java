@@ -51,14 +51,14 @@ public class CommentController {
 	private final 	CommentService 		commentService;
 
 	/**
-	 * 게시글 작성 - 사용자가 게시글을 작성하는 기능. 
+	 * 댓글 작성 - 사용자가 댓글 작성하는 기능. 
 	 * 
 	 * @param Post String lcid, String mcid, String pTitle, String pContent, String pType
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_BLOG_SUCCESS), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "댓글 작성", response = ResponseEntity.class)
+	@ApiOperation(value = "댓글 작성", response = ResponseEntity.class, notes = "사용자가 댓글을 작성합니다.")
 	@PostMapping("/comments")
 	public ResponseEntity createComment(@RequestBody Comments comment, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -80,7 +80,7 @@ public class CommentController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글의 댓글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글의 댓글 목록 조회", response = ResponseEntity.class, notes = "해당 게시글에 있는 전체 댓글 목록 조회합니다.")
 	@GetMapping(value = "/comments/{pid}")
 	public ResponseEntity readCommentListAll(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -128,7 +128,7 @@ public class CommentController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "댓글 수정", response = ResponseEntity.class)
+	@ApiOperation(value = "댓글 수정", response = ResponseEntity.class, notes = "댓글을 수정합니다.")
 	@PutMapping(value = "/comments")
 	public ResponseEntity updatePost(@RequestBody Comments comment, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -147,7 +147,7 @@ public class CommentController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "댓글 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "댓글 삭제", response = ResponseEntity.class, notes = "댓글을 삭제합니다.")
 	@DeleteMapping(value = "/comments")
 	public ResponseEntity deletePost(@RequestBody Comments comment, HttpServletRequest req) {
 		String token = req.getHeader("auth");

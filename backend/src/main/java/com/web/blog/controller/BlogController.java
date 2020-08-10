@@ -434,10 +434,10 @@ public class BlogController {
 		}
 	}
 	/**
-	 * 블로그 팔로우 취소 - 
+	 * 블로그 팔로우 취소 - 블로그 팔로우를 취소합니다.
 	 * 
 	 */
-	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class, notes = "")
+	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class, notes = "블로그 팔로우를 취소합니다.")
 	@DeleteMapping(value = "/blogs/follows")
 	public ResponseEntity decreaseBlogFollow(@RequestBody Blog blog, HttpServletRequest req) {
 		System.out.println("블로그 팔로우 취소");
@@ -459,10 +459,10 @@ public class BlogController {
 	}
 	
 	/**
-	 * 블로그 팔로우 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 블로그 팔로우 조회 - 블로그를 팔로우 했는지 여부를 알려준다. 팔로우 했을경우 파란색 / 안했을경우 회색 
 	 * 
 	 */
-	@ApiOperation(value = "블로그 팔로우 조회", response = ResponseEntity.class, notes = "")
+	@ApiOperation(value = "블로그 팔로우 조회", response = ResponseEntity.class, notes = "블로그를 팔로우 했는지 여부를 알려줍니다. 팔로우 했을경우 파란색 / 안했을경우 회색 ")
 	@GetMapping(value = "/blogs/{bid}/follows")
 	public ResponseEntity searchPostLike(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
