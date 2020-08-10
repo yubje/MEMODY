@@ -240,34 +240,25 @@ public class LoginController {
 	}
 
 	@ApiOperation(value = "회원정보 수정", response = ResponseEntity.class)
-	@PutMapping(value = "/users", produces = "application/json;charset=UTF-8", consumes = {
-			"multipart/form-data"})
-	public ResponseEntity updateUser(@RequestBody Users user,MultipartFile file, HttpServletRequest req) {
+	@PutMapping(value = "/users", produces = "application/json;charset=UTF-8")
+	public ResponseEntity updateUser(@RequestBody Users user, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		String email = jwtTokenProvider.getUserPk(token);
 		System.out.println("회원정보 수정");
-		System.out.println(user.getEmail() + " " + user.getUid() + " " + user.getPassword());
+//		System.out.println(user.getEmail() + " " + user.getUid() + " " + user.getPassword());
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(user.getEmail())) {
-			String ecdPwd = passwordEncoder.encode(user.getPassword());
+			Users member = userService.findByEmail(user.getEmail())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			String ecdPwd = null;
+			if(user.getPassword()==null) {
+				ecdPwd = member.getPassword();
+			}else {
+				ecdPwd = passwordEncoder.encode(user.getPassword());
+			}
+			
 			userService.userUpdate(user.getEmail(), user.getUid(), ecdPwd);
-			
-			if (file == null) {
-				System.out.println("[SYSTEM] 파일 없음");
-				return new ResponseEntity<Response>(
-						new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_PROFILE_FAIL), HttpStatus.FORBIDDEN);
-			}
-			System.out.println("[FILE] " + file);
-			String url = s3Service.profileUpload(file);
-			System.out.println("URL: "+url);
-			if (url != null) {
-				userService.profileUpdate(email, url);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),
-						HttpStatus.OK);
-			} else {
-				return new ResponseEntity<Response>(
-						new Response(StatusCode.FORBIDDEN, ResponseMessage.UPDATE_PROFILE_FAIL), HttpStatus.FORBIDDEN);
-			}
-			
+
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_USER, user),
+					HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FAIL_UPDATE_USER),
 					HttpStatus.FORBIDDEN);
