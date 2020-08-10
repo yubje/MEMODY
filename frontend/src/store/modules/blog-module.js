@@ -1,4 +1,5 @@
 // blog 상태 관리 모듈
+import router from '@/router'
 import BlogService from '@/services/blog-service'
 // import { delete } from 'vue/types/umd';
 
@@ -183,6 +184,9 @@ export const blog = {
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
+      .then(function() {
+        router.push({ name: 'BlogPostDetail' })
+      })
 
     },
 

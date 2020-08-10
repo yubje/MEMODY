@@ -30,7 +30,6 @@ export default {
     ...mapActions('blog',['lookupPostDetail']),
     blogPostDetail(post) {
       this.lookupPostDetail(post)
-      this.$router.push({ name: 'BlogPostDetail'})
     }
   },
   computed: {

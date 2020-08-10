@@ -62,6 +62,7 @@ export default {
     ...mapActions('blog', ['deletePost']),
 
     setPostContent() {
+      console.log(this.postData.pcontent)
       document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
     },
     
@@ -70,7 +71,7 @@ export default {
     },
 
     blogPostDelete() {
-      this.deletePost
+      this.deletePost()
     },
 
     clickLike() {
