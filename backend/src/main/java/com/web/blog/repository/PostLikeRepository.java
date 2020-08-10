@@ -6,19 +6,19 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.web.blog.domain.Member;
 import com.web.blog.domain.PostLike;
+import com.web.blog.domain.Users;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 	
-	List<Member> findByEmail(String email);
-	List<Member> findByPid(int pid);
+	List<Users> findByEmail(String email);
+	List<Users> findByPid(int pid);
 	
 	@Transactional
 	void deleteByEmailAndPid(String email, int pid);
 	
 	int countByPid(int pid);
 	
-	
+	List<PostLike> findByPidAndEmail(int pid, String email);
 
 }

@@ -38,14 +38,6 @@ public class UserService implements UserDetailsService {
 		userRepository.deleteByEmail(email);
 	}
 
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
 	public void join(Users user,String password) {
 		userRepository.save(Users.builder().email(user.getEmail()).uid(user.getUid()).password(password)
 				.roles(Collections.singletonList("ROLE_USER")).build());
@@ -71,5 +63,11 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public Optional<Users> findByUid(String uid) {
 		return userRepository.findByUid(uid);
+	}
+
+	public void profileUpdate(String email,String url) {
+		Optional<Users> user = userRepository.findByEmail(email);
+		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).build());
+		
 	}
 }
