@@ -10,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.web.blog.domain.Fork;
 import com.web.blog.domain.Post;
 import com.web.blog.repository.BlogRepository;
+import com.web.blog.repository.ForkRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.PostRepository;
 import com.web.blog.util.S3Util;
@@ -24,6 +26,7 @@ public class PostService {
 
 	private final PostRepository postRepository;
 	private final BlogRepository blogRepository;
+	private final ForkRepository forkRepository;
 	private final MemberRepository memberRepository;
 	
 
@@ -37,6 +40,7 @@ public class PostService {
 				.ptitle(post.getPtitle())
 				.pcontent(post.getPcontent())
 				.author(post.getAuthor())
+				.manager(post.getManager())
 				.postTime(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
 				.ptype(post.getPtype())
@@ -77,6 +81,9 @@ public class PostService {
 		Post updatePost = postRepository.findByPid(post.getPid());
 		
 		String content = updatePost.getPcontent();
+		System.out.println("[이전 데이터] "+content);
+		System.out.println("[바뀔 데이터] "+post.getPcontent());
+		
 		if(content.contains("img")) {
 			String[] inputArr = content.split("'");
 			for(int i=0;i<inputArr.length;i++) {
@@ -119,22 +126,39 @@ public class PostService {
 		}
 	}
 	
+	// 해당 pid에 대한 fork 한 사용자 목록
+	public List<Fork> forkList(int pid){
+		return forkRepository.findByPid(pid);
+	}
+	
 	public void forkPost(Post post,String user) {
 		// 내 블로그 목록 조회
 		// 내 카테고리 조회
 		// 선택한 후 lcid, mcid 랑 같이 
 		Post post2 = postRepository.findByPid(post.getPid());
+		post2.setFork(post2.getFork()+1);
+		postRepository.save(post2);
+		
+		// fork한 유저 목록 
+		forkRepository.save(Fork.builder()
+				.pid(post2.getPid())
+				.email(user)
+				.build());
+		
 		postRepository.save(Post.builder()
 				.bid(post.getBid())
 				.lcid(post.getLcid())
 				.mcid(post.getMcid())
 				.ptitle(post2.getPtitle())
 				.pcontent(post2.getPcontent())
-				.author(user)
+				.author(post2.getAuthor())
+				.manager(user)
 				.postTime(LocalDateTime.now())
 				.update_time(LocalDateTime.now())
 				.ptype(post2.getPtype())
 				.build());
+		
+		// author의 경험치 증가 +5
 	}
 
 }
