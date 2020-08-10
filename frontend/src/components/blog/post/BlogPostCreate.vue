@@ -79,6 +79,10 @@ export default {
   padding: 0;
 }
 
+img {
+  max-width: 713px;
+}
+
 .post-button {
   margin: 10px 10px;
   text-align: right;
