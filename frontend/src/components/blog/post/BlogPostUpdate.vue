@@ -1,27 +1,29 @@
 <template>
-  <div>
-    <div class="post-button">
-      <button id="post-update-back" @click="$router.go(-1)">취소</button>
-      <button id="post-update" @click="blogPostUpdate()">수정</button>
-    </div>
+  <v-container>
+    <div>
+      <div class="post-button">
+        <button id="post-update-back" @click="$router.go(-1)">취소</button>
+        <button id="post-update" @click="blogPostUpdate()">수정</button>
+      </div>
 
-    <BlogEditor />
+      <BlogEditor />
 
-    <div class="editor-background">
-      <div class="editor-body">
-        <div class="editor-body-padding">
-          <div class="editor-title-area">
-            <input id="editor-title" v-model="ptitle" type="text" placeholder="제목">
-            <hr>
-          </div>
+      <div class="editor-background">
+        <div class="editor-body">
+          <div class="editor-body-padding">
+            <div class="editor-title-area">
+              <input id="editor-title" v-model="ptitle" type="text" placeholder="제목">
+              <hr>
+            </div>
 
-          <div>
-            <div id="editor-content" contenteditable="true" placeholder="본문 내용을 입력해주세요." v-focus></div>
+            <div>
+              <div id="editor-content" contenteditable="true" placeholder="본문 내용을 입력해주세요." v-focus></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </v-container>
 </template>
 
 <script>

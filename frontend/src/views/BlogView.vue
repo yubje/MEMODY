@@ -1,25 +1,37 @@
 <template>
-  <div id="blog" >
-    <div class="container-fluid">
-      <div class="row ">
-        <!-- Sidebar -->
-        <BlogPostSidebar/>
-        <div class="col col-lg-10 align-self-center" style="height: 60%;">
-          <div class="col">
-            <h1>{{ blogData.btitle }}</h1>
-            <h3>{{ blogData.bsubtitle }}</h3>
-            <p>{{ blogData.bcontent }}</p>
-            <p>관리자: {{ blogData.manager }}</p>
-            <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-            <p> 팔로우: {{blogData.followers}} 명</p>
+  <div class="container-fluid">
+    <div class="row">
+    <BlogPostSidebar/>
+    <div class="col col-lg-10 align-self-center" style="height: 60%;">
+      <div class="col align-center">
+        <h1>{{ blogData.btitle }}</h1>
+        <h3>{{ blogData.bsubtitle }}</h3>
+        <p>{{ blogData.bcontent }}</p>
+        <p>관리자: {{ blogData.manager }}</p>
+        <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
+        <p> 팔로우: {{blogData.followers}} 명</p>
+        
 
-            <div v-if="userInfo.email !== blogData.manager">
-              <button v-if="following" @click="clickFollow()" >팔로우 취소</button>
-              <button v-else @click="clickFollow()" >팔로우 </button>
-            </div>           
-          </div>
-        </div>
+        <div v-if="userInfo.email !== blogData.manager">
+          <v-btn 
+            color="secondary" 
+            class="text-light"
+            v-if="following"
+            @click="clickFollow()"
+          >
+            <b>팔로우 취소</b>
+          </v-btn>
+          <v-btn 
+            color="teal lighten-3" 
+            class="text-light"
+            v-else
+            @click="clickFollow()"
+          >
+            <b>팔로우</b>
+          </v-btn>
+        </div>           
       </div>
+    </div>
     </div>
   </div>
 </template>
