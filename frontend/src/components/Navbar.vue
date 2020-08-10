@@ -2,7 +2,6 @@
     <v-app-bar
       app
       color="white"
-      elevate-on-scroll
     >
       <v-toolbar-title>
         <router-link 

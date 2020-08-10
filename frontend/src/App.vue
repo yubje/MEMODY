@@ -1,20 +1,11 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="app">
     <Navbar/>
 
 
     <v-main>
-      <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <router-view/>
-        </v-row>
-      </v-container>
+      <router-view/>
+
     </v-main>
   </v-app>
 
