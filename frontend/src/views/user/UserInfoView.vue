@@ -1,63 +1,93 @@
 <template>
-  <div>
-    <div class="modal fade" id="info-modal"  data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="info-modalLabel">UserInfo</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="row cols justify-content-center my-3">
-              <h1>회원 정보 조회</h1>
-            </div>
-            <div class="row cols p-2">
-              <p class="col-3">닉네임</p>
-              <p class="col-9">{{ this.userInfo.uid }}</p>
-            </div>
-            <div class="row cols p-2">
-              <p class="col-3">이메일</p>
-              <p class="col-9">{{ this.userInfo.email }}</p>
-            </div>
-            <router-link
-            data-dismiss="modal" 
-            data-toggle="modal" data-target="#info-update-modal"
-            :to="{ name: 'UserInfoUpdateView' }"
-            :userInfo="userInfo"
-            class="btn btn-sm btn-primary"
-            >
-            수정</router-link>
-            <button class="btn btn-sm btn-primary" @click="userInfoDelete()">탈퇴</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <v-container>
+    <v-row justify="center">
+      <v-card>
+        <v-card-title class="headline">회원 정보 </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-row justify="center">
+                <v-avatar color="teal" size="150">
+                  <span class="white--text headline">사진</span>
+                </v-avatar>
+              </v-row>
+
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>닉네임</v-list-item-subtitle>
+                  <v-list-item-title>{{ this.userInfo.uid }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>이메일</v-list-item-subtitle>
+                  <v-list-item-title>{{ this.userInfo.email }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>레벨</v-list-item-subtitle>
+                  <v-list-item-title>LV.{{ parseInt(this.userInfo.exp/10) }}</v-list-item-title>
+                  <v-progress-linear
+                    :value="(this.userInfo.exp%10)*10"
+                    height="25"
+                    color="teal"
+                    rounded
+                  >
+                    <strong>{{ (this.userInfo.exp%10)*10 }}%</strong>
+                  </v-progress-linear>
+                </v-list-item-content>
+              </v-list-item>            
+            </v-row>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-row justify="center">
+            <v-btn class="ma-2" tile outlined color="success" :to="{ name: 'UserInfoUpdateView' }" >
+              <v-icon left>mdi-pencil</v-icon> Edit
+            </v-btn>
+            <v-btn class="ma-2" tile outlined color="teal" @click="userInfoDelete()">
+              탈퇴
+            </v-btn>
+          </v-row>
+        </v-card-actions>
+      </v-card>
+    </v-row>
+
+
+  </v-container>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
 
-export default {
-  name: 'UserInfoView',
-  computed: {
-      ...mapState(['userInfo'])
-  },
-  methods: {
-    ...mapActions(['logout', 'deleteUserInfo']),
+  export default {
+    name: 'UserInfoView',
+    data() {
+      return {
+        dialog: true,
+      }
+    },
+    computed: {
+      ...mapState(['userInfo']),
+    },
+    methods: {
+      ...mapActions(['logout', 'deleteUserInfo']),
 
-    userInfoDelete() {
-      var result = confirm("정말로 탈퇴하시겠습니까?")
+      userInfoDelete() {
+        var result = confirm("정말로 탈퇴하시겠습니까?")
 
-      if(result) {
-        this.deleteUserInfo()
-        this.logout()
+        if (result) {
+          this.deleteUserInfo()
+          this.logout()
+        }
       }
     }
   }
-}
 </script>
 
 <style>

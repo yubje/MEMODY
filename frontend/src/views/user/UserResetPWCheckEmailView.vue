@@ -1,6 +1,33 @@
 <template>
   <div>
-    <div class="modal fade" id="resetpwcheckemail-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+     <v-row justify="center">
+      <v-dialog v-model="dialog" persistent max-width="500">
+        <v-card>
+          <v-card-title class="headline">ResetPW</v-card-title>
+          <v-card-text>
+            <v-container >
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field v-model="resetpwcheckemailData.email" label="이메일을 입력하세요"></v-text-field>
+                </v-col>
+                
+
+              </v-row>
+            </v-container>
+
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="checkForm()">
+              인증 메일 받기
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+
+    <!-- <div class="modal fade" id="resetpwcheckemail-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -18,8 +45,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </div> -->
+  </div> 
 </template>
 
 <script>
@@ -29,6 +56,7 @@ export default {
   name: 'UserResetPWCheckEmailView',
   data() {
     return {
+      dialog:true,
       resetpwcheckemailData: {
         email: ''
       }

@@ -1,54 +1,65 @@
 <template>
-  <div id="nav">
-    <b-navbar class="navbar" toggleable="lg" type="dark">
-    <b-navbar-brand>
-      <router-link 
-      :to="{ name: 'Main' }"
-      class="text-light text-decoration-none"
-      >
-        MEMODY
+  <v-app-bar app flat color="white">
+    <v-toolbar-title>
+      <router-link :to="{ name: 'Main' }">
+        <img src="@/assets/memody.png" alt="memody" style="height: 45px;">
       </router-link>
-    </b-navbar-brand>
+    </v-toolbar-title>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="ml-auto">
-        <!-- <b-nav-item>
-          <router-link :to="{ name: 'BlogView' }" class="text-decoration-none text-light">Blog</router-link>
-        </b-nav-item> -->
-        <div v-if="authToken" class="row">
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content >알람</template>
-            <b-dropdown-item href="#">Alarm1</b-dropdown-item>
-          </b-nav-item-dropdown>
+    <!-- <v-spacer></v-spacer> -->
 
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>User</template>
-            <b-dropdown-item>
-              <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
-              <br>
-              <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
+    <v-menu v-if="authToken">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn text v-bind="attrs" v-on="on">
+          <p>User</p>
+        </v-btn>
+      </template>
 
-        <div v-else>
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>로그인·회원가입</template>
-            <b-dropdown-item>
-              <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
 
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-  </div>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    
+
+    <v-menu
+      left
+      bottom
+      v-else
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          icon
+          v-bind="attrs"
+          v-on="on"
+        >
+          <p>로그인·회원가입</p>
+        </v-btn>
+      </template>
+
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
+          </v-list-item-title>
+        </v-list-item>
+          
+
+      </v-list>
+    </v-menu>
+  </v-app-bar>
 </template>
 
 <script>
-
 import { mapState } from 'vuex'
 
 export default {
@@ -56,14 +67,11 @@ export default {
   computed: {
       ...mapState(['authToken'])
   },
-
 }
 </script>
 
-<style scoped>
-.navbar {
-  background-color: #25374F !important;
-  color: white !important;
+<style>
+.v-toolbar__content {
+  border-bottom: 1px solid #DFDFDF;
 }
-
 </style>

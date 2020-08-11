@@ -13,6 +13,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueCookies from 'vue-cookies'
+import vuetify from './plugins/vuetify';
+
 
 Vue.use(VueCookies)
 
@@ -28,8 +30,15 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
 
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  }
+})
+
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

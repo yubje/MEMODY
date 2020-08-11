@@ -1,4 +1,15 @@
 <template>
+<!-- <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+        </v-row>
+      </v-container> -->
+
   <div id="main">
     <div class="m-5">
       <h1>MEMODY</h1>
@@ -10,8 +21,12 @@
     
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="myBlogs"/>
+      팔로잉 블로그
+      <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
-    <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      추천 블로그
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      <MainRanking/>
   </div>
 </template>
 
@@ -22,7 +37,7 @@ import cookies from 'vue-cookies'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
-
+import MainRanking from '@/components/main/MainRanking.vue'
 import { mapState } from 'vuex'
 
 const SERVER = process.env.VUE_APP_SERVER
@@ -36,12 +51,14 @@ export default {
     return {
       myBlogs: [],
       recommendBlog: null,
+      followBlog: null,
     }
   },
   components: {
     MainSearchTab,
     MainMyBlogList,
-    MainRecommendBlogList
+    MainRecommendBlogList,
+    MainRanking,
   },
   mounted() {
     this.fetchBlogs()
@@ -51,9 +68,10 @@ export default {
       if (cookies.get('auth-token')) {
         axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
-          console.log('조회성공')
+          console.log(response.data.data)
           this.myBlogs = response.data.data.myBlog
           this.recommendBlog = response.data.data.recommendBlog
+          this.followBlog =response.data.data.followBlog
           return response
         })
         .catch(error => {
