@@ -1,4 +1,15 @@
 <template>
+<!-- <v-container
+        class="fill-height"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+        </v-row>
+      </v-container> -->
+
   <div id="main">
     <div class="m-5">
       <h1>MEMODY</h1>

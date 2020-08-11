@@ -37,6 +37,14 @@ Vue.use(VueRouter)
     component: BlogView,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   // users
@@ -49,11 +57,20 @@ Vue.use(VueRouter)
     path: '/logout',
     name: 'UserLogout',
     component: UserLogout,
+
   },
   {
     path: '/users/info',
     name: 'UserInfoView',
     component: UserInfoView,
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: '/users/info/update',
@@ -88,6 +105,14 @@ Vue.use(VueRouter)
     component: BlogSettingsInfo,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
@@ -96,6 +121,14 @@ Vue.use(VueRouter)
     component: BlogSettingsCategory,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
