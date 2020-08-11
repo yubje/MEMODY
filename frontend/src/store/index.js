@@ -89,7 +89,6 @@ export default new Vuex.Store({
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
-        console.log(response.data.data)
         commit('SET_USERINFO', response.data.data)
         router.push({ name: 'Main'})
       })
@@ -185,7 +184,7 @@ export default new Vuex.Store({
     },
     // 회원 정보 수정 (API 문서 - 15~17 D)
     // updateUserInfo({ getters }, response) {
-    updateUserInfo({ state, getters, commit }, updateInfo) {
+    updateUserInfo({ state, getters, commit, dispatch }, updateInfo) {
       commit('SET_UNIQUEID')
       if (state.uniqueId) {
         console.log(updateInfo)
@@ -193,7 +192,7 @@ export default new Vuex.Store({
           .then(response => {
             commit('SET_USERINFO', response.data.data)
             commit('SET_UNIQUEID')
-            router.push({ name: 'Main'})
+            dispatch('logout')
           })
           .catch(error => alert(error))
       }

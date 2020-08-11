@@ -1,19 +1,24 @@
 <template>
   <div>
-      <v-card>
-          <v-card-title class="headline">퍼 갈 땐 출 처 를 명 확 히</v-card-title>
-          <v-card-text>
+    <div class="modal fade" id="fork-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">퍼 갈 땐 출 처 를 명 확 히</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
             <div v-for="myBlog in myBlogs" :key="myBlog.bid">
-                <BlogForkBlogCategoryList :myBlog="myBlog" :pid="pid"/>
+              <BlogForkBlogCategoryList :myBlog="myBlog" :pid="pid"/>
             </div>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="closeModal()">닫기</v-btn>
-           
-          </v-card-actions>
-      </v-card>
-  
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,23 +29,17 @@ import BlogForkBlogCategoryList from '@/components/blog/fork/BlogForkBlogCategor
 export default {
   name: 'BlogForkBlogList',
   props: {
-    pid: Number,
+    pid: Number
   },
   components: {
     BlogForkBlogCategoryList
   },
   computed: {
-    ...mapState('blog',['myBlogs',]),
-
+    ...mapState('blog',['myBlogs']),
+    ...mapActions('blog', ['getBlogs'])
   },
-  methods: {
-    ...mapActions('blog', ['getBlogs']),
-    closeModal() {
-      this.$emit('closeModal',false)
-    }
-  },
-  async mounted() {
-    await this.getBlogs()
+  created() {
+    this.getBlogs()
   }
   
 }
