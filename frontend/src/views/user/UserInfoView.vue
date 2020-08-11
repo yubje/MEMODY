@@ -50,7 +50,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
 
 export default {
   name: 'UserInfoView',
@@ -74,8 +77,8 @@ export default {
   methods: {
     ...mapActions(['logout', 'deleteUserInfo', 'lookupUserInfo']),
 
-    userInfoDelete() {
-      var result = confirm("정말로 탈퇴하시겠습니까?")
+      userInfoDelete() {
+        var result = confirm("정말로 탈퇴하시겠습니까?")
 
       if (result) {
         this.deleteUserInfo()
@@ -83,7 +86,6 @@ export default {
       }
     }
   }
-}
 </script>
 
 <style>

@@ -90,6 +90,7 @@ export default new Vuex.Store({
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
+        console.log(response.data.data)
         commit('SET_USERINFO', response.data.data)
         router.push({ name: 'Main'})
       })
@@ -207,7 +208,6 @@ export default new Vuex.Store({
               router.push({ name: 'Main'})
             })
             .catch(error => alert(error))
-
         })
       }
     },
