@@ -3,55 +3,22 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col col-lg-10">
-        <v-card
-          outlined
-        >
-          <v-card-title>
-            <h1>카테고리</h1>
-            <v-btn
-              fab
-              dark
-              color="teal"
-              absolute
-              right
-            >
-              <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
-                <v-icon dark>mdi-plus</v-icon>
-              </router-link>
-            </v-btn>
-          </v-card-title>
-
-          <v-simple-table>
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left">글 제목</th>
-                  <th class="text-left">작성자</th>
-                  <th class="text-left">작성일</th>
-                  <th class="text-left">좋아요</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
-                  <td>{{ post.ptitle }}</td>
-                  <td>{{ post.author }}</td>
-                  <td>{{ post.postTime.slice(0,10) }}</td>
-                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
-          
-          <div class="text-center">
-            <v-pagination
-              v-model="page"
-              :length="posts.totalPages"
-              circle
-              color="teal"
-              @input="onPageChange"
-            ></v-pagination>
+        <h1>카테고리</h1>
+        <div>
+        <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }">새글쓰기</router-link>
+      </div>
+        <div style="border:1px solid; text-align:left;">
+          <div>
+            <a>글제목</a>
+            <a style="float:right">작성일</a>
           </div>
-        </v-card>
+          <div v-if="posts">
+            <BlogPostCategoryListItem v-for="post in posts" :key="post.pid" :post="post"/>
+          </div>
+          <div v-else>
+            작성한 글이 없습니다.
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -59,8 +26,11 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
+import BlogPostCategoryListItem from '@/components/blog/post/BlogPostCategoryListItem.vue'
 
-
+// import axios from 'axios'
+// import cookies from 'vue-cookies'
+// const SERVER = process.env.VUE_APP_SERVER
 
 import { mapState, mapActions } from 'vuex'
 
@@ -68,14 +38,10 @@ export default {
   name: 'BlogPostList',
   components: {
     BlogPostSidebar,
-
-  },
-  data() {
-    return {
-      page: 1,
-    }
+    BlogPostCategoryListItem
   },
   props: {
+    bid : Number,
     mcid : Number,
     lcid: Number,
   },
@@ -83,32 +49,16 @@ export default {
     ...mapState('blog', ['blogData','posts'])
   },
   methods: {
-    ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),
-
-    blogPostDetail(post) {
-      this.lookupPostDetail(post)
-      this.$router.push({ name: 'BlogPostDetail'})
-    },
-    onPageChange(newPage) {
-      const info = {
-        "bid": this.blogData.bid,
-        "mcid": this.mcid,
-        "page": this.page-1,
-      }
-      this.page = newPage
-      this.fetchPosts(info)
-    },
+    ...mapActions('blog',['fetchPosts'])
   },
  
   created() {
     const info = {
       "bid": this.blogData.bid,
-      "mcid": this.mcid,
-      "page": this.page-1,
+      "mcid": this.mcid
     }
-    console.log(this.page)
-    console.log(info)
     this.fetchPosts(info)
+    console.log(this.posts)
   },
    
 }
