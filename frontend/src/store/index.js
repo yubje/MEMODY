@@ -34,6 +34,7 @@ export default new Vuex.Store({
       "uid": state.userInfo.uid,
       "email": state.userInfo.email,
       "password": null,
+      "profile" : state.userInfo.profile
     })
   },
 
@@ -183,21 +184,43 @@ export default new Vuex.Store({
         })
         .catch(error => alert(error.response.data.message))
     },
+    //회원 정보 조회
+    lookupUserInfo({state, commit}) {
+      axios.get(`${SERVER}/users/${state.userInfo.email}`, {headers: {'auth': cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_USERINFO', response.data.data)
+      })
+
+    },
+
     // 회원 정보 수정 (API 문서 - 15~17 D)
     // updateUserInfo({ getters }, response) {
-    updateUserInfo({ state, getters, commit }, updateInfo) {
+    updateUserInfo({ state, getters, commit }, formData) {
       commit('SET_UNIQUEID')
       if (state.uniqueId) {
-        console.log(updateInfo)
-        axios.put(`${SERVER}/users`, updateInfo, getters.config)
-          .then(response => {
-            commit('SET_USERINFO', response.data.data)
-            commit('SET_UNIQUEID')
-            router.push({ name: 'Main'})
-          })
-          .catch(error => alert(error))
+        axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
+        .then(response=> {
+          console.log(response)
+          axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
+            .then(response => {
+              commit('SET_USERINFO', response.data.data)
+              commit('SET_UNIQUEID')
+              router.push({ name: 'Main'})
+            })
+            .catch(error => alert(error))
+        })
       }
     },
+
+    //프로필 이미지 변경
+    // changeProfileImg({state}, formData) {
+    //   axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
+    //   .then(response => {
+    //     router.push({ name: 'UserInfoView'})
+    //     console.log(response)
+    //   })
+    //   .catch(error => console.log(error))
+    // },
 
     //회원 탈퇴 (API 문서 - 19D)
     deleteUserInfo({getters}) {
