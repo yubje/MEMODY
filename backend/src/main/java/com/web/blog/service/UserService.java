@@ -72,4 +72,5 @@ public class UserService implements UserDetailsService {
 	public Optional<Users> findByUid(String uid) {
 		return userRepository.findByUid(uid);
 	}
+
 }
