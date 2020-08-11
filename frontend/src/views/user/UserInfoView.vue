@@ -60,30 +60,41 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
 
-  export default {
-    name: 'UserInfoView',
-    data() {
-      return {
-        dialog: true,
-      }
-    },
-    computed: {
-      ...mapState(['userInfo']),
-    },
-    methods: {
-      ...mapActions(['logout', 'deleteUserInfo']),
+export default {
+  name: 'UserInfoView',
+  data() {
+    return {
+      dialog: true,
+    }
+  },
+  created() {
+    this.lookupUserInfo()
+  },
+  mounted() {
+    if(this.userInfo.profile) {
+      document.getElementById('profile-img').src = this.userInfo.profile;
+    }
+  },
+
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  methods: {
+    ...mapActions(['logout', 'deleteUserInfo', 'lookupUserInfo']),
 
     userInfoDelete() {
       var result = confirm("정말로 탈퇴하시겠습니까?")
-
       if (result) {
         this.deleteUserInfo()
         this.logout()
       }
     }
-  }
+  },
 }
 </script>
 

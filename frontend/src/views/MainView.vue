@@ -1,19 +1,7 @@
 <template>
-<!-- <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-        </v-row>
-      </v-container> -->
-
   <div id="main">
     <div class="m-5">
       <h1>MEMODY</h1>
-      <!-- <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px"> -->
     </div>
     <div class="container w-75">
       <MainSearchTab/>
@@ -37,9 +25,7 @@ import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
 import MainRanking from '@/components/main/MainRanking.vue'
-import { mapState } from 'vuex'
-
-const SERVER = process.env.VUE_APP_SERVER
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
