@@ -9,8 +9,16 @@
           <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
         </div>
         <div v-else>
-          <BlogForkBlogList :pid="postData.pid"/>
-          <button data-toggle="modal" data-target="#fork-modal" >퍼가기</button>
+           <v-dialog v-model="dialog" persistent max-width="400">
+            <BlogForkBlogList  :pid="postData.pid" @closeModal="closeModal()" />
+           </v-dialog>
+          <v-row justify="center">
+            <v-col cols="8"></v-col>
+            <v-col cols="2">
+            <v-btn color="teal accent-3" text @click="dialog=true" >퍼가기</v-btn>
+            </v-col>
+            <BlogForkUsers :pid="postData.pid"/>
+          </v-row>
         </div>
         <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
@@ -20,8 +28,6 @@
         <BlogCommentForm/>
         <BlogCommentList/>
       </div>
-      <!-- <BlogCommentCreate/> -->
-      
     </div>
   </div>
 </template>
@@ -29,6 +35,7 @@
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 import BlogForkBlogList from '@/components/blog/fork/BlogForkBlogList.vue'
+import BlogForkUsers from '@/components/blog/fork/BlogForkUsers.vue'
 import BlogCommentForm from '@/components/blog/comment/BlogCommentForm.vue'
 import BlogCommentList from '@/components/blog/comment/BlogCommentList.vue'
 
@@ -37,6 +44,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'BlogPostDetail',
   components: {
+    BlogForkUsers,
     BlogPostSidebar,
     BlogForkBlogList,
     BlogCommentForm,

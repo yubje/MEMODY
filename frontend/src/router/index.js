@@ -106,11 +106,6 @@ Vue.use(VueRouter)
       return { bid: route.query.bid }
     }
   },
-  {
-    path: '/blog/settings/category',
-    name: 'BlogSettingsMember',
-    component: BlogSettingsMember,
-  },
   // blog post
   {
     path: '/blog/post/create',

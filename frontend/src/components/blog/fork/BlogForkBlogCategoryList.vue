@@ -16,45 +16,36 @@
 </template>
 
 <script>
-import BlogForkBlogLargeCategoryItem from '@/components/blog/fork/BlogForkBlogLargeCategoryItem.vue'
-import axios from 'axios'
-import cookies from 'vue-cookies'
+  import BlogForkBlogLargeCategoryItem from '@/components/blog/fork/BlogForkBlogLargeCategoryItem.vue'
+  import axios from 'axios'
+  import cookies from 'vue-cookies'
 
-export default {
-  name: 'BlogForkBlogCategoryList',
-  components:{
-    BlogForkBlogLargeCategoryItem
-  },
-  props: {
-    myBlog: Object,
-    dataCategories: null,
-    pid:Number,
-  },
-  data() {
-    return {
-      showCategories:false,
-      blogCategories: null,
-    }
-  },
-  methods: {
-    clickBtitle() {
-      if (this.showCategories){
-        this.showCategories=false
-      }else {
-        this.showCategories=true
+  export default {
+    name: 'BlogForkBlogCategoryList',
+    components: {
+      BlogForkBlogLargeCategoryItem
+    },
+    props: {
+      myBlog: Object,
+      dataCategories: null,
+      pid: Number,
+    },
+    data() {
+      return {
+        blogCategories: null,
       }
+    },
+    mounted() {
+      axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.myBlog.bid}/categories`, {
+          headers: {
+            "auth": cookies.get('auth-token')
+          }
+        })
+        .then(response => {
+          this.blogCategories = response.data.data
+        })
     }
-  },
-  computed: {
-
-  },
-  created() {
-    axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.myBlog.bid}/categories`,{ headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        this.dataCategories = response.data.data
-      })
   }
-}
 </script>
 
 <style scoped>

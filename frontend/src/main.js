@@ -13,6 +13,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueCookies from 'vue-cookies'
+import vuetify from './plugins/vuetify';
+
+require('@/assets/css/style.css')
+
 
 Vue.use(VueCookies)
 
