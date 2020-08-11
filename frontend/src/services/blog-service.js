@@ -44,8 +44,9 @@ class BlogService {
   }
 
   // 블로그 게시글 전체 조회 (API 문서 - 62D)
-  lookupPostList(bid) {
-    return axios.get(`${SERVER}/blogs/${bid}/posts/`, {headers: {"auth": cookies.get('auth-token')}})
+  lookupPostList(bid, page) {
+    console.log(bid, page)
+    return axios.get(`${SERVER}/blogs/${bid}/posts?page=${page}`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         return result.data.data
       })
@@ -230,8 +231,7 @@ class BlogService {
   }
 
   fetchPosts({commit},info) {
-      
-      axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
+    axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}?page=${info.page}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_POSTS', response.data.data)
       })

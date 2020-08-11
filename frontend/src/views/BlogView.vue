@@ -3,7 +3,7 @@
     <div class="row">
     <BlogPostSidebar/>
     <div class="col col-lg-10 align-self-center" style="height: 60%;">
-      <div class="col align-center">
+      <div class="col text-left">
         <h1>{{ blogData.btitle }}</h1>
         <h3>{{ blogData.bsubtitle }}</h3>
         <p>{{ blogData.bcontent }}</p>
