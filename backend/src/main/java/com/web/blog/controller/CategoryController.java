@@ -1,11 +1,12 @@
 package com.web.blog.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,7 +25,6 @@ import com.web.blog.domain.MCategory;
 import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
-import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.CategoryService;
@@ -287,7 +287,7 @@ public class CategoryController {
 	
 	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class, notes = "중분류 카테고리내의 게시글을 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories/{mcid}")
-	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
+	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
@@ -296,8 +296,9 @@ public class CategoryController {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
-				if(list.size()!=0) {
+//				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
+				Page<Post> list = postService.listAllPostByMCategory(bid, mcid, pageable);
+				if(list.getSize()!=0) {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {

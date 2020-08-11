@@ -236,7 +236,7 @@ public class PostController {
 	 */
 	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 전체 게시글 목록 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/posts")
-	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable,HttpServletRequest req) {
+	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 //			List<Post> list = postService.listAllPost(bid, pageable);
@@ -435,7 +435,7 @@ public class PostController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Fork> list = postService.forkList(pid);
-			
+			System.out.println(list);
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.OK, ResponseMessage.FORK_USER_LIST_SUCCESS,list), HttpStatus.OK);
 

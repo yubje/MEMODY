@@ -53,6 +53,8 @@ public class ResponseMessage {
     public static final String MAIN_SUCCESS = "메인 페이지 성공";
     
     
+    public static final String SEARCH_ALLRANK_SUCCESS = "전체 랭킹 조회 성공";
+    
     
     // Post
     public static final String CREATE_POST_SUCCESS = "성공적으로 게시글을 작성하였습니다.";

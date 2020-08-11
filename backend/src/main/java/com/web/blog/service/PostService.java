@@ -130,10 +130,11 @@ public class PostService {
 		postRepository.deleteByPid(pid);
 	}
 
-	public List<Post> listAllPostByMCategory(int bid, int mcid){
-		List<Post> result = new ArrayList<Post>();
+	public Page<Post> listAllPostByMCategory(int bid, int mcid, Pageable pageable){
+//		List<Post> result = new ArrayList<Post>();
 		// 최신글 순서로 조회 
-		result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid);
+//		result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid);
+		Page<Post> result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid, pageable);
 		return result;
 	}
 	
