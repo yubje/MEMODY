@@ -11,23 +11,33 @@
                   <span class="white--text headline">사진</span>
                 </v-avatar>
               </v-row>
-              <v-list-item>
-                <v-list-item-action></v-list-item-action>
 
+              <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>{{ this.userInfo.uid }}</v-list-item-title>
                   <v-list-item-subtitle>닉네임</v-list-item-subtitle>
+                  <v-list-item-title>{{ this.userInfo.uid }}</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-
               <v-list-item>
-                <v-list-item-action></v-list-item-action>
                 <v-list-item-content>
-                  <v-list-item-title>{{ this.userInfo.email }}</v-list-item-title>
                   <v-list-item-subtitle>이메일</v-list-item-subtitle>
+                  <v-list-item-title>{{ this.userInfo.email }}</v-list-item-title>
                 </v-list-item-content>
-
               </v-list-item>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-subtitle>레벨</v-list-item-subtitle>
+                  <v-list-item-title>LV.{{ parseInt(this.userInfo.exp/10) }}</v-list-item-title>
+                  <v-progress-linear
+                    :value="(this.userInfo.exp%10)*10"
+                    height="25"
+                    color="teal"
+                    rounded
+                  >
+                    <strong>{{ (this.userInfo.exp%10)*10 }}%</strong>
+                  </v-progress-linear>
+                </v-list-item-content>
+              </v-list-item>            
             </v-row>
           </v-container>
         </v-card-text>
@@ -63,7 +73,7 @@
       }
     },
     computed: {
-      ...mapState(['userInfo'])
+      ...mapState(['userInfo']),
     },
     methods: {
       ...mapActions(['logout', 'deleteUserInfo']),
