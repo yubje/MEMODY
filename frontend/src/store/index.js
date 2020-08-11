@@ -25,6 +25,9 @@ export default new Vuex.Store({
     validType: false,
     // 아이디 중복 확인 
     uniqueId: false,
+    myBlogs: null,
+    recommendBlog: null,
+    followBlog:null,
   },
 
   getters: {
@@ -34,6 +37,7 @@ export default new Vuex.Store({
       "uid": state.userInfo.uid,
       "email": state.userInfo.email,
       "password": null,
+      "profile" : state.userInfo.profile
     })
   },
 
@@ -67,6 +71,16 @@ export default new Vuex.Store({
     // 아이디 중복 확인 
     SET_UNIQUEID(state) {
       state.uniqueId = !state.uniqueId
+    },
+
+    SET_BLOGS_AFTER(state, data) {
+      state.myBlogs = data.myBlogs
+      state.recommendBlog = data.recommendBlog
+      state.followBlog = data.followBlog
+    },
+
+    SET_BLOGS_BEFORE(state, data) {
+      state.recommendBlog = data
     }
   },
 
@@ -89,7 +103,6 @@ export default new Vuex.Store({
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
-        console.log(response.data.data)
         commit('SET_USERINFO', response.data.data)
         router.push({ name: 'Main'})
       })
@@ -183,21 +196,44 @@ export default new Vuex.Store({
         })
         .catch(error => alert(error.response.data.message))
     },
+    //회원 정보 조회
+    lookupUserInfo({state, commit}) {
+      axios.get(`${SERVER}/users/${state.userInfo.email}`, {headers: {'auth': cookies.get('auth-token')}})
+      .then(response => {
+        commit('SET_USERINFO', response.data.data)
+      })
+
+    },
+
     // 회원 정보 수정 (API 문서 - 15~17 D)
     // updateUserInfo({ getters }, response) {
-    updateUserInfo({ state, getters, commit }, updateInfo) {
+    updateUserInfo({ state, getters, commit }, formData) {
       commit('SET_UNIQUEID')
       if (state.uniqueId) {
-        console.log(updateInfo)
-        axios.put(`${SERVER}/users`, updateInfo, getters.config)
-          .then(response => {
-            commit('SET_USERINFO', response.data.data)
-            commit('SET_UNIQUEID')
-            router.push({ name: 'Main'})
-          })
-          .catch(error => alert(error))
+        axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
+        .then(response=> {
+          console.log(response)
+          axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
+            .then(response => {
+              commit('SET_USERINFO', response.data.data)
+              commit('SET_UNIQUEID')
+              router.push({ name: 'Main'})
+            })
+            .catch(error => alert(error))
+
+        })
       }
     },
+
+    //프로필 이미지 변경
+    // changeProfileImg({state}, formData) {
+    //   axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
+    //   .then(response => {
+    //     router.push({ name: 'UserInfoView'})
+    //     console.log(response)
+    //   })
+    //   .catch(error => console.log(error))
+    // },
 
     //회원 탈퇴 (API 문서 - 19D)
     deleteUserInfo({getters}) {
@@ -207,7 +243,29 @@ export default new Vuex.Store({
           router.go()
         })
         .catch(error => alert(error))
-    }
+    },
+
+    mainAfter({commit}) {
+      axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
+        .then(response => {
+          commit('SET_BLOGS_AFTER',response.data.data)
+        })
+        .catch(() => {
+          console.log('실패 ㅠㅠ')
+        })
+    },
+
+    mainBefore({commit}) {
+      axios.get(`${SERVER}/main/before/`)
+        .then(response => {
+          commit('SET_BLOGS_BEFORE',response.data.data)
+        })
+        .catch(() => {
+         
+        })
+    },
+
+
   },
 
   modules: {

@@ -20,7 +20,7 @@
     </div>
     
     <div v-if="authToken">
-      <MainMyBlogList :myBlogs="myBlogs"/>
+      <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
       <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import cookies from 'vue-cookies'
 
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
@@ -44,15 +43,13 @@ const SERVER = process.env.VUE_APP_SERVER
 
 export default {
   name: 'MainView',
-  computed: {
-      ...mapState(['authToken'])
-  },
   data() {
     return {
-      myBlogs: [],
-      recommendBlog: null,
-      followBlog: null,
+
     }
+  },
+  computed: {
+      ...mapState(['authToken','myBlogs','recommendBlog','followBlog'])
   },
   components: {
     MainSearchTab,
@@ -60,32 +57,20 @@ export default {
     MainRecommendBlogList,
     MainRanking,
   },
-  mounted() {
-    this.fetchBlogs()
+  async mounted() {
+    await this.fetchBlogs()
   },
   methods: {
+    ...mapActions(['mainAfter','mainBefore']),
     fetchBlogs() {
       if (cookies.get('auth-token')) {
-        axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
-        .then(response => {
-          console.log(response.data.data)
-          this.myBlogs = response.data.data.myBlog
-          this.recommendBlog = response.data.data.recommendBlog
-          this.followBlog =response.data.data.followBlog
-          return response
-        })
-        .catch(error => {
-          console.log('실패 ㅠㅠ')
-          console.log(error)
-        })
+        this.mainAfter()
       }else {
-        axios.get(`${SERVER}/main/before/`)
-        .then(response => {
-          this.recommendBlog = response.data.data
-        })
+        this.mainBefore()
+        console.log(this.$store.state.recommendBlog)
       }
     }
-  }
+  },
 }
 </script>
 

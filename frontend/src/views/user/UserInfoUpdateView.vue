@@ -7,13 +7,15 @@
           <v-container>
             <v-row justify="center"  class="text-center">
               <v-col cols="12" >
-                <v-avatar color="teal" size="150">
-                  <span class="white--text headline">사진</span>
-                </v-avatar>
+                <div class="profile-img-box">
+                  <img id="profile-img" src="@/assets/img/user-default.png">
+                </div>
               </v-col>
               <v-col cols="12">
-                <span>프로필 사진 변경</span>
-                <input value="userUpdateInfo.password" type="file" image="image/*" @change="uploadImage">
+                <label class="profile-img-button" @click="makeImage()">
+                  <span>프로필 사진 변경</span>
+                  <input v-on:change="changeImage()" id="add-img" ref="addImg" type="file" accept="image/*">
+                </label>
               </v-col>
 
             </v-row>
@@ -52,7 +54,7 @@
 
         <v-card-actions>
           <v-row justify="center">
-            <v-btn class="ma-2" tile outlined color="success" @click="updateUserInfo(userUpdateInfo)">
+            <v-btn class="ma-2" tile outlined color="success" @click="update()">
               <v-icon left>mdi-pencil</v-icon> 수정
             </v-btn>
           </v-row>
@@ -63,22 +65,76 @@
 </template>
 
 <script>
-  import {
-    mapGetters,
-    mapActions
-  } from 'vuex'
-  export default {
-    name: 'UserInfoUpdateView',
-    computed: {
-      ...mapGetters(['userUpdateInfo'])
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  name: 'UserInfoUpdateView',
+  data() {
+    return {
+      profileImage: ''
+    }
+  },
+  mounted() {
+    if(this.userUpdateInfo.profile) {
+      document.getElementById('profile-img').src = this.userUpdateInfo.profile;
+    }
+  },
+  computed: {
+    ...mapGetters(['userUpdateInfo'])
+  },
+
+  methods: {
+    ...mapActions(['lookUpNickname', 'updateUserInfo', 'changeProfileImg']),
+
+    makeImage() {
+      var imgTag = document.getElementById('add-img')
+
+      imgTag.onchange = function() {
+        var img = imgTag.files;
+
+        var reader = new FileReader();
+        reader.readAsDataURL(img[0]);
+
+        reader.onload = function() {
+          document.getElementById('profile-img').src = reader.result;
+        };
+      };
     },
 
-    methods: {
-      ...mapActions(['lookUpNickname', 'updateUserInfo']),
+    changeImage() {
+      this.profileImage = this.$refs.addImg.files[0];
+    },
+
+    update() {
+      const formData = new FormData();
+      formData.append('file', this.profileImage);
+      
+     // this.changeProfileImg(formData)
+      this.updateUserInfo(formData)
     }
   }
+}
 </script>
 
 <style>
+.profile-img-box {
+  width: 150px;
+  height: 150px; 
+  border-radius: 70%;
+  overflow: hidden;
+}
 
+.profile-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-img-button {
+  color: #6ac6c8;
+}
+
+.profile-img-button:hover {
+  cursor: pointer;
+}
 </style>
