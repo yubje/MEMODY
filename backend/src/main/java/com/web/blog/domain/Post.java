@@ -19,6 +19,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author multicampus
+ *
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,11 +52,17 @@ public class Post {
 	@Column(length = 45, nullable = false)
 	private String author;
 	
+	@Column(length = 45, nullable = false)
+	private String manager;
+	
 	@Column
 	private LocalDateTime postTime;
 	
 	@Column
 	private LocalDateTime update_time;
+	
+	@Column(nullable = true)
+	private int fork;
 	
 	@Column(length = 10, nullable = true)
 	private String ptype;
@@ -64,18 +74,19 @@ public class Post {
 	@JoinColumn(name="email")
 	private Collection<PostLike> liker;
 	
+	
+	
 	@Builder
-	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author, LocalDateTime postTime, LocalDateTime update_time, String ptype, int postlikecnt) {
+	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author,String manager, LocalDateTime postTime, LocalDateTime update_time, String ptype, int postlikecnt) {
 		this.bid = bid;
 		this.lcid = lcid;
 		this.mcid = mcid;
 		this.ptitle = ptitle;
 		this.pcontent = pcontent;
 		this.author = author;
+		this.manager = manager;
 		this.postTime = postTime;
 		this.update_time = update_time;
-//		this.post_time = LocalDateTime.now();
-//		this.update_time = LocalDateTime.now();
 		this.ptype = ptype;
 		this.postlikecnt = postlikecnt;
 	}
@@ -95,6 +106,10 @@ public class Post {
 	public void setPostlikecnt(int postlikecnt) {
 		this.postlikecnt = postlikecnt;
 	}
+	
+	public void setFork(int fork) {
+		this.fork = fork;
+	}
 
 	public void addLiker(PostLike lik) {
 		if(liker == null) {
@@ -106,8 +121,9 @@ public class Post {
 	@Override
 	public String toString() {
 		return "Post [pid=" + pid + ", bid=" + bid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle
-				+ ", pcontent=" + pcontent + ", author=" + author + ", postTime=" + postTime + ", update_time="
-				+ update_time + ", ptype=" + ptype + ", postlikecnt=" + postlikecnt + ", liker=" + liker + "]";
+				+ ", pcontent=" + pcontent + ", author=" + author + ", manager=" + manager + ", postTime=" + postTime
+				+ ", update_time=" + update_time + ", fork=" + fork + ", ptype=" + ptype + ", postlikecnt="
+				+ postlikecnt + ", liker=" + liker + "]";
 	}
-
+	
 }
