@@ -3,37 +3,54 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col col-lg-10">
-        <v-card>
-            <v-card-title>
-              <h1>카테고리</h1>
-              <v-btn
-                fab
-                dark
-                color="teal"
-                absolute
-                right
-              >
-                <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
-                  <v-icon dark>mdi-plus</v-icon>
-                </router-link>
-              </v-btn>
-            </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :items="posts"
-              item-key="post"
-              single-select
+        <v-card
+          outlined
+        >
+          <v-card-title>
+            <h1>카테고리</h1>
+            <v-btn
+              fab
+              dark
+              color="teal"
+              absolute
+              right
             >
-              <template v-slot:item="props">
-                <tr @click="blogPostDetail(props.item)">
-                    <td>{{ props.item.ptitle }}</td>
-                    <td>{{ props.item.author }}</td>
-                    <td>{{ props.item.postTime.slice(0,10) }}</td>
-                    <td><font-awesome-icon  :icon="['fas','heart']" /> {{ props.item.postlikecnt }}</td> 
+              <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
+                <v-icon dark>mdi-plus</v-icon>
+              </router-link>
+            </v-btn>
+          </v-card-title>
+
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">글 제목</th>
+                  <th class="text-left">작성자</th>
+                  <th class="text-left">작성일</th>
+                  <th class="text-left">좋아요</th>
                 </tr>
-              </template>
-              <BlogPostCategoryListItem/>
-            </v-data-table>
+              </thead>
+              <tbody>
+                <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
+                  <td>{{ post.ptitle }}</td>
+                  <td>{{ post.author }}</td>
+                  <td>{{ post.postTime.slice(0,10) }}</td>
+                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="posts.totalPages"
+              circle
+              color="teal"
+              @input="onPageChange"
+            ></v-pagination>
+          </div>
         </v-card>
       </div>
     </div>
@@ -42,7 +59,7 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-// import BlogPostCategoryListItem from '@/components/blog/post/BlogPostCategoryListItem.vue'
+
 
 
 import { mapState, mapActions } from 'vuex'
@@ -51,37 +68,14 @@ export default {
   name: 'BlogPostList',
   components: {
     BlogPostSidebar,
-    // BlogPostCategoryListItem
+
   },
   data() {
     return {
-      headers: [
-      {
-        text: '글 제목',
-        align: 'start',
-        filterable: false,
-        value: 'ptitle',
-      },
-      {
-        text: '작성자',
-        value: 'author'
-      },
-      { 
-        text: '작성일', 
-        value: 'postTime',
-      },
-      { 
-        text: '좋아요', 
-        value: 'postlikecnt',
-      },
-      
-      ],
+      page: 1,
     }
-    
   },
-
   props: {
-    bid : Number,
     mcid : Number,
     lcid: Number,
   },
@@ -89,27 +83,32 @@ export default {
     ...mapState('blog', ['blogData','posts'])
   },
   methods: {
-    ...mapActions('blog',['fetchPosts']),
-    // BlogPostCategoryListItem
-    ...mapActions('blog',['lookupPostDetail']),
+    ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),
+
     blogPostDetail(post) {
       this.lookupPostDetail(post)
-      // console.log(post)
       this.$router.push({ name: 'BlogPostDetail'})
     },
-    // handleClick(value) {
-    //   this
-    // },
-    
+    onPageChange(newPage) {
+      const info = {
+        "bid": this.blogData.bid,
+        "mcid": this.mcid,
+        "page": this.page-1,
+      }
+      this.page = newPage
+      this.fetchPosts(info)
+    },
   },
  
   created() {
     const info = {
       "bid": this.blogData.bid,
-      "mcid": this.mcid
+      "mcid": this.mcid,
+      "page": this.page-1,
     }
+    console.log(this.page)
+    console.log(info)
     this.fetchPosts(info)
-    console.log(this.posts)
   },
    
 }
