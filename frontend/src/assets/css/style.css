@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*--------------------Navbar--------------------*/
+.v-toolbar__content {
+  border-bottom: 1px solid #dfdfdf;
+}
+
+#navbar-menu-before {
+  color: #888888 !important;
+  font-size: 15px;
+}
+
+#navbar-menu-before:hover, #navbar-menu-after:hover {
+  text-decoration: none;
+  color: #6ac6c8 !important;
+}
+
+#navbar-menu-after:focus {
+  outline: none;
+}
