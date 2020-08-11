@@ -1,10 +1,12 @@
 // main 상태 관리 모듈 
-import mainService from '../../services/main-service'
+import MainService from '../../services/main-service.js'
 
 export const main = {
   namespaced: true,
   state: {
     searchedBlogs: null,
+    // 유저 랭킹 
+    rankedUsers: null,
   
   },
 
@@ -12,6 +14,9 @@ export const main = {
   mutations: {
     SET_SEARCHEDBLOGS(state, blogs) {
       state.searchedBlogs = blogs
+    },
+    SET_RANKEDUSERS(state, rankedUsers) {
+      state.rankedUsers = rankedUsers
     }
   },
   actions: {
@@ -25,18 +30,22 @@ export const main = {
           location: `/blogs/${response.searchInput}/list`
         }
 
-        mainService.searchBlogs({ commit }, info)
+        MainService.searchBlogs({ commit }, info)
         // dispatch('searchBlogs',info)
       } else if (response.searchBy === 2) {
         const info = {
           searchInput: response.searchInput,
           location: `/tags/${response.searchInput}/list`
         }
-        mainService.searchBlogs({ commit }, info)
+        MainService.searchBlogs({ commit }, info)
         // dispatch('searchBlogs',info)
       } else {
         alert('검색 카테고리를 선택하세요.')
       }
+    },
+
+    getRankedUsers({ state, commit }) {
+      MainService.getRankedUsers({ state, commit })
     },
 
 
