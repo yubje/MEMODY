@@ -7,9 +7,9 @@
           <v-container>
             <v-row>
               <v-row justify="center">
-                <v-avatar color="teal" size="150">
-                  <span class="white--text headline">사진</span>
-                </v-avatar>
+                <div class="profile-img-box">
+                  <img id="profile-img" src="@/assets/img/user-default.png">
+                </div>
               </v-row>
               <v-list-item>
                 <v-list-item-action></v-list-item-action>
@@ -50,34 +50,40 @@
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
-  export default {
-    name: 'UserInfoView',
-    data() {
-      return {
-        dialog: true,
-      }
-    },
-    computed: {
-      ...mapState(['userInfo'])
-    },
-    methods: {
-      ...mapActions(['logout', 'deleteUserInfo']),
+export default {
+  name: 'UserInfoView',
+  data() {
+    return {
+      dialog: true,
+    }
+  },
+  created() {
+    this.lookupUserInfo()
+  },
+  mounted() {
+    if(this.userInfo.profile) {
+      document.getElementById('profile-img').src = this.userInfo.profile;
+    }
+  },
 
-      userInfoDelete() {
-        var result = confirm("정말로 탈퇴하시겠습니까?")
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  methods: {
+    ...mapActions(['logout', 'deleteUserInfo', 'lookupUserInfo']),
 
-        if (result) {
-          this.deleteUserInfo()
-          this.logout()
-        }
+    userInfoDelete() {
+      var result = confirm("정말로 탈퇴하시겠습니까?")
+
+      if (result) {
+        this.deleteUserInfo()
+        this.logout()
       }
     }
   }
+}
 </script>
 
 <style>
