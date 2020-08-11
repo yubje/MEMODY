@@ -25,6 +25,9 @@ export default new Vuex.Store({
     validType: false,
     // 아이디 중복 확인 
     uniqueId: false,
+    myBlogs: null,
+    recommendBlog: null,
+    followBlog:null,
   },
 
   getters: {
@@ -67,6 +70,16 @@ export default new Vuex.Store({
     // 아이디 중복 확인 
     SET_UNIQUEID(state) {
       state.uniqueId = !state.uniqueId
+    },
+
+    SET_BLOGS_AFTER(state, data) {
+      state.myBlogs = data.myBlogs
+      state.recommendBlog = data.recommendBlog
+      state.followBlog = data.followBlog
+    },
+
+    SET_BLOGS_BEFORE(state, data) {
+      state.recommendBlog = data
     }
   },
 
@@ -207,7 +220,29 @@ export default new Vuex.Store({
           router.go()
         })
         .catch(error => alert(error))
-    }
+    },
+
+    mainAfter({commit}) {
+      axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
+        .then(response => {
+          commit('SET_BLOGS_AFTER',response.data.data)
+        })
+        .catch(() => {
+          console.log('실패 ㅠㅠ')
+        })
+    },
+
+    mainBefore({commit}) {
+      axios.get(`${SERVER}/main/before/`)
+        .then(response => {
+          commit('SET_BLOGS_BEFORE',response.data.data)
+        })
+        .catch(() => {
+         
+        })
+    },
+
+
   },
 
   modules: {
