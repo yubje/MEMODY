@@ -39,13 +39,6 @@ export default {
   components: {
     BlogEditor
   },
-  data() {
-    return {
-      editorOptions: {
-        hideModeSwitch: true
-      }
-    }
-  },
   created() {
     this.initPostData
     this.postData.bid = this.bid
@@ -66,7 +59,6 @@ export default {
 
     blogPostCreate() {
       this.postData.pcontent = document.getElementById('editor-content').innerHTML
-      console.log(this.postData.pcontent)
       this.createPost()
     }
   }
