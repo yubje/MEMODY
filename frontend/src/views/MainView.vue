@@ -25,7 +25,8 @@
       <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
       추천 블로그
-      <MainRecommendBlogList :recommendBlog="$store.state.recommendBlog"/>
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      <MainRanking/>
   </div>
 </template>
 
@@ -35,8 +36,10 @@ import cookies from 'vue-cookies'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
+import MainRanking from '@/components/main/MainRanking.vue'
+import { mapState } from 'vuex'
 
-import { mapState, mapActions } from 'vuex'
+const SERVER = process.env.VUE_APP_SERVER
 
 export default {
   name: 'MainView',
@@ -51,7 +54,8 @@ export default {
   components: {
     MainSearchTab,
     MainMyBlogList,
-    MainRecommendBlogList
+    MainRecommendBlogList,
+    MainRanking,
   },
   async mounted() {
     await this.fetchBlogs()
