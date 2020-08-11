@@ -1,6 +1,7 @@
 package com.web.blog.controller;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Users;
@@ -33,7 +35,6 @@ import com.web.blog.service.UserService;
 import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -160,7 +161,7 @@ public class LoginController {
 		if (jwtTokenProvider.validateToken(token)) {
 			Users member = userService.findByEmail(email)
 					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
-
+			System.out.println(member.toString());
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.READ_USER, member),
 					HttpStatus.OK);
 		} else {
@@ -353,6 +354,26 @@ public class LoginController {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}
+	}
+	
+	/**
+	 * 랭킹 조회 - 전체 랭킹순위를 조회합니다
+	 * @return
+	 */
+	@ApiOperation(value = "랭킹 조회", response = ResponseEntity.class, notes = "전체 랭킹순위를 조회합니다.")
+	@GetMapping(value = "/rank")
+	public ResponseEntity searchRanking(HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			List<Users> list = userService.findAll();
+			System.out.println(list);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLRANK_SUCCESS, list),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+
 	}
 
 }
