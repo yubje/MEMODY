@@ -1,6 +1,6 @@
-<template>
+<template >
   <div @click="clickMediumDir()">
-    |{{mcategory.medium_dir}}
+    | {{mcategory.medium_dir}}
   </div>
 </template>
 
