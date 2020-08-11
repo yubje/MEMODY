@@ -11,7 +11,7 @@
           </v-btn-toggle>
         </div>
         <div v-else>
-           <v-dialog v-model="dialog" persistent max-width="300">
+           <v-dialog v-model="dialog" persistent max-width="400">
             <BlogForkBlogList  :pid="postData.pid" @closeModal="closeModal()" />
            </v-dialog>
           <button @click="dialog=true" >퍼가기</button>
