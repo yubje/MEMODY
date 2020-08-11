@@ -20,7 +20,8 @@ import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vu
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
-import MainSearchResultView from '@/views/main/MainSearchResultView'
+import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
+import MainRankingView from '@/views/main/MainRankingView.vue'
 
 Vue.use(VueRouter)
 
@@ -184,6 +185,11 @@ Vue.use(VueRouter)
     props(route) {
       return { search: route.query.search }
     }
+  },
+  {
+    path: '/main/rankings',
+    name: 'MainRankingView',
+    component: MainRankingView,
   },
 ]
 
