@@ -2,12 +2,41 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
-        <h1>전체글조회</h1>
-        <div style="border:1px solid; text-align:left;">
-          <div>
-            <a>글제목</a>
-            <a style="float:right">작성일</a>
+      <div class="col">
+        <v-card
+          outlined
+        >
+          <v-card-title>
+            <h1>전체 글 조회</h1>
+          </v-card-title>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">글 제목</th>
+                  <th class="text-left">작성자</th>
+                  <th class="text-left">작성일</th>
+                  <th class="text-left">좋아요</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="post in postListData.content" :key="post.pid" @click="blogPostDetail(post)">
+                  <td>{{ post.ptitle }}</td>
+                  <td>{{ post.author }}</td>
+                  <td>{{ post.postTime.slice(0,10) }}</td>
+                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="postListData.totalPages"
+              circle
+              color="teal"
+              @input="onPageChange"
+            ></v-pagination>
           </div>
           <BlogPostListItem/>
         </div>
