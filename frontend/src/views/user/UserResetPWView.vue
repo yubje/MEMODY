@@ -7,53 +7,28 @@
           <v-card-title class="headline">비밀번호 재설정</v-card-title>
           <v-card-text>
             <v-container>
+              <v-form>
               <v-row justify="center">
-                <span class="col-4">비밀번호</span>
-                <v-text-field v-model="resetPWData.password" type="password" placeholder="비밀번호를 입력하세요" label="비밀번호를 입력" ></v-text-field>
-                <span class="col-4">비밀번호 확인</span>
-                <v-text-field v-model="password2" type="password" placeholder="비밀번호 확인" label="비밀번호를 확인"  ></v-text-field>
+                <v-col cols="12">
+                <v-text-field v-model="resetPWData.password" :rules="passwordRules"  type="password" label="비밀번호를 입력" ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                <v-text-field v-model="password2" :rules="passwordCheckRules" type="password"  label="비밀번호를 확인"  ></v-text-field>
+                </v-col>
+                <v-btn block color="teal accent-4" text @click="resetPW(resetPWData)">
+                  비밀번호 재설정
+                </v-btn>
               </v-row>
+              </v-form>
             </v-container>
           </v-card-text>
-
+            <v-btn block color ="teal accent-4" text @click="goBack()">취소</v-btn>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="resetPW(resetPWData)">
-              비밀번호 재설정
-            </v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
     </v-row>
-    <!-- <div class="modal fade" id="resetpw-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog"
-      aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="resetpw-modalLabel">ResetPW</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h1>비밀번호 재설정</h1>
-            <p>새로운 비밀번호를 입력하세요.</p>
-
-            <div class="row col mt-2">
-              <span class="col-4">비밀번호</span>
-              <input class="col-8" v-model="resetPWData.password" type="password" placeholder="비밀번호를 입력하세요">
-            </div>
-            <div class="row col mt-2">
-              <span class="col-4">비밀번호 확인</span>
-              <input class="col-8" v-model="password2" type="password" placeholder="비밀번호 확인">
-            </div>
-
-            <button @click="resetPW(resetPWData)" class="btn btn-primary" data-dismiss="modal" data-toggle="modal">비밀번호
-              재설정</button>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -71,14 +46,20 @@
         resetPWData: {
           email: '',
           password: ''
-        }
+        },
+        passwordRules: [
+          v => !!v || 'password is required'
+        ],
+        passwordCheckRules: [
+          v => v == this.password2 || '비밀번호가 틀립니다.'
+        ]
       }
     },
     mounted() {
       window.$('#resetpw-modal').modal('show')
     },
     methods: {
-      ...mapActions(['resetPW'])
+      ...mapActions(['resetPW','goBack'])
     }
   }
 </script>
