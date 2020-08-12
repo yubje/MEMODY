@@ -294,7 +294,6 @@ class BlogService {
 
   deleteComment({ state }, comment) {
     console.log(state)
-    console.log(comment)
     axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {    
         router.push({ name: 'BlogPostDetail' })
@@ -302,6 +301,15 @@ class BlogService {
       })
       .catch(error => console.log(error.response.data))
     
+  }
+
+  getBlogPostTmpList({ state }) {
+    console.log(state.blogData.bid)
+    axios.get(`${SERVER}/blogs/${state.blogData.bid}/tmpposts/`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        state.blogPostTmpList = response.data.data
+      })
+      .catch(error => console.log(error.response.data))
   }
 
 }

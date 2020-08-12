@@ -63,6 +63,10 @@ export default new Vuex.Store({
     SET_ISVALID(state) {
       state.isValid = true
     },
+    RESET_ISVALID(state) {
+      state.isValid = false
+    },
+
 
     SET_VALIDTYPE(state) {
       state.validType = true
@@ -74,7 +78,7 @@ export default new Vuex.Store({
     },
 
     SET_BLOGS_AFTER(state, data) {
-      state.myBlogs = data.myBlogs
+      state.myBlogs = data.myBlog
       state.recommendBlog = data.recommendBlog
       state.followBlog = data.followBlog
     },
@@ -127,7 +131,7 @@ export default new Vuex.Store({
         location: '/users'
       }
       dispatch('postAuthData', info)
-      router.push({ name: 'Main'})
+      router.push({ name: 'UserLoginView'})
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
@@ -247,6 +251,7 @@ export default new Vuex.Store({
     mainAfter({commit}) {
       axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
+          console.log(response.data.data)
           commit('SET_BLOGS_AFTER',response.data.data)
         })
         .catch(() => {
@@ -263,6 +268,10 @@ export default new Vuex.Store({
          
         })
     },
+
+    goBack() {
+      router.go(-1)
+    }
 
 
   },
