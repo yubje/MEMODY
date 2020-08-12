@@ -19,6 +19,8 @@ import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vue'
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
+import BlogPostTemporaryList from '@/components/blog/post/BlogPostTemporaryList.vue'
+import BlogPostTmpCreate from '@/components/blog/post/BlogPostTmpCreate'
 
 import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
 import MainRankingView from '@/views/main/MainRankingView.vue'
@@ -171,6 +173,19 @@ Vue.use(VueRouter)
     path: '/blog/post/update',
     name: 'BlogPostUpdate',
     component: BlogPostUpdate,
+  },
+  {
+    path: '/blog/post/tmp',
+    name: 'BlogPostTemporaryList',
+    component: BlogPostTemporaryList,
+  },
+  {
+    path: '/blog/post/tmp/create',
+    name: 'BlogPostTmpCreate',
+    component: BlogPostTmpCreate,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid,lcid: route.query.lcid }
+    }
   },
   // main
   {
