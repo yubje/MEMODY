@@ -56,13 +56,16 @@ hr {
   font-size: 15px;
 }
 
-#navbar-menu-before a:hover, #navbar-menu-after:hover, .v-application a:hover {
-  text-decoration: none;
+#navbar-menu-before a:hover, #navbar-menu-after:hover, .v-application a:hover,
+.searchTab-type:hover {
   color: #6ac6c8 !important;
+  background-color: white;
+  text-decoration: none;
 }
 
-#navbar-menu-before:focus, #navbar-menu-after:focus {
-  outline: none;
+#navbar-menu-before:focus, #navbar-menu-after:focus,
+.searchTab-type:focus, .searchTab-input:focus {
+  outline: none !important;
 }
 
 #profile-img-small {
@@ -75,4 +78,60 @@ hr {
 #logout-icon {
   float: right;
   color: #646464;
+}
+
+/*--------------------MainView--------------------*/
+.main-intro {
+  padding: 120px;
+}
+
+.main-intro-title {
+  color: #444444;
+  font-size: 42px;
+  line-height: 58px;
+  letter-spacing: -0.8px;
+}
+
+.main-intro-title span {
+  color: #6ac6c8;
+}
+
+/*--------------------MainSearchTab--------------------*/
+.searchTab-container {
+  width: 800px;
+  height: 60px;
+  margin: 0px auto;
+  margin-top: 28px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d0d2d6;
+  border-image: initial;
+}
+
+.dropdown-menu {
+  transform: translate3d(-1px, 56px, 0px) !important;
+  min-width: 10px !important;
+  
+}
+
+.dropdown-item {
+  letter-spacing: 0.2px;
+  padding: 0.25rem 25px !important;
+}
+
+.searchTab-type {
+  letter-spacing: 0.2px;
+  padding: 6px 25px;
+}
+
+.searchTab-input {
+  height: 30px;
+  width: 600px;
+  padding: 0px 20px;
+  margin: 14px 25px 14px 0px;
+  color: #222222;
+  font-size: 20px;
+  border-width: 0px 0px 0px 1px;
+  border-image: initial;
+  border-left: 1px solid rgb(221, 221, 221);
 }

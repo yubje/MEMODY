@@ -1,22 +1,25 @@
 <template>
-<div class="container input-group my-3">
+<div class="searchTab-container input-group">
   <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchBy] }}</button>
+    <button class="searchTab-type dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchBy] }}</button>
     <div class="dropdown-menu">
       <a class="dropdown-item" @click="changeSearchBy(1)">블로그명</a>
-      <a class="dropdown-item" @click="changeSearchBy(2)">해쉬태그</a>
+      <a class="dropdown-item" @click="changeSearchBy(2)">해시태그</a>
     </div>
   </div>
-  <input type="text" class="form-control" aria-label="input" v-model="searchInput">
-  <div class="input-group-append">
+  <input type="text" class="searchTab-input" aria-label="input" v-model="searchInput">
+
+
+
+
+  <!-- <div class="input-group-append">
     <button class="btn btn-primary" type="button" id="button-addon2" @click="search({searchBy, searchInput})">Button</button>
-  </div>
+  </div> -->
 </div>
 
 </template>
 
 <script>
-// import axios from 'axios'
 import { mapActions } from 'vuex'
 
 export default {

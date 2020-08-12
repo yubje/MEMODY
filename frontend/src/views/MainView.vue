@@ -1,12 +1,27 @@
 <template>
-  <div id="main">
-    <div class="m-5">
-      <h1>MEMODY</h1>
-    </div>
-    <div class="container w-75">
+  <div class="main-container">
+    <div class="main-intro">
+      <div class="main-intro-title">
+        <p><span>사이트 소개글</span> 쓰고 싶은데</p>
+        <p>뭐라고 쓸까요?</p>
+      </div>
       <MainSearchTab/>
     </div>
+
     
+    
+
+
+
+
+
+
+
+
+
+
+
+
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
@@ -59,7 +74,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>
