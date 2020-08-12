@@ -2,14 +2,14 @@
   <div class="container-fluid">
     <div class="row">
       <BlogSettingsSidebar />
-      <div class="col col-lg-10">
+      <div class="col">
         <div>
           <h1>카테고리 설정 </h1>
         </div>
         <div>
           <p>카테고리 보여주기</p>
           <input type="text" v-model="largeCategoryData.large_dir">
-          <button @click="addParentCategory(largeCategoryData)">대분류 +</button>
+          <v-btn @click="addParentCategory(largeCategoryData)">대분류 +</v-btn>
           <div v-for="categories in dataCategories" :key="categories.lcid">
             <BlogSettingsCategoryItem :categories="categories" />
           </div>
