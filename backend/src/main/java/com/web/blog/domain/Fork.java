@@ -35,7 +35,10 @@ public class Fork {
 	@Column(nullable = false)
 	private int pid;
 	
-	@Column(nullable = true)
+	@Column(nullable = false)
 	private String email;
+	
+	@Column(nullable = false)
+	private String uid;
 
 }
