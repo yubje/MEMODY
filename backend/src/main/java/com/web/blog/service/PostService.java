@@ -151,7 +151,7 @@ public class PostService {
 		return forkRepository.findByPid(pid);
 	}
 	
-	public void forkPost(Post post,String user) {
+	public void forkPost(Post post,String user,String uid) {
 		// 내 블로그 목록 조회
 		// 내 카테고리 조회
 		// 선택한 후 lcid, mcid 랑 같이 
@@ -163,6 +163,7 @@ public class PostService {
 		forkRepository.save(Fork.builder()
 				.pid(post2.getPid())
 				.email(user)
+				.uid(uid)
 				.build());
 		
 		postRepository.save(Post.builder()

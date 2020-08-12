@@ -31,12 +31,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Fork;
 import com.web.blog.domain.Post;
+import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.PostLikeService;
 import com.web.blog.service.PostService;
+import com.web.blog.service.UserService;
 import com.web.blog.util.FileUpload;
 import com.web.blog.util.S3Util;
 
@@ -64,6 +66,7 @@ public class PostController {
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	PostService 		postService;
 	private final 	PostLikeService 	postLikeService;
+	private final	UserService			userService;
 
 	@Value("${cloud.aws.s3.bucket}")
 	String bucketName;
@@ -418,7 +421,10 @@ public class PostController {
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 
-			postService.forkPost(post,user);
+			Users member = userService.findByEmail(user)
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			
+			postService.forkPost(post,user,member.getUid());
 			
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
@@ -435,7 +441,6 @@ public class PostController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Fork> list = postService.forkList(pid);
-			
 			return new ResponseEntity<Response>(
 					new Response(StatusCode.OK, ResponseMessage.FORK_USER_LIST_SUCCESS,list), HttpStatus.OK);
 

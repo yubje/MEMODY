@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
 	public Optional<Users> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-
+	
 	@Transactional
 	public void deleteUser(String email) {
 		userRepository.deleteByEmail(email);
