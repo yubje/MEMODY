@@ -2,23 +2,41 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
+      <div class="col">
         <v-card
           outlined
         >
           <v-card-title>
             <h1>카테고리</h1>
-            <v-btn
-              fab
-              dark
-              color="teal"
-              absolute
-              right
-            >
-              <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
-                <v-icon dark>mdi-plus</v-icon>
-              </router-link>
-            </v-btn>
+            <!-- <v-menu> -->
+              <v-btn
+                fab
+                dark
+                color="teal"
+                absolute
+                right
+                slot="activator"
+
+              >
+                <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
+                  <v-icon dark>mdi-plus</v-icon>
+                </router-link>
+              </v-btn>
+
+              <!--블로그 임시저장 목록 버튼(임시)-->
+              <v-btn>
+                <router-link :to="{ name: 'BlogPostTemporaryList' }">
+                임시저장 목록
+                </router-link>
+              </v-btn>
+              <!-- <v-list>
+                <v-list-tile>
+                  <v-list-tile-title>임시저장 불러오기</v-list-tile-title>
+                  <v-list-tile-title>새 글 쓰기</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu> -->
+            
           </v-card-title>
 
           <v-simple-table>
