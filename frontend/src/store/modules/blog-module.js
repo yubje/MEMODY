@@ -189,9 +189,10 @@ export const blog = {
     },
 
     // 블로그 게시글 전체 조회 (API 문서 - 62D)
-    lookupPostList({commit, state}) {
-      return BlogService.lookupPostList(state.bid)
+    lookupPostList({ commit, state }, page) {
+      return BlogService.lookupPostList(state.bid, page)
       .then(postListData => {
+        console.log(postListData)
         commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
@@ -280,7 +281,7 @@ export const blog = {
     },
 
     fetchPosts({commit}, info) {
-      BlogService.fetchPosts({commit},info)
+      BlogService.fetchPosts({commit}, info)
     },
 
     getBlogMembers({ state }) {

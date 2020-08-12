@@ -36,9 +36,10 @@
             </v-list-item-title>
           </v-list-item>         
         </div>
+
       </v-list>
       <template v-slot:append>
-        <div class="d-flex justify-end pa-5">
+        <div v-if="blogData.manager==userInfo.email" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
         </div>
@@ -59,7 +60,8 @@ export default {
     bid: Number 
   },
   computed: {
-    ...mapState('blog', ['blogData','dataCategories'])
+    ...mapState(['userInfo']),
+    ...mapState('blog', ['blogData','dataCategories']),
   },
   methods: {
     ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory','moveToPosts','fetchPosts']),

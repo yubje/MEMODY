@@ -111,7 +111,8 @@ export default {
      // this.changeProfileImg(formData)
       this.updateUserInfo(formData)
     }
-  }
+  },
+}
 </script>
 
 <style>
