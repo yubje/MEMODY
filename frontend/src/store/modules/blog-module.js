@@ -47,9 +47,18 @@ export const blog = {
     },
     posts: [],
 
-
     // 블로그 멤버
     members: null,
+
+
+    // 내가 속한 블로그 리스트
+    myBlogs: [],
+
+    // 댓글
+    comment_id: null,
+    commentData: null,
+
+  
   },
   getters: {
     getpostListData(state) {
@@ -61,8 +70,8 @@ export const blog = {
     initPostData(state) {
       state.postData = {
         pid: '',
-        lcid: '1', /***나중에 수정***/
-        mcid: '1', /***나중에 수정***/
+        lcid: '', /***나중에 수정***/
+        mcid: '', /***나중에 수정***/
         ptitle: '',
         pcontent: '',
         author: '',
@@ -119,7 +128,27 @@ export const blog = {
 
     SET_POSTS(state, posts){
       state.posts= posts
-    }
+    },
+
+    
+    //내가 속한 블로그 리스트 
+    SET_MYBLOGS(state, blogs) {
+      state.myBlogs = blogs
+    },
+
+
+    SET_COMMENTDATA(state, commentData) {
+      state.commentData = commentData
+    },
+
+    SET_COMMENTID(state, comment_id) {
+      state.comment_id = comment_id
+    },
+    
+    RESET_COMMENTID(state) {
+      state.comment_id = null
+    },
+
 
 
   },
@@ -159,21 +188,51 @@ export const blog = {
     },
 
     // 대분류 추가 
-    addParentCategory({commit},largeCategoryData) {
-      BlogService.addParentCategory({commit},largeCategoryData)
+    addParentCategory({commit, state},largeCategoryData) {
+      BlogService.addParentCategory({commit,state},largeCategoryData)
     },
+    // 대분류 삭제
+    deleteParentCategory({commit},Category) {
+      const largeCategoryData = {
+        'bid' : Category.bid,
+        'lcid' : Category.lcid
+      }
+      BlogService.deleteParentCategory({commit},largeCategoryData)
+    },
+    //대분류 업데이트
+    updateParentCategory({commit},largeCategoryData) {
+      BlogService.updateParentCategory({commit},largeCategoryData)
+    },
+
     // 소분류 추가 
     addChildCategory({commit},mediumCategoryData) {
       BlogService.addChildCategory({commit},mediumCategoryData)
     },
+    
+    // 소분류 삭제
+    deleteChildCategory({commit,state}, mediumCategoryData) {
+      console.log(mediumCategoryData)
+      BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
+    },
+    //소분류 업데이트
+    updateChildCategory({commit, state}, childData) {
+      BlogService.updateChildCategory({commit, state}, childData)
+    },
+
     getBlogCategory({ commit },bid) {
       BlogService.getBlogCategory({ commit },bid)
 
     },
 
+    // 블로그 정보 수정 (API 문서 - 32~36D)
     updateBlogInfo({ state, commit }) {
       BlogService.updateBlogInfo({ state, commit })
       
+    },
+    
+     // 블로그 삭제 (API 문서 - 37D)
+    deleteBlog({ state }) {
+      BlogService.deleteBlog({ state })
     },
 
 
@@ -205,6 +264,44 @@ export const blog = {
       console.log(state)
       BlogService.getBlogMembers({ state })
     },
+
+    addBlogMember({ state }, email) {
+      BlogService.addBlogMember({ state }, email)
+    },
+
+    deleteBlogMember({ state }, email) {
+      BlogService.deleteBlogMember({ state }, email)
+    },
+
+    //Fork 용 블로그 목록 불러오기 
+    getBlogs({commit}) {
+      BlogService.getBlogs({commit})
+    },
+
+    //fork
+    forkPost({commit},forkData) {
+      BlogService.forkPost({commit},forkData)
+    },
+
+    // 댓글 작성 (API 문서 87~88D)
+    createComment({ state }, comment) {
+      BlogService.createComment({ state }, comment)
+
+    },
+
+    getCommentData({ commit, state }) {
+      BlogService.getCommentData({ commit, state })
+    },
+    
+
+    updateComment({ commit }, comment) {
+      BlogService.updateComment({ commit }, comment) 
+    },
+
+    deleteComment({ state }, comment) {
+      BlogService.deleteComment({ state }, comment)
+    },
+
   },
 
 }
