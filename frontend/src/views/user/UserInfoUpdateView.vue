@@ -17,7 +17,6 @@
                   <input v-on:change="changeImage()" id="add-img" ref="addImg" type="file" accept="image/*">
                 </label>
               </v-col>
-
             </v-row>
               <v-list-item>
                 <v-list-item-action></v-list-item-action>
@@ -112,7 +111,7 @@ export default {
      // this.changeProfileImg(formData)
       this.updateUserInfo(formData)
     }
-  }
+  },
 }
 </script>
 

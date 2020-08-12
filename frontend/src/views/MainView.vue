@@ -1,19 +1,7 @@
 <template>
-<!-- <v-container
-        class="fill-height"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-        </v-row>
-      </v-container> -->
-
   <div id="main">
     <div class="m-5">
       <h1>MEMODY</h1>
-      <!-- <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px"> -->
     </div>
     <div class="container w-75">
       <MainSearchTab/>
@@ -25,7 +13,8 @@
       <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
       추천 블로그
-      <MainRecommendBlogList :recommendBlog="$store.state.recommendBlog"/>
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      <MainRanking/>
   </div>
 </template>
 
@@ -35,7 +24,7 @@ import cookies from 'vue-cookies'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
-
+import MainRanking from '@/components/main/MainRanking.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -51,7 +40,8 @@ export default {
   components: {
     MainSearchTab,
     MainMyBlogList,
-    MainRecommendBlogList
+    MainRecommendBlogList,
+    MainRanking,
   },
   async mounted() {
     await this.fetchBlogs()
@@ -61,9 +51,9 @@ export default {
     fetchBlogs() {
       if (cookies.get('auth-token')) {
         this.mainAfter()
+        console.log(this.$store.state.myBlogs)
       }else {
         this.mainBefore()
-        console.log(this.$store.state.recommendBlog)
       }
     }
   },
