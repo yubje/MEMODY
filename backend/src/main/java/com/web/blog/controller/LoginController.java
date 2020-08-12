@@ -344,7 +344,7 @@ public class LoginController {
 			System.out.println("URL: "+url);
 			if (url != null) {
 				userService.profileUpdate(email, url);
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.UPDATE_PROFILE_SUCCESS),
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.UPDATE_PROFILE_SUCCESS, url),
 						HttpStatus.OK);
 			} else {
 				return new ResponseEntity<Response>(
@@ -375,7 +375,6 @@ public class LoginController {
 		}
 
 	}
-
 
 }
 
