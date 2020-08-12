@@ -2,11 +2,13 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
-        <h1>{{this.postData.ptitle}}</h1>
-        <div v-if="userInfo.email == this.postData.author" style="float: right">
-          <button class="btn btn-primary" @click="blogPostUpdate()">수정</button>
-          <button class="btn btn-primary" @click="blogPostDelete()">삭제</button>
+      <div class="col">
+        <h1>{{ postData.ptitle }}</h1>
+        <div v-if="userInfo.email == postData.author" style="float: right">
+          <v-btn-toggle>
+            <v-btn text color="teal" @click="blogPostUpdate()"><v-icon>mdi-pencil</v-icon> 수정</v-btn>
+            <v-btn text color="error" @click="blogPostDelete()"><v-icon>mdi-delete</v-icon>삭제</v-btn>
+          </v-btn-toggle>
         </div>
         <div v-else>
            <v-dialog v-model="dialog" persistent max-width="400">

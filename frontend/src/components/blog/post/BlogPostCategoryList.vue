@@ -8,7 +8,10 @@
         >
           <v-card-title>
             <h1>카테고리</h1>
-            <!-- <v-menu> -->
+            <v-menu 
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">    
               <v-btn
                 fab
                 dark
@@ -16,27 +19,26 @@
                 absolute
                 right
                 slot="activator"
-
+                v-bind="attrs"
+                v-on="on"
               >
-                <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
-                  <v-icon dark>mdi-plus</v-icon>
-                </router-link>
+                <v-icon dark color="white">mdi-file-edit-outline</v-icon>
               </v-btn>
+              </template>
 
-              <!--블로그 임시저장 목록 버튼(임시)-->
-              <v-btn>
-                <router-link :to="{ name: 'BlogPostTemporaryList' }">
-                임시저장 목록
-                </router-link>
-              </v-btn>
-              <!-- <v-list>
-                <v-list-tile>
-                  <v-list-tile-title>임시저장 불러오기</v-list-tile-title>
-                  <v-list-tile-title>새 글 쓰기</v-list-tile-title>
-                </v-list-tile>
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>
+                    <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">새 글 쓰기</router-link>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <router-link :to="{ name: 'BlogPostTemporaryList' }">임시저장된 글</router-link>
+                  </v-list-item-title>
+                </v-list-item>
               </v-list>
-            </v-menu> -->
-            
+            </v-menu>
           </v-card-title>
 
           <v-simple-table>

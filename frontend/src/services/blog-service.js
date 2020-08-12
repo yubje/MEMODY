@@ -301,6 +301,15 @@ class BlogService {
 
   }
 
+  getBlogPostTmpList({ state }) {
+    console.log(state.blogData.bid)
+    axios.get(`${SERVER}/blogs/${state.blogData.bid}/tmpposts/`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        state.blogPostTmpList = response.data.data
+      })
+      .catch(error => console.log(error.response.data))
+  }
+
 }
 
 
