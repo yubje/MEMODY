@@ -1,69 +1,50 @@
 <template>
-  <div id="nav">
-    <b-navbar class="navbar" toggleable="lg" type="dark">
-    <b-navbar-brand>
-      <router-link 
-      :to="{ name: 'Main' }"
-      class="text-light text-decoration-none"
-      >
-        MEMODY
+  <v-app-bar app flat color="white">
+    <v-toolbar-title>
+      <router-link :to="{ name: 'Main' }">
+        <img src="@/assets/logo/memody.png" alt="memody" style="height: 44px;">
       </router-link>
-    </b-navbar-brand>
+    </v-toolbar-title>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="ml-auto">
-        <!-- <b-nav-item>
-          <router-link :to="{ name: 'BlogView' }" class="text-decoration-none text-light">Blog</router-link>
-        </b-nav-item> -->
-        <div v-if="authToken" class="row">
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content >알람</template>
-            <b-dropdown-item href="#">Alarm1</b-dropdown-item>
-          </b-nav-item-dropdown>
+    <v-spacer></v-spacer>
 
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>User</template>
-            <b-dropdown-item>
-              <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
-              <br>
-              <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
-
-        <div v-else>
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>로그인·회원가입</template>
-            <b-dropdown-item>
-              <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
-
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-  </div>
+    <v-menu v-if="authToken">
+      <template v-slot:activator="{ on, attrs }">
+        <button id="navbar-menu-after" v-bind="attrs" v-on="on">
+          <span>{{userInfo.uid}} 님</span>
+        </button>
+      </template>
+      <v-list>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+          </v-list-item-title>
+        </v-list-item>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#logout-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    
+    <v-menu v-else>
+      <template v-slot:activator="{ on, attrs }">
+        <button v-bind="attrs" v-on="on">
+          <router-link id="navbar-menu-before" data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">회원가입 · 로그인</router-link>
+        </button>
+      </template>
+    </v-menu>
+  </v-app-bar>
 </template>
 
 <script>
-
 import { mapState } from 'vuex'
 
 export default {
   name: 'NavBar',
   computed: {
-      ...mapState(['authToken'])
-  },
-
+    ...mapState(['authToken', 'userInfo'])
+  }
 }
 </script>
-
-<style scoped>
-.navbar {
-  background-color: #25374F !important;
-  color: white !important;
-}
-
-</style>

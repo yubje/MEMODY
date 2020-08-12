@@ -3,58 +3,77 @@
     <div class="row">
       <BlogSettingsSidebar/>
       <div class="col col-lg-10">
-        <div>
-          <h1>블로그 정보 수정</h1>
-        </div>
         <div class="col w-75 mx-auto">
-          <div class="row justify-content-between">
-            <p>블로그명</p>
-            <input 
-              type="text" 
-              v-model="blogData.btitle"
-              class="w-50 m-2"
-            >
+          <div class="mx-auto my-2">
+            <h1>블로그 정보 수정</h1>
+          </div>
+          <div class="row">
+            <p class="col-1">블로그 이름</p>
+            <div class="col-11">
+              <v-text-field outlined v-model="blogData.btitle"></v-text-field>              
+            </div>
+
           </div>
           <div class="row justify-content-between">
-            <p>블로그 부제</p>
-            <input 
-              type="text" 
-              v-model="blogData.bsubtitle"
-              class="w-50 m-2"
-            >
+            <p class="col-1">블로그 부제</p>
+            <div class="col-11">
+              <v-text-field outlined v-model="blogData.bsubtitle"></v-text-field>
+            </div>
           </div>
           <div class="row justify-content-between">
-            <p>블로그 설명</p>
-            <textarea 
-              name="blogDataContent"
-              cols="30" rows="10"
-              v-model="blogData.bcontent"
-              class="w-50 m-2"
-            ></textarea>
+            <p class="col-1">블로그 설명</p>
+            <div class="col-11">
+              <v-textarea 
+                outlined
+                name="blogDataContent"
+                v-model="blogData.bcontent"
+              ></v-textarea>
+            </div>
+            
           </div>
-          <div class="row justify-content-between">
-            <p>해시태그</p>
-            <div>
-              <form @submit.prevent="ADD_HASHTAG(newHashtag)" style="width: 336.75px;">
-                <input type="text" v-model="newHashtag" class="w-75 m-2 align-middle">
-                <button class="btn btn-sm btn-primary m-2">추가</button>
+          <div class="row">
+            <p class="col-1">해시태그</p>
+            <div class="col-11">
+              <form @click="addHashtag(newHashtag)">
+                <v-text-field outlined v-model="newHashtag" ></v-text-field>
+                <v-btn 
+                  color="teal" 
+                  class="m-2"
+                  small
+                  dark
+                  fab
+                >
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
               </form>
               <div>
-                <button 
-                class="btn btn-sm btn-primary rounded-pill m-2"
-                v-for="(item, key) in blogData.hashtags"
-                @click="REMOVE_HASHTAG(key)"
-                :key="item"
-                >  # {{ item.tname }}  X</button>
+                <v-btn
+                  rounded
+                  class="m-2"
+                  v-for="(item, key) in blogData.hashtags"
+                  @click="REMOVE_HASHTAG(key)"
+                  :key="item.tname"
+                >
+                  <v-icon>mdi-music-accidental-sharp</v-icon>
+                  {{ item.tname }}
+                  <v-icon class="ml-2" style="color:red;">mdi-close-circle-outline</v-icon>
+                </v-btn>
               </div>
               
             </div>
           </div>
           
-          <button 
-            class="btn btn-primary mt-5"
+          <v-btn
+            color="teal"
+            dark 
+            class="mt-5 mr-3"
             @click="updateBlogInfo"
-          >수정하기</button>
+          >수정하기</v-btn>
+          <v-btn
+            color="error"
+            class="mt-5"
+            @click="deleteBlog"
+          >블로그 삭제</v-btn>
         </div>
       </div>
     </div>
@@ -80,7 +99,15 @@ export default {
   },
   methods: {
     ...mapMutations('blog', ['REMOVE_HASHTAG', 'ADD_HASHTAG']),
-    ...mapActions('blog', ['updateBlogInfo'])
+    ...mapActions('blog', ['updateBlogInfo', 'deleteBlog']),
+    addHashtag(newHashtag) {
+      if (newHashtag) {
+        this.ADD_HASHTAG(newHashtag)
+      } else {
+        alert('해시태그를 입력해 주세요')
+      }
+      newHashtag = null
+    },
   },
 }
 </script>

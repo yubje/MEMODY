@@ -5,6 +5,8 @@ import BlogView from '@/views/BlogView.vue'
 import UserLoginView from '@/views/user/UserLoginView.vue'
 import UserLogout from '@/components/user/UserLogout.vue'
 import UserSignupView from '@/views/user/UserSignupView.vue'
+import UserResetPWCheckEmailView from '@/views/user/UserResetPWCheckEmailView.vue'
+import UserResetPWCheckValidView from '@/views/user/UserResetPWCheckValidView.vue'
 import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
@@ -18,7 +20,8 @@ import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vu
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 
-import MainSearchResultView from '@/views/main/MainSearchResultView'
+import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
+import MainRankingView from '@/views/main/MainRankingView.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +38,14 @@ Vue.use(VueRouter)
     component: BlogView,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   // users
@@ -47,11 +58,20 @@ Vue.use(VueRouter)
     path: '/logout',
     name: 'UserLogout',
     component: UserLogout,
+
   },
   {
     path: '/users/info',
     name: 'UserInfoView',
     component: UserInfoView,
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: '/users/info/update',
@@ -64,7 +84,17 @@ Vue.use(VueRouter)
     component: UserSignupView,
   },
   {
-    path: '/users/pw',
+    path: '/users/resetpw/emailcheck',
+    name: 'UserResetPWCheckEmailView',
+    component: UserResetPWCheckEmailView,
+  },
+  {
+    path: '/users/resetpw/validcheck',
+    name: 'UserResetPWCheckValidView',
+    component: UserResetPWCheckValidView,
+  },
+  {
+    path: '/users/resetpw',
     name: 'UserResetPWView',
     component: UserResetPWView,
   },
@@ -76,6 +106,14 @@ Vue.use(VueRouter)
     component: BlogSettingsInfo,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
@@ -84,12 +122,23 @@ Vue.use(VueRouter)
     component: BlogSettingsCategory,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
-    path: '/blog/settings/category',
+    path: '/blog/settings/member',
     name: 'BlogSettingsMember',
     component: BlogSettingsMember,
+    props(route) {
+      return { bid: route.query.bid }
+    }
   },
   // blog post
   {
@@ -131,6 +180,11 @@ Vue.use(VueRouter)
     props(route) {
       return { search: route.query.search }
     }
+  },
+  {
+    path: '/main/rankings',
+    name: 'MainRankingView',
+    component: MainRankingView,
   },
 ]
 
