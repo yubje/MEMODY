@@ -14,8 +14,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-                .paths(PathSelectors.any()).build();
+        return new Docket(DocumentationType.SWAGGER_2)
+        		.select()
+//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+                .apis(RequestHandlerSelectors.basePackage("com.web.blog.controller"))
+//                .paths(PathSelectors.any())
+                .paths(PathSelectors.ant("/api/**"))
+                .build();
     }
 }

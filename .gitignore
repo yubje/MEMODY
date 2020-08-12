@@ -5,7 +5,7 @@
 
 # Spring
 *.properties
-
+memody.*
 
 ### Eclipse ###
 .metadata

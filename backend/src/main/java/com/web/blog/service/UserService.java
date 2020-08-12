@@ -1,8 +1,7 @@
 package com.web.blog.service;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,11 +9,12 @@ import javax.transaction.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Users;
 import com.web.blog.repository.UsersRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -32,20 +32,12 @@ public class UserService implements UserDetailsService {
 	public Optional<Users> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-
+	
 	@Transactional
 	public void deleteUser(String email) {
 		userRepository.deleteByEmail(email);
 	}
 
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
 	public void join(Users user,String password) {
 		userRepository.save(Users.builder().email(user.getEmail()).uid(user.getUid()).password(password)
 				.roles(Collections.singletonList("ROLE_USER")).build());
@@ -73,4 +65,14 @@ public class UserService implements UserDetailsService {
 		return userRepository.findByUid(uid);
 	}
 
+	public void profileUpdate(String email,String url) {
+		Optional<Users> user = userRepository.findByEmail(email);
+		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).build());
+		
+	}
+	
+	public List<Users> findAll(){
+//		return userRepository.findAllByOrderByExpDesc();
+		return userRepository.findTop10ByOrderByExpDesc();
+	}
 }
