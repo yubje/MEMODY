@@ -1,11 +1,12 @@
 package com.web.blog.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -23,7 +25,6 @@ import com.web.blog.domain.MCategory;
 import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
-import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.CategoryService;
@@ -47,6 +48,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class CategoryController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
@@ -64,10 +66,11 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/parent")
 	public ResponseEntity createCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		System.out.println(lcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(lcategory.getBid())){
@@ -95,7 +98,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/child")
 	public ResponseEntity createCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -129,7 +132,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/parent")
 	public ResponseEntity updateCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -160,10 +163,11 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/child")
 	public ResponseEntity updateCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		System.out.println(mcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!categoryService.checkCategory(mcategory.getLcid())){
@@ -196,7 +200,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/parent")
 	public ResponseEntity deleteCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -227,7 +231,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/child")
 	public ResponseEntity deleteCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -260,7 +264,7 @@ public class CategoryController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class, notes = "블로그 내의 카테고리 구조를 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories")
 	public ResponseEntity searchCategory(@PathVariable int bid, HttpServletRequest req) {
 		System.out.println(bid);
@@ -281,9 +285,9 @@ public class CategoryController {
 		}
 	}
 	
-	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class, notes = "중분류 카테고리내의 게시글을 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories/{mcid}")
-	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
+	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
@@ -292,13 +296,14 @@ public class CategoryController {
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
-				if(list.size()!=0) {
+//				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
+				Page<Post> list = postService.listAllPostByMCategory(bid, mcid, pageable);
+				if(list.getSize()!=0) {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
-							HttpStatus.FORBIDDEN);
+							HttpStatus.NO_CONTENT);
 				}
 			}
 		} else {
