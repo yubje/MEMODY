@@ -29,5 +29,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	List<Post> findAllByBidAndPtypeIsNotNullAndAuthorOrderByPostTimeDesc(int bid, String author);
 
 	// 카테고리 내 전체 게시글 조회 (임시저장글 제외)
-	List<Post> findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(int bid, int mcid);
+//	List<Post> findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(int bid, int mcid);
+	Page<Post> findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(int bid, int mcid, Pageable pageable);
 }

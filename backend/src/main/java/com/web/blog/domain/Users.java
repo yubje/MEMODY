@@ -91,4 +91,9 @@ public class Users implements UserDetails {
     public void setExp(int exp) {
 		this.exp = exp;
 	}
+    
+    public String toString() {
+    	return "User [email=" + email + ", uid=" + uid + ", exp=" + exp + ", profile=" + profile + ", password=" + password
+				+ "]";
+    }
 }
