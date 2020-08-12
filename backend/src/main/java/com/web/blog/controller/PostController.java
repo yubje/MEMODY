@@ -150,6 +150,13 @@ public class PostController {
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
 						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
+				
+				System.out.println("게시글 작성");
+				System.out.println(post.get("pid"));
+				if(post.get("pid") != null || post.get("pid") != "") {
+					System.out.println("임시저장 글이었다.");
+					postService.deletePost(Integer.parseInt(post.get("pid")));
+				}
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
 						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
