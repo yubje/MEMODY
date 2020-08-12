@@ -69,7 +69,10 @@
               @input="onPageChange"
             ></v-pagination>
           </div>
-        </v-card>
+          <div v-else>
+            작성한 글이 없습니다.
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -77,8 +80,11 @@
 
 <script>
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
+import BlogPostCategoryListItem from '@/components/blog/post/BlogPostCategoryListItem.vue'
 
-
+// import axios from 'axios'
+// import cookies from 'vue-cookies'
+// const SERVER = process.env.VUE_APP_SERVER
 
 import { mapState, mapActions } from 'vuex'
 
@@ -86,14 +92,10 @@ export default {
   name: 'BlogPostList',
   components: {
     BlogPostSidebar,
-
-  },
-  data() {
-    return {
-      page: 1,
-    }
+    BlogPostCategoryListItem
   },
   props: {
+    bid : Number,
     mcid : Number,
     lcid: Number,
   },
@@ -101,32 +103,16 @@ export default {
     ...mapState('blog', ['blogData','posts'])
   },
   methods: {
-    ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),
-
-    blogPostDetail(post) {
-      this.lookupPostDetail(post)
-      this.$router.push({ name: 'BlogPostDetail'})
-    },
-    onPageChange(newPage) {
-      const info = {
-        "bid": this.blogData.bid,
-        "mcid": this.mcid,
-        "page": this.page-1,
-      }
-      this.page = newPage
-      this.fetchPosts(info)
-    },
+    ...mapActions('blog',['fetchPosts'])
   },
  
   created() {
     const info = {
       "bid": this.blogData.bid,
-      "mcid": this.mcid,
-      "page": this.page-1,
+      "mcid": this.mcid
     }
-    console.log(this.page)
-    console.log(info)
     this.fetchPosts(info)
+    console.log(this.posts)
   },
    
 }
