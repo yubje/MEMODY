@@ -2,23 +2,43 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
+      <div class="col">
         <v-card
           outlined
         >
           <v-card-title>
             <h1>카테고리</h1>
-            <v-btn
-              fab
-              dark
-              color="teal"
-              absolute
-              right
+            <v-menu 
+              bottom
             >
-              <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">
-                <v-icon dark>mdi-plus</v-icon>
-              </router-link>
-            </v-btn>
+              <template v-slot:activator="{ on, attrs }">    
+              <v-btn
+                fab
+                dark
+                color="teal"
+                absolute
+                right
+                slot="activator"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon dark color="white">mdi-file-edit-outline</v-icon>
+              </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item>
+                  <v-list-item-title>
+                    <router-link :to="{ name: 'BlogPostCreate', query: {bid: blogData.bid, mcid: mcid, lcid: lcid } }" class="text-light text-decoration-none">새 글 쓰기</router-link>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>
+                    <router-link :to="{ name: 'BlogPostTemporaryList' }">임시저장된 글</router-link>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-card-title>
 
           <v-simple-table>
