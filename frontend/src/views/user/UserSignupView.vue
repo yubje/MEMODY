@@ -7,45 +7,49 @@
         <v-card>
           <v-card-title class="headline">회원가입</v-card-title>
           <v-card-text>
-            <v-container >
-              <v-row>
-                <v-col cols="12">
-                  <v-text-field v-model="signupData.uid" label="닉네임" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field v-model="signupData.email" label="Email*" required></v-text-field>
-                  <v-btn @click="validateEmail(signupData.email), dialog2 = true" small color="teal accent-4" dark>이메일
-                    인증</v-btn>
-                  <v-dialog v-model="dialog2" max-width="500px">
-                    <v-card>
-                      <v-card-title>
-                        이메일 인증
-                      </v-card-title>
-                      <v-card-text>
-                        <v-text-field v-model="validationNumber" label="인증번호 입력" required></v-text-field>
-                        <v-btn color="green darken-1" @click="checkValidation(validationNumber)">확인</v-btn>
-                      </v-card-text>
-                      <v-card-actions>
-                        <v-btn color="primary" text @click="dialog2 = false">
-                          Close
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field v-model="signupData.password" label="Password*" type="password" required></v-text-field>
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field v-model="password2" label="Password 확인" type="password" required></v-text-field>
-                </v-col>
-              </v-row>
+            <v-container>
+              <v-form ref="form" v-model="valid">
+                <v-text-field v-model="signupData.uid" :counter="10" :rules="nameRules" label="닉네임" required>
+                </v-text-field>
+                <v-text-field v-model="signupData.email" :rules="emailRules" label="E-mail" required></v-text-field>
+                <v-btn @click="validateEmail(signupData.email), dialog2 = true" small color="teal accent-4" dark>이메일
+                  인증</v-btn>
+                <!-- 이메일 인증 모달 -->
+                <v-dialog v-model="dialog2" max-width="500px">
+                  <v-card>
+                    <v-card-title>
+                      이메일 인증
+                    </v-card-title>
+                    <v-card-text>
+                      <v-text-field v-model="validationNumber" label="인증번호 입력" required></v-text-field>
+                      <v-btn color="green darken-1" @click="checkValidation(validationNumber)">확인</v-btn>
+                    </v-card-text>
+                    <v-card-actions>
+                      <v-btn color="primary" text @click="dialog2 = false">
+                        Close
+                      </v-btn>
+                      <v-btn :disabled="!isValid" color="primary" text @click="dialog2 = false, $refs.form.validate()">
+                        인증완료
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <!-- 이메일 인증 모달 끝 -->
+                <!-- 패스워드 -->
+                <v-text-field v-model="signupData.password" :rules="passwordRules" label="비밀번호 입력" type="password" required></v-text-field>
+                <v-text-field v-model="password2" :rules="passwordCheckRules" label="비밀번호 확인" type="password" required></v-text-field>
+                <v-btn color="teal accent-4"  text @click="goBack()">
+                  취소
+                </v-btn>
+                <v-btn :disabled="!valid" color="teal accent-3" class="mr-4" @click="validate,signup(signupData),dialog = false">
+                  회원가입
+                </v-btn>
+              </v-form>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text :to="{ name: 'UserLoginView' }">취소</v-btn>
-            <v-btn color="green darken-1" text @click="dialog = false" @click.prevent="signup(signupData)">회원가입</v-btn>
+
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -68,21 +72,39 @@
       return {
         dialog: true,
         dialog2: false,
+        emailValidation: false,
         validationNumber: '',
         signupData: {
           uid: '',
           email: '',
-          password: '',
+          password: null,
         },
         password2: '',
+        valid: true,
+        //Validation Rules
+        nameRules: [
+          v => !!v || 'Name is required',
+          v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+        ],
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
+          v => (v && this.isValid) || '이메일 인증을 완료해 주세요',
+        ],
+        passwordRules: [
+          v => !!v || 'password is required'
+        ],
+        passwordCheckRules: [
+          v => v == this.signupData.password || '비밀번호가 틀립니다.'
+        ]
+        //End Validation Rules
       };
     },
     mounted() {
-      window.$('#signup-modal').modal('show')
+      this.$store.commit('RESET_ISVALID')
     },
-
     methods: {
-      ...mapActions(["signup", "validateEmail", "validateEmail", "checkValidation"]),
+      ...mapActions(["signup", "validateEmail", "validateEmail", "checkValidation",'goBack']),
     },
     computed: {
       ...mapState(['isValid', 'emailValidationNumber'])

@@ -1,16 +1,6 @@
 <template>
-   <v-card
-    class="mr-auto"
-    height="100%;"
-    width="256"
-  >
-    <v-navigation-drawer
-      class="teal lighten-5"
-      absolute
-      light
-      permanent
-      right
-    >
+  <v-card class="mr-auto" height="100%;" width="256">
+    <v-navigation-drawer class="teal lighten-5" absolute light permanent right>
       <v-list>
         <v-list-item>
           <v-list-item-content>
@@ -41,22 +31,25 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-export default {
-  name: 'BlogSettingsSidebar',
-  computed: {
-    ...mapState('blog', ['blogData'])
-  },
-  methods: {
-    ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory']),
-  },
-  created() {
-    this.getBlogCategory(this.blogData.bid)
-  }
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
+  export default {
+    name: 'BlogSettingsSidebar',
+    computed: {
+      ...mapState('blog', ['blogData'])
+    },
+    methods: {
+      ...mapActions('blog', ['addParentCategory', 'addChildCategory', 'getBlogCategory']),
+    },
+    created() {
+      this.getBlogCategory(this.blogData.bid)
+    }
 
-  
-  
-}
+
+
+  }
 </script>
 
 <style>

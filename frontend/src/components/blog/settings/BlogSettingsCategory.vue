@@ -5,18 +5,21 @@
       <div class="col">
         <div>
           <h1>카테고리 설정 </h1>
-        </div>
-        <div>
-          <p>카테고리 보여주기</p>
-          <input type="text" v-model="largeCategoryData.large_dir">
-          <button @click="addParentCategory(largeCategoryData)">대분류 +</button>
-          <div v-for="categories in dataCategories" :key="categories.lcid">
+      </v-col>
+        <v-col cols="5">
+          <v-text-field text type="text" label="카테고리 추가" v-model="largeCategoryData.large_dir"></v-text-field>
+        </v-col>
+        <v-col cols="2">
+          <v-btn @click="addParentCategory(largeCategoryData)">대분류 +</v-btn>
+        </v-col>
+        <v-col cols="8">
+          <v-row v-for="categories in dataCategories" :key="categories.lcid">
             <BlogSettingsCategoryItem :categories="categories" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+          </v-row>
+        </v-col>
+    </v-row>
+  </v-container >
+</div>
 </template>
 
 <script>
