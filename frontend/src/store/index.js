@@ -220,7 +220,6 @@ export default new Vuex.Store({
               router.push({ name: 'Main'})
             })
             .catch(error => alert(error))
-
         })
       }
     },

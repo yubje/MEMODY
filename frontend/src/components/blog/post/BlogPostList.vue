@@ -2,28 +2,42 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
-        <v-card>
-            <v-card-title>
-              <h1>전체 글 조회</h1>
-            </v-card-title>
-            <v-data-table
-              :headers="headers"
-              :items="getpostListData.content"
-              item-key="post"
-              single-select
-            >
-              <template v-slot:item="props">
-                <tr @click="blogPostDetail(props.item)">
-                    <!-- <td>{{ props.item }}</td> -->
-                    <td>{{ props.item.ptitle }}</td>
-                    <td>{{ props.item.author }}</td>
-                    <td>{{ props.item.postTime.slice(0,10) }}</td>
-                    <td><font-awesome-icon  :icon="['fas','heart']" /> {{ props.item.postlikecnt }}</td> 
+      <div class="col">
+        <v-card
+          outlined
+        >
+          <v-card-title>
+            <h1>전체 글 조회</h1>
+          </v-card-title>
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">글 제목</th>
+                  <th class="text-left">작성자</th>
+                  <th class="text-left">작성일</th>
+                  <th class="text-left">좋아요</th>
                 </tr>
-              </template>
-              <BlogPostCategoryListItem/>
-            </v-data-table>
+              </thead>
+              <tbody>
+                <tr v-for="post in postListData.content" :key="post.pid" @click="blogPostDetail(post)">
+                  <td>{{ post.ptitle }}</td>
+                  <td>{{ post.author }}</td>
+                  <td>{{ post.postTime.slice(0,10) }}</td>
+                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              :length="postListData.totalPages"
+              circle
+              color="teal"
+              @input="onPageChange"
+            ></v-pagination>
+          </div>
         </v-card>
       </div>
     </div>
@@ -31,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 
@@ -42,36 +56,14 @@ export default {
   },
   data() {
     return {
-      headers: [
-      {
-        text: '글 제목',
-        align: 'start',
-        filterable: false,
-        value: 'ptitle',
-      },
-      {
-        text: '작성자',
-        value: 'author'
-      },
-      { 
-        text: '작성일', 
-        value: 'postTime',
-      },
-      { 
-        text: '좋아요', 
-        value: 'postlikecnt',
-      },
-      
-      ],
+      page: 1,
     }
-    
   },
-  // BlogPostListItem
   created() {
-    this.lookupPostList()
+    this.lookupPostList(this.page-1)
   },
   computed: {
-    ...mapGetters('blog', ['getpostListData']),
+    ...mapState('blog', ['postListData']),
   },
   methods: {
     ...mapActions('blog', ['lookupPostList', 'lookupPostDetail']),
@@ -79,8 +71,12 @@ export default {
     blogPostDetail(post) {
       this.lookupPostDetail(post)
       this.$router.push({ name: 'BlogPostDetail'})
-    }
-  }
+    },
+    onPageChange(newPage) {
+      this.page = newPage
+      this.lookupPostList(this.page-1)
+    },
+  },
 
 
    
