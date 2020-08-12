@@ -406,7 +406,7 @@ public class PostController {
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
+		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getManager())) {
 			postService.deletePost(pid);
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
 		}else {
