@@ -4,7 +4,8 @@
       <router-link :to="{ name: 'Main' }">
         <img src="@/assets/logo/memody.png" alt="memody" style="height: 44px;">
       </router-link>
-    </v-toolbar-title>
+    </b-navbar-brand>
+
 
     <v-spacer></v-spacer>
 
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+
 import { mapState } from 'vuex'
 
 export default {
@@ -56,3 +58,4 @@ export default {
   }
 }
 </script>
+

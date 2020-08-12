@@ -22,8 +22,7 @@ import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
 import BlogPostTemporaryList from '@/components/blog/post/BlogPostTemporaryList.vue'
 import BlogPostTmpCreate from '@/components/blog/post/BlogPostTmpCreate'
 
-import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
-import MainRankingView from '@/views/main/MainRankingView.vue'
+import MainSearchResultView from '@/views/main/MainSearchResultView'
 
 Vue.use(VueRouter)
 
@@ -40,14 +39,6 @@ Vue.use(VueRouter)
     component: BlogView,
     props(route) {
       return { bid: route.query.bid }
-    },
-    beforeEnter: (to, from, next) => {
-      //1. 토큰값을 가지고 있는가?
-      if(!Vue.$cookies.isKey('auth-token')){
-        next('/login')
-      }else{
-        next()
-      }
     }
   },
   // users
@@ -60,20 +51,11 @@ Vue.use(VueRouter)
     path: '/logout',
     name: 'UserLogout',
     component: UserLogout,
-
   },
   {
     path: '/users/info',
     name: 'UserInfoView',
     component: UserInfoView,
-    beforeEnter: (to, from, next) => {
-      //1. 토큰값을 가지고 있는가?
-      if(!Vue.$cookies.isKey('auth-token')){
-        next('/login')
-      }else{
-        next()
-      }
-    }
   },
   {
     path: '/users/info/update',
@@ -108,14 +90,6 @@ Vue.use(VueRouter)
     component: BlogSettingsInfo,
     props(route) {
       return { bid: route.query.bid }
-    },
-    beforeEnter: (to, from, next) => {
-      //1. 토큰값을 가지고 있는가?
-      if(!Vue.$cookies.isKey('auth-token')){
-        next('/login')
-      }else{
-        next()
-      }
     }
   },
   {
@@ -124,14 +98,6 @@ Vue.use(VueRouter)
     component: BlogSettingsCategory,
     props(route) {
       return { bid: route.query.bid }
-    },
-    beforeEnter: (to, from, next) => {
-      //1. 토큰값을 가지고 있는가?
-      if(!Vue.$cookies.isKey('auth-token')){
-        next('/login')
-      }else{
-        next()
-      }
     }
   },
   {
@@ -195,11 +161,6 @@ Vue.use(VueRouter)
     props(route) {
       return { search: route.query.search }
     }
-  },
-  {
-    path: '/main/rankings',
-    name: 'MainRankingView',
-    component: MainRankingView,
   },
 ]
 
