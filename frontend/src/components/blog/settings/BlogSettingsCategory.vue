@@ -1,25 +1,24 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <BlogSettingsSidebar />
-      <div class="col">
-        <div>
+  <v-container class="container-fluid">
+    <v-row>
+  <BlogSettingsSidebar />
+      <v-col col="12">
           <h1>카테고리 설정 </h1>
       </v-col>
         <v-col cols="5">
           <v-text-field text type="text" label="카테고리 추가" v-model="largeCategoryData.large_dir"></v-text-field>
         </v-col>
-        <v-col cols="2">
+        <v-col cols="7">
           <v-btn @click="addParentCategory(largeCategoryData)">대분류 +</v-btn>
         </v-col>
-        <v-col cols="8">
+        <v-col cols="12">
           <v-row v-for="categories in dataCategories" :key="categories.lcid">
             <BlogSettingsCategoryItem :categories="categories" />
           </v-row>
         </v-col>
     </v-row>
   </v-container >
-</div>
+
 </template>
 
 <script>
