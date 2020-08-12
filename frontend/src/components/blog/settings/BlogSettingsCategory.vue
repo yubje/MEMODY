@@ -1,9 +1,9 @@
 <template>
-<div>
-  <v-container class="fluid">
-      <BlogSettingsSidebar/>
-    <v-row>
-      <v-col cols="8 lg-10">
+  <div class="container-fluid">
+    <div class="row">
+      <BlogSettingsSidebar />
+      <div class="col">
+        <div>
           <h1>카테고리 설정 </h1>
       </v-col>
         <v-col cols="5">

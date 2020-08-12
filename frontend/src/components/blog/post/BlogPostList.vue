@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
+      <div class="col">
         <v-card
           outlined
         >

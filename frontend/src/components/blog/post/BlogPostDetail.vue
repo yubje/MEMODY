@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <BlogPostSidebar/>     
-      <div class="col col-lg-10">
+      <div class="col">
         <h1>{{ postData.ptitle }}</h1>
         <div v-if="userInfo.email == postData.author" style="float: right">
           <v-btn-toggle>
