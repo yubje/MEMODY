@@ -34,8 +34,7 @@
           <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
         </v-btn>
         <hr>
-
-        <div id="post-content"/>
+        <div id="post-content" v-html="postData.pcontent"></div>
         <hr>
         <BlogCommentForm/>
         <BlogCommentList/>
@@ -72,10 +71,6 @@ export default {
     BlogCommentForm,
     BlogCommentList,
   },
-  mounted() {
-    this.setPostContent()
-    console.log(this.postData)
-  },
   computed: {
     ...mapState(['userInfo',]),
     ...mapState('blog', ['postData']),
@@ -84,9 +79,9 @@ export default {
   methods: {
     ...mapActions('blog', ['deletePost']),
 
-    setPostContent() {
-      document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
-    },
+    // setPostContent() {
+    //   document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
+    // },
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
