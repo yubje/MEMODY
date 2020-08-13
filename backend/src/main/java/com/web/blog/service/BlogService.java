@@ -1,31 +1,23 @@
 package com.web.blog.service;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Blog;
+import com.web.blog.domain.BlogFollow;
 import com.web.blog.domain.Blogtag;
 import com.web.blog.domain.Member;
-import com.web.blog.domain.Tag;
-import com.web.blog.domain.Users;
+import com.web.blog.repository.BlogFollowRepository;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.BlogTagRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.TagRepository;
-import com.web.blog.repository.UsersRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -35,10 +27,12 @@ public class BlogService {
 	private final MemberRepository memberRepository;
 	private final BlogTagRepository blogtagRepository;
 	private final TagRepository tagRepository;
+	private final BlogFollowRepository blogFollowRepository;
+	
 
-	public int createBlog(Blog blog) {
-		return blogRepository.save(Blog.builder().btitle(blog.getBtitle()).bsubtitle(blog.getBsubtitle())
-				.bcontent(blog.getBcontent()).manager(blog.getManager()).build()).getBid();
+	public int createBlog(String title,String subtitle,String content, String email) {
+		return blogRepository.save(Blog.builder().btitle(title).bsubtitle(subtitle)
+				.bcontent(content).manager(email).build()).getBid();
 	}
 
 	public boolean countBlogByUser(String email) {
@@ -49,6 +43,11 @@ public class BlogService {
 		}
 	}
 
+	// 내가 manager인 블로그 번호 조회
+	public List<Blog> myBlog(String email){
+		return blogRepository.findByManager(email);
+	}
+	
 	// 내 블로그 목록 조회
 	public List<Blog> myBlogList(String email) {
 		List<Member> list = memberRepository.findByEmail(email);
@@ -68,6 +67,26 @@ public class BlogService {
 				List<Member> members = memberRepository.findByBid(bid);
 				for(Member mem:members) {
 					blog.addMember(mem);
+				}
+			}
+			
+			result.add(blog);
+		}
+		return result;
+	}
+
+	// 내가 팔로우한 블로그 목록 조회
+	public List<Blog> followBlogList(String email) {
+		List<BlogFollow> list = blogFollowRepository.findByEmail(email);
+		List<Blog> result = new ArrayList<Blog>();
+		for (BlogFollow blogFollow : list) {
+			int bid = blogFollow.getBid();
+			Blog blog = blogRepository.findByBid(bid);
+			
+			if(blog.getFollower().size()==0) {
+				List<BlogFollow> followers = blogFollowRepository.findByBid(bid);
+				for(BlogFollow fol:followers) {
+					blog.addFollower(fol);
 				}
 			}
 			
@@ -131,14 +150,13 @@ public class BlogService {
 
 	// 수정
 	// blogService.updateBlog(user, changeBlog,changeTag,bid))
-	public boolean updateBlog(String user, Blog changeBlog, String changeTag, int bid) {
+	public boolean updateBlog(String user,String btitle,String bsubtitle,String bcontent, String changeTag, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
-		System.out.println(blog);
 		if (user.equals(blog.getManager())) {
 			System.out.println("수정 시작");
-			blogRepository.save(Blog.builder().bid(bid).btitle(changeBlog.getBtitle())
-					.bsubtitle(changeBlog.getBsubtitle()).bcontent(changeBlog.getBcontent()).manager(blog.getManager())
-					.views(blog.getViews()).build());
+			blog.setBtitle(bsubtitle);
+			blog.setBcontent(bcontent);
+			blogRepository.save(blog);
 
 			return true;
 		} else {
@@ -150,6 +168,7 @@ public class BlogService {
 	public boolean deleteBlog(String user, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
+//			blogRepository.deleteById(bid);
 			blogRepository.deleteByBid(bid);
 			return true;
 		} else {

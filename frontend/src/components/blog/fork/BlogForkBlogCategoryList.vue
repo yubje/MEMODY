@@ -13,7 +13,6 @@
   import BlogForkBlogLargeCategoryItem from '@/components/blog/fork/BlogForkBlogLargeCategoryItem.vue'
   import axios from 'axios'
   import cookies from 'vue-cookies'
-
   export default {
     name: 'BlogForkBlogCategoryList',
     components: {
