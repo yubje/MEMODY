@@ -8,8 +8,7 @@
             <v-row>
               <v-row justify="center">
                 <div class="profile-img-box">
-                  <img v-if="userInfo.profile" id="profile-img" :src="userInfo.profile">
-                  <img v-else id="profile-img" src="@/assets/img/user-default.png">
+                  <img id="profile-img" src="@/assets/img/user-default.png">
                 </div>
               </v-row>
 
@@ -71,6 +70,12 @@ export default {
   created() {
     this.lookupUserInfo()
   },
+  mounted() {
+    if(this.userInfo.profile) {
+      document.getElementById('profile-img').src = this.userInfo.profile;
+    }
+  },
+
   computed: {
     ...mapState(['userInfo'])
   },

@@ -29,19 +29,10 @@
           </tbody>
         </table>
 
-
-          <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
-            <v-list-item-title @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
-              | {{child.medium_dir}}
-            </v-list-item-title>
-          </v-list-item>         
-        </div>
-
-      </v-list>
-      <template v-slot:append>
-        <div v-if="blogData.manager==userInfo.email" class="d-flex justify-end pa-5">
-          <v-icon>mdi-wrench</v-icon>
-          <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
+        <!-- <div class="col-12">
+          <h4 class="d-flex my-2">
+          {{categories.large_dir}}
+          </h4>
         </div>
         <div v-for="child in categories.mcategory" :key="child.mcid" class="col-11">
           <p @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
@@ -71,8 +62,7 @@ export default {
     bid: Number 
   },
   computed: {
-    ...mapState(['userInfo']),
-    ...mapState('blog', ['blogData','dataCategories']),
+    ...mapState('blog', ['blogData','dataCategories'])
   },
   methods: {
     ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory','moveToPosts','fetchPosts']),
