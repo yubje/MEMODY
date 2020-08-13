@@ -109,7 +109,15 @@ public class LoginController {
 	 */
 	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "Email, Password, NickName을 입력하여 회원가입을 합니다.")
 	@PostMapping("/users")
-	public ResponseEntity signUp(@RequestBody Users user) {
+	public ResponseEntity signUp(@RequestBody Users user, HttpServletRequest req)  {
+		String code = req.getHeader("code");
+		if ((redisTemplate.opsForValue().get(user.getEmail())==null) || !redisTemplate.opsForValue().get(user.getEmail()).equals(code)) {
+			System.out.println(("인증되는 이메일이 아님"));
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+		redisTemplate.opsForValue().set(user.getEmail(),"",0);
+		
 		if (userService.findByEmail(user.getEmail()).isPresent()) {
 			throw new RestException(ResponseMessage.ALREADY_USER, HttpStatus.FORBIDDEN);
 		}
@@ -212,8 +220,14 @@ public class LoginController {
 			StringBuilder sb = new StringBuilder();
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
-
+			
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
+//				redisTemplate.opsForValue().set(code+"_"+SEND_EMAIL_ID, "email-code", 300,
+//						TimeUnit.MILLISECONDS);
+				System.out.println("인증코드 redis에 저장 "+email);
+				System.out.println(redisTemplate.opsForValue().get(email));
+				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
@@ -249,6 +263,7 @@ public class LoginController {
 			sb.append("인증코드 : " + code);
 
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
@@ -301,6 +316,14 @@ public class LoginController {
 	@PutMapping(value = "/users/pw")
 	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
 
+		String code = req.getHeader("code");
+		if ((redisTemplate.opsForValue().get(user.getEmail())==null) || !redisTemplate.opsForValue().get(user.getEmail()).equals(code)) {
+			System.out.println(("인증되는 이메일이 아님"));
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+		redisTemplate.opsForValue().set(user.getEmail(),"",0);
+		
 		String ecdPwd = passwordEncoder.encode(user.getPassword());
 		userService.pwdUpdate(user.getEmail(), ecdPwd);
 
