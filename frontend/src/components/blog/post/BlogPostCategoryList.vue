@@ -54,7 +54,7 @@
               <tbody>
                 <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
                   <td>{{ post.ptitle }}</td>
-                  <td>{{ post.author }}</td>
+                  <td>{{ post.manager }}</td>
                   <td>{{ post.postTime.slice(0,10) }}</td>
                   <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
                 </tr>
