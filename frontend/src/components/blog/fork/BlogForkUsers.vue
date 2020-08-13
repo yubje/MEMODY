@@ -1,10 +1,11 @@
 <template>
+  <v-col cols="2" align="center">
     <v-menu v-model="value" :disabled="disabled" :absolute="absolute" :open-on-hover="openOnHover"
       :close-on-click="closeOnClick" :close-on-content-click="closeOnContentClick" :offset-x="offsetX"
       :offset-y="offsetY">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn icon color="teal lighten-3" dark text v-bind="attrs" v-on="on">
-          <font-awesome-icon :icon="['fas','code-branch']" class="fa-lg"/>
+        <v-btn color="teal lighten-3" dark text v-bind="attrs" v-on="on">
+          History
         </v-btn>
       </template>
       <v-list>
@@ -14,6 +15,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
+  </v-col>
 </template>
 
 <script>

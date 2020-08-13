@@ -1,13 +1,5 @@
 <template>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <v-card outlined>
-=======
   <div>
->>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
-=======
-  <div>
->>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
     <div v-if="!comment">
       <div class="inputbox d-flex flex-column m-3">
         <input class="textbox" v-model="newComment"><br>
