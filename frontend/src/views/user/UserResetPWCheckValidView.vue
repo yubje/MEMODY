@@ -31,9 +31,7 @@
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
+import { mapActions } from 'vuex'
 
   export default {
     name: 'UserResetPWCheckValidView',
@@ -49,5 +47,12 @@
     methods: {
       ...mapActions(['checkValidation','goBack'])
     }
+  },
+  mounted() {
+    window.$('#resetpwcheckvalid-modal').modal('show')
+  },
+  methods: {
+    ...mapActions(['checkValidation'])
   }
+}
 </script>

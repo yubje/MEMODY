@@ -1,145 +1,69 @@
 <template>
-  <v-container>
+  <div>
     <div>
-      <div class="post-button">
-        <button id="post-update-back" @click="$router.go(-1)">취소</button>
-        <button id="post-update" @click="blogPostUpdate()">수정</button>
-      </div>
-
-      <BlogEditor />
-
-      <div class="editor-background">
-        <div class="editor-body">
-          <div class="editor-body-padding">
-            <div class="editor-title-area">
-              <input id="editor-title" v-model="ptitle" type="text" placeholder="제목">
-              <hr>
-            </div>
-
-            <div>
-              <div id="editor-content" contenteditable="true" placeholder="본문 내용을 입력해주세요." v-focus></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <input v-model="postForm.ptitle" type="text" placeholder="제목">
     </div>
-  </v-container>
+    <div>
+      <editor ref="toastuiEditor" :value="postForm.pcontent" :initialValue="postForm.pcontent" :options="editorOptions" initialEditType="markdown" previewStyle="vertical" />
+    </div>
+    <div> 
+      <a>카테고리</a>
+      <select>
+        <option value=""></option>
+        <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+      </select>
+    </div>
+    <div>
+      <button @click="blogPostUpdate()">수정</button>
+      <button @click="$router.go(-1)">취소</button>
+    </div>
+  </div>
 </template>
 
 <script>
-import BlogEditor from '../editor/BlogEditor.vue'
+//editor
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/vue-editor';
 
 import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostUpdate',
   components: {
-    BlogEditor
+    'editor': Editor
   },
   data() {
     return {
-      ptitle: ''
+      categories: ['category1', 'category2'],
+      editorOptions: {
+        hideModeSwitch: true
+      },
+      postForm: {
+        ptitle: '',
+        pcontent: '',
+        lcid: '1', /***나중에 수정***/
+        mcid: '1', /***나중에 수정***/
+      }
     }
   },
   created() {
-    this.ptitle = this.postData.ptitle
-  },
-  mounted() {
-    this.setPostContent()
+    this.postForm = this.postData
   },
   computed: {
     ...mapState('blog', ['postData']),
+    ...mapActions('blog', ['updatePost'])
   },
   methods: {
-    ...mapActions('blog', ['updatePost']),
-
-    setPostContent() {
-      document.getElementById('editor-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
-    },
-
     blogPostUpdate() {
-      this.postData.ptitle = this.ptitle
-      this.postData.pcontent = document.getElementById('editor-content').innerHTML
+      this.postData.ptitle = this.postForm.ptitle
+      this.postData.pcontent = this.$refs.toastuiEditor.invoke("getMarkdown")
+      this.postData.lcid = this.postForm.lcid
+      this.postData.mcid = this.postForm.mcid
 
-      this.updatePost()
+      this.updatePost
       this.$router.push({ name: 'BlogPostList'})
     }
   }
 }
 </script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
-img {
-  max-width: 713px;
-}
-
-.post-button {
-  margin: 10px 10px;
-  text-align: right;
-}
-
-#post-update-back {
-  margin: 1px 10px;
-  background-color: white;
-}
-
-#post-update {
-  background-color: rgb(0, 141, 127);
-  color: white;
-}
-
-#post-update-back, #post-update {
-  padding: 2px 15px;
-  border: 1px solid #9394a7;
-  box-shadow: 0px 1px 4px 0px #bcbccc;
-  border-radius: 2px;
-}
-
-.editor-background {
-  width: 100%;
-  height: 790px;
-  background-color: rgb(249, 249, 249);
-}
-
-.editor-body {
-  width: 893px;
-  height: 790px;
-  margin: 0 auto;
-  background-color: white;
-}
-
-.editor-body-padding {
-  padding: 100px 90px;
-  text-align: left;
-}
-
-.editor-title-area {
-  padding-bottom: 20px;
-}
-
-#editor-title {
-  border: 0;
-  width: 100%;
-  height: 50px;
-  font-size: 35px;
-}
-
-#editor-title::placeholder {
-  color: rgb(160, 160, 160);
-}
-
-#editor-title:focus, #editor-content:focus {
-  outline: none;
-}
-
-[contenteditable=true]:empty:before{
-  content: attr(placeholder);
-  color: rgb(160, 160, 160);
-}
-
-</style>

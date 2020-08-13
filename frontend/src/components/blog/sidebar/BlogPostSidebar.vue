@@ -1,33 +1,33 @@
 <!--카테고리 2중-->
 <template>
- <v-card
-    class="mr-auto"
-    height="100%;"
-    width="256"
-  >
-    <v-navigation-drawer
-      class="teal lighten-5"
-      absolute
-      light
-      permanent
-      right
-    >
-      <v-list>
-        <v-list-item>
-          <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none"><h4> Home</h4></router-link>
-        </v-list-item>
-        <v-list-item>
-          <router-link :to="{ name: 'BlogPostList' }" class="text-dark text-decoration-none">전체글조회</router-link>
-        </v-list-item>
-        <div v-for="categories in dataCategories"
-          :key="categories.lcid" >
-          <v-list-item
-            link
-          >
-            <v-list-item-content>
-              <v-list-item-title><h5>{{ categories.large_dir }}</h5></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+  <div class="col col-lg-2 container bg-light">
+    <!-- 
+    <div v-for="category in categories" :key="category">
+      <router-link :to="{ name: 'BlogCategory' }">{{ category }}</router-link>
+    </div> -->
+    <div class="container p-3">
+      <div>
+        <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none"> <h3> Home</h3></router-link>
+      </div>
+      <div class="my-2">
+        <router-link :to="{ name: 'BlogPostList' }" class="text-dark text-decoration-none">전체글조회</router-link>
+      </div>
+      
+      <div v-for="categories in dataCategories" :key="categories.lcid" class="row justify-content-end">
+        <table class="table text-left">
+          <thead>
+            <tr>
+              {{categories.large_dir}}
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="child in categories.mcategory" :key="child.mcid">
+              <th scope="row" @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
+              | {{child.medium_dir}} 
+              </th>
+            </tr>
+          </tbody>
+        </table>
 
 
           <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
@@ -43,9 +43,20 @@
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
         </div>
-      </template>
-    </v-navigation-drawer>
-  </v-card>
+        <div v-for="child in categories.mcategory" :key="child.mcid" class="col-11">
+          <p @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
+            {{child.medium_dir}} 
+          </p>
+        </div> -->
+      </div>
+    <!-- <div class="row justify-content-end">
+      <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
+    </div> -->
+    </div>
+    <div class="row justify-content-end my-5 mx-3">
+      <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}" class="text-dark text-decoration-none">Settings</router-link>
+    </div>
+  </div>
 </template>
 
 <script>

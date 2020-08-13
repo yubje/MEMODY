@@ -49,9 +49,6 @@
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
 
   export default {
     name: 'UserLoginView',
@@ -70,11 +67,12 @@
           v => !!v || 'password is required'
         ],
       }
-    },
-    methods: {
-      ...mapActions(['login'])
     }
+  },
+  methods: {
+    ...mapActions(['login'])
   }
+}
 </script>
 
 <style>

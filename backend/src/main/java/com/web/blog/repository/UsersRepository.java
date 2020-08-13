@@ -1,10 +1,11 @@
 package com.web.blog.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.web.blog.domain.Users;
-
-import java.util.Optional;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
@@ -13,4 +14,7 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     void deleteByEmail(String email);
     
     Optional<Users> findByUid(String uid);
+
+//    List<Users> findAllByOrderByExpDesc();
+    List<Users> findTop10ByOrderByExpDesc();
 }

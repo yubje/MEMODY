@@ -24,7 +24,6 @@
         <v-btn color="green darken-1" text @click="closeModal()">닫기</v-btn>
       </v-card-actions>
     </v-card>
-
   </div>
 </template>
 
@@ -60,9 +59,7 @@
     async created() {
       await this.getBlogs()
       this.temp = this.myBlogs
-
     }
-
   }
 </script>
 
