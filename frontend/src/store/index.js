@@ -43,6 +43,7 @@ export default new Vuex.Store({
 
   mutations: {
     SET_TOKEN(state, token) {
+      console.log("메롱", token)
       state.authToken = token
       cookies.set('auth-token', token)
     },
