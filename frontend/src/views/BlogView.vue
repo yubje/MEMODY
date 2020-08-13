@@ -32,7 +32,6 @@
         </div>           
       </div>
     </div>
-    </div>
   </div>
 </template>
 
@@ -40,39 +39,18 @@
 import { mapState } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
-import axios from 'axios'
-import cookies from 'vue-cookies'
-
 export default {
   name: 'BlogView',
   components: {
     BlogPostSidebar,
   },
-  data() {
-    return {
-      following: null,
-    }
-  },
-  methods: {
-    clickFollow() {
-      if (this.following) {
-        axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`,{data :this.blogData,headers: {"auth": cookies.get('auth-token')}})
-        this.following = false
-      }else {
-        axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`,this.blogData,{headers: {"auth": cookies.get('auth-token')}})
-        this.following = true
-      }
-    }
-  },
+
+  // props: {
+  //   bid: {},
+  // },
   computed: {
-    ...mapState('blog', ['bid', 'blogData']),
-    ...mapState(['userInfo'])
+    ...mapState('blog', ['bid', 'blogData'])
   },
-  async mounted() {
-    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
-    this.following = data.data
-    console.log(this.following)
-  }  
 }
 </script>
 

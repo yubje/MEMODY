@@ -4,6 +4,7 @@
       <BlogSettingsSidebar /> 
       <v-col cols="4"></v-col>
       <v-col cols="8">
+
           <h1>카테고리 설정 </h1>
         <v-col cols="12">
           <v-text-field text type="text" label="카테고리 추가" v-model="largeCategoryData.large_dir"></v-text-field>

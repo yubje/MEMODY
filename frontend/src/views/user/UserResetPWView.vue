@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <v-row justify="center">
 
       <v-dialog v-model="dialog" persistent max-width="400">
@@ -29,13 +30,13 @@
         </v-card>
       </v-dialog>
     </v-row>
+
   </div>
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
+import { mapActions } from 'vuex'
+
 
   export default {
     name: 'UserResetPWView',
@@ -60,6 +61,14 @@
     },
     methods: {
       ...mapActions(['resetPW','goBack'])
+
     }
+  },
+  mounted() {
+    window.$('#resetpw-modal').modal('show')
+  },
+  methods: {
+    ...mapActions(['resetPW'])
   }
+}
 </script>

@@ -27,6 +27,7 @@
       </v-dialog>
     </v-row>
   </div> 
+
 </template>
 
 <script>
@@ -36,7 +37,6 @@ export default {
   name: 'UserResetPWCheckEmailView',
   data() {
     return {
-      dialog:true,
       resetpwcheckemailData: {
         email: ''
       },

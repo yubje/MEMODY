@@ -38,47 +38,23 @@
               @input="onPageChange"
             ></v-pagination>
           </div>
-        </v-card>
+          <BlogPostListItem/>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
+import BlogPostListItem from '@/components/blog/post/BlogPostListItem.vue'
 
 export default {
   name: 'BlogPostList',
   components: {
     BlogPostSidebar,
+    BlogPostListItem
   },
-  data() {
-    return {
-      page: 1,
-    }
-  },
-  created() {
-    this.lookupPostList(this.page-1)
-  },
-  computed: {
-    ...mapState('blog', ['postListData']),
-  },
-  methods: {
-    ...mapActions('blog', ['lookupPostList', 'lookupPostDetail']),
-
-    blogPostDetail(post) {
-      this.lookupPostDetail(post)
-      this.$router.push({ name: 'BlogPostDetail'})
-    },
-    onPageChange(newPage) {
-      this.page = newPage
-      this.lookupPostList(this.page-1)
-    },
-  },
-
-
    
 }
 </script>

@@ -10,7 +10,6 @@
         <h6 class="card-subtitle mb-2 text-muted">{{myblog.bsubtitle}}</h6>
         <p class="card-text">{{myblog.bcontent}}</p>
         <a href="#" class="card-link text-decoration-none text-dark">views: {{myblog.views}}</a>
-        <a href="#" class="card-link text-decoration-none text-dark">followers: {{myblog.followers}}</a>
       </div>
     </div>
   </div>
@@ -28,7 +27,6 @@ export default {
   methods: {
     ...mapActions('blog', ['getBlogInfo']),
   },
-
 }
 
 </script>

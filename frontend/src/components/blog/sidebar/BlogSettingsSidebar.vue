@@ -1,4 +1,5 @@
 <template>
+
     <v-navigation-drawer class="teal lighten-5"  absolute light permanent fixed sticky>
       <v-list>
         <v-list-item>
@@ -26,6 +27,7 @@
         </div>
       </template>
     </v-navigation-drawer>
+
 </template>
 
 <script>
