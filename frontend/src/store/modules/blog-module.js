@@ -62,6 +62,7 @@ export const blog = {
     // 임시 저장 리스트
     blogPostTmpList: null,
 
+
   
   },
   getters: {

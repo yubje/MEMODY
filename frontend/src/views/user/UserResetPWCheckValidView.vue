@@ -43,6 +43,7 @@ import { mapActions } from 'vuex'
     },
     methods: {
       ...mapActions(['checkValidation','goBack'])
+
     }
   },
   mounted() {
