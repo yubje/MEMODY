@@ -15,7 +15,6 @@
         <p style="text-align: left; margin-bottom: 0px">작성자: {{ postData.manager }}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
         <p style="text-align: left">수정날짜: {{ postData.update_time.slice(0,10) }}</p>
-<<<<<<< HEAD
         <hr>
         <div id="post-content" v-html="postData.pcontent"></div>
         <hr>
@@ -45,17 +44,6 @@
             </v-col>
           </v-row>
         </v-container>
-    
-=======
-        <v-btn icon v-if="liked" @click="clickLike()">
-          <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
-        </v-btn>
-        <v-btn icon v-else @click="clickLike()">
-          <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
-        </v-btn>
-        <hr>
-        <div id="post-content"/>
->>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
         <hr>
         <textarea style="height:60%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
         <BlogCommentForm/>
@@ -91,10 +79,13 @@ export default {
   methods: {
     ...mapActions('blog', ['deletePost']),
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     // setPostContent() {
     //   document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
     // },
+=======
+>>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
 =======
 >>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
     
