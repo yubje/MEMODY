@@ -8,7 +8,8 @@
             <v-row>
               <v-row justify="center">
                 <div class="profile-img-box">
-                  <img id="profile-img" src="@/assets/img/user-default.png">
+                  <img v-if="userInfo.profile" id="profile-img" :src="userInfo.profile">
+                  <img v-else id="profile-img" src="@/assets/img/user-default.png">
                 </div>
               </v-row>
 
@@ -54,11 +55,16 @@
         </v-card-actions>
       </v-card>
     </v-row>
+
+
   </v-container>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
 
 export default {
   name: 'UserInfoView',
@@ -70,12 +76,6 @@ export default {
   created() {
     this.lookupUserInfo()
   },
-  mounted() {
-    if(this.userInfo.profile) {
-      document.getElementById('profile-img').src = this.userInfo.profile;
-    }
-  },
-
   computed: {
     ...mapState(['userInfo'])
   },
@@ -89,7 +89,6 @@ export default {
         this.logout()
       }
     }
-
   },
 }
 </script>

@@ -1,4 +1,5 @@
 // blog 상태 관리 모듈
+import router from '@/router'
 import BlogService from '@/services/blog-service'
 // import { delete } from 'vue/types/umd';
 
@@ -35,14 +36,18 @@ export const blog = {
 
     //블로그 게시글 상세정보
     postData: {
+      bid: '',
       pid: '',
-      lcid: '', /***나중에 수정***/
-      mcid: '', /***나중에 수정***/
+      lcid: '',
+      mcid: '',
       ptitle: '',
       pcontent: '',
       author: '',
+      manager: '',
       postTime: '',
       update_time: '',
+      fork: '',
+      postlikecnt: '',
       ptype: null
     },
     posts: [],
@@ -53,10 +58,15 @@ export const blog = {
 
     // 내가 속한 블로그 리스트
     myBlogs: [],
-
     // 댓글
     comment_id: null,
     commentData: null,
+
+
+    // 임시 저장 리스트
+    blogPostTmpList: null,
+
+  
 
   
   },
@@ -64,6 +74,7 @@ export const blog = {
     getpostListData(state) {
       return state.postListData;
     },
+
 
   },
   mutations: {
@@ -97,7 +108,19 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      state.postData = postData;
+      state.postData.bid = postData.bid
+      state.postData.pid = postData.pid
+      state.postData.lcid = postData.lcid
+      state.postData.mcid = postData.mcid
+      state.postData.ptitle = postData.ptitle
+      state.postData.pcontent = postData.pcontent
+      state.postData.author = postData.author
+      state.postData.manager = postData.manager
+      state.postData.postTime = postData.postTime
+      state.postData.update_time = postData.update_time
+      state.postData.fork = postData.fork
+      state.postData.postlikecnt = postData.postlikecnt
+      state.postData.ptype = postData.ptype
     },
     
 
@@ -129,6 +152,7 @@ export const blog = {
     SET_POSTS(state, posts){
       state.posts= posts
     },
+
 
     
     //내가 속한 블로그 리스트 
@@ -169,9 +193,10 @@ export const blog = {
     },
 
     // 블로그 게시글 전체 조회 (API 문서 - 62D)
-    lookupPostList({commit, state}) {
-      return BlogService.lookupPostList(state.bid)
+    lookupPostList({ commit, state }, page) {
+      return BlogService.lookupPostList(state.bid, page)
       .then(postListData => {
+        console.log(postListData)
         commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
@@ -184,6 +209,9 @@ export const blog = {
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
+      .then(function() {
+        router.push({ name: 'BlogPostDetail' })
+      })
 
     },
 
@@ -237,8 +265,8 @@ export const blog = {
 
 
     // 블로그 게시글 수정 (API 문서 - 54D)
-    updatePost({commit}, response) {
-      return BlogService.updatePost(response)
+    updatePost({state, commit}) {
+      return BlogService.updatePost(state.postData)
       .then(result => {
         commit('setPostDetailData', result.data)
         alert(result.message)
@@ -257,7 +285,7 @@ export const blog = {
     },
 
     fetchPosts({commit}, info) {
-      BlogService.fetchPosts({commit},info)
+      BlogService.fetchPosts({commit}, info)
     },
 
     getBlogMembers({ state }) {
@@ -302,7 +330,14 @@ export const blog = {
       BlogService.deleteComment({ state }, comment)
     },
 
+    changeDialogState({commit}) {
+      BlogService.changeDialogState({commit})
+    },
+
+    getBlogPostTmpList({ state }) {
+      BlogService.getBlogPostTmpList({ state })
+    },
+
   },
 
 }
-

@@ -11,7 +11,7 @@
       <div class="editor-body">
         <div class="editor-body-padding">
           <div class="editor-title-area">
-            <input id="editor-title" v-model="postData.ptitle" type="text" placeholder="제목">
+            <input id="editor-title" v-model="ptitle" type="text" placeholder="제목">
             <hr>
           </div>
 
@@ -30,7 +30,12 @@ import BlogEditor from '../editor/BlogEditor.vue'
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-  name: 'BlogPostCreate',
+  name: 'BlogPostTmpCreate',
+  data() {
+    return {
+      ptitle: ''
+    }
+  },
   props: {
     bid: Number,
     mcid: Number,
@@ -40,10 +45,13 @@ export default {
     BlogEditor
   },
   created() {
-    this.initPostData
+    this.ptitle = this.postData.ptitle
     this.postData.bid = this.bid
     this.postData.mcid = this.mcid
     this.postData.lcid = this.lcid
+  },
+  mounted() {
+    this.setPostContent()
   },
   computed: {
     ...mapState('blog', ['postData', 'dataCategories']),
@@ -52,16 +60,27 @@ export default {
   methods: {
     ...mapActions('blog', ['createPost','getBlogCategory']),
 
+    setPostContent() {
+      document.getElementById('editor-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
+    },
+
     typeChange() {
       this.postData.ptype = 'SAVE'
       this.blogPostCreate()
     },
 
     blogPostCreate() {
+      this.postData.ptype=''
+      console.log(this.postData.pid)
+      this.postData.ptitle = this.ptitle
       this.postData.pcontent = document.getElementById('editor-content').innerHTML
       this.createPost()
+
     }
   }
+
+
+  
 }
 </script>
 
