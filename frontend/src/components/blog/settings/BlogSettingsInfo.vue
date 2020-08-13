@@ -7,37 +7,47 @@
           <h1>블로그 정보 수정</h1>
         </div>
         <div class="col w-75 mx-auto">
-          <div class="row justify-content-between">
-            <p>블로그명</p>
-            <input 
-              type="text" 
-              v-model="blogData.btitle"
-              class="w-50 m-2"
-            >
+          <div class="mx-auto my-2">
+            <h1>블로그 정보 수정</h1>
           </div>
-          <div class="row justify-content-between">
-            <p>블로그 부제</p>
-            <input 
-              type="text" 
-              v-model="blogData.bsubtitle"
-              class="w-50 m-2"
-            >
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 이름</p>
+            <div class="col-8">
+              <v-text-field outlined v-model="blogData.btitle"></v-text-field>              
+            </div>
+
           </div>
-          <div class="row justify-content-between">
-            <p>블로그 설명</p>
-            <textarea 
-              name="blogDataContent"
-              cols="30" rows="10"
-              v-model="blogData.bcontent"
-              class="w-50 m-2"
-            ></textarea>
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 부제</p>
+            <div class="col-8">
+              <v-text-field outlined v-model="blogData.bsubtitle"></v-text-field>
+            </div>
           </div>
-          <div class="row justify-content-between">
-            <p>해시태그</p>
-            <div>
-              <form @submit.prevent="ADD_HASHTAG(newHashtag)" style="width: 336.75px;">
-                <input type="text" v-model="newHashtag" class="w-75 m-2 align-middle">
-                <button class="btn btn-sm btn-primary m-2">추가</button>
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 설명</p>
+            <div class="col-8">
+              <v-textarea 
+                outlined
+                name="blogDataContent"
+                v-model="blogData.bcontent"
+              ></v-textarea>
+            </div>
+            
+          </div>
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">해시태그</p>
+            <div class="col-8">
+              <form @click="addHashtag(newHashtag)">
+                <v-text-field outlined v-model="newHashtag" ></v-text-field>
+                <v-btn 
+                  color="teal" 
+                  class="m-2"
+                  small
+                  dark
+                  fab
+                >
+                  <v-icon dark>mdi-plus</v-icon>
+                </v-btn>
               </form>
               <div>
                 <button 

@@ -12,7 +12,8 @@
     <v-menu v-if="authToken">
       <template v-slot:activator="{ on, attrs }">
         <button id="navbar-menu-after" v-bind="attrs" v-on="on">
-          <img id="profile-img-small" src="@/assets/img/user-default.png">
+          <img v-if="userInfo.profile" id="profile-img-small" :src="userInfo.profile">
+          <img v-else id="profile-img-small" src="@/assets/img/user-default.png">
           <span>{{userInfo.uid}} 님</span>
         </button>
       </template>
@@ -48,13 +49,8 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'NavBar',
-  mounted() {
-    if(this.userInfo.profile) {
-      document.getElementById('profile-img').src = this.userInfo.profile;
-    }
-  },
   computed: {
-    ...mapState(['authToken', 'userInfo'])
+    ...mapState(['authToken', 'userInfo']),
   }
 }
 </script>
