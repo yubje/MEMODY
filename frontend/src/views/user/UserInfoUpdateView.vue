@@ -53,7 +53,7 @@
 
         <v-card-actions>
           <v-row justify="center">
-            <v-btn class="ma-2" tile outlined color="success" @click="updateUserInfo(userUpdateInfo)">
+            <v-btn class="ma-2" tile outlined color="success" @click="update()">
               <v-icon left>mdi-pencil</v-icon> 수정
             </v-btn>
           </v-row>
@@ -101,11 +101,17 @@ export default {
     },
 
     changeImage() {
+      this.profileImage = this.$refs.addImg.files[0];
+    },
+
+    update() {
       const formData = new FormData();
-      formData.append('file', this.$refs.addImg.files[0]);
-      this.changeProfileImg(formData)
+      formData.append('file', this.profileImage);
+      
+     // this.changeProfileImg(formData)
+      this.updateUserInfo(formData)
     }
-  }
+  },
 }
 </script>
 
