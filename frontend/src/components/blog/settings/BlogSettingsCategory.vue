@@ -1,21 +1,25 @@
 <template>
-  <v-container class="container-fluid">
+  <v-container fluid class="m-0 mb-0 mr-0">
     <v-row>
-  <BlogSettingsSidebar />
-      <v-col col="12">
+      <BlogSettingsSidebar /> 
+      <v-col cols="4"></v-col>
+      <v-col cols="8">
+
           <h1>카테고리 설정 </h1>
-      </v-col>
-        <v-col cols="5">
+        <v-col cols="12">
           <v-text-field text type="text" label="카테고리 추가" v-model="largeCategoryData.large_dir"></v-text-field>
         </v-col>
-        <v-col cols="7">
-          <v-btn @click="addParentCategory(largeCategoryData)">대분류 +</v-btn>
+        <v-col cols="12">
+          <v-btn @click="addParentCategory(largeCategoryData)">
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </v-col>
         <v-col cols="12">
           <v-row v-for="categories in dataCategories" :key="categories.lcid">
             <BlogSettingsCategoryItem :categories="categories" />
           </v-row>
         </v-col>
+      </v-col>
     </v-row>
   </v-container >
 
@@ -59,6 +63,8 @@
   }
 </script>
 
-<style>
-
+<style scoped>
+  v-row {
+    height: 100%;
+  }
 </style>

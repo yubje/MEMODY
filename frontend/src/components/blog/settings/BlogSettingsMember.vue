@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <BlogSettingsSidebar/>
-      <div class="col col-lg-10">
+      <div class="col">
         <div class="col my-5" style="width:80%">
           <h1>멤버 관리</h1>
           <div class="my-5 mx-auto">

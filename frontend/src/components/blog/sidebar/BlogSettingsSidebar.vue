@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mr-auto" height="100%;" width="256">
-    <v-navigation-drawer class="teal lighten-5" absolute light permanent right>
+
+    <v-navigation-drawer class="teal lighten-5"  absolute light permanent fixed sticky>
       <v-list>
         <v-list-item>
           <v-list-item-content>
@@ -27,6 +27,7 @@
         </div>
       </template>
     </v-navigation-drawer>
+
   </v-card>
   <div class="col col-lg-2 container bg-light py-5">
     <div class="col">
@@ -50,6 +51,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -74,6 +76,8 @@
   }
 </script>
 
-<style>
-
+<style scoped>
+v-navigation-drawer {
+  height : 100vh
+}
 </style>

@@ -2,10 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <BlogSettingsSidebar/>
-      <div class="col col-lg-10">
-        <div>
-          <h1>블로그 정보 수정</h1>
-        </div>
+      <div class="col">
         <div class="col w-75 mx-auto">
           <div class="mx-auto my-2">
             <h1>블로그 정보 수정</h1>

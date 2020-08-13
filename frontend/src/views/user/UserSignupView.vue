@@ -44,7 +44,6 @@
         </div>
       </div>
     </div>
-
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="500">
         <v-card>
@@ -116,6 +115,7 @@
         dialog2: false,
         emailValidation: false,
         validationNumber: '',
+
         signupData: {
           uid: '',
           email: '',
@@ -145,8 +145,10 @@
     mounted() {
       this.$store.commit('RESET_ISVALID')
     },
+
     methods: {
       ...mapActions(["signup", "validateEmail", "validateEmail", "checkValidation",'goBack']),
+
     },
     computed: {
       ...mapState(['isValid'])
