@@ -12,34 +12,53 @@
 import Navbar from '@/components/Navbar.vue'
 import axios from 'axios'
 
+
+
 // axios.interceptors.request.use(function (config) {
 //     // Do something before request is sent
-//     console.log(config)
+//     console.log('보내기전데이터',config)
 //     return config;
 //   }, function (error) {
 //     // Do something with request error
-//     console.log(error)
+//     console.log("보내기전 에러",error)
  
 //     return Promise.reject(error);
 //   });
 
-axios.interceptors.response.use(function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    console.log(response.data)
-    return response;
-  }, function (error) {
-    if(error.response.status===403) {
-      console.log('hih')
-    }
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    return Promise.reject(error);
-  });
+
 
 export default {
   components: {
     Navbar,
+  },
+  methods: {
+
+  },
+  mounted() {
+    axios.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    console.log("받은 후 데이터",response.headers.expires)
+      if (response.headers.expires == 1) {
+        console.log(response.headers.auth)
+        console.log(this.$store)
+        // this.$store.commit('SET_TOKEN',response.headers.auth )
+      } 
+    // console.log('바뀐 토큰', response.headers.auth)
+    return response;
+  }, function (error) {
+    // console.log('받는 시점---------------------')
+    if (error.response.headers.expires ==2 ) {
+      console.log('로그아웃 시키기') 
+    }
+    // console.log(error.response)
+    // if(error.response.status===403) {
+    //   console.log('403받을때')
+    // }
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  });
   }
 }
 </script>

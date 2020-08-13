@@ -78,10 +78,6 @@ export default {
   methods: {
     ...mapActions('blog', ['deletePost']),
 
-    // setPostContent() {
-    //   document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
-    // },
-    
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
     },
