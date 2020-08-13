@@ -96,7 +96,6 @@ public class LoginController {
 
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
-		System.out.println(user.getEmail()+" >>>LOGIN>>>>>>>>"+token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
