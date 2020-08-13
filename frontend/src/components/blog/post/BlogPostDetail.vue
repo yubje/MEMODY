@@ -78,16 +78,11 @@ export default {
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     // setPostContent() {
     //   document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
     // },
-=======
->>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
-=======
->>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
+
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
