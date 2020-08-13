@@ -19,8 +19,11 @@ import BlogPostList from '@/components/blog/post/BlogPostList.vue'
 import BlogPostCategoryList from '@/components/blog/post/BlogPostCategoryList.vue'
 import BlogPostDetail from '@/components/blog/post/BlogPostDetail.vue'
 import BlogPostUpdate from '@/components/blog/post/BlogPostUpdate.vue'
+import BlogPostTemporaryList from '@/components/blog/post/BlogPostTemporaryList.vue'
+import BlogPostTmpCreate from '@/components/blog/post/BlogPostTmpCreate'
 
-import MainSearchResultView from '@/views/main/MainSearchResultView'
+import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
+import MainRankingView from '@/views/main/MainRankingView.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +40,14 @@ Vue.use(VueRouter)
     component: BlogView,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   // users
@@ -49,11 +60,20 @@ Vue.use(VueRouter)
     path: '/logout',
     name: 'UserLogout',
     component: UserLogout,
+
   },
   {
     path: '/users/info',
     name: 'UserInfoView',
     component: UserInfoView,
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: '/users/info/update',
@@ -88,6 +108,14 @@ Vue.use(VueRouter)
     component: BlogSettingsInfo,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
@@ -96,6 +124,14 @@ Vue.use(VueRouter)
     component: BlogSettingsCategory,
     props(route) {
       return { bid: route.query.bid }
+    },
+    beforeEnter: (to, from, next) => {
+      //1. 토큰값을 가지고 있는가?
+      if(!Vue.$cookies.isKey('auth-token')){
+        next('/login')
+      }else{
+        next()
+      }
     }
   },
   {
@@ -138,6 +174,19 @@ Vue.use(VueRouter)
     name: 'BlogPostUpdate',
     component: BlogPostUpdate,
   },
+  {
+    path: '/blog/post/tmp',
+    name: 'BlogPostTemporaryList',
+    component: BlogPostTemporaryList,
+  },
+  {
+    path: '/blog/post/tmp/create',
+    name: 'BlogPostTmpCreate',
+    component: BlogPostTmpCreate,
+    props(route) {
+      return { bid: route.query.bid, mcid: route.query.mcid,lcid: route.query.lcid }
+    }
+  },
   // main
   {
     path: '/main',
@@ -146,6 +195,11 @@ Vue.use(VueRouter)
     props(route) {
       return { search: route.query.search }
     }
+  },
+  {
+    path: '/main/rankings',
+    name: 'MainRankingView',
+    component: MainRankingView,
   },
 ]
 

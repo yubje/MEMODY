@@ -1,17 +1,11 @@
 <template>
   <div>
-    <thead class="text-left">
-      <tr>
-        <th>
-          <h1 id="btitle" @click="clickBtitle()">{{myBlog.btitle}}</h1>
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <div v-if="showCategories">
-        <BlogForkBlogLargeCategoryItem v-for="dataCategory in dataCategories" :key="dataCategory.bid" :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid"/>
-      </div>
-    </tbody>
+      <v-subheader :inset="inset">{{myBlog.btitle}}</v-subheader>
+    <v-list>
+      <v-list-item  v-for="dataCategory in blogCategories" :key="dataCategory.lcid">
+        <BlogForkBlogLargeCategoryItem :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid" />
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
@@ -19,7 +13,6 @@
   import BlogForkBlogLargeCategoryItem from '@/components/blog/fork/BlogForkBlogLargeCategoryItem.vue'
   import axios from 'axios'
   import cookies from 'vue-cookies'
-
   export default {
     name: 'BlogForkBlogCategoryList',
     components: {

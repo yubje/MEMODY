@@ -43,6 +43,7 @@ export default new Vuex.Store({
 
   mutations: {
     SET_TOKEN(state, token) {
+      console.log("메롱", token)
       state.authToken = token
       cookies.set('auth-token', token)
     },
@@ -50,6 +51,10 @@ export default new Vuex.Store({
     SET_USERINFO(state, userInfo) {
       state.userInfo = userInfo
       window.localStorage.setItem('userInfo', userInfo);
+    },
+
+    SET_PROFILE(state, profile) {
+      state.userInfo.profile = profile
     },
 
     SET_EMAIL(state, email) {
@@ -63,6 +68,10 @@ export default new Vuex.Store({
     SET_ISVALID(state) {
       state.isValid = true
     },
+    RESET_ISVALID(state) {
+      state.isValid = false
+    },
+
 
     SET_VALIDTYPE(state) {
       state.validType = true
@@ -74,7 +83,7 @@ export default new Vuex.Store({
     },
 
     SET_BLOGS_AFTER(state, data) {
-      state.myBlogs = data.myBlogs
+      state.myBlogs = data.myBlog
       state.recommendBlog = data.recommendBlog
       state.followBlog = data.followBlog
     },
@@ -104,7 +113,7 @@ export default new Vuex.Store({
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
-        router.push({ name: 'Main'})
+        router.push({ name: 'Main' })
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -115,7 +124,7 @@ export default new Vuex.Store({
           commit('SET_TOKEN', null)
           cookies.remove('auth-token')
           window.localStorage.removeItem('userInfo')
-          router.push({ name: 'Main' })
+          router.push({ name: 'Main'})
         })
         .catch(error => alert(error.response.data.message))
     },
@@ -127,7 +136,7 @@ export default new Vuex.Store({
         location: '/users'
       }
       dispatch('postAuthData', info)
-      router.push({ name: 'Main'})
+      router.push({ name: 'UserLoginView'})
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
@@ -206,33 +215,28 @@ export default new Vuex.Store({
     },
 
     // 회원 정보 수정 (API 문서 - 15~17 D)
-    // updateUserInfo({ getters }, response) {
-    updateUserInfo({ state, getters, commit }, formData) {
+    updateUserInfo({ state, getters, commit }) {
       commit('SET_UNIQUEID')
       if (state.uniqueId) {
-        axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
-        .then(response=> {
-          console.log(response)
-          axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
-            .then(response => {
-              commit('SET_USERINFO', response.data.data)
-              commit('SET_UNIQUEID')
-              router.push({ name: 'Main'})
-            })
-            .catch(error => alert(error))
+        axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
+        .then(response => {
+          commit('SET_USERINFO', response.data.data)
+          commit('SET_UNIQUEID')
+          router.push({ name: 'UserInfoView'})
         })
+        .catch(error => alert(error))
       }
     },
 
     //프로필 이미지 변경
-    // changeProfileImg({state}, formData) {
-    //   axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
-    //   .then(response => {
-    //     router.push({ name: 'UserInfoView'})
-    //     console.log(response)
-    //   })
-    //   .catch(error => console.log(error))
-    // },
+    changeProfileImg({state, commit}, formData) {
+      axios.put(`${SERVER}/users/${state.userInfo.email}/profile`, formData, {headers: {'auth': cookies.get('auth-token'), 'Content-Type': 'multipart/form-data'}})
+      .then(response => {
+        alert("프로필 이미지 변경 성공")
+        commit('SET_PROFILE', response.data.data)
+      })
+      .catch(error => console.log(error))
+    },
 
     //회원 탈퇴 (API 문서 - 19D)
     deleteUserInfo({getters}) {
@@ -247,6 +251,7 @@ export default new Vuex.Store({
     mainAfter({commit}) {
       axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
+          console.log(response.data.data)
           commit('SET_BLOGS_AFTER',response.data.data)
         })
         .catch(() => {
@@ -263,6 +268,10 @@ export default new Vuex.Store({
          
         })
     },
+
+    goBack() {
+      router.go(-1)
+    }
 
 
   },
