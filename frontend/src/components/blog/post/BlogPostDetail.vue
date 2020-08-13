@@ -22,9 +22,21 @@
             <BlogForkUsers :pid="postData.pid"/>
           </v-row>
         </div>
-        <p style="text-align: left; margin-bottom: 0px">작성자: {{this.postData.author}}</p>
-        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{this.postData.postTime}}</p>
-        <p style="text-align: left">수정날짜: {{this.postData.update_time}}</p>
+
+        <p style="text-align: left; margin-bottom: 0px">작성자: {{ postData.author }}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
+        <p style="text-align: left">수정날짜: {{ postData.update_time.slice(0,10) }}</p>
+        <!-- <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" style="color:red;"/> 
+        <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" style="color:red;"/>  -->
+        <v-btn icon v-if="liked" @click="clickLike()">
+          <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
+        </v-btn>
+        <v-btn icon v-else @click="clickLike()">
+          <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
+        </v-btn>
+        <hr>
+        <div id="post-content" v-html="postData.pcontent"></div>
+
         <hr>
         <textarea style="height:60%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
         <BlogCommentForm/>
@@ -59,6 +71,7 @@ export default {
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
+
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
