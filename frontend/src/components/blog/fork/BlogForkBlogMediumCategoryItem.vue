@@ -7,7 +7,6 @@
       <v-list-item-title @click="clickMediumDir()" v-text="mcategory.medium_dir"></v-list-item-title>
     </v-list-item-content>
   </v-list-item>
-
 </template>
 
 <script>

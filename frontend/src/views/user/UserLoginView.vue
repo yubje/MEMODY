@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <v-row justify="center">
 
       <v-dialog v-model="dialog" persistent max-width="350">
@@ -44,14 +43,13 @@
         </v-card>
       </v-dialog>
     </v-row>
+
   </div>
 
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
+
 
   export default {
     name: 'UserLoginView',
@@ -69,12 +67,14 @@
         passwordRules: [
           v => !!v || 'password is required'
         ],
+
       }
-    },
-    methods: {
-      ...mapActions(['login'])
     }
+  },
+  methods: {
+    ...mapActions(['login'])
   }
+}
 </script>
 
 <style>

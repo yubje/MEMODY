@@ -3,6 +3,9 @@
     <div class="row">
       <BlogSettingsSidebar/>
       <div class="col col-lg-10">
+        <div>
+          <h1>블로그 정보 수정</h1>
+        </div>
         <div class="col w-75 mx-auto">
           <div class="mx-auto my-2">
             <h1>블로그 정보 수정</h1>
@@ -47,33 +50,25 @@
                 </v-btn>
               </form>
               <div>
-                <v-btn
-                  rounded
-                  class="m-2"
-                  v-for="(item, key) in blogData.hashtags"
-                  @click="REMOVE_HASHTAG(key)"
-                  :key="item.tname"
-                >
-                  <v-icon>mdi-music-accidental-sharp</v-icon>
-                  {{ item.tname }}
-                  <v-icon class="ml-2" style="color:red;">mdi-close-circle-outline</v-icon>
-                </v-btn>
+                <button 
+                class="btn btn-sm btn-primary rounded-pill m-2"
+                v-for="(item, key) in blogData.hashtags"
+                @click="REMOVE_HASHTAG(key)"
+                :key="item.tname"
+                >  # {{ item.tname }}  X</button>
               </div>
               
             </div>
           </div>
           
-          <v-btn
-            color="teal"
-            dark 
-            class="mt-5 mr-3"
+          <button 
+            class="btn btn-primary mt-5 mr-3"
             @click="updateBlogInfo"
-          >수정하기</v-btn>
-          <v-btn
-            color="error"
-            class="mt-5"
+          >수정하기</button>
+          <button 
+            class="btn btn-danger mt-5"
             @click="deleteBlog"
-          >블로그 삭제</v-btn>
+          >블로그 삭제</button>
         </div>
       </div>
     </div>
@@ -99,15 +94,7 @@ export default {
   },
   methods: {
     ...mapMutations('blog', ['REMOVE_HASHTAG', 'ADD_HASHTAG']),
-    ...mapActions('blog', ['updateBlogInfo', 'deleteBlog']),
-    addHashtag(newHashtag) {
-      if (newHashtag) {
-        this.ADD_HASHTAG(newHashtag)
-      } else {
-        alert('해시태그를 입력해 주세요')
-      }
-      newHashtag = null
-    },
+    ...mapActions('blog', ['updateBlogInfo', 'deleteBlog'])
   },
 }
 </script>

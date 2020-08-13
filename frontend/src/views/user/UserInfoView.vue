@@ -55,16 +55,11 @@
         </v-card-actions>
       </v-card>
     </v-row>
-
-
   </v-container>
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'UserInfoView',
@@ -89,6 +84,7 @@ export default {
         this.logout()
       }
     }
+
   },
 }
 </script>

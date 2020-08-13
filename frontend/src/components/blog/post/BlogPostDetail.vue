@@ -32,13 +32,12 @@
         <v-btn icon v-else @click="clickLike()">
           <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
         </v-btn>
-        <hr>s
-
+        <hr>
         <div id="post-content"/>
         <hr>
+        <textarea style="height:60%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
         <BlogCommentForm/>
         <BlogCommentList/>
-        
       </div>
     </div>
   </div>
@@ -53,17 +52,8 @@ import BlogCommentList from '@/components/blog/comment/BlogCommentList.vue'
 
 import { mapState, mapActions } from 'vuex'
 
-import axios from 'axios'
-import cookies from 'vue-cookies'
-
 export default {
   name: 'BlogPostDetail',
-  data() {
-    return {
-      liked: null,
-      dialog: false,
-    }
-  },
   components: {
     BlogForkUsers,
     BlogPostSidebar,
@@ -71,54 +61,24 @@ export default {
     BlogCommentForm,
     BlogCommentList,
   },
-  mounted() {
-    this.setPostContent()
-    console.log(this.postData)
-  },
   computed: {
-    ...mapState(['userInfo',]),
+    ...mapState(['userInfo']),
     ...mapState('blog', ['postData']),
     
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
-
-    setPostContent() {
-      document.getElementById('post-content').insertAdjacentHTML('afterbegin', this.postData.pcontent)
-    },
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
     },
 
     blogPostDelete() {
-      this.deletePost()
-    },
-
-    clickLike() {
-      if (this.liked) {
-        axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :this.postData,headers: {"auth": cookies.get('auth-token')}})
-        this.liked = false
-      }else {
-        axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,this.postData,{headers: {"auth": cookies.get('auth-token')}})
-        this.liked = true
-      }
-    },
-    closeModal(flag) {
-      this.dialog = flag
+      this.deletePost
     }
   },
-  async created() {
-    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`,{headers: {"auth": cookies.get('auth-token')}})
-    this.liked = data.data
-  }
+  created() {
+    this.getCommentData()
+  },
 }
 </script>
-
-<style>
-#post-content {
-  text-align: left;
-  min-height: 300px;
-  padding: 1.5rem;
-}
-</style>

@@ -12,9 +12,7 @@
       팔로잉 블로그
       <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
-      추천 블로그
-      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
-      <MainRanking/>
+    <MainRecommendBlogList :recommendBlog="recommendBlog"/>
   </div>
 </template>
 
@@ -29,19 +27,13 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
-  data() {
-    return {
-
-    }
-  },
   computed: {
       ...mapState(['authToken','myBlogs','recommendBlog','followBlog'])
   },
   components: {
     MainSearchTab,
     MainMyBlogList,
-    MainRecommendBlogList,
-    MainRanking,
+    MainRecommendBlogList
   },
   async mounted() {
     await this.fetchBlogs()
