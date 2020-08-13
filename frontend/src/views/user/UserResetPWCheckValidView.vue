@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="500">
         <v-card>
@@ -27,13 +25,11 @@
         </v-card>
       </v-dialog>
     </v-row>
-
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-
   export default {
     name: 'UserResetPWCheckValidView',
     data() {

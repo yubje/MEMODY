@@ -299,6 +299,7 @@ class BlogService {
       })
       .catch(error => console.log(error.response.data))
 
+
   }
 
   getBlogPostTmpList({ state }) {
@@ -308,6 +309,7 @@ class BlogService {
         state.blogPostTmpList = response.data.data
       })
       .catch(error => console.log(error.response.data))
+
   }
 
   getBlogPostTmpList({ state }) {

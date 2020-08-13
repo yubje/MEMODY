@@ -4,7 +4,7 @@
       <BlogPostSidebar/>     
       <div class="col">
         <h1>{{ postData.ptitle }}</h1>
-        <div v-if="userInfo.email == postData.author" style="float: right">
+        <div v-if="userInfo.email == postData.manager" style="float: right">
           <v-btn-toggle>
             <v-btn text color="teal" @click="blogPostUpdate()"><v-icon>mdi-pencil</v-icon> 수정</v-btn>
             <v-btn text color="error" @click="blogPostDelete()"><v-icon>mdi-delete</v-icon>삭제</v-btn>
@@ -23,11 +23,10 @@
           </v-row>
         </div>
 
-        <p style="text-align: left; margin-bottom: 0px">작성자: {{ postData.author }}</p>
+        <p style="text-align: left; margin-bottom: 0px">원작자: {{ postData.author }}</p>
+        <p style="text-align: left; margin-bottom: 0px">관리자: {{ postData.manager }}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
         <p style="text-align: left">수정날짜: {{ postData.update_time.slice(0,10) }}</p>
-        <!-- <font-awesome-icon @click="clickLike()" v-if="liked" :icon="['fas','heart']" style="color:red;"/> 
-        <font-awesome-icon @click="clickLike()" v-else :icon="['far','heart']" style="color:red;"/>  -->
         <v-btn icon v-if="liked" @click="clickLike()">
           <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
         </v-btn>
@@ -35,8 +34,10 @@
           <font-awesome-icon  :icon="['far','heart']" style="color:red;"/> 
         </v-btn>
         <hr>
-        <div id="post-content" v-html="postData.pcontent"></div>
 
+        <div id="post-content"/>
+
+        <div id="post-content" v-html="postData.pcontent"></div>
         <hr>
         <textarea style="height:60%; width:100%" v-text="this.postData.pcontent" readonly></textarea>
         <BlogCommentForm/>
@@ -71,7 +72,6 @@ export default {
   },
   methods: {
     ...mapActions('blog', ['deletePost']),
-
     
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
