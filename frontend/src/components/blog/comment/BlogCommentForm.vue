@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <v-card outlined>
+=======
+  <div>
+>>>>>>> 30547c188af4d7d3461cd6e36238863761adcaed
     <div v-if="!comment">
       <div class="inputbox d-flex flex-column m-3">
         <input class="textbox" v-model="newComment"><br>
@@ -19,7 +23,7 @@
           >댓글 수정</button>
       </div>
     </div>
-  </v-card>
+  </div> 
 </template>
 
 
@@ -53,6 +57,8 @@ export default {
   vertical-align: center;
 }
 .inputbox {
+  border: 1px solid #8EACC5;
+  border-radius: 5px;
   height: 100px;
 }
 .textbox {
@@ -65,5 +71,12 @@ export default {
 .textbox:focus {
   outline: none;
 }
+/* .btn {
+  box-shadow: none;
+  background-color: transparent;
+}
 
+.btn:focus {
+  outline:none;
+} */
 </style>

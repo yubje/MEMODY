@@ -33,9 +33,7 @@
 </template>
 
 <script>
-  import {
-    mapActions
-  } from 'vuex'
+import { mapActions } from 'vuex'
 
   export default {
     name: 'UserResetPWView',
@@ -61,5 +59,12 @@
     methods: {
       ...mapActions(['resetPW','goBack'])
     }
+  },
+  mounted() {
+    window.$('#resetpw-modal').modal('show')
+  },
+  methods: {
+    ...mapActions(['resetPW'])
   }
+}
 </script>

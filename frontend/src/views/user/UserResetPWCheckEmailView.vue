@@ -36,7 +36,6 @@ export default {
   name: 'UserResetPWCheckEmailView',
   data() {
     return {
-      dialog:true,
       resetpwcheckemailData: {
         email: ''
       },
