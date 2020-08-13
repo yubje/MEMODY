@@ -2,11 +2,19 @@
   <div class="main-container">
     <div class="main-intro">
       <div class="main-intro-title">
-        <p><span>사이트 소개글</span> 쓰고 싶은데</p>
-        <p>뭐라고 쓸까요?</p>
+        <p>어떤 <span>공유 블로그</span>를</p>
+        <p>찾고 싶으신가요?</p>
       </div>
       <MainSearchTab/>
     </div>
+
+
+
+
+
+
+    <hr>
+    <MainRanking/>
 
     
     
@@ -29,7 +37,7 @@
     </div>
       추천 블로그
       <MainRecommendBlogList :recommendBlog="recommendBlog"/>
-      <MainRanking/>
+      
   </div>
 </template>
 

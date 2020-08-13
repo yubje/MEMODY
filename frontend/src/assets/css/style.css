@@ -111,12 +111,13 @@ hr {
 .dropdown-menu {
   transform: translate3d(-1px, 56px, 0px) !important;
   min-width: 10px !important;
-  
+  width: 126px;
 }
 
 .dropdown-item {
   letter-spacing: 0.2px;
   padding: 0.25rem 25px !important;
+  text-align: center;
 }
 
 .searchTab-type {
@@ -126,12 +127,21 @@ hr {
 
 .searchTab-input {
   height: 30px;
-  width: 600px;
+  width: 620px;
   padding: 0px 20px;
-  margin: 14px 25px 14px 0px;
+  margin: 14px 0px;
   color: #222222;
   font-size: 20px;
   border-width: 0px 0px 0px 1px;
   border-image: initial;
   border-left: 1px solid rgb(221, 221, 221);
+}
+
+#search-icon {
+  margin: 21px 10px;
+  color: #888888;
+}
+
+#search-icon:hover {
+  cursor: pointer;
 }
