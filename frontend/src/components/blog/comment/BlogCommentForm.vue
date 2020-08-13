@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card outlined>
     <div v-if="!comment">
       <div class="inputbox d-flex flex-column m-3">
         <input class="textbox" v-model="newComment"><br>
