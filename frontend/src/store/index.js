@@ -8,10 +8,13 @@ import cookies from 'vue-cookies'
 
 import { blog } from './modules/blog-module.js'
 import { main } from './modules/main-module.js'
-
 Vue.use(Vuex)
 
 const SERVER = process.env.VUE_APP_SERVER
+
+
+
+
 
 export default new Vuex.Store({
   state: {
@@ -265,15 +268,12 @@ export default new Vuex.Store({
           commit('SET_BLOGS_BEFORE',response.data.data)
         })
         .catch(() => {
-         
         })
     },
 
     goBack() {
       router.go(-1)
     }
-
-
   },
 
   modules: {
@@ -283,5 +283,6 @@ export default new Vuex.Store({
 
   plugins: [
     createPersistedState()
-  ]
+  ],
+  
 })

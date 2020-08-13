@@ -43,3 +43,10 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+
+// importing the helper
+import interceptorsSetup from '@/helpers/interceptors'
+
+// and running it somewhere here
+interceptorsSetup()
