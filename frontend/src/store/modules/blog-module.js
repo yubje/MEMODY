@@ -58,6 +58,10 @@ export const blog = {
     comment_id: null,
     commentData: null,
 
+
+    // 임시 저장 리스트
+    blogPostTmpList: null,
+
   
   },
   getters: {
@@ -300,6 +304,14 @@ export const blog = {
 
     deleteComment({ state }, comment) {
       BlogService.deleteComment({ state }, comment)
+    },
+
+    changeDialogState({commit}) {
+      BlogService.changeDialogState({commit})
+    },
+
+    getBlogPostTmpList({ state }) {
+      BlogService.getBlogPostTmpList({ state })
     },
 
   },
