@@ -1,7 +1,7 @@
 <template>
-  <v-card>
+  <v-card outlined class="ma-3">
     <div v-if="!comment">
-      <div class="inputbox d-flex flex-column m-3">
+      <div class="inputbox d-flex flex-column ma-0">
         <input class="textbox" v-model="newComment"><br>
         <button 
           @click="createComment(newComment)"
