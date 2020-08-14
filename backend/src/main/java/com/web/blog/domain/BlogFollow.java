@@ -1,10 +1,10 @@
 package com.web.blog.domain;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,34 +26,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name="large_categories")
-public class LCategory {
+@Table(name="blog_and_follow")
+public class BlogFollow {
+	
 	@Id
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int lcid;
+	private int bfid;
+	
 	
 	@Column(nullable = false)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private int bid;
 	
-	@Column(length = 200, nullable = false)
-	private String large_dir;
 	
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="medium_dir")
-	private Collection<MCategory> mcategory;
+	@Column(name="email", nullable = true)
+	private String email;
 	
-	public void addMCategory(List<MCategory> list) {
-		if(mcategory == null) {
-			mcategory = new ArrayList<MCategory>();
-		}
-//		mcategory.add(list);
-		mcategory = list;
-	}
+	
 
-	@Override
-	public String toString() {
-		return "LCategory [lcid=" + lcid + ", bid=" + bid + ", large_dir=" + large_dir + ", mcategory=" + mcategory
-				+ "]";
-	}
-	
 }
