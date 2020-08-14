@@ -88,6 +88,8 @@ public class CommentController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Comments> list = commentService.listAllComments(pid);
+			System.out.println("게시글의 댓글 목록 조회");
+			System.out.println(list);
 			if(list.size()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLCOMMENT_NONE),HttpStatus.OK);
 			}else {

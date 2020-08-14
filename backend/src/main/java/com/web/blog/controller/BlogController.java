@@ -379,6 +379,8 @@ public class BlogController {
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_MEMBER_FAIL), HttpStatus.FORBIDDEN);
 			} else {
+				System.out.println(member.toString());
+				System.out.println(bid+" "+member.getEmail()+" "+user);
 				blogService.deleteMember(bid, member.getEmail(), user);
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS), HttpStatus.OK);

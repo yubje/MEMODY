@@ -44,7 +44,7 @@ public class CommentService {
 	
 	public List<Comments> listAllComments(int pid){
 		List<Comments> result = new ArrayList<Comments>();
-		result = commentRepository.findByPid(pid);
+		result = commentRepository.findAllByPidOrderByCommentTimeDesc(pid);
 		return result;
 	}
 	

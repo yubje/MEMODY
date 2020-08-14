@@ -169,7 +169,6 @@ public class BlogService {
 	public boolean deleteBlog(String user, int bid, String role) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager()) | role.equals(ADMIN)) {
-//				blogRepository.deleteById(bid);
 			blogRepository.deleteByBid(bid);
 			return true;
 		} else {
@@ -202,7 +201,7 @@ public class BlogService {
 		String manager = blogRepository.findByBid(bid).getManager();
 
 		if (user.equals(manager)) {
-			memberRepository.deleteByEmail(email);
+			memberRepository.deleteByEmailAndBid(email, bid);
 		} else {
 			return false;
 		}
