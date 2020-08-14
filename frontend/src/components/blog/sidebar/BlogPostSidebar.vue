@@ -68,7 +68,8 @@ export default {
   },
   created() {
     this.getBlogCategory(this.blogData.bid)
-  }
+  },
+}
 </script>
 
 
