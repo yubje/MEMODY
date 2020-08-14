@@ -1,12 +1,35 @@
 <template>
-  <div id="main">
-    <div class="m-5">
-      <h1>MEMODY</h1>
-    </div>
-    <div class="container w-75">
+  <div class="main-container">
+    <div class="main-intro">
+      <div class="main-intro-title">
+        <p>어떤 <span>공유 블로그</span>를</p>
+        <p>찾고 싶으신가요?</p>
+      </div>
       <MainSearchTab/>
     </div>
+
+
+
+
+
+
+    <hr>
+    <MainRanking/>
+
     
+    
+
+
+
+
+
+
+
+
+
+
+
+
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
@@ -14,7 +37,7 @@
     </div>
       추천 블로그
       <MainRecommendBlogList :recommendBlog="recommendBlog"/>
-      <MainRanking/>
+      
   </div>
 </template>
 
@@ -51,15 +74,11 @@ export default {
     fetchBlogs() {
       if (cookies.get('auth-token')) {
         this.mainAfter()
+        console.log(this.$store.state.myBlogs)
       }else {
         this.mainBefore()
-        console.log(this.$store.state.recommendBlog)
       }
     }
   },
 }
 </script>
-
-<style>
-
-</style>

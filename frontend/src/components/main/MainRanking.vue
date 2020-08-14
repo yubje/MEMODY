@@ -20,7 +20,7 @@
             rounded
             @click="toggle"
           >
-            {{ n }}위  {{ rankedUsers[1].uid }}
+            {{ n+1 }}위  {{ rankedUser[1].uid }}
           </v-btn>
         </router-link>
       </v-slide-item>

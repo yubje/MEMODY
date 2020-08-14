@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class CommentService {
 
 	private final CommentRepository commentRepository;
-	private final UsersRepository 	userRepository;
-	
+	private final UsersRepository userRepository;
+
 	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createComments(Comments comment) {

@@ -62,6 +62,10 @@ export const blog = {
     comment_id: null,
     commentData: null,
 
+
+    // 임시 저장 리스트
+    blogPostTmpList: null,
+
   
 
   
@@ -328,9 +332,12 @@ export const blog = {
 
     changeDialogState({commit}) {
       BlogService.changeDialogState({commit})
-    }
+    },
+
+    getBlogPostTmpList({ state }) {
+      BlogService.getBlogPostTmpList({ state })
+    },
 
   },
 
 }
-

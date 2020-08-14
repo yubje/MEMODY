@@ -401,16 +401,9 @@ public class LoginController {
 	@GetMapping(value = "/rank")
 	public ResponseEntity searchRanking(HttpServletRequest req) {
 		String token = req.getHeader("auth");
-//		if (jwtTokenProvider.validateToken(token)) {
-			List<Users> list = userService.findAll();
-//			System.out.println(list);
-			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLRANK_SUCCESS, list),
-					HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-//					HttpStatus.FORBIDDEN);
-//		}
-
+		List<Users> list = userService.findAll();
+		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLRANK_SUCCESS, list),
+				HttpStatus.OK);
 	}
 
 }
