@@ -29,6 +29,7 @@ public class BlogService {
 	private final TagRepository tagRepository;
 	private final BlogFollowRepository blogFollowRepository;
 	
+	private final String ADMIN = "ROLE_ADMIN";
 
 	public int createBlog(String title,String subtitle,String content, String email) {
 		return blogRepository.save(Blog.builder().btitle(title).bsubtitle(subtitle)
@@ -165,9 +166,9 @@ public class BlogService {
 	}
 
 	// 삭제
-	public boolean deleteBlog(String user, int bid) {
+	public boolean deleteBlog(String user, int bid, String role) {
 		Blog blog = blogRepository.findByBid(bid);
-		if (user.equals(blog.getManager())) {
+		if (user.equals(blog.getManager()) | role.equals(ADMIN)) {
 //			blogRepository.deleteById(bid);
 			blogRepository.deleteByBid(bid);
 			return true;
@@ -201,7 +202,7 @@ public class BlogService {
 		String manager = blogRepository.findByBid(bid).getManager();
 
 		if (user.equals(manager)) {
-			memberRepository.deleteByEmail(email);
+			memberRepository.deleteByEmailAndBid(email, bid);
 		} else {
 			return false;
 		}

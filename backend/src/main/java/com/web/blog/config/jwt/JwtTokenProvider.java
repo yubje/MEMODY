@@ -30,8 +30,6 @@ public class JwtTokenProvider {
 
 	// 토큰 유효시간 30분
 //	private long tokenValidTime = 6 * 60 * 1000L;
-//	private long tokenValidTime = 6 * 20 * 1000L;
-	
 	private long tokenValidTime = 8 * 60 * 60 * 1000L;
 
 	private final UserDetailsService userDetailsService;
@@ -70,7 +68,7 @@ public class JwtTokenProvider {
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
 	}
 
-	// Request의 Header에서 token 값을 가져옵니다. "auth" : "TOKEN값'
+	// Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
 	public String resolveToken(HttpServletRequest request) {
 		return request.getHeader("auth");
 	}

@@ -59,7 +59,7 @@ public class Post {
 	private LocalDateTime postTime;
 	
 	@Column
-	private LocalDateTime update_time;
+	private LocalDateTime updateTime;
 	
 	@Column(nullable = true)
 	private int fork;
@@ -77,7 +77,7 @@ public class Post {
 	
 	
 	@Builder
-	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author,String manager, LocalDateTime postTime, LocalDateTime update_time, String ptype, int postlikecnt) {
+	public Post(int bid, int lcid, int mcid, String ptitle, String pcontent, String author,String manager, LocalDateTime postTime, LocalDateTime updateTime, String ptype, int postlikecnt) {
 		this.bid = bid;
 		this.lcid = lcid;
 		this.mcid = mcid;
@@ -86,7 +86,7 @@ public class Post {
 		this.author = author;
 		this.manager = manager;
 		this.postTime = postTime;
-		this.update_time = update_time;
+		this.updateTime = updateTime;
 		this.ptype = ptype;
 		this.postlikecnt = postlikecnt;
 	}
@@ -98,7 +98,7 @@ public class Post {
 		this.pcontent = pcontent;
 	}
 	public void setUpdate_time(LocalDateTime update_time) {
-		this.update_time = update_time;
+		this.updateTime = update_time;
 	}
 	public void setPtype(String ptype) {
 		this.ptype = ptype;
@@ -122,7 +122,7 @@ public class Post {
 	public String toString() {
 		return "Post [pid=" + pid + ", bid=" + bid + ", lcid=" + lcid + ", mcid=" + mcid + ", ptitle=" + ptitle
 				+ ", pcontent=" + pcontent + ", author=" + author + ", manager=" + manager + ", postTime=" + postTime
-				+ ", update_time=" + update_time + ", fork=" + fork + ", ptype=" + ptype + ", postlikecnt="
+				+ ", update_time=" + updateTime + ", fork=" + fork + ", ptype=" + ptype + ", postlikecnt="
 				+ postlikecnt + ", liker=" + liker + "]";
 	}
 	
