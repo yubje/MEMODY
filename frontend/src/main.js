@@ -10,14 +10,22 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueCookies from 'vue-cookies'
 import vuetify from './plugins/vuetify';
+import VuetifyDialog from 'vuetify-dialog';
 
 require('@/assets/css/style.css')
 
 Vue.use(VueCookies)
+
+Vue.use(VuetifyDialog, {
+  context: {
+    vuetify
+  }
+})
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)

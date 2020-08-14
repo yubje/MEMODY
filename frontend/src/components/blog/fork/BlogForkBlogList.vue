@@ -49,7 +49,6 @@
     },
     computed: {
       ...mapState('blog', ['myBlogs', ])
-
     },
     methods: {
       ...mapActions('blog', ['getBlogs']),
@@ -60,12 +59,9 @@
     async created() {
       await this.getBlogs()
       this.temp = this.myBlogs
-
     }
-
   }
 </script>
 
 <style>
-
 </style>
