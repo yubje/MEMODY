@@ -68,6 +68,7 @@ public class ResponseMessage {
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
     public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
     public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
+    public static final String DELETE_POST_FAIL = "게시글 삭제 실패";
     public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
     public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
@@ -85,6 +86,7 @@ public class ResponseMessage {
     public static final String SEARCH_COMMENT_SUCCESS = "댓글 조회 성공";
     public static final String UPDATE_COMMENT_SUCCESS = "댓글 수정 성공";
     public static final String DELETE_COMMENT_SUCCESS = "댓글 삭제 성공";
+    public static final String DELETE_COMMENT_FAIL = "댓글 삭제 실패";
     
     // Category
     public static final String CREATE_CATEGORY_SUCCESS = "카테고리 추가 성공";
@@ -101,7 +103,6 @@ public class ResponseMessage {
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
     public static final String FORBIDDEN = "인가 실패";
-    public static final String TOKEN_REFRESH = "토큰 갱신 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String SERVICE_UNAVAILABLE = "현재 서비스를 사용하실 수 없습니다. 잠시후 다시 시도해 주세요.";
