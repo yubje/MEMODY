@@ -15,6 +15,7 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
+      member: null,
     },
 
     // 새 블로그 추가를 위한 새 정보

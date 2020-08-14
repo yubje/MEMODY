@@ -4,31 +4,99 @@
     <BlogPostSidebar/>
     <div class="col align-self-center" style="height: 60%;">
       <div class="col text-left">
-        <h1>{{ blogData.btitle }}</h1>
-        <h3>{{ blogData.bsubtitle }}</h3>
+        <h1 class="font-weight-black">{{ blogData.btitle }}</h1>
+        <h3 class="font-weight-bold">{{ blogData.bsubtitle }}</h3>
         <p>{{ blogData.bcontent }}</p>
-        <p>관리자: {{ blogData.manager }}</p>
-        <a v-for="hashtag in blogData.hashtags" :key="hashtag.tname">  # {{ hashtag.tname }}</a>
-        <p> 팔로우: {{blogData.followers}} 명</p>
+        <p>관리자 {{ blogData.manager }}</p>
+        <v-btn
+          outlined
+          rounded
+          color="teal"
+          class="ma-1"
+          v-for="hashtag in blogData.hashtags"
+          :key="hashtag.tname"
+        >
+          <v-icon>mdi-music-accidental-sharp</v-icon>
+          {{ hashtag.tname }}
+        </v-btn>
+        <p><span class="font-weight-bold">팔로워</span> {{blogData.followers}} 명</p>
         
-
+        <!-- 블로그 관리자가 아닌 경우 -->
         <div v-if="userInfo.email !== blogData.manager">
-          <v-btn 
-            color="secondary" 
-            class="text-light"
-            v-if="following"
-            @click="clickFollow()"
-          >
-            <b>팔로우 취소</b>
+          <!-- 블로그 회원인 경우 블로그 탈퇴 버튼 보여주기 -->
+          <div v-if="this.isMember">
+            <v-btn 
+              v-if="this.isMember"
+              color="error" 
+              data-toggle="modal" 
+              data-target="#leaveBlogModal"
+              class="m-2"
+              small
+              dark
+              fab
+            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn>
+          </div>
+          <!-- 블로그 회원이 아닌 경우 -->
+          <div v-else>
+            <!-- 팔로우 하고 있는 경우 -->
+            <v-btn 
+              color="secondary" 
+              small
+              dark
+              fab
+              v-if="following"
+              @click="clickFollow()"
+            >
+              <v-icon dark>mdi-account-remove-outline</v-icon>
+            </v-btn>
+
+            <v-btn 
+              color="teal" 
+              small
+              dark
+              fab
+              v-else
+              @click="clickFollow()"
+            >
+              <v-icon>mdi-account-star-outline</v-icon>
           </v-btn>
-          <v-btn 
-            color="teal lighten-3" 
-            class="text-light"
-            v-else
-            @click="clickFollow()"
-          >
-            <b>팔로우</b>
-          </v-btn>
+          </div>
+          
+            
+          <!-- <div v-for="(member, n) in members" :key="n">
+            <v-btn 
+              v-if="userInfo.email==member.email"
+              color="error" 
+              data-toggle="modal" 
+              data-target="#leaveBlogModal"
+              class="m-2"
+              small
+              dark
+              fab
+            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn>
+          </div> -->
+
+          <!-- Modal -->
+          <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="leaveBlogModalLabel">블로그 탈퇴</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  블로그 회원 탈퇴를 하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-danger" @click="leaveBlog(member.email)">탈퇴하기</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>           
       </div>
     </div>
@@ -37,7 +105,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 import axios from 'axios'
@@ -51,9 +119,11 @@ export default {
   data() {
     return {
       following: null,
+      isMember: false,
     }
   },
   methods: {
+    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember']),
     clickFollow() {
       if (this.following) {
         axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`,{data :this.blogData,headers: {"auth": cookies.get('auth-token')}})
@@ -62,17 +132,28 @@ export default {
         axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`,this.blogData,{headers: {"auth": cookies.get('auth-token')}})
         this.following = true
       }
-    }
+    },
+    leaveBlog(email) {
+      this.deleteBlogMember(email)
+    },
   },
   computed: {
-    ...mapState('blog', ['bid', 'blogData']),
+    ...mapState('blog', ['bid', 'blogData', 'members']),
     ...mapState(['userInfo'])
   },
   async mounted() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
     this.following = data.data
     console.log(this.following)
-  }  
+  },
+  created() {
+    this.getBlogMembers()
+    this.members.forEach(member => {
+      if (member.email === this.userInfo.email) {
+        this.isMember=true;
+      }
+    });
+  },  
 }
 </script>
 

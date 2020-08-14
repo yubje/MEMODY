@@ -7,7 +7,9 @@
           outlined
         >
           <v-card-title>
-            <h1>카테고리</h1>
+            {{ mdir }}
+
+
             <v-menu 
               bottom
             >
@@ -39,24 +41,30 @@
                 </v-list-item>
               </v-list>
             </v-menu>
+          
           </v-card-title>
-
+          <v-breadcrumbs :items="items" class="px-3 py-1">
+            <template v-slot:divider>
+              <v-icon>mdi-chevron-right</v-icon>
+            </template>
+          </v-breadcrumbs>
+          <hr>
           <v-simple-table>
             <template v-slot:default>
               <thead>
                 <tr>
                   <th class="text-left">글 제목</th>
-                  <th class="text-left">작성자</th>
+                  <th class="text-left">관리자</th>
                   <th class="text-left">작성일</th>
                   <th class="text-left">좋아요</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
-                  <td>{{ post.ptitle }}</td>
-                  <td>{{ post.author }}</td>
-                  <td>{{ post.postTime.slice(0,10) }}</td>
-                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
+                  <td class="text-left">{{ post.ptitle }}</td>
+                  <td class="text-left">{{ post.author }}</td>
+                  <td class="text-left">{{ post.postTime.slice(0,10) }}</td>
+                  <td class="text-left"><font-awesome-icon  :icon="['fas','heart']" style="color:red;"/> {{ post.postlikecnt }}</td>
                 </tr>
               </tbody>
             </template>
@@ -93,11 +101,17 @@ export default {
   data() {
     return {
       page: 1,
+      items: [
+        { text: this.ldir, disabled: true, href: '',},
+        { text: this.mdir, disabled: true, href: '',},
+      ],
     }
   },
   props: {
     mcid : Number,
     lcid: Number,
+    ldir: String,
+    mdir: String,
   },
   computed: {
     ...mapState('blog', ['blogData','posts'])
@@ -119,17 +133,30 @@ export default {
       this.fetchPosts(info)
     },
   },
- 
+  watch: {
+    mcid: function(newVal) {
+      const info = {
+      "bid": this.blogData.bid,
+      "mcid": newVal,
+      "page": this.page-1,
+    }
+    this.fetchPosts(info)
+    }
+    
+  },
   created() {
+    console.log('created')
     const info = {
       "bid": this.blogData.bid,
       "mcid": this.mcid,
       "page": this.page-1,
     }
-    console.log(this.page)
-    console.log(info)
     this.fetchPosts(info)
   },
    
 }
 </script>
+;
+<style scoped>
+
+</style>
