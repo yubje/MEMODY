@@ -57,7 +57,7 @@ hr {
 }
 
 #navbar-menu-before a:hover, #navbar-menu-after:hover, .v-application a:hover,
-.searchTab-type:hover {
+.searchTab-type:hover, #search-icon:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -144,4 +144,12 @@ hr {
 
 #search-icon:hover {
   cursor: pointer;
+}
+
+.searchTab_container_input_click {
+  border-color: #6ac6c8;
+}
+
+.searchTab_icon_input_click {
+  color: #6ac6c8 !important;
 }
