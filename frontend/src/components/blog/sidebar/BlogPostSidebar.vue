@@ -14,27 +14,33 @@
     >
       <v-list>
         <v-list-item>
-          <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none"><h4> Home</h4></router-link>
+          <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none">
+            <v-card-title><b>Home</b></v-card-title>
+          </router-link>
         </v-list-item>
         <v-list-item>
-          <router-link :to="{ name: 'BlogPostList' }" class="text-dark text-decoration-none">전체글조회</router-link>
+          <router-link :to="{ name: 'BlogPostList' }" class="text-decoration-none pa-5">
+            <b>전체 글 조회</b>
+          </router-link>
         </v-list-item>
         <div v-for="categories in dataCategories"
           :key="categories.lcid" >
-          <v-list-item
-            link
+          <v-list-group
+            value="true"
+            color="teal"
           >
-            <v-list-item-content>
-              <v-list-item-title><h5>{{ categories.large_dir }}</h5></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
+            <template v-slot:activator>
+              <v-list-item-title><b>{{ categories.large_dir }}</b></v-list-item-title>
+            </template>  
 
           <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
-            <v-list-item-title @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
-              | {{child.medium_dir}}
+            <v-list-item-title>
+              <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" >
+                {{child.medium_dir}}
+              </router-link>
             </v-list-item-title>
-          </v-list-item>         
+          </v-list-item>       
+          </v-list-group>  
         </div>
 
       </v-list>
@@ -64,22 +70,7 @@ export default {
     ...mapState('blog', ['blogData','dataCategories']),
   },
   methods: {
-    ...mapActions('blog',['addParentCategory','addChildCategory','getBlogCategory','moveToPosts','fetchPosts']),
-    moveToPost(mcid,bid,lcid) {
-      const categoryData = {
-        "bid": bid,
-        "mcid": mcid,
-        "lcid": lcid,
-      }
-      this.moveToPosts(categoryData)
-    },
-    fetchPost(mcid, bid) {
-      const temp ={
-        "bid": bid,
-        "mcid": mcid
-      }
-      this.fetchPosts(temp)
-    }
+    ...mapActions('blog',['getBlogCategory']),
   },
   created() {
     this.getBlogCategory(this.blogData.bid)
@@ -89,12 +80,8 @@ export default {
 
 
 <style scoped>
-p {
-  cursor: pointer;
-}
-th {
-  cursor: pointer;
-  color: #313D4F;
-
+a:hover {
+  color: #00897B !important;
+  background-color: #E0F2F1 !important;
 }
 </style>
