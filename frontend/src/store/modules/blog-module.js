@@ -1,7 +1,7 @@
 // blog 상태 관리 모듈
 import router from '@/router'
 import BlogService from '@/services/blog-service'
-// import { delete } from 'vue/types/umd';
+// import { delete } from 'vue/types/umd';http://c55b07877ea7.ngrok.io/
 
 export const blog = {
   namespaced: true,
