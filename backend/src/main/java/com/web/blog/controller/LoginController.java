@@ -347,6 +347,23 @@ public class LoginController {
 		}
 	}
 	
+	/**
+	 * 회원가입 시 닉네임 중복 조회 - 회원가입 시 닉네임 중복 방지 기능 
+	 * @param String uid
+	 * @return
+	 */
+	@ApiOperation(value = "회원가입 시 닉네임 중복 조회", response = ResponseEntity.class, notes = "회원가입 시 닉네임 중복 방지 기능입니다.")
+	@GetMapping(value = "/nickname/{uid}")
+	public ResponseEntity searchByNickname(@PathVariable String uid) {
+		if (!userService.findByUid(uid).isPresent()) {
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST), HttpStatus.FORBIDDEN);
+		}
+	}
+	
 	
 	@ApiOperation(value = "프로필 이미지 변경", response = ResponseEntity.class)
 	@PutMapping(value = "/users/{email}/profile", produces = "application/json;charset=UTF-8", consumes = {
