@@ -38,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final JwtTokenProvider jwtTokenProvider;
-	private final RedisTemplate redisTemplate;
+
 	private final UserDetailsService jwtUserDetailsService;
 
 	// 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.addFilterBefore(filter,CsrfFilter.class)
 				.addFilterBefore(new CorsFilter(),SecurityContextPersistenceFilter.class)
-				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate),
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
 						UsernamePasswordAuthenticationFilter.class);
 		// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
 	}

@@ -152,10 +152,12 @@ public class PostController {
 						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
 				
 				System.out.println("게시글 작성");
-				System.out.println("!!!!"+post.get("pid")+"!!!");
-				if((post.get("pid")!="")) {
+				System.out.println(post.get("pid"));
+				if(post.get("pid") != "") {
 					System.out.println("임시저장 글이었다.");
-					postService.deletePost(Integer.parseInt(post.get("pid")));
+					Users user = userService.findByEmail(email)
+							.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+					postService.deletePost(email, Integer.parseInt(post.get("pid")), user.getRoles().get(0));
 				}
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
@@ -406,9 +408,16 @@ public class PostController {
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
-			postService.deletePost(pid);
-			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
+		if (jwtTokenProvider.validateToken(token)) {
+			String userEmail = jwtTokenProvider.getUserPk(token);
+			Users user = userService.findByEmail(userEmail)
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			if(postService.deletePost(userEmail, pid, user.getRoles().get(0))) {
+				
+				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_FAIL),HttpStatus.OK);
+			}
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}

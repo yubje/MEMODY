@@ -2,6 +2,7 @@ package com.web.blog.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.handler.UserRoleAuthorizationInterceptor;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Users;
@@ -96,6 +96,7 @@ public class LoginController {
 
 		String token = jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
 		res.setHeader("auth", token);
+		System.out.println(user.getEmail()+" >>>LOGIN>>>>>>>>"+token);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.LOGIN_SUCCESS, member),
 				HttpStatus.OK);
 	}
@@ -109,19 +110,7 @@ public class LoginController {
 	 */
 	@ApiOperation(value = "회원 가입", response = ResponseEntity.class, notes = "Email, Password, NickName을 입력하여 회원가입을 합니다.")
 	@PostMapping("/users")
-	public ResponseEntity signUp(@RequestBody Users user, HttpServletRequest req)  {
-		String code = req.getHeader("code");
-		System.out.println("**************************************");
-		System.out.println(code);
-		System.out.println(redisTemplate.opsForValue().get(user.getEmail()));
-		System.out.println("**************************************");
-		if ((redisTemplate.opsForValue().get(user.getEmail())==null) || !redisTemplate.opsForValue().get(user.getEmail()).equals(code)) {
-			System.out.println(("인증되는 이메일이 아님"));
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-					HttpStatus.FORBIDDEN);
-		}
-		redisTemplate.opsForValue().set(user.getEmail(),"",0);
-		
+	public ResponseEntity signUp(@RequestBody Users user) {
 		if (userService.findByEmail(user.getEmail()).isPresent()) {
 			throw new RestException(ResponseMessage.ALREADY_USER, HttpStatus.FORBIDDEN);
 		}
@@ -224,14 +213,8 @@ public class LoginController {
 			StringBuilder sb = new StringBuilder();
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
-			
+
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
-				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
-//				redisTemplate.opsForValue().set(code+"_"+SEND_EMAIL_ID, "email-code", 300,
-//						TimeUnit.MILLISECONDS);
-				System.out.println("인증코드 redis에 저장 "+email);
-				System.out.println(redisTemplate.opsForValue().get(email));
-				
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
@@ -267,7 +250,6 @@ public class LoginController {
 			sb.append("인증코드 : " + code);
 
 			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
-				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
@@ -320,16 +302,6 @@ public class LoginController {
 	@PutMapping(value = "/users/pw")
 	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
 
-		String code = req.getHeader("code");
-		System.out.println(redisTemplate.opsForValue().get(user.getEmail()));
-		if ((redisTemplate.opsForValue().get(user.getEmail())==null) || !redisTemplate.opsForValue().get(user.getEmail()).equals(code)) {
-			System.out.println(("인증되는 이메일이 아님"));
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-					HttpStatus.FORBIDDEN);
-		}
-		System.out.println("인증됨");
-		redisTemplate.opsForValue().set(user.getEmail(),"",0);
-		
 		String ecdPwd = passwordEncoder.encode(user.getPassword());
 		userService.pwdUpdate(user.getEmail(), ecdPwd);
 
@@ -344,15 +316,24 @@ public class LoginController {
 	 */
 	@ApiOperation(value = "닉네임으로 회원정보 조회", response = ResponseEntity.class, notes = "닉네임 중복 방지를 위해 닉네임으로 회원정보를 조회합니다.")
 	@GetMapping(value = "/users/{uid}/nickname")
-	public ResponseEntity searchUserByNickname(@PathVariable String uid) {
-		if (!userService.findByUid(uid).isPresent()) {
-			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),
-					HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Response>(
-					new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST), HttpStatus.FORBIDDEN);
+	public ResponseEntity searchUserByNickname(@PathVariable String uid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String email = jwtTokenProvider.getUserPk(token);
+			Users user = userService.findByEmail(email)
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			
+			if (user.getUid().equals(uid) | !userService.findByUid(uid).isPresent()) {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_NONE, uid),
+						HttpStatus.OK);
+			} else {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_NICKNAME_EXIST), HttpStatus.FORBIDDEN);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
 		}
-
 	}
 	
 	
@@ -392,17 +373,16 @@ public class LoginController {
 	@GetMapping(value = "/rank")
 	public ResponseEntity searchRanking(HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token)) {
+//		if (jwtTokenProvider.validateToken(token)) {
 			List<Users> list = userService.findAll();
-			System.out.println(list);
+//			System.out.println(list);
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLRANK_SUCCESS, list),
 					HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-					HttpStatus.FORBIDDEN);
-		}
+//		} else {
+//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+//					HttpStatus.FORBIDDEN);
+//		}
 
 	}
 
 }
-
