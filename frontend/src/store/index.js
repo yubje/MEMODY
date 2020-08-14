@@ -12,10 +12,6 @@ Vue.use(Vuex)
 
 const SERVER = process.env.VUE_APP_SERVER
 
-
-
-
-
 export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
@@ -46,7 +42,6 @@ export default new Vuex.Store({
 
   mutations: {
     SET_TOKEN(state, token) {
-      console.log("메롱", token)
       state.authToken = token
       cookies.set('auth-token', token)
     },
@@ -98,10 +93,11 @@ export default new Vuex.Store({
 
   actions: {
     // auth
-    postAuthData({ commit }, info) {
-      axios.post(SERVER + info.location, info.data)
-        .then(response => {
-          commit('SET_TOKEN', response.headers.auth)
+    postAuthData({ state }, info) {
+      axios.post(SERVER + info.location, info.data, {headers:{"code":info.code}})
+        .then(() => {
+          console.log(state)
+          // commit('SET_TOKEN', response.headers.auth)
           router.push({ name: 'Main'})
         })
         .catch(error => alert(error.response.data.message))
@@ -114,6 +110,8 @@ export default new Vuex.Store({
       }
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
+        console.log('로그인:',response )
+        console.log(response.config)
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
         router.push({ name: 'Main' })
@@ -122,30 +120,35 @@ export default new Vuex.Store({
     },
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
+      commit('SET_TOKEN', null)
+      cookies.remove('auth-token')
+      window.localStorage.removeItem('userInfo')
       axios.get(SERVER + '/logout/', getters.config)
         .then(() => {
-          commit('SET_TOKEN', null)
-          cookies.remove('auth-token')
-          window.localStorage.removeItem('userInfo')
-          router.push({ name: 'Main'})
+         })
+        .catch(error => {
+          alert(error.response.data.message)
         })
-        .catch(error => alert(error.response.data.message))
+      router.push({ name: 'Main'})
     },
 
     // 회원가입 (API 문서 - 7~9 D)
     signup({ dispatch }, signupData) {
+      // signupData['code'] = signupData.validationNumber
       const info = {
         data: signupData,
+        code: signupData.validationNumber,
         location: '/users'
       }
       dispatch('postAuthData', info)
-      router.push({ name: 'UserLoginView'})
+      
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
+        console.log('이메일 인증:', response)
         commit('SET_VALIDATION', response.data.data)
         console.log(response.data.data)
       })
@@ -156,6 +159,7 @@ export default new Vuex.Store({
     validateEmailForResetPW({ commit }, email) {
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
+        console.log('비번 재설정시', response.data)
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
@@ -169,13 +173,12 @@ export default new Vuex.Store({
     checkValidation( { commit } ,validationNumber) {
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
-
+        
         if (this.state.validType) {
           router.push({ name: 'UserResetPWView' })
         } else {
           commit('SET_ISVALID')
           console.log(this.state.emailValidationNumber)
-          window.$('#email-validation').modal('hide')
         }
       } else {
         alert("인증번호가 틀립니다.")
@@ -185,7 +188,9 @@ export default new Vuex.Store({
     // 비밀번호 재설정 (API 문서 - 13D)
     resetPW({ state }, resetPWData) {
       resetPWData.email = state.email
-      axios.put(`${SERVER}/users/pw`, resetPWData)
+      const code = this.state.emailValidationNumber
+      console.log(code)
+      axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
         .then(response => {
           alert(response.data.message)
           router.push({ name: 'Main'})

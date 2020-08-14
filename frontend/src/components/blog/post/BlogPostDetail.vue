@@ -25,7 +25,7 @@
         <p style="text-align: left; margin-bottom: 0px">원작자: {{ postData.author }}</p>
         <p style="text-align: left; margin-bottom: 0px">관리자: {{ postData.manager }}</p>
         <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
-        <p style="text-align: left">수정날짜: {{ postData.update_time.slice(0,10) }}</p>
+        <p style="text-align: left">수정날짜: {{ postData.updateTime.slice(0,10) }}</p>
         <v-btn icon v-if="liked" @click="clickLike()">
           <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
         </v-btn>
