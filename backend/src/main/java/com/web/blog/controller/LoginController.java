@@ -302,6 +302,17 @@ public class LoginController {
 	@PutMapping(value = "/users/pw")
 	public ResponseEntity resetPassword(@RequestBody Users user, HttpServletRequest req) {
 
+		String code = req.getHeader("code");
+		System.out.println(redisTemplate.opsForValue().get(user.getEmail()));
+		System.out.println("CODE: "+code);
+		if ((redisTemplate.opsForValue().get(user.getEmail())==null) || !redisTemplate.opsForValue().get(user.getEmail()).equals(code)) {
+			System.out.println(("인증되는 이메일이 아님"));
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+		System.out.println("인증됨");
+		redisTemplate.opsForValue().set(user.getEmail(),"",0);
+		
 		String ecdPwd = passwordEncoder.encode(user.getPassword());
 		userService.pwdUpdate(user.getEmail(), ecdPwd);
 
