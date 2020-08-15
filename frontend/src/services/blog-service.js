@@ -148,7 +148,7 @@ class BlogService {
     axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         alert(response.data.message)
-        router.push({ name: 'MainView' })
+        router.push({ name: 'Main' })
       })
       .catch(error => console.log(error.response.data))
   }
@@ -220,14 +220,6 @@ class BlogService {
         router.go()
       })
       .catch(error => console.log(error.response.data))
-  }
-
-  //카테고리 별 글목록 조회
-  moveToPosts({commit},categoryData) {
-    console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},
-    
-    )
   }
 
   fetchPosts({commit},info) {

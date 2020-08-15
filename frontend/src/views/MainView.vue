@@ -7,29 +7,8 @@
       </div>
       <MainSearchTab/>
     </div>
-
-
-
-
-
-
     <hr>
     <MainRanking/>
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
@@ -72,7 +51,7 @@ export default {
   methods: {
     ...mapActions(['mainAfter','mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token')) {
+      if (cookies.get('auth-token') !== undefined) {
         this.mainAfter()
         console.log(this.$store.state.myBlogs)
       }else {
