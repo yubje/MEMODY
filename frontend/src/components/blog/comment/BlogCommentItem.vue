@@ -22,7 +22,7 @@
     </div>
     <div>
       <p class="px-3 text-left">{{ comment.comment }}</p>
-      <p class="px-3 text-left">created at: {{ comment.comment_time.slice(0,10) }}  |  updated at: {{ comment.update_time.slice(0,10) }}</p>
+      <p class="px-3 text-left">created at: {{ comment.commentTime.slice(0,10) }}  |  updated at: {{ comment.updateTime.slice(0,10) }}</p>
     </div>
     <hr>
   </div>

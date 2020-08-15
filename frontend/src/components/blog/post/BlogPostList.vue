@@ -6,25 +6,24 @@
         <v-card
           outlined
         >
-          <v-card-title>
-            <h1>전체 글 조회</h1>
-          </v-card-title>
+          <v-card-title>전체 글 조회</v-card-title>
+          <hr>
           <v-simple-table>
             <template v-slot:default>
               <thead>
                 <tr>
                   <th class="text-left">글 제목</th>
-                  <th class="text-left">작성자</th>
+                  <th class="text-left">관리자</th>
                   <th class="text-left">작성일</th>
                   <th class="text-left">좋아요</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="post in postListData.content" :key="post.pid" @click="blogPostDetail(post)">
-                  <td>{{ post.ptitle }}</td>
-                  <td>{{ post.author }}</td>
-                  <td>{{ post.postTime.slice(0,10) }}</td>
-                  <td><font-awesome-icon  :icon="['fas','heart']" /> {{ post.postlikecnt }}</td>
+                  <td class="text-left">{{ post.ptitle }}</td>
+                  <td class="text-left">{{ post.author }}</td>
+                  <td class="text-left">{{ post.postTime.slice(0,10) }}</td>
+                  <td class="text-left"><font-awesome-icon  :icon="['fas','heart']" style="color:red;"/> {{ post.postlikecnt }}</td>
                 </tr>
               </tbody>
             </template>
