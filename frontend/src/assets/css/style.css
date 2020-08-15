@@ -21,6 +21,10 @@ hr {
   box-shadow: 0px 10px 18px -10px rgba(0, 0, 0, 0.251);
 }
 
+#navbar-menu-after{
+  margin-left: 45px;
+}
+
 .navbar-menu-list-after {
   text-align: left;
   border-width: 1px;
@@ -69,15 +73,24 @@ hr {
 }
 
 #profile-img-small {
-  width: 30px;
-  height: 30px; 
+  width: 31px;
+  height: 31px; 
   border-radius: 70%;
-  margin-right: 7px;
+  margin: 0px 7px;
+  border: 1px solid #c7c7c7;
 }
 
 #logout-icon {
   float: right;
   color: #646464;
+}
+
+.hr-col {
+  height: 30px;
+  border-width: 0px 0px 0px 1px;
+  border-image: initial;
+  border-left: 1px solid #dfdfdf;
+  margin-right: 10px;
 }
 
 /*--------------------MainView--------------------*/
@@ -94,6 +107,10 @@ hr {
 
 .main-intro-title span {
   color: #6ac6c8;
+}
+
+.hr-main {
+  width: 65%;
 }
 
 /*--------------------MainSearchTab--------------------*/
@@ -152,4 +169,19 @@ hr {
 
 .searchTab_icon_input_click {
   color: #6ac6c8 !important;
+}
+
+/*--------------------MainRanking--------------------*/
+.v-item-group {
+  max-width: 13%;
+  cursor:default;
+}
+
+#icon-rank {
+  margin-right: 5px;
+}
+
+#rank-number {
+  font-weight: bold;
+  font-size: large;
 }

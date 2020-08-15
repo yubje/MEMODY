@@ -11,11 +11,6 @@
 
 
 
-
-
-    <hr>
-    <MainRanking/>
-
     
     
 
@@ -25,7 +20,7 @@
 
 
 
-
+    <hr class="hr-main">
 
 
 
@@ -47,7 +42,6 @@ import cookies from 'vue-cookies'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
-import MainRanking from '@/components/main/MainRanking.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -64,7 +58,6 @@ export default {
     MainSearchTab,
     MainMyBlogList,
     MainRecommendBlogList,
-    MainRanking,
   },
   async mounted() {
     await this.fetchBlogs()

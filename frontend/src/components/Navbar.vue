@@ -8,6 +8,19 @@
 
     <v-spacer></v-spacer>
 
+
+
+    <hr class="hr-col">
+
+    <router-link :to="{ name: 'MainRankingView' }">전체랭킹</router-link>
+    <v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <MainRanking v-bind="attrs" v-on="on"/>
+      </template>
+    </v-menu>
+
+    <hr class="hr-col">
+
     <v-menu v-if="authToken">
       <template v-slot:activator="{ on, attrs }">
         <button id="navbar-menu-after" v-bind="attrs" v-on="on">
@@ -44,9 +57,13 @@
 
 <script>
 import { mapState } from 'vuex'
+import MainRanking from '@/components/main/MainRanking.vue'
 
 export default {
   name: 'NavBar',
+  components: {
+    MainRanking
+  },
   computed: {
     ...mapState(['authToken', 'userInfo']),
   }

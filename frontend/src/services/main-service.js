@@ -18,18 +18,13 @@ class MainService {
 
   }
 
-  getRankedUsers({ state, commit }) {
+  getRankedUsers({ commit }) {
     axios.get(`${SERVER}/rank`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response.data)
         commit('SET_RANKEDUSERS', response.data.data)
-        console.log(state.rankedUsers)
       })
       .catch(error => console.log(error.response.data))
   }
-  
-
-
 }
 
 export default new MainService() 

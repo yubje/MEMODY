@@ -39,6 +39,14 @@ export default {
       this.searchData.searchBy = num
     },
 
+    inputClickFocus() {
+      this.inputClickValid = true;
+    },
+
+    inputClickBlur() {
+      this.inputClickValid = false;
+    },
+
     checkValid() {
       if (this.searchData.searchInput == null) {
         this.$dialog.notify.error('검색어를 입력해주세요.', {
@@ -49,14 +57,6 @@ export default {
       else {
         this.search(this.searchData)
       }
-    },
-
-    inputClickFocus() {
-      this.inputClickValid = true;
-    },
-
-    inputClickBlur() {
-      this.inputClickValid = false;
     }
   }
 }
