@@ -22,7 +22,7 @@ hr {
 }
 
 #navbar-menu-after{
-  margin-left: 45px;
+  margin-left: 37px;
 }
 
 .navbar-menu-list-after {
@@ -76,7 +76,7 @@ hr {
   width: 31px;
   height: 31px; 
   border-radius: 70%;
-  margin: 0px 7px;
+  margin: 0px 7px 0px 15px;
   border: 1px solid #c7c7c7;
 }
 
@@ -173,7 +173,7 @@ hr {
 
 /*--------------------MainRanking--------------------*/
 .v-item-group {
-  max-width: 13%;
+  max-width: 243px;
   cursor:default;
 }
 

@@ -28,7 +28,6 @@ export default {
         '#b4b4b4',
         '#dd8a3e'
       ]
-
     }
   },
   computed: {
@@ -39,6 +38,6 @@ export default {
   },
   created() {
     this.getRankedUsers()
-  },
+  }
 }
 </script>
