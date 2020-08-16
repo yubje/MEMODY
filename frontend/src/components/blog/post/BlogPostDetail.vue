@@ -4,7 +4,7 @@
       <BlogPostSidebar/>     
       <div class="col">
         <v-card-title>{{ postData.ptitle }}</v-card-title>
-        <div v-if="userInfo.email == postData.manager" style="float: right">
+        <div v-if="userInfo.email == postData.manager | userInfo.roles[0] === 'ROLE_ADMIN'" style="float: right">
           <v-btn-toggle>
             <v-btn text color="teal" @click="blogPostUpdate()"><v-icon>mdi-pencil</v-icon> 수정</v-btn>
             <v-btn text color="error" @click="blogPostDelete()"><v-icon>mdi-delete</v-icon>삭제</v-btn>
