@@ -21,8 +21,8 @@
                       이메일 인증
                     </v-card-title>
                     <v-card-text>
-                      <v-text-field v-model="validationNumber" label="인증번호 입력" required></v-text-field>
-                      <v-btn color="green darken-1" @click="checkValidation(validationNumber)">확인</v-btn>
+                      <v-text-field v-model="signupData.validationNumber" label="인증번호 입력" required></v-text-field>
+                      <v-btn color="green darken-1" @click="checkValidation(signupData.validationNumber)">확인</v-btn>
                     </v-card-text>
                     <v-card-actions>
                       <v-btn color="primary" text @click="dialog2 = false">
@@ -54,7 +54,6 @@
         </v-card>
       </v-dialog>
     </v-row>
-
   </div>
 </template>
 
@@ -63,8 +62,6 @@
     mapActions,
     mapState
   } from 'vuex'
-
-
   export default {
     name: 'UserSignupView',
     components: {},
@@ -73,11 +70,11 @@
         dialog: true,
         dialog2: false,
         emailValidation: false,
-        validationNumber: '',
         signupData: {
           uid: '',
           email: '',
           password: null,
+          validationNumber: '',
         },
         password2: '',
         valid: true,
