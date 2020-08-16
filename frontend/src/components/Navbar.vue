@@ -8,7 +8,10 @@
 
     <v-spacer></v-spacer>
 
-
+    <div v-if="authToken">
+      <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
+      <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
+    </div>
 
     <hr class="hr-col">
 

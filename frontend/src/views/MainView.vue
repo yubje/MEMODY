@@ -17,25 +17,6 @@
 
     <hr class="main-hr">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그

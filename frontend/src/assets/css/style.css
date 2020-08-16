@@ -21,6 +21,10 @@ hr {
   box-shadow: 0px 10px 18px -10px rgba(0, 0, 0, 0.251);
 }
 
+.navbar-menu {
+  margin-right: 10px;
+}
+
 #navbar-menu-after{
   margin-left: 37px;
 }
@@ -70,7 +74,8 @@ hr {
 }
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
-.searchTab-type:focus, .searchTab-input:focus {
+.searchTab-type:focus, .searchTab-input:focus,
+#main-blig-item-hashtag-btn:focus {
   outline: none !important;
 }
 
@@ -237,7 +242,7 @@ hr {
 }
 
 .main-blog-item-view-follower {
-  margin: 12px 0px 10px 0px !important;
+  margin: 13px 0px 7px 0px !important;
 }
 
 #main-blig-item-hashtag-btn {
