@@ -27,6 +27,10 @@ class BlogService {
         .catch(error => {
           if (error.response.data.status === 403) {
             alert('로그인이 필요한 서비스 입니다.')
+            this.$dialog.notify.error('검색어를 입력해주세요.', {
+              position: 'top-right',
+              timeout: 5000
+            })
           }
         })
     }

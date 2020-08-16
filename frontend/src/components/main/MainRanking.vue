@@ -1,9 +1,9 @@
 <template>
-  <v-carousel cycle hide-delimiters interval="5000" height="50px" light :show-arrows="false" vertical>
+  <v-carousel class="main-ranking-container" cycle hide-delimiters interval="5000" height="50px" light :show-arrows="false" vertical>
     <v-carousel-item v-for="(rankedUser, idx) in rankedUsers" :key="idx">
       <v-sheet height="100%">
         <v-row align="center" justify="center">
-          <font-awesome-icon id="icon-rank" v-if="idx<3" :color="colors[idx]" :icon="['fas','crown']"/>
+          <font-awesome-icon id="rank-icon" v-if="idx<3" :color="colors[idx]" :icon="['fas','crown']"/>
           <div>
             <span id="rank-number">{{ idx+1 }}</span> <span>위</span>  
             <img v-if="rankedUser.profile" id="profile-img-small" :src="rankedUser.profile">

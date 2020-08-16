@@ -12,6 +12,7 @@ class MainService {
     axios.get(SERVER + info.location, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_SEARCHEDBLOGS', response.data.data)
+        console.log(response.data.data)
         router.push({ name: 'MainSearchResultView', query: { search: info.searchInput }})
       })
       .catch(error => console.log(error.response.data))
@@ -19,7 +20,7 @@ class MainService {
   }
 
   getRankedUsers({ commit }) {
-    axios.get(`${SERVER}/rank`, {headers: {"auth": cookies.get('auth-token')}})
+    axios.get(`${SERVER}/rank`)
       .then(response => {
         commit('SET_RANKEDUSERS', response.data.data)
       })
