@@ -77,6 +77,7 @@ export default new Vuex.Store({
 
     // 아이디 중복 확인 
     SET_UNIQUEID(state, data) {
+      console.log(data)
       state.uniqueId = data
       console.log(state.uniqueId)
 
@@ -213,19 +214,16 @@ export default new Vuex.Store({
               alert("닉네임을 변경할 수 없습니다.")
             }
           })
-          .catch(error => alert(error.response.data.message))
       } else {
           axios.get(`${SERVER}/nickname/${uid}`)
             .then(response => {
               if (response.data.status == 200) {
                 alert("닉네임을 변경할 수 있습니다!")
-                console.log(response.getters.userUpdateInfo)
                 commit('SET_UNIQUEID',true)
               } else {
                 alert("닉네임을 변경할 수 없습니다.")
               }
             })
-            .catch(error => alert(error.response.data.message))
 
       }
     },

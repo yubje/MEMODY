@@ -92,7 +92,7 @@
         nameRules: [
           v => !!v || 'Name is required',
           v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-          v => (v && this. uniqueId) || '닉네임 중복확인을 해주세요'
+          v => (v && this.uniqueId) || '닉네임 중복확인을 해주세요'
         ],
         emailRules: [
           v => !!v || 'E-mail is required',
