@@ -23,12 +23,14 @@ import com.web.blog.domain.Member;
 import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
+import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.BlogFollowService;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.BlogTagService;
 import com.web.blog.service.MemberService;
 import com.web.blog.service.TagService;
+import com.web.blog.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -51,13 +53,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class BlogController {
 
-	private final JwtTokenProvider jwtTokenProvider;
-	private final BlogService blogService;
-	private final TagService tagService;
-	private final BlogTagService blogtagService;
-	private final MemberService memberService;
+	private final JwtTokenProvider 	jwtTokenProvider;
+	private final BlogService 		blogService;
+	private final TagService 		tagService;
+	private final BlogTagService 	blogtagService;
+	private final MemberService 	memberService;
 	private final BlogFollowService blogFollowService;
-
+	private final UserService		userService;
+	
 	/**
 	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능.
 	 * 
@@ -282,11 +285,13 @@ public class BlogController {
 	public ResponseEntity blogDelete(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-			String user = jwtTokenProvider.getUserPk(token);
+			String userEmail = jwtTokenProvider.getUserPk(token);
+			Users user = userService.findByEmail(userEmail)
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
 			if (!blogService.checkBlog(bid)) {
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_BLOG_FAIL), HttpStatus.FORBIDDEN);
-			} else if (blogService.deleteBlog(user, bid)) {
+			} else if (blogService.deleteBlog(userEmail, bid, user.getRoles().get(0))) {
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_BLOG_SUCCESS), HttpStatus.OK);
 			} else {
@@ -374,6 +379,8 @@ public class BlogController {
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_MEMBER_FAIL), HttpStatus.FORBIDDEN);
 			} else {
+				System.out.println(member.toString());
+				System.out.println(bid+" "+member.getEmail()+" "+user);
 				blogService.deleteMember(bid, member.getEmail(), user);
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS), HttpStatus.OK);
