@@ -1,7 +1,7 @@
 // blog 상태 관리 모듈
 import router from '@/router'
 import BlogService from '@/services/blog-service'
-// import { delete } from 'vue/types/umd';
+// import { delete } from 'vue/types/umd';http://c55b07877ea7.ngrok.io/
 
 export const blog = {
   namespaced: true,
@@ -15,6 +15,7 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
+      member: null,
     },
 
     // 새 블로그 추가를 위한 새 정보
@@ -45,7 +46,7 @@ export const blog = {
       author: '',
       manager: '',
       postTime: '',
-      update_time: '',
+      updateTime: '',
       fork: '',
       postlikecnt: '',
       ptype: null
@@ -87,7 +88,7 @@ export const blog = {
         pcontent: '',
         author: '',
         postTime: '',
-        update_time: '',
+        updateTime: '',
         ptype: ''
       }
     },
@@ -117,7 +118,7 @@ export const blog = {
       state.postData.author = postData.author
       state.postData.manager = postData.manager
       state.postData.postTime = postData.postTime
-      state.postData.update_time = postData.update_time
+      state.postData.updateTime = postData.updateTime
       state.postData.fork = postData.fork
       state.postData.postlikecnt = postData.postlikecnt
       state.postData.ptype = postData.ptype
