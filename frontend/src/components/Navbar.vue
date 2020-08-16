@@ -8,6 +8,9 @@
 
     <v-spacer></v-spacer>
 
+    <button @click="test">test</button>
+    <div  v-if="is_show"><UserLogin @tete="test" :is_show="is_show"/></div>
+
     <div v-if="authToken">
       <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
       <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
@@ -60,15 +63,28 @@
 
 <script>
 import { mapState } from 'vuex'
+import UserLogin from '@/components/user/UserLogin.vue'
 import MainRanking from '@/components/main/MainRanking.vue'
 
 export default {
   name: 'NavBar',
   components: {
+    UserLogin,
     MainRanking
+  },
+  data() {
+    return {
+      is_show: false
+    }
   },
   computed: {
     ...mapState(['authToken', 'userInfo']),
+  },
+  methods: {
+    test() {
+      console.log(this.is_show)
+      this.is_show = !this.is_show
+    }
   }
 }
 </script>
