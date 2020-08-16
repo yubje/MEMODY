@@ -76,8 +76,10 @@ export default new Vuex.Store({
     },
 
     // 아이디 중복 확인 
-    SET_UNIQUEID(state) {
-      state.uniqueId = !state.uniqueId
+    SET_UNIQUEID(state, data) {
+      state.uniqueId = data
+      console.log(state.uniqueId)
+
     },
 
     SET_BLOGS_AFTER(state, data) {
@@ -126,8 +128,8 @@ export default new Vuex.Store({
       axios.get(SERVER + '/logout/', getters.config)
         .then(() => {
          })
-        .catch(error => {
-          alert(error.response.data.message)
+        .catch(() => {
+          // alert(error.response.data.message)
         })
       router.push({ name: 'Main'})
     },
@@ -200,18 +202,32 @@ export default new Vuex.Store({
 
     // 회원 검색(닉네임) (API 문서 - 21 D)
     lookUpNickname({ commit }, uid) {
-      console.log(uid)
-      axios.get(`${SERVER}/users/${uid}/nickname`)
+      commit('SET_UNIQUEID', false)
+      if (cookies.get('auth-token')) {
+        axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
         .then(response => {
           if (response.data.status == 200) {
             alert("닉네임을 변경할 수 있습니다!")
-            console.log(response.getters.userUpdateInfo)
-            commit('SET_UNIQUEID')
-          } else {
-            alert("닉네임을 변경할 수 없습니다.")
-          }
-        })
-        .catch(error => alert(error.response.data.message))
+            commit('SET_UNIQUEID', true)
+            } else {
+              alert("닉네임을 변경할 수 없습니다.")
+            }
+          })
+          .catch(error => alert(error.response.data.message))
+      } else {
+          axios.get(`${SERVER}/nickname/${uid}`)
+            .then(response => {
+              if (response.data.status == 200) {
+                alert("닉네임을 변경할 수 있습니다!")
+                console.log(response.getters.userUpdateInfo)
+                commit('SET_UNIQUEID',true)
+              } else {
+                alert("닉네임을 변경할 수 없습니다.")
+              }
+            })
+            .catch(error => alert(error.response.data.message))
+
+      }
     },
     //회원 정보 조회
     lookupUserInfo({state, commit}) {
