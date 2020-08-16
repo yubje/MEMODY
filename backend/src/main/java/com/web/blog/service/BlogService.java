@@ -222,16 +222,17 @@ public class BlogService {
 			}
 			result.add(blog);
 		}
+		System.out.println("블로그>>"+result);
 		return result;
 	}
 	
 	// 해쉬태그 이름으로 블로그 목록 검색
 	public List<Blog> searchListByTag(String tname){
 		List<Blogtag> list = blogtagRepository.findDistinctByTnameContaining(tname);
+		List<Blog> result = new ArrayList<Blog>();
 		if(list.size()==0) {
-			return null;
+			return result;
 		}else {
-			List<Blog> result = new ArrayList<Blog>();
 			for(Blogtag tag:list) {
 				Blog blog = blogRepository.findByBid(tag.getBid());
 				List<Blogtag> hashtags = blogtagRepository.findByBid(tag.getBid());
