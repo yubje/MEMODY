@@ -35,7 +35,7 @@
 
       </v-list>
       <template v-slot:append>
-        <div v-if="blogData.manager==userInfo.email" class="d-flex justify-end pa-5">
+        <div v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}"
             class="text-dark text-decoration-none">Settings</router-link>
