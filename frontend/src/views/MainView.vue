@@ -50,7 +50,7 @@ export default {
   methods: {
     ...mapActions(['mainAfter','mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token') !== undefined) {
+      if (cookies.get('auth-token')) {
         this.mainAfter()
         console.log(this.$store.state.myBlogs)
       }else {
