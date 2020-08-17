@@ -85,7 +85,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody Users user, HttpServletResponse res) {
 		Users member = userService.findByEmail(user.getEmail())
-				.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+				.orElseThrow(() -> new RestException(ResponseMessage.LOGIN_FAIL, HttpStatus.NOT_FOUND));
 
 		if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.LOGIN_FAIL),
