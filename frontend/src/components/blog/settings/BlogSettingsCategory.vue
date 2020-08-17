@@ -16,7 +16,7 @@
             v-model="largeCategoryData.large_dir"
             append-icon="mdi-folder-plus"
             @click:append="addParentCategory(largeCategoryData)"
-          ></v-text-field>
+          ></v-text-field>   
         </v-col>
         <v-col cols="10">
           <v-card>
