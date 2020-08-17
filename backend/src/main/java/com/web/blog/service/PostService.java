@@ -33,7 +33,6 @@ public class PostService {
 	private final MemberRepository memberRepository;
 	private final UsersRepository userRepository;
 
-	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createPost(Post post) {
 		System.out.println(post);
@@ -46,7 +45,7 @@ public class PostService {
 				.author(post.getAuthor())
 				.manager(post.getManager())
 				.postTime(LocalDateTime.now())
-				.updateTime(LocalDateTime.now())
+				.update_time(LocalDateTime.now())
 				.ptype(post.getPtype())
 				.build()).getPid();
 		// 게시글 작성 시 작성자 경험치 상승
@@ -127,14 +126,8 @@ public class PostService {
 	}
 	
 	@Transactional
-	public boolean deletePost(String user, int pid, String role) {
-		Post post = postRepository.findByPid(pid);
-		if(user.equals(post.getManager()) | role.equals(ADMIN)) {
-			postRepository.deleteByPid(pid);
-			return true;
-		}else {
-			return false;
-		}
+	public void deletePost(int pid) {
+		postRepository.deleteByPid(pid);
 	}
 
 	public Page<Post> listAllPostByMCategory(int bid, int mcid, Pageable pageable){
@@ -183,7 +176,7 @@ public class PostService {
 				.author(post2.getAuthor())
 				.manager(user)
 				.postTime(LocalDateTime.now())
-				.updateTime(LocalDateTime.now())
+				.update_time(LocalDateTime.now())
 				.ptype(post2.getPtype())
 				.build());
 

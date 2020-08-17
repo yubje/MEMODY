@@ -34,8 +34,6 @@
               :length="postListData.totalPages"
               circle
               color="teal"
-              next-icon="mdi-chevron-right"
-              prev-icon="mdi-chevron-left"
               @input="onPageChange"
             ></v-pagination>
           </div>

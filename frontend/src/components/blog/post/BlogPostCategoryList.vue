@@ -158,7 +158,5 @@ export default {
 </script>
 ;
 <style scoped>
-.mdi-chevron-right {
-  color: gray !important;
-}
+
 </style>
