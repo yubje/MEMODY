@@ -145,7 +145,6 @@ export default {
     
   },
   created() {
-    console.log('created')
     const info = {
       "bid": this.blogData.bid,
       "mcid": this.mcid,

@@ -87,9 +87,7 @@ export default new Vuex.Store({
 
     // 아이디 중복 확인 
     SET_UNIQUEID(state, data) {
-      console.log(data)
       state.uniqueId = data
-      console.log(state.uniqueId)
 
     },
 
@@ -124,8 +122,6 @@ export default new Vuex.Store({
       }
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
-        console.log('로그인:',response )
-        console.log(response.config)
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
         router.push({ name: 'Main' })
@@ -162,9 +158,7 @@ export default new Vuex.Store({
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
-        console.log('이메일 인증:', response)
         commit('SET_VALIDATION', response.data.data)
-        console.log(response.data.data)
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -173,7 +167,6 @@ export default new Vuex.Store({
     validateEmailForResetPW({ commit }, email) {
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
-        console.log('비번 재설정시', response.data)
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
@@ -202,7 +195,6 @@ export default new Vuex.Store({
     resetPW({ state }, resetPWData) {
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
-      console.log("code:",code)
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
         .then(response => {
           alert(response.data.message)
@@ -218,20 +210,20 @@ export default new Vuex.Store({
         axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
         .then(response => {
           if (response.data.status == 200) {
-            console.log("닉네임을 변경할 수 있습니다!")
+            alert("닉네임을 변경할 수 있습니다!")
             commit('SET_UNIQUEID', true)
             } else {
-              console.log("닉네임을 변경할 수 없습니다.")
+              alert("닉네임을 변경할 수 없습니다.")
             }
           })
       } else {
           axios.get(`${SERVER}/nickname/${uid}`)
             .then(response => {
               if (response.data.status == 200) {
-                console.log("닉네임을 변경할 수 있습니다!")
+                alert("닉네임을 변경할 수 있습니다!")
                 commit('SET_UNIQUEID',true)
               } else {
-                console.log("닉네임을 변경할 수 없습니다.")
+                alert("닉네임을 변경할 수 없습니다.")
               }
             })
             .catch(()=>{

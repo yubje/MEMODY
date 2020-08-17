@@ -28,12 +28,12 @@
     data: () => ({
       items: null,
       disabled: false,
-      absolute: false,
-      openOnHover: true,
+      absolute: true,
+      openOnHover: false,
       value: false,
       closeOnClick: true,
       closeOnContentClick: true,
-      offsetX: true,
+      offsetX: false,
       offsetY: false,
     }),
     created() {
