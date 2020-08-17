@@ -14,6 +14,7 @@ import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueCookies from 'vue-cookies'
+import 'babel-polyfill'
 import vuetify from './plugins/vuetify';
 import VuetifyDialog from 'vuetify-dialog';
 
