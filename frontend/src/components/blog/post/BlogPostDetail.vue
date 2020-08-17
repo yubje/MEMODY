@@ -4,31 +4,44 @@
       <BlogPostSidebar/>     
       <div class="col">
         <v-card-title>{{ postData.ptitle }}</v-card-title>
-        <div v-if="userInfo.email == postData.manager | userInfo.roles[0] === 'ROLE_ADMIN'" style="float: right">
-          <v-btn-toggle>
-            <v-btn text color="teal" @click="blogPostUpdate()"><v-icon>mdi-pencil</v-icon> 수정</v-btn>
-            <v-btn text color="error" @click="blogPostDelete()"><v-icon>mdi-delete</v-icon>삭제</v-btn>
-          </v-btn-toggle>
-        </div>
-        <p style="text-align: left; margin-bottom: 0px">원작자: {{ postData.author }}</p>
+        <ul v-if="userInfo.email == postData.manager | userInfo.roles[0] === 'ROLE_ADMIN'" style="float: right">
+          <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <font-awesome-icon :icon="['fas','ellipsis-v']" />
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <button
+              color="teal"
+              class="dropdown-item"
+              @click="blogPostUpdate()"
+            ><v-icon>mdi-pencil</v-icon>수정</button>
+            <button
+              class="dropdown-item"
+              color="teal"
+              @click="blogPostDelete()"
+            ><v-icon>mdi-delete</v-icon>삭제</button>
+          </div>
+        </li>
+        </ul>
         <p style="text-align: left; margin-bottom: 0px">관리자: {{ postData.manager }}</p>
-        <p style="text-align: left; margin-bottom: 0px">작성날짜: {{ postData.postTime.slice(0,10) }}</p>
-        <p style="text-align: left">수정날짜: {{ postData.updateTime.slice(0,10) }}</p>
+        <p style="text-align: left; margin-bottom: 0px">원작자: {{ postData.author }}</p>
+        <p style="text-align: left; margin-bottom: 0px">작성일 {{ postData.postTime.slice(0,10) }}  | 수정일 {{ postData.updateTime.slice(0,10) }}</p>
         <hr>
         <div id="post-content" v-html="postData.pcontent"></div>
         <hr>
-        <v-container fluid ma-0>
+        <v-flex>
           <v-row>
             <!-- 좋아요 버튼 -->
-            <v-col cols="6" class="pa-0 text-left">
+            <v-col cols="6" class="px-5 py-2 text-left">
               <v-btn icon v-if="liked" @click="clickLike()" class="mr-auto">
                 <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
               </v-btn>
               <v-btn icon v-else @click="clickLike()">
                 <font-awesome-icon :icon="['far','heart']" style="color:red;"/> 
               </v-btn>
+              <a>{{ postData.postlikecnt }}</a>
             </v-col>
-            <v-col cols="6" class="pa-0 text-right">
+            <v-col cols="6" class="px-5 py-2 text-right">
               <!-- 퍼가기, 히스토리 버튼 -->
               <div v-if="userInfo.email !== postData.manager">
                 <v-dialog v-model="dialog" persistent max-width="400">
@@ -41,7 +54,7 @@
               </div>
             </v-col>
           </v-row>
-        </v-container>
+        </v-flex>
         <hr>
         <BlogCommentForm/>
         <BlogCommentList/>
@@ -84,7 +97,7 @@ export default {
     
   },
   methods: {
-    ...mapActions('blog', ['deletePost']),
+    ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike']),
 
     blogPostUpdate() {
       this.$router.push({ name: 'BlogPostUpdate'})
@@ -96,10 +109,10 @@ export default {
 
     clickLike() {
       if (this.liked) {
-        axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :this.postData,headers: {"auth": cookies.get('auth-token')}})
+        this.deleteLike()
         this.liked = false
-      }else {
-        axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,this.postData,{headers: {"auth": cookies.get('auth-token')}})
+      } else {
+        this.addLike()
         this.liked = true
       }
     },
