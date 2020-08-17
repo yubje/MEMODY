@@ -10,7 +10,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field ref="nickname" v-model="signupData.uid" :rules="nameRules"
-                      @keydown="lookUpNickname(signupData.uid)" class="d-inline-flex" :counter="20" label="닉네임"
+                      @change="lookUpNickname(signupData.uid)" class="d-inline-flex" :counter="20" label="닉네임"
                       required>
                     </v-text-field>
                     <v-btn small color="teal accent-4" dark @click="$refs.nickname.validate()">중복확인</v-btn>
@@ -23,7 +23,7 @@
                   </v-col>
                 </v-row>
                 <!-- 이메일 인증 모달 -->
-                <v-dialog v-model="uniqueEmail" max-width="500px">
+                <v-dialog v-model="uniqueEmail"  max-width="500px">
                   <v-card>
                     <v-card-title>
                       이메일 인증
@@ -116,7 +116,9 @@
     },
     mounted() {
       this.$store.commit('RESET_ISVALID')
-      this.$store.commit('SET_UNIQUEID', false)
+      this.$store.commit('SET_UNIQUEID', false) 
+      this.$store.commit('RESET_VALIDTYPE') 
+      this.$store.commit('RESET_UNIQUEEMAIL') 
     },
     methods: {
       ...mapActions(["signup", "validateEmail", "validateEmail", "checkValidation", 'goBack', 'lookUpNickname']),

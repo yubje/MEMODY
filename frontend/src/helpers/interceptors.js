@@ -17,7 +17,7 @@ export default function setup() {
   }, function (error) {
     // 토큰 시간이 만료된 경우, 자동 로그아웃
     if (error.response.headers.expires == 2) {
-      //  store.dispatch('logout')    
+       store.dispatch('logout')    
     } 
     // 에러응답 삭제
     return Promise.reject(error);
