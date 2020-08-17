@@ -153,7 +153,7 @@ public class PostController {
 				
 				System.out.println("게시글 작성");
 				System.out.println(post.get("pid"));
-				if(post.get("pid") != "") {
+				if(!post.get("pid").equals("")) {
 					System.out.println("임시저장 글이었다.");
 					Users user = userService.findByEmail(email)
 							.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
@@ -387,8 +387,11 @@ public class PostController {
 			}
 			Post result = postService.findByPid(Integer.parseInt(post.get("pid")));
 			result.setPtitle(post.get("ptitle"));
+			System.out.println(result.getPcontent());
+			String content = result.getPcontent();
 			result.setPcontent(input);
-			postService.updatePost(result,bucketName,accessKey, secretKey);
+			
+			postService.updatePost(content,result,bucketName,accessKey, secretKey);
 			Post updatePost = postService.findByPid(Integer.parseInt(post.get("pid")));
 			System.out.println(updatePost);
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
