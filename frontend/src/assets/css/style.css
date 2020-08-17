@@ -249,6 +249,7 @@ hr {
   margin: 2px 3px 2px 0px;
 }
 
-.mdi-chevron-left, .mdi-chevron-right {
+.main-recommend-blog-container .v-window__container .v-window__prev .v-btn .v-btn__content .mdi-chevron-left, 
+.main-recommend-blog-container .v-window__container .v-window__next .v-btn .v-btn__content .mdi-chevron-right {
   color: white !important;
 }
