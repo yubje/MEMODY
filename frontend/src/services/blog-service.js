@@ -26,7 +26,7 @@ class BlogService {
         })
         .catch(error => {
           if (error.response.data.status === 403) {
-            commit('SET_MODAL_VALID',null, { root: true })
+            commit('SET_MODAL_LOGIN',null, { root: true })
           }
         })
     }

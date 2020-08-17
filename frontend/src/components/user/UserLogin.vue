@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" max-width="380" persistent>
     <v-card class="user-login-container">
       <v-card-actions>
-        <font-awesome-icon id="user-login-cancel-icon" :icon="['far','times-circle']" @click="SET_MODAL_VALID()" />
+        <font-awesome-icon id="user-login-cancel-icon" :icon="['far','times-circle']" @click="SET_MODAL_LOGIN()" />
       </v-card-actions>
 
       <div class="user-login-contents">
@@ -20,9 +20,8 @@
                   required @keyup.enter="checkForm()"></v-text-field>
               </v-col>
 
-              <v-col class="user-login-content-findpw" cols="12">
-                <router-link :to="{ name: 'UserResetPWCheckEmailView' }" data-dismiss="modal" data-toggle="modal"
-                  data-target="#resetpwcheckemail-modal">비밀번호 재설정</router-link>
+              <v-col class="user-login-content-resetpw" cols="12">
+                <button class="user-login-content-btn" @click="SET_MODAL_RESETPW_CHECK_EMAIL()">비밀번호 재설정</button>
               </v-col>
 
               <v-col cols="12">
@@ -33,8 +32,7 @@
 
               <v-col class="user-login-content-signup" cols="12">
                 <span>아직 회원이 아니세요? </span>
-                <router-link :to="{ name: 'UserSignupView' }" data-dismiss="modal" data-toggle="modal"
-                  data-target="#signup-modal">회원 가입</router-link>
+                <button class="user-login-content-btn" @click="SET_MODAL_SIGNUP()">회원 가입</button>
               </v-col>
             </v-row>
           </v-form>
@@ -45,7 +43,7 @@
 </template>
 
 <script>
-  import { mapMutations, mapActions } from 'vuex'
+  import { mapState, mapMutations, mapActions } from 'vuex'
 
   export default {
     name: 'UserLoginView',
@@ -68,21 +66,30 @@
         validPW: /^.*(?=.{8})(?=.*[0-9])(?=.*[a-zA-Z]).*$/
       }
     },
+    computed: {
+      ...mapState(['loginError'])
+    },
     methods: {
-      ...mapMutations(['SET_MODAL_VALID']),
+      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP']),
       ...mapActions(['login']),
 
       checkForm() {
         let err = true;
         let msg = "";
 
-        !this.loginData.email && (msg="이메일을 입력해주세요", err=false, this.$refs.email.focus());
-        err && !this.validEmail.test(this.loginData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
-        err && !this.loginData.password && (msg="비밀번호를 입력해주세요", err=false, this.$refs.password.focus());
-        err && !this.validPW.test(this.loginData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
+        // !this.loginData.email && (msg="이메일을 입력해주세요", err=false, this.$refs.email.focus());
+        // err && !this.validEmail.test(this.loginData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
+        // err && !this.loginData.password && (msg="비밀번호를 입력해주세요", err=false, this.$refs.password.focus());
+        // err && !this.validPW.test(this.loginData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
 
-        if (err) this.login(this.loginData);
-        else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
+        if (err) {
+          this.login(this.loginData);
+
+          if (this.loginError) {
+            this.$dialog.notify.error(this.loginError, { position: 'top-right', timeout: 5000 });
+            this.SET_LOGIN_ERROR('')
+          }
+        } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
       }
     }
   }

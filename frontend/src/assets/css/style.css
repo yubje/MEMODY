@@ -67,7 +67,7 @@ hr {
 #navbar-menu-before:hover, #navbar-menu-after:hover, .v-application a:hover,
 .searchTab-type:hover, #search-icon:hover,
 .main-blog-item-title:hover,
-#user-login-cancel-icon:hover {
+#user-login-cancel-icon:hover, .user-login-content-btn:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -76,7 +76,8 @@ hr {
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
 .searchTab-type:focus, .searchTab-input:focus,
-#main-blig-item-hashtag-btn:focus {
+#main-blig-item-hashtag-btn:focus,
+.user-login-content-btn:focus {
   outline: none !important;
 }
 
@@ -282,7 +283,7 @@ hr {
   padding: 2px 15px;
 }
 
-.user-login-content-findpw {
+.user-login-content-resetpw {
   text-align: right; 
   padding-top: 3px;
   padding-bottom: 0px;
