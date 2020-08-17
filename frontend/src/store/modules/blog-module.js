@@ -189,8 +189,8 @@ export const blog = {
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
-    createPost(response) {
-      BlogService.createPost(response)
+    createPost(response, postData) {
+      BlogService.createPost(response,postData)
     },
 
     // 블로그 게시글 전체 조회 (API 문서 - 62D)
