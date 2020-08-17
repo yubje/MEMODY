@@ -2,7 +2,6 @@
   <div>
      <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="500">
-      <v-form>
 
         <v-card>
           <v-card-title class="headline">ResetPW</v-card-title>
@@ -23,7 +22,6 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-form>
       </v-dialog>
     </v-row>
   </div> 
