@@ -24,6 +24,7 @@ export default new Vuex.Store({
     validType: false,
     // 아이디 중복 확인 
     uniqueId: false,
+    uniqueEmail: false,
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
@@ -61,6 +62,7 @@ export default new Vuex.Store({
 
     SET_VALIDATION(state, number) {
       state.emailValidationNumber = number
+      state.uniqueEmail = true
     },
 
     SET_ISVALID(state) {
@@ -176,7 +178,6 @@ export default new Vuex.Store({
     checkValidation( { commit } ,validationNumber) {
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
-        
         if (this.state.validType) {
           router.push({ name: 'UserResetPWView' })
         } else {
@@ -208,21 +209,24 @@ export default new Vuex.Store({
         axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
         .then(response => {
           if (response.data.status == 200) {
-            alert("닉네임을 변경할 수 있습니다!")
+            console.log("닉네임을 변경할 수 있습니다!")
             commit('SET_UNIQUEID', true)
             } else {
-              alert("닉네임을 변경할 수 없습니다.")
+              console.log("닉네임을 변경할 수 없습니다.")
             }
           })
       } else {
           axios.get(`${SERVER}/nickname/${uid}`)
             .then(response => {
               if (response.data.status == 200) {
-                alert("닉네임을 변경할 수 있습니다!")
+                console.log("닉네임을 변경할 수 있습니다!")
                 commit('SET_UNIQUEID',true)
               } else {
-                alert("닉네임을 변경할 수 없습니다.")
+                console.log("닉네임을 변경할 수 없습니다.")
               }
+            })
+            .catch(()=>{
+              console.log("닉네임을 변경할 수 없습니다")
             })
 
       }
