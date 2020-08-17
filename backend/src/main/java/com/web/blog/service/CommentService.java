@@ -22,8 +22,6 @@ public class CommentService {
 
 	private final CommentRepository commentRepository;
 	private final UsersRepository userRepository;
-
-	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createComments(Comments comment) {
 		System.out.println(comment);
@@ -31,8 +29,8 @@ public class CommentService {
 				.pid(comment.getPid())
 				.comment(comment.getComment())
 				.email(comment.getEmail())
-				.commentTime(LocalDateTime.now())
-				.updateTime(LocalDateTime.now())
+				.comment_time(LocalDateTime.now())
+				.update_time(LocalDateTime.now())
 				.build());
 		// 댓글 작성 시 댓글 작성자 경험치 상승
 		Optional<Users> user = userRepository.findByEmail(comment.getEmail());
@@ -44,7 +42,7 @@ public class CommentService {
 	
 	public List<Comments> listAllComments(int pid){
 		List<Comments> result = new ArrayList<Comments>();
-		result = commentRepository.findAllByPidOrderByCommentTimeDesc(pid);
+		result = commentRepository.findByPid(pid);
 		return result;
 	}
 	
@@ -61,14 +59,8 @@ public class CommentService {
 	}
 	
 	@Transactional
-	public boolean deleteComments(String user, int cmid, String role) {
-		Comments comment = commentRepository.findByCmid(cmid);
-		if(user.equals(comment.getEmail()) | role.equals(ADMIN)) {
-			commentRepository.deleteByCmid(cmid);
-			return true;
-		}else {
-			return false;
-		}
+	public void deleteComments(int cmid) {
+		commentRepository.deleteByCmid(cmid);
 	}
 
 }

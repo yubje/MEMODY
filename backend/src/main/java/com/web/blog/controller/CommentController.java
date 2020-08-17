@@ -19,13 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
 import com.web.blog.domain.Comments;
-import com.web.blog.domain.Users;
+import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.CommentService;
-import com.web.blog.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +49,7 @@ public class CommentController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	CommentService 		commentService;
-	private final	UserService			userService;
-	
+
 	/**
 	 * 댓글 작성 - 사용자가 댓글 작성하는 기능. 
 	 * 
@@ -88,8 +86,6 @@ public class CommentController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			List<Comments> list = commentService.listAllComments(pid);
-			System.out.println("게시글의 댓글 목록 조회");
-			System.out.println(list);
 			if(list.size()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLCOMMENT_NONE),HttpStatus.OK);
 			}else {
@@ -156,14 +152,8 @@ public class CommentController {
 	public ResponseEntity deletePost(@RequestBody Comments comment, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-			String userEmail = jwtTokenProvider.getUserPk(token);
-			Users user = userService.findByEmail(userEmail)
-					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
-			if(commentService.deleteComments(userEmail, comment.getCmid(), user.getRoles().get(0))) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_COMMENT_SUCCESS),HttpStatus.OK);
-			}else {
-				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_COMMENT_FAIL),HttpStatus.OK);
-			}
+			commentService.deleteComments(comment.getCmid());
+			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_COMMENT_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}

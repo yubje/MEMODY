@@ -339,14 +339,6 @@ export const blog = {
       BlogService.getBlogPostTmpList({ state })
     },
 
-    addLike({ state }) {
-      BlogService.addLike({ state })
-    },
-
-    deleteLike({ state }) {
-      BlogService.deleteLike({ state })
-    },
-
   },
 
 }

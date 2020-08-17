@@ -7,21 +7,15 @@
       </div>
       <MainSearchTab/>
     </div>
-    
-    <hr class="main-hr">
-
-    <div class="main-contents">
-      <span class="main-content-title">추천 블로그</span>
-      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
-    </div>
-
-    <hr class="main-hr">
-
-    <!-- <div v-if="authToken">
+    <hr>
+    <MainRanking/>
+    <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
       <MainRecommendBlogList :recommendBlog="followBlog"/>
-    </div> -->
+    </div>
+      추천 블로그
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
       
   </div>
 </template>
@@ -30,19 +24,26 @@
 import cookies from 'vue-cookies'
 
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
-// import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
+import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
+import MainRanking from '@/components/main/MainRanking.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
+  data() {
+    return {
+
+    }
+  },
   computed: {
       ...mapState(['authToken','myBlogs','recommendBlog','followBlog'])
   },
   components: {
     MainSearchTab,
-    // MainMyBlogList,
+    MainMyBlogList,
     MainRecommendBlogList,
+    MainRanking,
   },
   async mounted() {
     await this.fetchBlogs()
@@ -50,7 +51,7 @@ export default {
   methods: {
     ...mapActions(['mainAfter','mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token')) {
+      if (cookies.get('auth-token') !== undefined) {
         this.mainAfter()
         console.log(this.$store.state.myBlogs)
       }else {

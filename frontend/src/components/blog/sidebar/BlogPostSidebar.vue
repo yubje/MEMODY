@@ -10,17 +10,8 @@
         </v-list-item>
         <v-list-item>
           <router-link :to="{ name: 'BlogPostList' }" class="text-decoration-none pa-5">
-            <b>전체보기</b>
+            <b>전체 글 조회</b>
           </router-link>
-          <router-link v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" :to="{ name: 'BlogSettingsCategory' }">
-            <v-btn 
-              x-small 
-              pa-0 
-              color="teal lighten-2" 
-              dark
-            >Edit</v-btn>
-          </router-link>
-          
         </v-list-item>
         <div v-for="categories in dataCategories"
           :key="categories.lcid" >
@@ -44,7 +35,7 @@
 
       </v-list>
       <template v-slot:append>
-        <div v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="d-flex justify-end pa-5">
+        <div v-if="blogData.manager==userInfo.email" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}"
             class="text-dark text-decoration-none">Settings</router-link>

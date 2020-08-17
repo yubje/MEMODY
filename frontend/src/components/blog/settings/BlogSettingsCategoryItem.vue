@@ -1,87 +1,35 @@
 <template>
-  <v-list-group
-    prepend-icon="mdi-folder"
-    no-action
-    color="teal"
-  >
-    <template v-slot:activator>
-      <v-list-item-content>
-        <v-list-item-title v-text="categories.large_dir"></v-list-item-title>
-      </v-list-item-content>
-      <!-- <v-list-item-action @click="clickEdit()">
-        <v-icon>mdi-folder-edit</v-icon>
-      </v-list-item-action> -->
-    </template>
-    <v-list-item v-if="largeShow">
-      <!-- 대분류 수정 -->
-      <v-btn 
-        fab 
-        x-small
-        dark
-        color="teal" 
-        @click="clickEdit()"
-      >
-        <v-icon>mdi-folder-edit</v-icon>
-      </v-btn>
-      <!-- 대분류 삭제 -->
-      <v-btn 
-        fab
-        x-small
-        dark
-        color="error"
-        @click="deleteParentCategory(categories)"
-      >
-        <v-icon>mdi-trash-can</v-icon>
-      </v-btn>
-
-      <!-- 소분류 추가 버튼 -->
-      <v-btn 
-        fab
-        x-small
-        dark
-        color="teal"
-        v-if="!addShow" 
-        @click="clickAdd()"
-      >
-        <v-icon>mdi-subdirectory-arrow-right</v-icon>
-      </v-btn>
-
-      <!-- 소분류 추가 -->
-      <v-list-item v-if="addShow">
-        <v-text-field 
-          color="teal"
-          type="text" 
-          placeholder="카테고리 소분류 추가" 
-          v-model="categoryData.medium_dir"
-          append-icon="mdi-close-circle"
-          clear-icon="mdi-folder-plus-outline"
-          clearable
-          @click:append="clickAdd()"
-          @click:clear="addChildCategory(categoryData)"
-        ></v-text-field>
-      </v-list-item>
-    </v-list-item>
-    <!-- 대분류 수정 및 삭제 -->
-    <v-list-item v-else>
-      <v-text-field
-        color="teal"
-        type="text" 
-        v-model="categoryData.large_dir"
-        append-icon="mdi-folder-edit-outline"
-        clear-icon="mdi-close-circle"
-        clearable
-        @click:append="clickUpdate(categoryData)"
-        @click:clear="clickEdit()"
-      ></v-text-field>
-    </v-list-item>
-    
-    <v-list-item
-      v-for="child in categories.mcategory"
-      :key="child.mcid"
-    >
-      <BlogSettingsCategoryUpdate :child="child"/>
-    </v-list-item>
-</v-list-group>
+  <table class="table">
+    <thead>
+      <tr class="text-left" v-if="largeShow">
+        <th scope="col justify-content-between">
+        <span @click="changeShowStatus()" >{{categories.large_dir}}</span>
+        <button @click="clickEdit()">Edit</button>
+        <div v-show="addShow">
+          <input type="text" placeholder="소분류제목" v-model="categoryData.medium_dir">
+          <button @click="addChildCategory(categoryData)">Add</button>
+        </div>
+        <button v-if="!addShow" @click="clickAdd()">소분류 추가</button>
+        <button v-else @click="clickAdd()">닫기</button>
+        </th>
+      </tr>
+      <tr class="text-left" v-else>
+        <th scope="col">
+        <input type="text"  v-model="categoryData.large_dir">
+        <button @click="clickUpdate(categoryData)">수정</button>
+        <button @click="deleteParentCategory(categories)">삭제</button>
+        <button @click="clickEdit()">취소</button>
+        </th>
+      </tr>
+    </thead>
+    <tbody :id="categories.lcid"  :ref="categories.lcid" class="col-11" v-show="showMiddleCategoires" >
+      <tr v-for="child in categories.mcategory" :key="child.mcid">
+        <th scope="row text-left">
+          <BlogSettingsCategoryUpdate :child="child"/>
+        </th> 
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -91,8 +39,7 @@ import BlogSettingsCategoryUpdate from '@/components/blog/settings/BlogSettingsC
 export default {
   name: "BlogSettingsCategoryItem",
   props: {
-    categories: Object,
-    i: Number,
+    categories: Object
   },
   components: {
     BlogSettingsCategoryUpdate
@@ -141,7 +88,7 @@ export default {
     clickAdd() {
       if (this.addShow) {
         this.addShow = false
-      } else {
+      }else {
         this.addShow = true
       }
     }

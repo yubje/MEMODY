@@ -36,32 +36,32 @@ public class Comments {
 	private String email;
 	
 	@Column
-	private LocalDateTime commentTime;
+	private LocalDateTime comment_time;
 	
 	@Column
-	private LocalDateTime updateTime;
+	private LocalDateTime update_time;
 	
 	@Builder
-	public Comments(int pid, String comment, String email, LocalDateTime commentTime, LocalDateTime updateTime) {
+	public Comments(int pid, String comment, String email, LocalDateTime comment_time, LocalDateTime update_time) {
 		this.pid = pid;
 		this.comment = comment;
 		this.email = email;
-		this.commentTime = commentTime;
-		this.updateTime = updateTime;
+		this.comment_time = comment_time;
+		this.update_time = update_time;
 	}
 
 	public void setComment(String comment) {
     	this.comment = comment;
     }
 	
-	public void setUpdate_time(LocalDateTime updateTime) {
-		this.updateTime = updateTime;
+	public void setUpdate_time(LocalDateTime update_time) {
+		this.update_time = update_time;
 	}
 
 	@Override
 	public String toString() {
 		return "Comments [cmid=" + cmid + ", pid=" + pid + ", comment=" + comment + ", email=" + email
-				+ ", comment_time=" + commentTime + ", update_time=" + updateTime + "]";
+				+ ", comment_time=" + comment_time + ", update_time=" + update_time + "]";
 	}
 	
 }

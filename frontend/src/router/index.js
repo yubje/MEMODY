@@ -24,8 +24,6 @@ import BlogPostTmpCreate from '@/components/blog/post/BlogPostTmpCreate'
 
 import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
 import MainRankingView from '@/views/main/MainRankingView.vue'
-import MainMyBlogListView from '@/views/main/MainMyBlogListView.vue'
-import MainFollowBlogListView from '@/views/main/MainFollowBlogListView.vue'
 
 Vue.use(VueRouter)
 
@@ -202,16 +200,6 @@ Vue.use(VueRouter)
     path: '/main/rankings',
     name: 'MainRankingView',
     component: MainRankingView,
-  },
-  {
-    path: '/main/myBlogs',
-    name: 'MainMyBlogListView',
-    component: MainMyBlogListView,
-  },
-  {
-    path: '/main/followBlogs',
-    name: 'MainFollowBlogListView',
-    component: MainFollowBlogListView,
   },
 ]
 
