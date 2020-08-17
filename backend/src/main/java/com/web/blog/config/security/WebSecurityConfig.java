@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +26,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import com.navercorp.lucy.security.xss.servletfilter.XssEscapeServletFilter;
 import com.web.blog.config.jwt.JwtAuthenticationFilter;
 import com.web.blog.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final JwtTokenProvider jwtTokenProvider;
-
+	private final RedisTemplate redisTemplate;
 	private final UserDetailsService jwtUserDetailsService;
 
 	// 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
@@ -44,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
+	
 
 	// authenticationManager를 Bean 등록합니다.
 	@Bean
@@ -73,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.addFilterBefore(filter,CsrfFilter.class)
 				.addFilterBefore(new CorsFilter(),SecurityContextPersistenceFilter.class)
-				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+				.addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate),
 						UsernamePasswordAuthenticationFilter.class);
 		// JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
 	}

@@ -1,10 +1,11 @@
-
+.env
+.env.local
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,visualstudiocode,vue,vuejs,java,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,visualstudiocode,vue,vuejs,java,node
 
 # Spring
 *.properties
-
+memody.*
 
 ### Eclipse ###
 .metadata

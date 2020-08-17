@@ -1,11 +1,21 @@
 package com.web.blog.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,15 +25,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
+import com.web.blog.domain.Fork;
 import com.web.blog.domain.Post;
+import com.web.blog.domain.Users;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
+import com.web.blog.service.PostLikeService;
 import com.web.blog.service.PostService;
+import com.web.blog.service.UserService;
+import com.web.blog.util.FileUpload;
+import com.web.blog.util.S3Util;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,22 +52,29 @@ import lombok.RequiredArgsConstructor;
  *			조민경, ver.0.1 , 2020-07-28, (First Commit)
  * </pre>
  * 
- * @author 조민경
- * @version 0.1, 2020-07-28, Post 관리 Controller
+ * @author 김형택
+ * @version 0.1, 2020-08-03, 게시글 Fork
  * @see None
  * 
  */
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class PostController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	PostService 		postService;
-//	private final 	TagService 			tagService;
-//	private final 	BlogTagService 		blogtagService;
-//	private final 	MemberService 		memberService;
+	private final 	PostLikeService 	postLikeService;
+	private final	UserService			userService;
 
+	@Value("${cloud.aws.s3.bucket}")
+	String bucketName;
+	@Value("${cloud.aws.credentials.accessKey}")
+	String accessKey; // 엑세스 키
+	@Value("${cloud.aws.credentials.secretKey}")
+	String secretKey;
+	
 	/**
 	 * 게시글 작성 - 사용자가 게시글을 작성하는 기능. 
 	 * 
@@ -59,26 +83,86 @@ public class PostController {
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 작성", response = ResponseEntity.class, notes = "사용자가 게시글을 작성합니다.")
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
-		System.out.println("포스트 생성 ");
-		System.out.println(post);
-		System.out.println(post.get("ptype"));
 		String token = req.getHeader("auth");
-		System.out.println("POST>>>>>>>>>>>>>>>"+token);
 		if (jwtTokenProvider.validateToken(token)) {
+			System.out.println("게시글 작성!!!");
+			String input = post.get("pcontent");
+			System.out.println("*********************");
+			System.out.println(input);
+			System.out.println("*********************");
+			if(input.contains("img")) {
+				String base64String = null;
+				String[] inputArr = post.get("pcontent").split("\"");
+				for(int i=0;i<inputArr.length;i++) {
+					if(inputArr[i].contains("data:image/")) {
+						base64String = inputArr[i];
+						String[] strings = base64String.split(",");
+				        String extension;
+				        switch (strings[0]) {//check image's extension
+				            case "data:image/jpeg;base64":
+				                extension = "jpeg";
+				                break;
+				            case "data:image/png;base64":
+				                extension = "png";
+				                break;
+				            default://should write cases for more images types
+				                extension = "jpg";
+				                break;
+				        }
+				        //convert base64 string to binary data
+				        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+				        
+				        String uploadpath = "post";
+						S3Util s3 = new S3Util(accessKey, secretKey);
+						String img_path;
+						String url = null;
+						try {
+							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
+							System.out.println("*****   "+img_path);
+							String img_url = img_path;
+							System.out.println(img_url);
+							System.out.println(bucketName);
+							url = s3.getFileURL(bucketName, uploadpath+img_url);
+							System.out.println("Service: "+url);
+							System.out.println(url);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						inputArr[i] = url;
+					}
+				}
+				String result = "";
+				for(int i=0;i<inputArr.length;i++) {
+					result+=inputArr[i];
+					if(i!=inputArr.length-1) {
+						result+="'";
+					}
+				}
+				input = result;
+			}
 			int pid;
 			String email = jwtTokenProvider.getUserPk(token);
 			Post temp = null;
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), null);
+						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
+				
+				System.out.println("게시글 작성");
+				System.out.println("!!!!"+post.get("pid")+"!!!");
+				if((post.get("pid")!="")) {
+					System.out.println("임시저장 글이었다.");
+					postService.deletePost(Integer.parseInt(post.get("pid")));
+				}
 			}else {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
-						, post.get("pcontent"), email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"));
+						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), post.get("ptype"), 0);
 			}
-			pid = postService.createPost(temp);
+//			pid = postService.createPost(temp);
+			postService.createPost(temp);
 			if(post.get("ptype").equals("SAVE")) {
 				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
 			}else {
@@ -89,6 +173,69 @@ public class PostController {
 		}
 	}
 
+	// test
+	@PostMapping("/image/test")
+	public ResponseEntity img_url(@RequestBody Map<String,String> post, HttpServletRequest req) {
+		String input = post.get("pcontent");
+		if(input.contains("img")) {
+			String base64String = null;
+			String[] inputArr = post.get("pcontent").split("'");
+			for(int i=0;i<inputArr.length;i++) {
+				if(inputArr[i].contains("data:image/")) {
+					base64String = inputArr[i];
+					String[] strings = base64String.split(",");
+			        String extension;
+			        switch (strings[0]) {//check image's extension
+			            case "data:image/jpeg;base64":
+			                extension = "jpeg";
+			                break;
+			            case "data:image/png;base64":
+			                extension = "png";
+			                break;
+			            default://should write cases for more images types
+			                extension = "jpg";
+			                break;
+			        }
+			        //convert base64 string to binary data
+			        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+			        
+			        String uploadpath = "post";
+					S3Util s3 = new S3Util(accessKey, secretKey);
+					System.out.println("1");
+					String img_path;
+					String url = null;
+					try {
+						img_path = FileUpload.uploadFile(uploadpath, "post넘버_number", data,bucketName, accessKey, secretKey);
+						System.out.println("*****   "+img_path);
+						String img_url = img_path;
+						System.out.println(img_url);
+						System.out.println(bucketName);
+						url = s3.getFileURL(bucketName, uploadpath+img_url);
+						System.out.println("Service: "+url);
+						System.out.println(url);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					inputArr[i] = url;
+				}
+			}
+			String result = "";
+			for(int i=0;i<inputArr.length;i++) {
+				result+=inputArr[i];
+				if(i!=inputArr.length-1) {
+					result+="'";
+				}
+			}
+			System.out.println(result);
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
+		}
+	}
+	
+	
+	
 	
 	/**
 	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
@@ -97,16 +244,18 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class)
-	@GetMapping(value = "/blogs/{bid}/posts/")
-	public ResponseEntity readPostListAll(@PathVariable int bid, HttpServletRequest req) {
+	@ApiOperation(value = "블로그의 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 전체 게시글 목록 조회합니다.")
+	@GetMapping(value = "/blogs/{bid}/posts")
+	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			List<Post> list = postService.listAllPost(bid);
+//			List<Post> list = postService.listAllPost(bid, pageable);
+			Page<Post> list = postService.listAllPost(bid, pageable);
 			System.out.println(list);
-			if(list.size()==0) {
-				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE),HttpStatus.OK);
+			System.out.println(pageable);
+//			if(list.size()==0) {
+			if(list.getSize()==0) {
+				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE, list),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLPOST_SUCCESS, list),HttpStatus.OK);
 			}
@@ -116,22 +265,19 @@ public class PostController {
 	}
 	
 	/**
-	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
+	 * 블로그의 임시저장 게시글 목록 조회 - 해당 블로그에 있는 임시저장 게시글 목록 조회
 	 * 
 	 * @param String Email
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "블로그의 임시저장 게시글 목록 조회", response = ResponseEntity.class, notes = "해당 블로그에 있는 임시저장 게시글 목록 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/tmpposts/")
 	public ResponseEntity readTmpPostListAll(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 내 임시저장 게시글 목록 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
 			String author = jwtTokenProvider.getUserPk(token);
-			System.out.println("로그인한 사람>>>"+author);
 			List<Post> list = postService.listAllSavePost(bid, author);
-			System.out.println(list);
 			if(list.size()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLSAVEPOST_NONE),HttpStatus.OK);
 			}else {
@@ -149,14 +295,13 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 상세 조회", response = ResponseEntity.class, notes = "게시글의 상세내용을 조회합니다.")
 	@GetMapping(value = "/blogs/{bid}/posts/{pid}")
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 조회 ");
 		if (jwtTokenProvider.validateToken(token)) {
-			Post post = postService.findByPid(pid);
-			System.out.println(post);
+//			Post post = postService.findByPid(pid);
+			Post post = postService.postInfo(pid);
 			if(post != null) {
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
 			}else {
@@ -174,19 +319,77 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class, notes = "게시글을 수정합니다.")
 	@PutMapping(value = "/blogs/posts")
-	public ResponseEntity updatePost(@RequestBody Post post, HttpServletRequest req) {
+	public ResponseEntity updatePost(@RequestBody Map<String,String> post, HttpServletRequest req) {
+		System.out.println("게시글 수정");
 		String token = req.getHeader("auth");
-		System.out.println("게시글 수정 ");
-		System.out.println(post);
-		
-		// 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
-		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(post.getAuthor())) {
+		String email = jwtTokenProvider.getUserPk(token);
+		if (jwtTokenProvider.validateToken(token) && email.equals(postService.findByPid(Integer.parseInt(post.get("pid"))).getManager())) {
+			String input = post.get("pcontent");
 			
-			postService.updatePost(post);
-			System.out.println("수정 성공");
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, post),HttpStatus.OK);
+			if(input.contains("img")) {
+				String base64String = null;
+				String[] inputArr = input.split("\"");
+				for(int i=0;i<inputArr.length;i++) {
+					if(inputArr[i].contains("data:image/")) {
+						base64String = inputArr[i];
+						String[] strings = base64String.split(",");
+						System.out.println("!!!!!!!!!!");
+						System.out.println(strings[0]);
+						System.out.println(strings.length);
+				        String extension;
+				        switch (strings[0]) {//check image's extension
+				            case "data:image/jpeg;base64":
+				                extension = "jpeg";
+				                break;
+				            case "data:image/png;base64":
+				                extension = "png";
+				                break;
+				            default://should write cases for more images types
+				                extension = "jpg";
+				                break;
+				        }
+				        //convert base64 string to binary data
+				        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
+				        
+				        String uploadpath = "post";
+						S3Util s3 = new S3Util(accessKey, secretKey);
+						System.out.println("1");
+						String img_path;
+						String url = null;
+						try {
+							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
+							System.out.println("*****   "+img_path);
+							String img_url = img_path;
+							System.out.println(img_url);
+							System.out.println(bucketName);
+							url = s3.getFileURL(bucketName, uploadpath+img_url);
+							System.out.println("Service: "+url);
+							System.out.println(url);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						inputArr[i] = url;
+					}
+				}
+				String result = "";
+				for(int i=0;i<inputArr.length;i++) {
+					result+=inputArr[i];
+					if(i!=inputArr.length-1) {
+						result+="'";
+					}
+				}
+				input = result;
+			}
+			Post result = postService.findByPid(Integer.parseInt(post.get("pid")));
+			result.setPtitle(post.get("ptitle"));
+			result.setPcontent(input);
+			postService.updatePost(result,bucketName,accessKey, secretKey);
+			Post updatePost = postService.findByPid(Integer.parseInt(post.get("pid")));
+			System.out.println(updatePost);
+			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
@@ -199,22 +402,140 @@ public class PostController {
 	 * @return ResponseEntity<Response> - 
 	 * @exception RestException - NOT_FOUND
 	 */
-	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class)
+	@ApiOperation(value = "게시글 삭제", response = ResponseEntity.class, notes = "게시글을 삭제합니다.")
 	@DeleteMapping(value = "/blogs/posts/{pid}")
 	public ResponseEntity deletePost(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 삭제 ");
-		System.out.println(pid);
-		
-//		 토큰 유효성 검사 & 로그인한 사용자와 게시글 작성자 같은지 체크 
 		if (jwtTokenProvider.validateToken(token) && jwtTokenProvider.getUserPk(token).equals(postService.findByPid(pid).getAuthor())) {
-			
 			postService.deletePost(pid);
-			System.out.println("삭제 성공");
 			return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.DELETE_POST_SUCCESS),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
 		}
 	}
+	
+	/**
+	 * 게시글 Fork - 나의 블로그로 원하는 게시글을 fork한다.
+	 * 
+	 * @param Post post (int bid, int lcid, int mcid, int pid)
+	 * @return ResponseEntity<Response> - CREATE_POST_SUCCESS
+	 * @exception RestException - NOT_FOUND
+	 */
+	@ApiOperation(value = "게시글 Fork", response = ResponseEntity.class, notes = "나의 블로그로 원하는 게시글을 fork합니다.")
+	@PostMapping(value = "/blogs/fork")
+	public ResponseEntity blogFork(@RequestBody Post post, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String user = jwtTokenProvider.getUserPk(token);
+
+			Users member = userService.findByEmail(user)
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			
+			postService.forkPost(post,user,member.getUid());
+			
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.CREATE_POST_SUCCESS), HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@ApiOperation(value = "게시글 Fork한 사용자 리스트", response = ResponseEntity.class)
+	@GetMapping(value = "/blogs/fork/{pid}")
+	public ResponseEntity blogForkUserList(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			List<Fork> list = postService.forkList(pid);
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.FORK_USER_LIST_SUCCESS,list), HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	
+	/**
+	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class, notes = "게시글에 좋아요를 누르면 좋아요가 증가합니다.")
+	@PostMapping(value = "/posts/likes")
+	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(post.getPid())){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				postLikeService.increasePostLike(post.getPid(), loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	/**
+	 * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class, notes = "게시글에 좋아요를 다시 누르면 좋아요가 취소됩니다.")
+	@DeleteMapping(value = "/posts/likes")
+	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(post.getPid())){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				postLikeService.decreasePostLike(post.getPid(), loginuser);
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
+						HttpStatus.OK);
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
+	/**
+	 * 게시글 좋아요 조회 - 게시글에 좋아요 했는지 여부를 알려준다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트
+	 * 
+	 */
+	@ApiOperation(value = "게시글 좋아요 조회", response = ResponseEntity.class, notes = "게시글에 좋아요 했는지 여부를 알려줍니다. 좋아요 했을경우 빨간하트 / 안했을경우 회색하트")
+	@GetMapping(value = "/posts/{pid}/likes")
+	public ResponseEntity searchPostLike(@PathVariable int pid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		System.out.println("게시글 좋아요 조회");
+		if (jwtTokenProvider.validateToken(token)) {
+			String loginuser = jwtTokenProvider.getUserPk(token);
+			if(!postService.checkPost(pid)){
+				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+						HttpStatus.FORBIDDEN);
+			}else {
+				boolean liked = postLikeService.searchPostLike(pid, loginuser);
+				System.out.println(liked);
+				if(liked) {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}else {
+					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
+							HttpStatus.OK);
+				}
+			}
+		} else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
 	
 }

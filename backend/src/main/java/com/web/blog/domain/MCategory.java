@@ -30,4 +30,10 @@ public class MCategory {
 	
 	@Column(name="medium_dir",length = 200, nullable = false)
 	private String medium_dir;
+
+	@Override
+	public String toString() {
+		return "MCategory [mcid=" + mcid + ", lcid=" + lcid + ", medium_dir=" + medium_dir + "]";
+	}
+	
 }

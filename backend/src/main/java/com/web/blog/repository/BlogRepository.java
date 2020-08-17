@@ -1,16 +1,14 @@
 package com.web.blog.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.web.blog.domain.Blog;
-import com.web.blog.domain.Users;
-
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-public interface BlogRepository extends JpaRepository<Blog, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.web.blog.domain.Blog;
+
+public interface BlogRepository extends JpaRepository<Blog, Integer> {
 
 	long countByManager(String manager);
 	
@@ -20,5 +18,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 	void deleteByBid(int bid);
 	
 	List<Blog> findDistinctByBtitleContaining(String bname);
+	
+	List<Blog> findByManager(String manager);
 	
 }
