@@ -26,7 +26,7 @@ class BlogService {
         })
         .catch(error => {
           if (error.response.data.status === 403) {
-            alert('로그인이 필요한 서비스 입니다.')
+            commit('SET_MODAL_LOGIN',null, { root: true })
           }
         })
     }
@@ -305,6 +305,19 @@ class BlogService {
       .catch(error => console.log(error.response.data))
   }
 
+  addLike({ state }) {
+    axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
+      .then(()=> {
+        state.postData.postlikecnt += 1
+      })
+  }
+
+  deleteLike({ state }) {
+    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData,headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        state.postData.postlikecnt -= 1
+      })
+  }
 }
 
 

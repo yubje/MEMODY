@@ -28,7 +28,7 @@
               </v-form>
             </v-container>
           </v-card-text>
-            <v-btn block color ="teal accent-4" text @click="goBack()">취소</v-btn>
+            <v-btn block color ="teal accent-4" text @click="SET_MODAL_RESETPW()">취소</v-btn>
           <v-card-actions>
             <v-spacer></v-spacer>
           </v-card-actions>
@@ -40,6 +40,7 @@
 
 <script>
   import {
+    mapMutations,
     mapActions
   } from 'vuex'
 
@@ -65,6 +66,7 @@
       window.$('#resetpw-modal').modal('show')
     },
     methods: {
+      ...mapMutations(['SET_MODAL_RESETPW']),
       ...mapActions(['resetPW','goBack'])
     }
   }

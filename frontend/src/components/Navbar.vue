@@ -50,25 +50,55 @@
     
     <v-menu v-else>
       <template v-slot:activator="{ on, attrs }">
-        <button id="navbar-menu-before" v-bind="attrs" v-on="on">
-          <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">회원가입 · 로그인</router-link>
-        </button>
+        <button id="navbar-menu-before" v-bind="attrs" v-on="on" @click="SET_MODAL_LOGIN()"> 회원가입 · 로그인</button>
+        
+        <div v-if="modalLogin">
+          <UserLogin />
+        </div>
       </template>
     </v-menu>
+
+    <div v-if="modalResetPWCheckEmail">
+      <UserResetPWCheckEmail />
+    </div>
+    <div v-if="modalResetPWCheckValid">
+      <UserResetPWCheckValid />
+    </div>
+    <div v-if="modalResetPW">
+      <UserResetPW />
+    </div>
+
+    <div v-if="modalSignup">
+      <UserSignup />
+    </div>
+    
   </v-app-bar>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import UserLogin from '@/components/user/UserLogin.vue'
 import MainRanking from '@/components/main/MainRanking.vue'
+import UserResetPWCheckEmail from '@/components/user/UserResetPWCheckEmail.vue'
+import UserResetPWCheckValid from '@/components/user/UserResetPWCheckValid.vue'
+import UserResetPW from '@/components/user/UserResetPW.vue'
+import UserSignup from '@/components/user/UserSignup.vue'
 
 export default {
   name: 'NavBar',
   components: {
+    UserLogin,
+    UserResetPWCheckEmail,
+    UserResetPWCheckValid,
+    UserResetPW,
+    UserSignup,
     MainRanking
   },
   computed: {
-    ...mapState(['authToken', 'userInfo']),
+    ...mapState(['authToken', 'userInfo', 'modalLogin', 'modalResetPWCheckEmail', 'modalResetPWCheckValid', 'modalResetPW', 'modalSignup'])
+  },
+  methods: {
+    ...mapMutations(['SET_MODAL_LOGIN'])
   }
 }
 </script>
