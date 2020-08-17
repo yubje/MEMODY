@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements UserDetailsService {
 
 	private final UsersRepository userRepository;
-//	private final PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -75,4 +80,15 @@ public class UserService implements UserDetailsService {
 //		return userRepository.findAllByOrderByExpDesc();
 		return userRepository.findTop10ByOrderByExpDesc();
 	}
+	
+	public boolean send(String subject, String text, String from, String to, String filePath) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+		javaMailSender.send(message);
+
+		return true;
+	}
+
 }

@@ -2,7 +2,6 @@ package com.web.blog.controller;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +31,6 @@ import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.S3Service;
 import com.web.blog.service.UserService;
-import com.web.blog.service.UserService2;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -62,7 +60,7 @@ public class LoginController {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RedisTemplate redisTemplate;
 	private final UserService userService;
-	private final UserService2 mailService;
+//	private final UserService2 mailService;
 	private final S3Service s3Service;
 
 	/**
@@ -214,7 +212,8 @@ public class LoginController {
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
 
-			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+			if (userService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
@@ -249,7 +248,8 @@ public class LoginController {
 			sb.append("귀하의 인증코드 입니다.\n");
 			sb.append("인증코드 : " + code);
 
-			if (mailService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+			if (userService.send(subject, sb.toString(), SEND_EMAIL_ID, email, null)) {
+				redisTemplate.opsForValue().set(email, code, 30000, TimeUnit.MILLISECONDS);
 				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.CREATE_CODE, code),
 						HttpStatus.OK);
 			} else {
