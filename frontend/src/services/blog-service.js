@@ -14,7 +14,7 @@ class BlogService {
         commit('CLEAR_NEWBLOGDATA')
         router.push({ name: 'Main'})
       })
-      .catch(error => console.log(error.response.data.message))
+      .catch(error => console.log(error))
   }
     // 블로그 정보 조회 (API 문서 - 28D)
   getBlogInfo({ commit }, bid) {
@@ -34,7 +34,6 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
-    console.log(response.state.postData)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)

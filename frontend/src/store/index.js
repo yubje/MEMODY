@@ -76,6 +76,14 @@ export default new Vuex.Store({
     SET_VALIDTYPE(state) {
       state.validType = true
     },
+    RESET_VALIDTYPE(state) {
+      state.validType = false
+    },
+
+    RESET_UNIQUEEMAIL(state){
+      state.uniqueEmail = false
+    },
+
 
     // 아이디 중복 확인 
     SET_UNIQUEID(state, data) {
@@ -99,6 +107,7 @@ export default new Vuex.Store({
   actions: {
     // auth
     postAuthData({ state }, info) {
+      console.log(info.code)
       axios.post(SERVER + info.location, info.data, {headers:{"code":info.code}})
         .then(() => {
           console.log(state)
@@ -193,7 +202,7 @@ export default new Vuex.Store({
     resetPW({ state }, resetPWData) {
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
-      console.log(code)
+      console.log("code:",code)
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
         .then(response => {
           alert(response.data.message)
