@@ -68,6 +68,7 @@ public class ResponseMessage {
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
     public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
     public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
+    public static final String DELETE_POST_FAIL = "게시글 삭제 실패";
     public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
     public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
@@ -85,6 +86,7 @@ public class ResponseMessage {
     public static final String SEARCH_COMMENT_SUCCESS = "댓글 조회 성공";
     public static final String UPDATE_COMMENT_SUCCESS = "댓글 수정 성공";
     public static final String DELETE_COMMENT_SUCCESS = "댓글 삭제 성공";
+    public static final String DELETE_COMMENT_FAIL = "댓글 삭제 실패";
     
     // Category
     public static final String CREATE_CATEGORY_SUCCESS = "카테고리 추가 성공";
