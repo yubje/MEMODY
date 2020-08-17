@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="500">
         <v-card>
-          <v-card-title class="headline">회원가입</v-card-title>
+          <v-card-title class="headline">회원가입t</v-card-title>
           <v-card-text>
             <v-container>
               <v-form v-model="valid">
@@ -53,11 +53,11 @@
                     required>
                   </v-text-field>
                 </v-col>
-                <v-btn color="teal accent-4" text @click="goBack()">
+                <v-btn color="teal accent-4" text @click="SET_MODAL_SIGNUP()">
                   취소
                 </v-btn>
                 <v-btn :disabled="!valid || !uniqueId" color="teal accent-3" class="mr-4"
-                  @click="signup(signupData),dialog = false">
+                  @click="signup(signupData)">
                   회원가입
                 </v-btn>
               </v-form>
@@ -76,7 +76,8 @@
 <script>
   import {
     mapActions,
-    mapState
+    mapState,
+    mapMutations
   } from 'vuex'
   export default {
     name: 'UserSignupView',
@@ -122,6 +123,7 @@
     },
     methods: {
       ...mapActions(["signup", "validateEmail", "validateEmail", "checkValidation", 'goBack', 'lookUpNickname']),
+      ...mapMutations(['SET_MODAL_SIGNUP'])
     },
     computed: {
       ...mapState(['isValid', 'emailValidationNumber', 'uniqueId', 'uniqueEmail'])
@@ -129,7 +131,3 @@
 
   }
 </script>
-
-<style>
-
-</style>

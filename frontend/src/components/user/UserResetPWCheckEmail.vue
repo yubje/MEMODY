@@ -2,7 +2,6 @@
   <div>
      <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="500">
-      <v-form>
 
         <v-card>
           <v-card-title class="headline">ResetPW</v-card-title>
@@ -17,20 +16,19 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color ="teal accent-4" text @click="goBack()">취소</v-btn>
+            <v-btn color ="teal accent-4" text @click="SET_MODAL_RESETPW_CHECK_EMAIL()">취소</v-btn>
             <v-btn color="teal accent-4" text @click="checkForm()">
               인증 메일 받기
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-form>
       </v-dialog>
     </v-row>
   </div> 
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'UserResetPWCheckEmailView',
@@ -50,7 +48,8 @@ export default {
     window.$('#resetpwcheckemail-modal').modal('show')
   },
   methods: {
-    ...mapActions(['validateEmailForResetPW','goBack']),
+    ...mapMutations(['SET_MODAL_RESETPW_CHECK_EMAIL']),
+    ...mapActions(['validateEmailForResetPW']),
 
     checkForm() {
       if (!this.resetpwcheckemailData.email) alert("이메일을 입력해주세요.");
