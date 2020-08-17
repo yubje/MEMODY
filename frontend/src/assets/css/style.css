@@ -59,14 +59,15 @@ hr {
   color: #000000 !important;
 }
 
-#navbar-menu-before a {
+#navbar-menu-before {
   color: #888888 !important;
   font-size: 15px;
 }
 
-#navbar-menu-before a:hover, #navbar-menu-after:hover, .v-application a:hover,
+#navbar-menu-before:hover, #navbar-menu-after:hover, .v-application a:hover,
 .searchTab-type:hover, #search-icon:hover,
-.main-blog-item-title:hover {
+.main-blog-item-title:hover,
+#user-login-cancel-icon:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -249,6 +250,49 @@ hr {
   margin: 2px 3px 2px 0px;
 }
 
-.mdi-chevron-left, .mdi-chevron-right {
+.main-recommend-blog-container .v-window__container .v-window__prev .v-btn .v-btn__content .mdi-chevron-left, 
+.main-recommend-blog-container .v-window__container .v-window__next .v-btn .v-btn__content .mdi-chevron-right {
   color: white !important;
+}
+
+/*--------------------UserLogin--------------------*/
+.v-dialog, .user-login-container {
+  border-radius: 0px !important;
+}
+
+#user-login-cancel-icon {
+  font-size: x-large;
+  color: #505050;
+  margin: 17px 0px 0px 89%;
+}
+
+.user-login-contents {
+  margin: 0px 19px;
+}
+
+.user-login-title {
+  display: unset;
+}
+
+.user-login-content {
+  margin-top: 33px;
+}
+
+.user-login-content-padding {
+  padding: 2px 15px;
+}
+
+.user-login-content-findpw {
+  text-align: right; 
+  padding-top: 3px;
+  padding-bottom: 0px;
+}
+
+#user-login-content-login-btn {
+  border-radius: 0px;
+}
+
+.user-login-content-signup {
+  margin-top: 15px;
+  margin-bottom: 3px;
 }

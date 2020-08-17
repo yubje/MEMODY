@@ -8,9 +8,6 @@
 
     <v-spacer></v-spacer>
 
-    <button @click="test">test</button>
-    <div  v-if="is_show"><UserLogin @tete="test" :is_show="is_show"/></div>
-
     <div v-if="authToken">
       <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
       <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
@@ -53,16 +50,17 @@
     
     <v-menu v-else>
       <template v-slot:activator="{ on, attrs }">
-        <button id="navbar-menu-before" v-bind="attrs" v-on="on">
-          <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">회원가입 · 로그인</router-link>
-        </button>
+        <button id="navbar-menu-before" v-bind="attrs" v-on="on" @click="SET_MODAL_VALID()"> 회원가입 · 로그인</button>
+        <div v-if="modalValid">
+          <UserLogin />
+        </div>
       </template>
     </v-menu>
   </v-app-bar>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import UserLogin from '@/components/user/UserLogin.vue'
 import MainRanking from '@/components/main/MainRanking.vue'
 
@@ -72,19 +70,11 @@ export default {
     UserLogin,
     MainRanking
   },
-  data() {
-    return {
-      is_show: false
-    }
-  },
   computed: {
-    ...mapState(['authToken', 'userInfo']),
+    ...mapState(['authToken', 'userInfo', 'modalValid'])
   },
   methods: {
-    test() {
-      console.log(this.is_show)
-      this.is_show = !this.is_show
-    }
+    ...mapMutations(['SET_MODAL_VALID'])
   }
 }
 </script>

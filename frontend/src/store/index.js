@@ -27,6 +27,7 @@ export default new Vuex.Store({
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
+    modalValid: false
   },
 
   getters: {
@@ -91,7 +92,11 @@ export default new Vuex.Store({
 
     SET_BLOGS_BEFORE(state, data) {
       state.recommendBlog = data
-    }
+    },
+
+    SET_MODAL_VALID(state) {
+      state.modalValid = !state.modalValid
+    },
   },
 
   actions: {
@@ -113,14 +118,13 @@ export default new Vuex.Store({
       }
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
-        console.log('로그인:',response )
-        console.log(response.config)
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
-        router.push({ name: 'Main' })
+        commit('SET_MODAL_VALID')
       })
       .catch(error => alert(error.response.data.message))
     },
+    
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
       commit('SET_TOKEN', null)

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import BlogView from '@/views/BlogView.vue'
-import UserLoginView from '@/views/user/UserLoginView.vue'
 import UserLogout from '@/components/user/UserLogout.vue'
 import UserSignupView from '@/views/user/UserSignupView.vue'
 import UserResetPWCheckEmailView from '@/views/user/UserResetPWCheckEmailView.vue'
@@ -53,11 +52,6 @@ Vue.use(VueRouter)
     }
   },
   // users
-  {
-    path: '/login',
-    name: 'UserLoginView',
-    component: UserLoginView,
-  },
   {
     path: '/logout',
     name: 'UserLogout',
