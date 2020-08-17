@@ -22,7 +22,6 @@
           <v-card>
             <v-list v-for="(categories, i) in dataCategories"  :key="`category-`+i">
                 <BlogSettingsCategoryItem :categories="categories" :i="i"/>
-
             </v-list>
           </v-card>
         </v-col>
