@@ -2,7 +2,7 @@
     <div>
     <div class="navbar navbar-expand-lg navbar-light justify-content-between p-0">
       <b>{{ comment.email }}</b>
-      <ul v-if="userInfo.email === comment.email" class="navbar-nav ml-auto">
+      <ul v-if="userInfo.email === comment.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="navbar-nav ml-auto">
         <li class="nav-item dropdown">
           <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <font-awesome-icon :icon="['fas','ellipsis-v']" />
@@ -22,7 +22,7 @@
     </div>
     <div>
       <p class="px-3 text-left">{{ comment.comment }}</p>
-      <p class="px-3 text-left">created at: {{ comment.comment_time.slice(0,10) }}  |  updated at: {{ comment.update_time.slice(0,10) }}</p>
+      <p class="px-3 text-left">created at: {{ comment.commentTime.slice(0,10) }}  |  updated at: {{ comment.updateTime.slice(0,10) }}</p>
     </div>
     <hr>
   </div>

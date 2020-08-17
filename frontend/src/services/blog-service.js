@@ -14,7 +14,7 @@ class BlogService {
         commit('CLEAR_NEWBLOGDATA')
         router.push({ name: 'Main'})
       })
-      .catch(error => console.log(error.response.data.message))
+      .catch(error => console.log(error))
   }
     // 블로그 정보 조회 (API 문서 - 28D)
   getBlogInfo({ commit }, bid) {
@@ -26,7 +26,7 @@ class BlogService {
         })
         .catch(error => {
           if (error.response.data.status === 403) {
-            alert('로그인이 필요한 서비스 입니다.')
+            commit('SET_MODAL_LOGIN',null, { root: true })
           }
         })
     }
@@ -34,7 +34,6 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
-    console.log(response.state.postData)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
@@ -148,7 +147,7 @@ class BlogService {
     axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         alert(response.data.message)
-        router.push({ name: 'MainView' })
+        router.push({ name: 'Main' })
       })
       .catch(error => console.log(error.response.data))
   }
@@ -220,14 +219,6 @@ class BlogService {
         router.go()
       })
       .catch(error => console.log(error.response.data))
-  }
-
-  //카테고리 별 글목록 조회
-  moveToPosts({commit},categoryData) {
-    console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},
-    
-    )
   }
 
   fetchPosts({commit},info) {
@@ -312,6 +303,19 @@ class BlogService {
       .catch(error => console.log(error.response.data))
   }
 
+  addLike({ state }) {
+    axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
+      .then(()=> {
+        state.postData.postlikecnt += 1
+      })
+  }
+
+  deleteLike({ state }) {
+    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData,headers: {"auth": cookies.get('auth-token')}})
+      .then(() => {
+        state.postData.postlikecnt -= 1
+      })
+  }
 }
 
 

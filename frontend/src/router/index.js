@@ -2,12 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import BlogView from '@/views/BlogView.vue'
-import UserLoginView from '@/views/user/UserLoginView.vue'
 import UserLogout from '@/components/user/UserLogout.vue'
-import UserSignupView from '@/views/user/UserSignupView.vue'
-import UserResetPWCheckEmailView from '@/views/user/UserResetPWCheckEmailView.vue'
-import UserResetPWCheckValidView from '@/views/user/UserResetPWCheckValidView.vue'
-import UserResetPWView from '@/views/user/UserResetPWView.vue'
 import UserInfoView from '@/views/user/UserInfoView.vue'
 import UserInfoUpdateView from '@/views/user/UserInfoUpdateView.vue'
 
@@ -24,6 +19,8 @@ import BlogPostTmpCreate from '@/components/blog/post/BlogPostTmpCreate'
 
 import MainSearchResultView from '@/views/main/MainSearchResultView.vue'
 import MainRankingView from '@/views/main/MainRankingView.vue'
+import MainMyBlogListView from '@/views/main/MainMyBlogListView.vue'
+import MainFollowBlogListView from '@/views/main/MainFollowBlogListView.vue'
 
 Vue.use(VueRouter)
 
@@ -52,11 +49,6 @@ Vue.use(VueRouter)
   },
   // users
   {
-    path: '/login',
-    name: 'UserLoginView',
-    component: UserLoginView,
-  },
-  {
     path: '/logout',
     name: 'UserLogout',
     component: UserLogout,
@@ -79,26 +71,6 @@ Vue.use(VueRouter)
     path: '/users/info/update',
     name: 'UserInfoUpdateView',
     component: UserInfoUpdateView,
-  },
-  {
-    path: '/users',
-    name: 'UserSignupView',
-    component: UserSignupView,
-  },
-  {
-    path: '/users/resetpw/emailcheck',
-    name: 'UserResetPWCheckEmailView',
-    component: UserResetPWCheckEmailView,
-  },
-  {
-    path: '/users/resetpw/validcheck',
-    name: 'UserResetPWCheckValidView',
-    component: UserResetPWCheckValidView,
-  },
-  {
-    path: '/users/resetpw',
-    name: 'UserResetPWView',
-    component: UserResetPWView,
   },
   // blog
   // blog settings
@@ -161,7 +133,7 @@ Vue.use(VueRouter)
     name: 'BlogPostCategoryList',
     component: BlogPostCategoryList,
     props(route) {
-      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid }
+      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid, ldir: route.query.ldir, mdir: route.query.mdir }
     }
   },
   {
@@ -200,6 +172,16 @@ Vue.use(VueRouter)
     path: '/main/rankings',
     name: 'MainRankingView',
     component: MainRankingView,
+  },
+  {
+    path: '/main/myBlogs',
+    name: 'MainMyBlogListView',
+    component: MainMyBlogListView,
+  },
+  {
+    path: '/main/followBlogs',
+    name: 'MainFollowBlogListView',
+    component: MainFollowBlogListView,
   },
 ]
 

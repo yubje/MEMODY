@@ -8,7 +8,6 @@ import cookies from 'vue-cookies'
 
 import { blog } from './modules/blog-module.js'
 import { main } from './modules/main-module.js'
-
 Vue.use(Vuex)
 
 const SERVER = process.env.VUE_APP_SERVER
@@ -25,9 +24,18 @@ export default new Vuex.Store({
     validType: false,
     // 아이디 중복 확인 
     uniqueId: false,
+    uniqueEmail: false,
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
+    //모달창 관리
+    modalLogin: false,
+    modalResetPWCheckEmail: false,
+    modalResetPWCheckValid: false,
+    modalResetPW: false,
+    modalSignup: false,
+    //에러메세지 관리
+    loginError: ''
   },
 
   getters: {
@@ -43,7 +51,6 @@ export default new Vuex.Store({
 
   mutations: {
     SET_TOKEN(state, token) {
-      console.log("메롱", token)
       state.authToken = token
       cookies.set('auth-token', token)
     },
@@ -63,6 +70,7 @@ export default new Vuex.Store({
 
     SET_VALIDATION(state, number) {
       state.emailValidationNumber = number
+      state.uniqueEmail = true
     },
 
     SET_ISVALID(state) {
@@ -76,10 +84,21 @@ export default new Vuex.Store({
     SET_VALIDTYPE(state) {
       state.validType = true
     },
+    RESET_VALIDTYPE(state) {
+      state.validType = false
+    },
+
+    RESET_UNIQUEEMAIL(state){
+      state.uniqueEmail = false
+    },
+
 
     // 아이디 중복 확인 
-    SET_UNIQUEID(state) {
-      state.uniqueId = !state.uniqueId
+    SET_UNIQUEID(state, data) {
+      console.log(data)
+      state.uniqueId = data
+      console.log(state.uniqueId)
+
     },
 
     SET_BLOGS_AFTER(state, data) {
@@ -90,15 +109,47 @@ export default new Vuex.Store({
 
     SET_BLOGS_BEFORE(state, data) {
       state.recommendBlog = data
+    },
+
+    //모달창 관리
+    SET_MODAL_LOGIN(state) {
+      state.modalLogin = !state.modalLogin
+    },
+
+    SET_MODAL_RESETPW_CHECK_EMAIL(state) {
+      state.modalLogin = false
+      state.modalResetPWCheckEmail = !state.modalResetPWCheckEmail
+    },
+
+    SET_MODAL_RESETPW_CHECK_VALID(state) {
+      state.modalResetPWCheckEmail = false
+      state.modalResetPWCheckValid = !state.modalResetPWCheckValid
+    },
+
+    SET_MODAL_RESETPW(state) {
+      state.modalResetPWCheckValid = false
+      state.modalResetPW = !state.modalResetPW
+    },
+
+    SET_MODAL_SIGNUP(state) {
+      state.modalLogin = false
+      state.modalSignup = !state.modalSignup
+    },
+
+    //에러메세지 관리
+    SET_LOGIN_ERROR(state, data) {
+      state.loginError = data
     }
   },
 
   actions: {
     // auth
-    postAuthData({ commit }, info) {
-      axios.post(SERVER + info.location, info.data)
-        .then(response => {
-          commit('SET_TOKEN', response.headers.auth)
+    postAuthData({ state }, info) {
+      console.log(info.code)
+      axios.post(SERVER + info.location, info.data, {headers:{"code":info.code}})
+        .then(() => {
+          console.log(state)
+          // commit('SET_TOKEN', response.headers.auth)
           router.push({ name: 'Main'})
         })
         .catch(error => alert(error.response.data.message))
@@ -113,36 +164,42 @@ export default new Vuex.Store({
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
-        router.push({ name: 'Main' })
+        commit('SET_MODAL_LOGIN')
       })
-      .catch(error => alert(error.response.data.message))
+      .catch(error => commit('SET_LOGIN_ERROR', error.response.data.message))
     },
+    
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
+      commit('SET_TOKEN', null)
+      cookies.remove('auth-token')
+      window.localStorage.removeItem('userInfo')
       axios.get(SERVER + '/logout/', getters.config)
         .then(() => {
-          commit('SET_TOKEN', null)
-          cookies.remove('auth-token')
-          window.localStorage.removeItem('userInfo')
-          router.push({ name: 'Main'})
+         })
+        .catch(() => {
+          // alert(error.response.data.message)
         })
-        .catch(error => alert(error.response.data.message))
+      router.push({ name: 'Main'})
     },
 
     // 회원가입 (API 문서 - 7~9 D)
-    signup({ dispatch }, signupData) {
+    signup({ dispatch, commit }, signupData) {
+      // signupData['code'] = signupData.validationNumber
       const info = {
         data: signupData,
+        code: signupData.validationNumber,
         location: '/users'
       }
       dispatch('postAuthData', info)
-      router.push({ name: 'UserLoginView'})
+      commit('SET_MODAL_SIGNUP')
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
     validateEmail({ commit }, email) {
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
+        console.log('이메일 인증:', response)
         commit('SET_VALIDATION', response.data.data)
         console.log(response.data.data)
       })
@@ -153,11 +210,12 @@ export default new Vuex.Store({
     validateEmailForResetPW({ commit }, email) {
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
+        console.log('비번 재설정시', response.data)
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
+        commit('SET_MODAL_RESETPW_CHECK_VALID')
         console.log(response.data.data)
-        router.push({ name: 'UserResetPWCheckValidView'})
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -166,13 +224,11 @@ export default new Vuex.Store({
     checkValidation( { commit } ,validationNumber) {
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
-
         if (this.state.validType) {
-          router.push({ name: 'UserResetPWView' })
+          commit('SET_MODAL_RESETPW')
         } else {
           commit('SET_ISVALID')
           console.log(this.state.emailValidationNumber)
-          window.$('#email-validation').modal('hide')
         }
       } else {
         alert("인증번호가 틀립니다.")
@@ -180,30 +236,46 @@ export default new Vuex.Store({
     },
 
     // 비밀번호 재설정 (API 문서 - 13D)
-    resetPW({ state }, resetPWData) {
+    resetPW({ state, commit }, resetPWData) {
       resetPWData.email = state.email
-      axios.put(`${SERVER}/users/pw`, resetPWData)
+      const code = this.state.emailValidationNumber
+      console.log("code:",code)
+      axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
         .then(response => {
           alert(response.data.message)
-          router.push({ name: 'Main'})
+          commit('SET_MODAL_RESETPW')
         })
         .catch(error => alert(error))
     },
 
     // 회원 검색(닉네임) (API 문서 - 21 D)
     lookUpNickname({ commit }, uid) {
-      console.log(uid)
-      axios.get(`${SERVER}/users/${uid}/nickname`)
+      commit('SET_UNIQUEID', false)
+      if (cookies.get('auth-token')) {
+        axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
         .then(response => {
           if (response.data.status == 200) {
-            alert("닉네임을 변경할 수 있습니다!")
-            console.log(response.getters.userUpdateInfo)
-            commit('SET_UNIQUEID')
-          } else {
-            alert("닉네임을 변경할 수 없습니다.")
-          }
-        })
-        .catch(error => alert(error.response.data.message))
+            console.log("닉네임을 변경할 수 있습니다!")
+            commit('SET_UNIQUEID', true)
+            } else {
+              console.log("닉네임을 변경할 수 없습니다.")
+            }
+          })
+      } else {
+          axios.get(`${SERVER}/nickname/${uid}`)
+            .then(response => {
+              if (response.data.status == 200) {
+                console.log("닉네임을 변경할 수 있습니다!")
+                commit('SET_UNIQUEID',true)
+              } else {
+                console.log("닉네임을 변경할 수 없습니다.")
+              }
+            })
+            .catch(()=>{
+              console.log("닉네임을 변경할 수 없습니다")
+            })
+
+      }
     },
     //회원 정보 조회
     lookupUserInfo({state, commit}) {
@@ -265,15 +337,12 @@ export default new Vuex.Store({
           commit('SET_BLOGS_BEFORE',response.data.data)
         })
         .catch(() => {
-         
         })
     },
 
     goBack() {
       router.go(-1)
     }
-
-
   },
 
   modules: {
@@ -283,5 +352,5 @@ export default new Vuex.Store({
 
   plugins: [
     createPersistedState()
-  ]
+  ],
 })
