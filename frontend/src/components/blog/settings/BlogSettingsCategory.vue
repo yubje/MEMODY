@@ -1,12 +1,12 @@
 <template>
   <div class="conatiner-fluid" style="height:100%;">
     <v-row>
-      <BlogSettingsSidebar/> 
+      <BlogSettingsSidebar />
       <v-col>
         <div class="col w-75 mx-auto">
-        <div class="mx-auto my-2">
-          <h3>블로그 카테고리 설정</h3>
-        </div>
+          <div class="mx-auto my-2">
+            <h3>블로그 카테고리 설정</h3>
+          </div>
         <v-col>
           <v-text-field
             outlined 
@@ -29,7 +29,7 @@
       </div>
       </v-col>
     </v-row>
-  </div >
+  </div>
 
 </template>
 

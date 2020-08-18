@@ -5,6 +5,7 @@ import store from '@/store'
 export default function setup() {
   axios.interceptors.response.use(function (response) {
     //토큰 갱신이 필요할 때
+    console.log("완료한 Task:",response.data)
     if (response.headers.expires == 1) {
         //SET TOKEN
         console.log('토큰업데이트 ---------------------------')

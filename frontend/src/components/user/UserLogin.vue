@@ -81,6 +81,7 @@
       ...mapActions(['login']),
 
       checkForm() {
+        this.RESET_VALIDTYPE('')
         let err = true;
         let msg = "";
 
@@ -93,6 +94,6 @@
           this.login(this.loginData);
         } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
       }
-    }
+    },
   }
 </script>
