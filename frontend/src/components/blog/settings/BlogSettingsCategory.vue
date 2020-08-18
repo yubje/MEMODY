@@ -16,13 +16,12 @@
             v-model="largeCategoryData.large_dir"
             append-icon="mdi-folder-plus"
             @click:append="addParentCategory(largeCategoryData)"
-          ></v-text-field>
+          ></v-text-field>   
         </v-col>
         <v-col cols="10">
           <v-card>
             <v-list v-for="(categories, i) in dataCategories"  :key="`category-`+i">
                 <BlogSettingsCategoryItem :categories="categories" :i="i"/>
-
             </v-list>
           </v-card>
         </v-col>
