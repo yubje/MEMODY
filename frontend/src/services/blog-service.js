@@ -5,6 +5,13 @@ import cookies from 'vue-cookies'
 const SERVER = process.env.VUE_APP_SERVER
 
 class BlogService {
+  // User 목록 조회
+  getUsers(res, uid) {
+    return axios.get(`${SERVER}/users/${uid}/list`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      return response.data.data
+    })
+  }
 
   // 블로그 추가 (API 문서 - 26~29 D)
   createBlog({ state, commit }) {
@@ -44,7 +51,6 @@ class BlogService {
 
   // 블로그 게시글 전체 조회 (API 문서 - 62D)
   lookupPostList(bid, page) {
-    console.log(bid, page)
     return axios.get(`${SERVER}/blogs/${bid}/posts?page=${page}`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         return result.data.data
@@ -63,8 +69,6 @@ class BlogService {
 
   // 블로그 게시글 수정 (API 문서 - 54D)
   updatePost(response) {
-    console.log("#####")
-    console.log(response)
     return axios.put(`${SERVER}/blogs/posts`, response, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       return result.data
@@ -79,7 +83,7 @@ class BlogService {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})
     })
-    .catch(error => console.log(error.response.data.message))
+    .catch(error => console.log(error.response.data))
   }
 
   //카테고리 불러오기
@@ -125,7 +129,6 @@ class BlogService {
   updateBlogInfo({ state, commit }) {
     var tagString = ''
     state.blogData.hashtags.forEach((item) => tagString += '#'+item.tname.trim())
-    console.log(tagString)
     const data = {
       "bid": state.blogData.bid,
       "btitle": state.blogData.btitle,
@@ -143,7 +146,6 @@ class BlogService {
   }
   // 블로그 삭제 (API 문서 - 37D)
   deleteBlog({ state }) {
-    console.log(state.blogData.bid)
     axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         alert(response.data.message)
@@ -154,7 +156,6 @@ class BlogService {
 
   // 소분류 추가 
   addChildCategory({commit},mediumCategoryData) {
-    console.log(mediumCategoryData)
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
       this.getBlogCategory({commit}, mediumCategoryData.bid)
@@ -179,7 +180,6 @@ class BlogService {
 
 
   getBlogMembers({ state }) {
-    console.log(state)
     axios.get(`${SERVER}/blogs/${state.bid}/members`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.members = response.data.data
@@ -188,8 +188,6 @@ class BlogService {
   }
 
   addBlogMember({ state }, email) {
-    console.log(state)
-    console.log(email) 
     const info = {
       "bid": state.bid,
       "email": email
@@ -205,8 +203,6 @@ class BlogService {
   }
 
   deleteBlogMember({ state }, email) {
-    console.log(state)
-    console.log(email)
     const info = {
       "bid": state.bid,
       "email": email,
@@ -215,8 +211,6 @@ class BlogService {
     axios.delete(`${SERVER}/blogs/${state.bid}/members`, { data: info, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.members = response.data.data
-        console.log(response)
-        console.log(state.members)
         router.go()
       })
       .catch(error => console.log(error.response.data))
@@ -227,8 +221,7 @@ class BlogService {
       .then(response => {
         commit('SET_POSTS', response.data.data)
       })
-      .catch(error => {
-        console.log(error)
+      .catch(() => {
       })
     }
 
@@ -255,12 +248,11 @@ class BlogService {
       "pid": state.postData.pid,
       "comment": comment
     }
-    console.log(commentData)
     axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         router.go()
       })
-      .catch(error => console.log(error.response.data))
+      
   }
 
   getCommentData({ commit, state }) {
@@ -268,7 +260,7 @@ class BlogService {
       .then(response => {
         commit('SET_COMMENTDATA', response.data.data)
       })
-      .catch(error => console.log(error.response.data))
+     
     
   }
 
@@ -297,7 +289,6 @@ class BlogService {
   }
 
   getBlogPostTmpList({ state }) {
-    console.log(state.blogData.bid)
     axios.get(`${SERVER}/blogs/${state.blogData.bid}/tmpposts/`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.blogPostTmpList = response.data.data
@@ -313,10 +304,29 @@ class BlogService {
   }
 
   deleteLike({ state }) {
-    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData,headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         state.postData.postlikecnt -= 1
       })
+  }
+
+  follow({ state }) {
+    axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, state.blogData, { headers: {"auth": cookies.get('auth-token')} })
+    .then(response => {
+      console.log(response.data)
+      state.blogData.followers += 1
+      state.blogData.follower.add(state.userInfo.email)
+    })
+    .catch(error => console.log(error.response.data))
+  }
+
+  unfollow({ state }) {
+    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, { data: state.blogData, headers: {"auth": cookies.get('auth-token')} })
+    .then(() => {
+      state.blogData.followers -= 1
+      state.blogData.follower.remove(state.userInfo.email)
+    })
+    .catch(error => console.log(error.response.data))
   }
 }
 

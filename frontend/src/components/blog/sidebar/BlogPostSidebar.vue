@@ -33,11 +33,12 @@
             </template>  
 
           <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
-            <v-list-item-title>
-              <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" >
+            <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" style="width:100%;">
+              <v-list-item-title>
                 {{child.medium_dir}}
-              </router-link>
-            </v-list-item-title>
+              </v-list-item-title>
+            </router-link>
+            
           </v-list-item>       
           </v-list-group>  
         </div>
