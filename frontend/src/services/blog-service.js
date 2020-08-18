@@ -244,6 +244,7 @@ class BlogService {
     .then(response =>{
       console.log(commit)
       console.log(response)
+      router.push({ name: 'MainMyBlogListView' })
     })
   }
 
