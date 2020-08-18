@@ -5,6 +5,14 @@ import cookies from 'vue-cookies'
 const SERVER = process.env.VUE_APP_SERVER
 
 class BlogService {
+  // User 목록 조회
+  getUsers(res, uid) {
+    return axios.get(`${SERVER}/users/${uid}/list`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      console.log('여기')
+      return response.data.data
+    })
+  }
 
   // 블로그 추가 (API 문서 - 26~29 D)
   createBlog({ state, commit }) {
@@ -34,6 +42,7 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
+    console.log( response.state.postData)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
@@ -74,12 +83,13 @@ class BlogService {
 
   // 블로그 게시글 삭제 (API 문서 - 65D)
   deletePost(response) {
+    console.log(response.state.postData)
     axios.delete(`${SERVER}/blogs/posts/`+response.state.postData.pid, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       alert(result.data.message)
       router.push({ name: 'BlogPostList'})
     })
-    .catch(error => console.log(error.response.data.message))
+    .catch(error => console.log(error.response.data))
   }
 
   //카테고리 불러오기
