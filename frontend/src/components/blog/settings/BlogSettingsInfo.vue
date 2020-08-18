@@ -5,7 +5,7 @@
       <div class="col">
         <div class="col w-75 mx-auto">
           <div class="mx-auto my-2">
-            <h1>블로그 정보 수정</h1>
+            <h3>블로그 정보 수정</h3>
           </div>
           <div class="row justify-content-between" style="align-items:baseline;">
             <p class="col-3">블로그 이름</p>
@@ -103,9 +103,7 @@ export default {
     addHashtag(newHashtag) {
       if (newHashtag) {
         this.ADD_HASHTAG(newHashtag)
-      } else {
-        alert('해시태그를 입력해 주세요')
-      }
+      } 
       newHashtag = null
     },
   },

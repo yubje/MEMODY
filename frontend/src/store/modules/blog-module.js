@@ -189,7 +189,7 @@ export const blog = {
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
-    createPost(response) {
+    createPost(response, ) {
       BlogService.createPost(response)
     },
 
@@ -337,6 +337,19 @@ export const blog = {
 
     getBlogPostTmpList({ state }) {
       BlogService.getBlogPostTmpList({ state })
+    },
+
+    getUsers({response}, uid) {
+      console.log(uid)
+      return BlogService.getUsers(response,uid)
+    },
+
+    follow({ state }) {
+      BlogService.follow({ state })
+    },
+
+    unfollow({ state }) {
+      BlogService.unfollow({ state })
     },
 
   },

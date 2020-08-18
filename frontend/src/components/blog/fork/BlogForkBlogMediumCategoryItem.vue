@@ -1,10 +1,10 @@
 <template>
-  <v-list-item>
+  <v-list-item @click="clickMediumDir()">
     <v-list-item-avatar>
-      <font-awesome-icon :icon="['fas','file-export']" style="color: teal" />
+      <v-icon color="teal">mdi-subdirectory-arrow-right</v-icon>
     </v-list-item-avatar>
     <v-list-item-content>
-      <v-list-item-title @click="clickMediumDir()" v-text="mcategory.medium_dir"></v-list-item-title>
+      <v-list-item-title class="text-left"  v-text="mcategory.medium_dir"></v-list-item-title>
     </v-list-item-content>
   </v-list-item>
 
