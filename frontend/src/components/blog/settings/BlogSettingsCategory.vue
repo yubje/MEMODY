@@ -7,19 +7,26 @@
           <div class="mx-auto my-2">
             <h3>블로그 카테고리 설정</h3>
           </div>
-          <v-col cols="10">
-            <v-text-field outlined color="teal" text type="text" label="카테고리 대분류 추가"
-              v-model="largeCategoryData.large_dir" append-icon="mdi-folder-plus"
-              @click:append="addParentCategory(largeCategoryData)"></v-text-field>
-          </v-col>
-          <v-col cols="10">
-            <v-card>
-              <v-list v-for="(categories, i) in dataCategories" :key="`category-`+i">
-                <BlogSettingsCategoryItem :categories="categories" :i="i" />
-              </v-list>
-            </v-card>
-          </v-col>
-        </div>
+        <v-col>
+          <v-text-field
+            outlined 
+            color="teal"
+            text type="text" 
+            label="카테고리 대분류 추가" 
+            v-model="largeCategoryData.large_dir"
+            append-icon="mdi-folder-plus"
+            @click:append="addParentCategory(largeCategoryData)"
+          ></v-text-field>   
+        </v-col>
+        <v-col>
+          <v-card outlined>
+            <v-list v-for="(categories, i) in dataCategories"  :key="`category-`+i">
+                <BlogSettingsCategoryItem :categories="categories" :i="i"/>
+            </v-list>
+            
+          </v-card>
+        </v-col>
+      </div>
       </v-col>
     </v-row>
   </div>
@@ -59,7 +66,7 @@
       },
     },
     computed: {
-      ...mapState('blog', ['blogData', 'dataCategories', 'bid'])
+      ...mapState('blog', ['blogData', 'dataCategories', 'bid']),
     }
   }
 </script>
