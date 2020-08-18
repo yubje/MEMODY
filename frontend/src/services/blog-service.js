@@ -221,11 +221,15 @@ class BlogService {
     console.log(email)
     const info = {
       "bid": state.bid,
-      "email": email
+      "email": email,
     }
+    console.log(info)
     axios.delete(`${SERVER}/blogs/${state.bid}/members`, { data: info, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.members = response.data.data
+        // state.members.remove(email)
+        console.log(response)
+        console.log(state.members)
         router.go()
       })
       .catch(error => console.log(error.response.data))
@@ -254,6 +258,7 @@ class BlogService {
     .then(response =>{
       console.log(commit)
       console.log(response)
+      router.push({ name: 'MainMyBlogListView' })
     })
   }
 

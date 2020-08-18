@@ -103,9 +103,7 @@ export default {
     addHashtag(newHashtag) {
       if (newHashtag) {
         this.ADD_HASHTAG(newHashtag)
-      } else {
-        alert('해시태그를 입력해 주세요')
-      }
+      } 
       newHashtag = null
     },
   },
