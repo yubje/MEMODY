@@ -1,21 +1,21 @@
 <template>
-  <v-list-group
-    prepend-icon="mdi-folder"
-    no-action
-    color="teal"
-  >
-    <template v-slot:activator>
+  <v-list>
+    <v-list-item>
+      <v-list-item-avatar>
+        <v-icon v-if="categories.mcategory.length">mdi-folder-open</v-icon>
+        <v-icon v-else>mdi-folder</v-icon>
+        
+      </v-list-item-avatar>
+      <!-- <template v-slot:activator> -->
       <v-list-item-content>
-        <v-list-item-title v-text="categories.large_dir"></v-list-item-title>
+        <v-list-item-title v-text="categories.large_dir" class="text-left"></v-list-item-title>
       </v-list-item-content>
-      <!-- <v-list-item-action @click="clickEdit()">
-        <v-icon>mdi-folder-edit</v-icon>
-      </v-list-item-action> -->
-    </template>
-    <v-list-item v-if="largeShow">
+    <!-- </template> -->
       <!-- 대분류 수정 -->
       <v-btn 
+        v-if="largeShow"
         fab 
+        text
         x-small
         dark
         color="teal" 
@@ -23,9 +23,12 @@
       >
         <v-icon>mdi-folder-edit</v-icon>
       </v-btn>
+
       <!-- 대분류 삭제 -->
       <v-btn 
+        v-if="largeShow"
         fab
+        text
         x-small
         dark
         color="error"
@@ -36,18 +39,20 @@
 
       <!-- 소분류 추가 버튼 -->
       <v-btn 
+        v-if="largeShow && !addShow"
         fab
+        text
         x-small
         dark
         color="teal"
-        v-if="!addShow" 
         @click="clickAdd()"
       >
         <v-icon>mdi-subdirectory-arrow-right</v-icon>
       </v-btn>
-
+    </v-list-item>
+    <v-divider></v-divider>
       <!-- 소분류 추가 -->
-      <v-list-item v-if="addShow">
+      <v-list-item v-if="largeShow && addShow">
         <v-text-field 
           color="teal"
           type="text" 
@@ -60,9 +65,9 @@
           @click:clear="addChildCategory(categoryData)"
         ></v-text-field>
       </v-list-item>
-    </v-list-item>
+    <!-- </v-list-item> -->
     <!-- 대분류 수정 및 삭제 -->
-    <v-list-item v-else>
+    <v-list-item v-if="!largeShow">
       <v-text-field
         color="teal"
         type="text" 
@@ -74,14 +79,14 @@
         @click:clear="clickEdit()"
       ></v-text-field>
     </v-list-item>
-    
+
     <v-list-item
       v-for="child in categories.mcategory"
       :key="child.mcid"
     >
       <BlogSettingsCategoryUpdate :child="child"/>
     </v-list-item>
-</v-list-group>
+</v-list>
 </template>
 
 <script>

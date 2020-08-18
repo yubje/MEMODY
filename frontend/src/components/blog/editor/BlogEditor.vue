@@ -47,6 +47,11 @@
             <font-awesome-icon :icon="['fas','strikethrough']" />
           </button>
         </li>
+        <li>
+          <button class="editor-header-button" @click="changeFontHighlight()">
+            <font-awesome-icon :icon="['fas','highlighter']" />
+          </button>
+        </li>
 
         <li>
           <span class="editor-header-partition" />
@@ -142,12 +147,17 @@ export default {
       document.execCommand('Strikethrough')
     },
 
+    changeFontHighlight() {
+      document.execCommand('Hilitecolor', false, "lightblue")
+    },
+
     changeFontJustify(fontJustify) {
       document.execCommand(fontJustify)
     },
 
     makeBlock(tagType) {
       document.execCommand('formatBlock', false, tagType)
+     
     },
 
     addImage() {
@@ -205,7 +215,14 @@ blockquote:before, blockquote:after{
 }
 
 pre {
-  background-color: #aaaaaa;
+  background-color: #eff0f1;
+  margin-bottom: 1em;
+  padding: 12px 8px;
+  width: auto;
+  max-height: 100px;
+  overflow: auto;
+  border-radius: 3px;
+  
 }
 
 .editor-header {

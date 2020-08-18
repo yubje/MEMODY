@@ -28,6 +28,14 @@ export default new Vuex.Store({
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
+    //모달창 관리
+    modalLogin: false,
+    modalResetPWCheckEmail: false,
+    modalResetPWCheckValid: false,
+    modalResetPW: false,
+    modalSignup: false,
+    //에러메세지 관리
+    loginError: ''
   },
 
   getters: {
@@ -101,6 +109,36 @@ export default new Vuex.Store({
 
     SET_BLOGS_BEFORE(state, data) {
       state.recommendBlog = data
+    },
+
+    //모달창 관리
+    SET_MODAL_LOGIN(state) {
+      state.modalLogin = !state.modalLogin
+    },
+
+    SET_MODAL_RESETPW_CHECK_EMAIL(state) {
+      state.modalLogin = false
+      state.modalResetPWCheckEmail = !state.modalResetPWCheckEmail
+    },
+
+    SET_MODAL_RESETPW_CHECK_VALID(state) {
+      state.modalResetPWCheckEmail = false
+      state.modalResetPWCheckValid = !state.modalResetPWCheckValid
+    },
+
+    SET_MODAL_RESETPW(state) {
+      state.modalResetPWCheckValid = false
+      state.modalResetPW = !state.modalResetPW
+    },
+
+    SET_MODAL_SIGNUP(state) {
+      state.modalLogin = false
+      state.modalSignup = !state.modalSignup
+    },
+
+    //에러메세지 관리
+    SET_LOGIN_ERROR(state, data) {
+      state.loginError = data
     }
   },
 
@@ -124,14 +162,13 @@ export default new Vuex.Store({
       }
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
-        console.log('로그인:',response )
-        console.log(response.config)
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
-        router.push({ name: 'Main' })
+        commit('SET_MODAL_LOGIN')
       })
-      .catch(error => alert(error.response.data.message))
+      .catch(error => commit('SET_LOGIN_ERROR', error.response.data.message))
     },
+    
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
       commit('SET_TOKEN', null)
@@ -147,7 +184,7 @@ export default new Vuex.Store({
     },
 
     // 회원가입 (API 문서 - 7~9 D)
-    signup({ dispatch }, signupData) {
+    signup({ dispatch, commit }, signupData) {
       // signupData['code'] = signupData.validationNumber
       const info = {
         data: signupData,
@@ -155,7 +192,7 @@ export default new Vuex.Store({
         location: '/users'
       }
       dispatch('postAuthData', info)
-      
+      commit('SET_MODAL_SIGNUP')
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
@@ -177,8 +214,8 @@ export default new Vuex.Store({
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
+        commit('SET_MODAL_RESETPW_CHECK_VALID')
         console.log(response.data.data)
-        router.push({ name: 'UserResetPWCheckValidView'})
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -188,7 +225,7 @@ export default new Vuex.Store({
       if (this.state.emailValidationNumber === validationNumber) {
         alert("확인되었습니다.")
         if (this.state.validType) {
-          router.push({ name: 'UserResetPWView' })
+          commit('SET_MODAL_RESETPW')
         } else {
           commit('SET_ISVALID')
           console.log(this.state.emailValidationNumber)
@@ -199,14 +236,14 @@ export default new Vuex.Store({
     },
 
     // 비밀번호 재설정 (API 문서 - 13D)
-    resetPW({ state }, resetPWData) {
+    resetPW({ state, commit }, resetPWData) {
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
       console.log("code:",code)
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
         .then(response => {
           alert(response.data.message)
-          router.push({ name: 'Main'})
+          commit('SET_MODAL_RESETPW')
         })
         .catch(error => alert(error))
     },

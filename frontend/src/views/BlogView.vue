@@ -3,10 +3,12 @@
     <div class="row">
     <BlogPostSidebar/>
     <div class="col align-self-center" style="height: 60%;">
-      <div class="col text-left">
-        <h1 class="font-weight-black">{{ blogData.btitle }}</h1>
-        <h3 class="font-weight-bold">{{ blogData.bsubtitle }}</h3>
+      <div class="col text-left m-5">
+        <h1 class="font-weight-black mb-3">{{ blogData.btitle }}</h1>
+        <h3 class="font-weight-bold ">{{ blogData.bsubtitle }}</h3>
+        
         <p>{{ blogData.bcontent }}</p>
+        
         <p>관리자 {{ blogData.manager }}</p>
         <v-btn
           outlined
@@ -25,7 +27,7 @@
         <div v-if="userInfo.email !== blogData.manager">
           <!-- 블로그 회원인 경우 블로그 탈퇴 버튼 보여주기 -->
           <div v-if="this.isMember">
-            <v-btn 
+            <!-- <v-btn 
               v-if="this.isMember"
               color="error" 
               data-toggle="modal" 
@@ -34,7 +36,7 @@
               small
               dark
               fab
-            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn>
+            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn> -->
           </div>
           <!-- 블로그 회원이 아닌 경우 -->
           <div v-else>
@@ -91,7 +93,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                  <button type="button" class="btn btn-danger" @click="leaveBlog(member.email)">탈퇴하기</button>
+                  <button type="button" class="btn btn-danger" @click="leaveBlog(userInfo.email)">탈퇴하기</button>
                 </div>
               </div>
             </div>
