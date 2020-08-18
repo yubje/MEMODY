@@ -91,8 +91,7 @@ import BlogSettingsCategoryUpdate from '@/components/blog/settings/BlogSettingsC
 export default {
   name: "BlogSettingsCategoryItem",
   props: {
-    categories: Object,
-    i: Number,
+    categories: Object
   },
   components: {
     BlogSettingsCategoryUpdate
@@ -141,7 +140,7 @@ export default {
     clickAdd() {
       if (this.addShow) {
         this.addShow = false
-      } else {
+      }else {
         this.addShow = true
       }
     }
