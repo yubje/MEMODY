@@ -35,14 +35,14 @@
             <v-expansion-panel v-for="(member,i) in members" :key="member.email">
               <v-expansion-panel-header>{{member.uid}}</v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-card>
+                <v-card outlined>
                   <!-- <div class="profile-img-box">
                     <img id="profile-img" :src="member.profile" alt="@/assets/img/user-default.png">
                   </div> -->
                   <v-list-item three-line>
                     <v-list-item-content>
                       <div class="overline mb-4">{{member.email}}</div>
-                      <v-list-item-subtitle>lv:{{member.exp/10}}</v-list-item-subtitle>
+                      <v-list-item-subtitle>lv:{{parseInt(member.exp/10)}}</v-list-item-subtitle>
                     </v-list-item-content>
                     <v-btn v-if="member.email !== userInfo.email" color="error" data-toggle="modal"
                       :data-target="`#deleteBlogMemberModal`+i" class="m-2" small dark fab>
@@ -53,8 +53,6 @@
                   </v-card-actions>
                 </v-card>
               </v-expansion-panel-content>
-              <!-- 멤버 강퇴  -->
-              <!-- 강퇴 끝 -->
             </v-expansion-panel>
           </v-expansion-panels>
           <div class="mx-auto" style="width:100%">

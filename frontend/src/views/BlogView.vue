@@ -49,7 +49,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                  <button type="button" class="btn btn-danger" @click="leaveBlog(userInfo.email)">탈퇴하기</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal" @click="leaveBlog(userInfo.email)">탈퇴하기</button>
                 </div>
               </div>
             </div>

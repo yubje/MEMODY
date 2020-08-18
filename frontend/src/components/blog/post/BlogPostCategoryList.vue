@@ -160,4 +160,7 @@ export default {
 .mdi-chevron-right {
   color: gray !important;
 }
+td {
+  cursor: pointer;
+}
 </style>
