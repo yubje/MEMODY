@@ -51,7 +51,7 @@
       </div>
               
       <!-- 이메일 인증 모달 -->
-      <v-dialog v-model="uniqueEmail" max-width="430px">
+      <v-dialog v-model="uniqueEmail" persistent max-width="430px">
         <v-card class="user-signup-container">
           <v-card-actions>
             <font-awesome-icon id="user-signup-cancel-icon" :icon="['far','times-circle']" @click="$store.state.uniqueEmail = false, $refs.email.validate(), SET_LOADING(false)" />
