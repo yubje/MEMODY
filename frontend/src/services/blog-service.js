@@ -264,6 +264,7 @@ class BlogService {
   getCommentData({ commit, state }) {
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
+        console.log(response.data.data)
         commit('SET_COMMENTDATA', response.data.data)
       })
       .catch(error => console.log(error.response.data))
