@@ -18,7 +18,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color ="teal accent-4" text @click="goBack()">취소</v-btn>
+            <v-btn color ="teal accent-4" text @click="SET_MODAL_RESETPW_CHECK_VALID()">취소</v-btn>
             <v-btn color="green darken-1" text @click="checkValidation(validationNumber)">
               확인
             </v-btn>
@@ -32,6 +32,7 @@
 
 <script>
   import {
+    mapMutations,
     mapActions
   } from 'vuex'
 
@@ -47,6 +48,7 @@
       window.$('#resetpwcheckvalid-modal').modal('show')
     },
     methods: {
+      ...mapMutations(['SET_MODAL_RESETPW_CHECK_VALID']),
       ...mapActions(['checkValidation','goBack'])
     }
   }

@@ -7,7 +7,7 @@
         <div class="mx-auto my-2">
           <h3>블로그 카테고리 설정</h3>
         </div>
-        <v-col cols="10">
+        <v-col>
           <v-text-field
             outlined 
             color="teal"
@@ -18,11 +18,12 @@
             @click:append="addParentCategory(largeCategoryData)"
           ></v-text-field>   
         </v-col>
-        <v-col cols="10">
-          <v-card>
+        <v-col>
+          <v-card outlined>
             <v-list v-for="(categories, i) in dataCategories"  :key="`category-`+i">
                 <BlogSettingsCategoryItem :categories="categories" :i="i"/>
             </v-list>
+            
           </v-card>
         </v-col>
       </div>
@@ -65,7 +66,7 @@
       },
     },
     computed: {
-      ...mapState('blog', ['blogData', 'dataCategories', 'bid'])
+      ...mapState('blog', ['blogData', 'dataCategories', 'bid']),
     }
   }
 </script>
