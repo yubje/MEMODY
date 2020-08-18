@@ -1,9 +1,13 @@
 <template>
   <v-list-item>
     <v-list-item v-if="editStatus" >
-      <v-list-item-title>{{ child.medium_dir }}</v-list-item-title>
+      <v-list-item-avatar>
+        <v-icon color="teal">mdi-folder-outline</v-icon>
+      </v-list-item-avatar>
+      <v-list-item-title class="text-left">{{ child.medium_dir }}</v-list-item-title>
       <v-btn
         fab
+        text
         x-small
         dark
         color="teal" 
@@ -11,6 +15,16 @@
       >
         <v-icon>mdi-folder-edit-outline</v-icon>
       </v-btn> 
+      <v-btn
+        fab
+        text
+        x-small
+        dark
+        color="error" 
+        @click="deleteChildCategory(child)"
+      >
+        <v-icon>mdi-trash-can</v-icon>
+      </v-btn>
     </v-list-item>
    
     <v-list-item v-else>
@@ -21,18 +35,9 @@
         append-icon="mdi-folder-edit-outline"
         clear-icon="mdi-close-circle"
         clearable
-        @click:append="clickUpdate(categoryData)"
+        @click:append="clickUpdate(childData)"
         @click:clear="clickEditButton()"
       ></v-text-field>
-      <v-btn
-        fab
-        x-small
-        dark
-        color="error" 
-        @click="deleteChildCategory(child)"
-      >
-        <v-icon>mdi-trash-can</v-icon>
-      </v-btn>
     </v-list-item>
   </v-list-item>
 </template>
@@ -66,7 +71,7 @@ export default {
     clickEditButton() {
       if (this.editStatus) {
         this.editStatus = false
-      }else {
+      } else {
         this.editStatus = true
       }
     },

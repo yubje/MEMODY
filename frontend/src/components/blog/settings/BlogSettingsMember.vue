@@ -1,65 +1,101 @@
 <template>
   <div class="container-fluid" style="height:100%;">
     <v-row>
-      <BlogSettingsSidebar/>
-      <v-col >
-        <h3 class="my-5">멤버 관리</h3>
-        <div class="my-5 mx-auto">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="col-3">
-              <a>사용자 검색</a>
+      <BlogSettingsSidebar />
+      <v-col>
+        <div class="col w-100 mx-auto">
+          <h3 class="my-5">멤버 관리</h3>
+
+          <!-- 멤버 검색 -->
+          <div class="my-5 mx-auto">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="input-group col-12">
+                <v-text-field outlined class="w-75" type="text" v-model="email" placeholder="사용자 아이디 입력"
+                  append-icon="mdi-account-search"
+                  @keydown.enter="getUsers(email).then(response => { users = response}) ">
+                </v-text-field>
+              </div>
             </div>
-            <div class="input-group col-9">
-              <v-text-field class="w-75" type="text" v-model="email"></v-text-field>
-              <v-btn color="teal" 
-                class="m-2"
-                small
-                dark
-                fab
-                @click="addBlogMember(email)">
-                <v-icon dark>mdi-account-plus-outline</v-icon>
-              </v-btn>
-            </div>
+            <v-list outlined v-if="email != '' ">
+              <v-list-item v-for="(user, i) in users" :key="i">
+                <v-list-item-content>
+                  <v-list-item-title v-text="user.uid"></v-list-item-title>
+                  <v-list-item-subtitle v-text="user.email">
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-btn color="teal" class="m-2" small dark fab @click="addBlogMember(user.email)">
+                  <v-icon dark>mdi-account-plus-outline</v-icon>
+                </v-btn>
+              </v-list-item>
+            </v-list>
           </div>
-        </div>
-        <div class="mx-auto" style="width:60%">
-          <h3>멤버 목록</h3>
-          <div v-for="(member, i) in members" :key="member.email" >
-            <div class="d-flex justify-content-between align-items-center my-1">
-              <div class="col-9"><a>{{ member.email }}</a></div>
-              <div class="col-2" v-if="blogData.manager!==member.email">
-                <v-btn v-if="member.email!==userInfo.email" color="teal"
-                  data-toggle="modal" :data-target="`#deleteBlogMemberModal`+i"
-                  class="m-2"
-                  small
-                  dark
-                  fab>
+
+          <h4>블로그 멤버</h4>
+          <v-expansion-panels>
+            <v-expansion-panel v-for="(member,i) in members" :key="member.email">
+              <v-expansion-panel-header>{{member.uid}}</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card>
+                  <!-- <div class="profile-img-box">
+                    <img id="profile-img" :src="member.profile" alt="@/assets/img/user-default.png">
+                  </div> -->
+                  <v-list-item three-line>
+                    <v-list-item-content>
+                      <div class="overline mb-4">{{member.email}}</div>
+                      <v-list-item-subtitle>lv:{{member.exp/10}}</v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-btn v-if="member.email !== userInfo.email" color="error" data-toggle="modal"
+                      :data-target="`#deleteBlogMemberModal`+i" class="m-2" small dark fab>
+                      <v-icon dark>mdi-account-remove-outline</v-icon>
+                    </v-btn>
+                  </v-list-item>
+                  <v-card-actions>
+                  </v-card-actions>
+                </v-card>
+              </v-expansion-panel-content>
+              <!-- 멤버 강퇴  -->
+              <!-- 강퇴 끝 -->
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <div class="mx-auto" style="width:100%">
+            <v-list rounded="true">
+
+
+              <v-list-item v-for="(member, i) in members" :key="member.email">
+                <!-- <v-list-item-content>
+                  <v-list-item-title>
+                    {{ member.email }}
+                  </v-list-item-title>
+                </v-list-item-content>
+                <v-btn v-if="member.email !== userInfo.email" color="error" data-toggle="modal"
+                  :data-target="`#deleteBlogMemberModal`+i" class="m-2" small dark fab>
                   <v-icon dark>mdi-account-remove-outline</v-icon>
                 </v-btn>
-              </div>
-              
-              <!-- Modal -->
-              <div class="modal fade" :id="`deleteBlogMemberModal`+i" tabindex="-1" role="dialog" aria-labelledby="deleteBlogMemberModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="deleteBlogMemberModalLabel">멤버 강퇴</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      멤버를 강퇴 하시겠습니까?
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                      <button type="button" class="btn btn-danger" @click="deleteBlogMember(member.email)">강퇴하기</button>
+                <font-awesome-icon v-if="member.email == userInfo.email" id="rank-icon" color="#ffcc33"
+                  :icon="['fas','crown']" /> -->
+                <div class="modal fade" :id="`deleteBlogMemberModal`+i" tabindex="-1" role="dialog"
+                  aria-labelledby="deleteBlogMemberModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        블로그에서 내보내시겠습니까?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-danger"
+                          @click="deleteBlogMember(member.email)">내보내기</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <hr>
+              </v-list-item>
+
+            </v-list>
           </div>
         </div>
       </v-col>
@@ -68,37 +104,56 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
-export default {
-  name: 'BlogSettingsMember',
-  components: {
-    BlogSettingsSidebar,
-  },
-  data() {
-    return {
-      email: '',
-    }
-  },
-  computed: {
-    ...mapState('blog', ['members', 'blogData']),
-    ...mapState(['userInfo'])
-    // ...mapActions('blog''getBlogMembers')
-  },
-  methods: {
-    ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember']),
+  import {
+    mapState,
+    mapActions
+  } from 'vuex'
+  import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
+  // import axios from 'axios'
 
-    // leaveBlog(email) {
-    //   this.deleteBlogMember(email)
-    // }
-  },
-  created() {
-    this.getBlogMembers()
-  },
+  export default {
+    name: 'BlogSettingsMember',
+    components: {
+      BlogSettingsSidebar
+    },
+    data() {
+      return {
+        email: '',
+        users: null,
+      }
+    },
+    methods: {
+      ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember', 'getUsers']),
+      // leaveBlog(email) {
+      //   this.deleteBlogMember(email)
+      // }
 
-}
+    },
+    created() {
+      this.getBlogMembers()
+
+    },
+    computed: {
+      ...mapState('blog', ['members', 'blogData']),
+      ...mapState(['userInfo']),
+      // ...mapActions('blog''getBlogMembers'),
+    },
+
+
+  }
 </script>
 
-<style>
+<style scoped>
+  .profile-img-box {
+    width: 150px;
+    height: 150px;
+    border-radius: 70%;
+    overflow: hidden;
+  }
 
+  .profile-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 </style>
