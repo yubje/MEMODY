@@ -320,7 +320,8 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
-			List<Member> list = blogService.searchMember(bid);
+			// List<Member> list = blogService.searchMember(bid);
+			List<Users> list = blogService.searchMemberToUsers(bid);
 			if (!blogService.checkBlog(bid)) {
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.BLOG_MEMBER_FAIL), HttpStatus.FORBIDDEN);

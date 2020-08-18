@@ -182,6 +182,18 @@ public class BlogService {
 		return memberRepository.findByBid(bid);
 	}
 
+	// 블로그 내 멤버 조회
+	public List<Users> searchMemberToUsers(int bid) {
+		List<Users> result = new ArrayList<Users>();
+		List<Member> list = memberRepository.findByBid(bid);
+		for(Member mem : list) {
+			Users user = userRepository.findByEmail(mem.getEmail())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			result.add(user);
+		}
+		return result;
+	}
+
 	// 블로그 내 멤버 추가
 	// 매니저만 가능
 	public boolean inviteMember(int bid, String email, String user) {
@@ -200,12 +212,12 @@ public class BlogService {
 	public boolean deleteMember(int bid, String email, String user) {
 		String manager = blogRepository.findByBid(bid).getManager();
 
-		if (user.equals(manager)) {
+		if (user.equals(manager) | user.equals(email)) {
 			memberRepository.deleteByEmailAndBid(email, bid);
+			return true;
 		} else {
 			return false;
 		}
-		return true;
 	}
 	
 	// 블로그 이름으로 블로그 목록 검색
