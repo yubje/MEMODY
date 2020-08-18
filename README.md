@@ -8,14 +8,16 @@
 
 ### 📂 Contents
 
-- [Project 소개](#Shared Your Blog)
+- [Project 소개](#%EF%B8%8F-shared-your-blog)
+- [기술 스택](#-기술-스택)
+- [사용 기술](#-사용-기술)
 
-- [Commit | Merge | Pull](#Commit  | Merge | Pull) 
-- [역할분담](#역할 분담)
-- [Git Branch 전략](# Git Branch 전략)
-- [Jira](# Jira)
-- [Code convention](# Code convention)
-- [와이어프레임](# 와이어프레임)
+- [Commit | Merge | Pull](#-commit-merge-pull) 
+- [역할분담](#-역할-분담)
+- [Git Branch 전략](#-git-branch-전략)
+- [Jira](#-jira)
+- [Code convention](#-code-convention)
+- [와이어프레임](#-와이어프레임)
 
 <hr>
 
