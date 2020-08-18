@@ -77,7 +77,7 @@
       ...mapState(['loginError', 'signupMsg'])
     },
     methods: {
-      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP', 'SET_SIGNUP_MSG']),
+      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP', 'SET_SIGNUP_MSG','RESET_VALIDTYPE']),
       ...mapActions(['login']),
 
       checkForm() {
