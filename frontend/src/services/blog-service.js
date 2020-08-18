@@ -5,6 +5,14 @@ import cookies from 'vue-cookies'
 const SERVER = process.env.VUE_APP_SERVER
 
 class BlogService {
+  // User 목록 조회
+  getUsers(res, uid) {
+    return axios.get(`${SERVER}/users/${uid}/list`, {headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      console.log('여기')
+      return response.data.data
+    })
+  }
 
   // 블로그 추가 (API 문서 - 26~29 D)
   createBlog({ state, commit }) {
