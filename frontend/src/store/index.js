@@ -194,17 +194,24 @@ export default new Vuex.Store({
     
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
+      axios.get(SERVER + '/logout/', getters.config)
+      .then(() => {
+        commit('SET_TOKEN', null)
+        cookies.remove('auth-token')
+        window.localStorage.removeItem('userInfo')
+           })
+          .catch(() => {
+            // alert(error.response.data.message)
+          })
+      router.push({ name: 'Main'})
+    },
+
+    logoutForExpired({commit}) {
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
       window.localStorage.removeItem('userInfo')
-      axios.get(SERVER + '/logout/', getters.config)
-        .then(() => {
-         })
-        .catch(() => {
-          // alert(error.response.data.message)
-        })
-      router.push({ name: 'Main'})
     },
+
 
     // 회원가입 (API 문서 - 7~9 D)
     signup({ dispatch, commit }, signupData) {
