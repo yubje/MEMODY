@@ -63,7 +63,7 @@
             <v-row>
               <v-col class="user-signup-content-padding" cols="12">
                 <div class="user-signup-content-left">
-                   <v-text-field v-model="signupData.validationNumber" label="인증번호를 입력해주세요." required></v-text-field>
+                   <v-text-field v-model="signupData.validationNumber" label="인증코드를 입력해주세요." required></v-text-field>
                 </div>
 
                 <div class="user-signup-content-right">
