@@ -9,7 +9,6 @@
         <v-card-title class="headline user-login-title">로그인</v-card-title>
         
         <v-card-text class="user-login-content">
-          <v-form>
             <v-row>
               <v-col class="user-login-content-padding" cols="12">
                 <v-text-field v-model="loginData.email" ref="email" label="이메일" :rules="emailRules" required
@@ -21,11 +20,11 @@
               </v-col>
 
               <v-col class="user-login-content-resetpw" cols="12">
-                <button class="user-login-content-btn" @click="SET_MODAL_RESETPW_CHECK_EMAIL()">비밀번호 재설정</button>
+                <button class="user-login-content-btn" @click.prevent="SET_MODAL_RESETPW_CHECK_EMAIL()"> 비밀번호 재설정</button>
               </v-col>
 
               <v-col cols="12">
-                <v-btn id="user-login-content-login-btn" block color="teal accent-4" dark depressed x-large @click="checkForm()">
+                <v-btn id="user-login-content-login-btn" block color="teal accent-4" dark depressed x-large @click="checkForm()" >
                   로그인
                 </v-btn>
               </v-col>
@@ -35,7 +34,6 @@
                 <button class="user-login-content-btn" @click="SET_MODAL_SIGNUP()">회원 가입</button>
               </v-col>
             </v-row>
-          </v-form>
         </v-card-text>
       </div>
     </v-card>
@@ -70,10 +68,11 @@
       ...mapState(['loginError'])
     },
     methods: {
-      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP']),
+      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP', 'RESET_VALIDTYPE']),
       ...mapActions(['login']),
 
       checkForm() {
+        this.RESET_VALIDTYPE('')
         let err = true;
         let msg = "";
 
@@ -91,6 +90,6 @@
           }
         } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
       }
-    }
+    },
   }
 </script>
