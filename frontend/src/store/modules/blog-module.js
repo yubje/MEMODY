@@ -49,7 +49,10 @@ export const blog = {
       updateTime: '',
       fork: '',
       postlikecnt: '',
-      ptype: null
+      ptype: null,
+      managerNickname: '',
+      authorNickname: '',
+      managerProfile: ''
     },
     posts: [],
 
@@ -89,7 +92,10 @@ export const blog = {
         author: '',
         postTime: '',
         updateTime: '',
-        ptype: ''
+        ptype: '',
+        managerNickname: '',
+        authorNickname: '',
+        managerProfile: ''
       }
     },
 
@@ -109,19 +115,23 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      state.postData.bid = postData.bid
-      state.postData.pid = postData.pid
-      state.postData.lcid = postData.lcid
-      state.postData.mcid = postData.mcid
-      state.postData.ptitle = postData.ptitle
-      state.postData.pcontent = postData.pcontent
-      state.postData.author = postData.author
-      state.postData.manager = postData.manager
-      state.postData.postTime = postData.postTime
-      state.postData.updateTime = postData.updateTime
-      state.postData.fork = postData.fork
-      state.postData.postlikecnt = postData.postlikecnt
-      state.postData.ptype = postData.ptype
+      state.postData.bid = postData.post.bid
+      state.postData.pid = postData.post.pid
+      state.postData.lcid = postData.post.lcid
+      state.postData.mcid = postData.post.mcid
+      state.postData.ptitle = postData.post.ptitle
+      state.postData.pcontent = postData.post.pcontent
+      state.postData.author = postData.post.author
+      state.postData.manager = postData.post.manager
+      state.postData.postTime = postData.post.postTime
+      state.postData.updateTime = postData.post.updateTime
+      state.postData.fork = postData.post.fork
+      state.postData.postlikecnt = postData.post.postlikecnt
+      state.postData.ptype = postData.post.ptype
+      state.postData.managerNickname = postData.managerNickname
+      state.postData.authorNickname = postData.authorNickname
+      state.postData.managerProfile = postData.postManager.profile
+
     },
     
 
