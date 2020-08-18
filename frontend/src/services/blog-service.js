@@ -192,8 +192,6 @@ class BlogService {
     console.log(state)
     axios.get(`${SERVER}/blogs/${state.bid}/members`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log('getBlogMembers')
-        console.log(response.data)
         state.members = response.data.data
       })
       .catch(error => console.log(error.response.data))
@@ -227,7 +225,6 @@ class BlogService {
     axios.delete(`${SERVER}/blogs/${state.bid}/members`, { data: info, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.members = response.data.data
-        // state.members.remove(email)
         console.log(response)
         console.log(state.members)
         router.go()
