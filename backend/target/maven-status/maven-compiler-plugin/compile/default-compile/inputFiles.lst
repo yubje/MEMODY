@@ -24,7 +24,6 @@ C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\we
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\repository\BlogRepository.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\MemberService.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\JwtServiceImpl.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\AuthController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\BlogController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\LoginController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\config\redis\EmbeddedRedisConfiguration.java
@@ -35,11 +34,8 @@ C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\we
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\Blogtag.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\PostLike.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\LCategory.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\UserController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\BlogFollowService.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\model\ResponseMessage.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\UserService2.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\UserServiceImpl.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\MainController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\util\AWSConfiguration.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\CommentController.java

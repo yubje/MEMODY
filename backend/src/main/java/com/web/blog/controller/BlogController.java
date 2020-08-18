@@ -83,20 +83,22 @@ public class BlogController {
 				bid = blogService.createBlog(blog.get("btitle"),blog.get("bsubtitle"),blog.get("bcontent"),email);
 				
 				System.out.println("블로그생성");
-				String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
-				String tname;
-				int tid;
-				for (int i = 1; i < hashtags.length; i++) {
-					tname = hashtags[i];
-					if (!tagService.checkTagName(tname)) { // 존재하지 않는다면
-						tid = tagService.createTag(tname);
+				if( blog.get("hashtags") != null) {
+					String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
+					String tname;
+					int tid;
+					for (int i = 1; i < hashtags.length; i++) {
+						tname = hashtags[i];
+						if (!tagService.checkTagName(tname)) { // 존재하지 않는다면
+							tid = tagService.createTag(tname);
+							// blog_and_tag 테이블에 추가
+						} else {
+							// tag 테이블에서 tid 가져오고
+							tid = tagService.findByTname(tname);
+						}
 						// blog_and_tag 테이블에 추가
-					} else {
-						// tag 테이블에서 tid 가져오고
-						tid = tagService.findByTname(tname);
+						blogtagService.blogAndTag(bid, tid, tname);
 					}
-					// blog_and_tag 테이블에 추가
-					blogtagService.blogAndTag(bid, tid, tname);
 				}
 				memberService.inviteMember(bid, email);
 				return new ResponseEntity<Response>(

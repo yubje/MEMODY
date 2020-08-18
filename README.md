@@ -1,22 +1,100 @@
-# Sub PJT 2
+# 📖 Memody Project 
 
-### Contents
+![version](https://img.shields.io/badge/version-0.0.1-orange?)![vue](https://img.shields.io/badge/vue-3.0.0-blue?logo=Vue.js)![spring](https://img.shields.io/badge/spring-4.0.0-yellow?logo=spring)![spring-boot](https://img.shields.io/badge/springboot-4.0.0-yellow?logo=spring)[![mysql](https://jaywcjlove.github.io/sb/ico/mysql.svg)](http://www.mysql.com/)![html](https://img.shields.io/badge/html-html5-red?logo=html5)![css](https://img.shields.io/badge/css-css3-red?logo=css3)![javascript](https://img.shields.io/badge/javascript-es6-yellowgreen?logo=javascript)![aws-s3](https://img.shields.io/badge/aws-s3-blue)![aws-ec2](https://img.shields.io/badge/aws-ec2-blue)
 
-- [Commit | Merge](#Commit  | Merge) 
-- [역할분담](#역할 분담)
-- [Branch 전략](# GitLab Branch 전략)
-- [지라](# 지라)
-- [컨벤션](# 컨벤션)
-- [와이어프레임](# 와이어프레임)
+### 🏠 [Memody Homepage](http://i3a306.p.ssafy.io/)
 
-### Commit  | Merge | Pull
+<hr>
+
+### 📂 Contents
+
+- [Project 소개](#%EF%B8%8F-shared-your-blog)
+- [기술 스택](#-기술-스택)
+- [사용 기술](#-사용-기술)
+
+- [Commit | Merge | Pull](#-commit-merge-pull) 
+- [역할분담](#-역할-분담)
+- [Git Branch 전략](#-git-branch-전략)
+- [Jira](#-jira)
+- [Code convention](#-code-convention)
+- [와이어프레임](#-와이어프레임)
+
+<hr>
+
+### 🖥️ Shared Your Blog
+
+- 다양한 분야의 블로그를 조회할 수 있고, 직접 블로그를 만들어 운영할 수 있다.
+
+- 개인뿐만 아니라 다수가 블로그를 관리할 수 있다.
+
+- 블로그 내용을 공유할 수 있는 생태계 구축
+  - 타 블로그의 게시글을 Fork하여 내 블로그로 가져올 수 있다.
+  - 여기저기 퍼져있는 다양한 정보들을 내 블로그로 모을 수 있다.
+
+- 랭킹 시스템 도입
+  - 블로그의 조회수, 게시글이 Fork된 횟수가 많아질수록 영향력있는 블로거가 된다.
+  - 랭킹 시스템을 통해 유명한 블로거가 되기 위해 다양하고 유익한 정보들을 공유할 수 있는 생태계가 형성된다.
+
+<hr>
+
+### 📃 기술 스택
+
+![image](/uploads/9ba20fb403527634ae5d94eb31dc6148/image.png)
+
+**BACKEND**
+
+1. Programming Languages : [ Java 8 ] 
+2. Frameworks : [ Spring ] 
+   - Tool : [ Spring boot ]
+3. SQL data storage : [ MySQL ]
+4. Key-value storage : [ Redis ]
+5. Web Server : [ Nginx ]
+6. Web application server : [ Apache Tomcat ]
+7. Hosting : [ AWS ]
+
+**FRONTEND**
+
+1. Programming Languages : [ JavaScript, HTML5, CSS3 ]
+2. JavaScript Framework : [ Vue.js ]
+
+
+
+<hr>
+
+### 📃 사용 기술
+
+**Spring boot** : Memody Project의 전반적인 기능 Rest Controller 구현
+
+**Spring Security + JWT** : 로그인한 사용자만 서비스를 사용가능 하도록(filter), Token을 계속 검사해서 유효한 회원인지 확인
+
+**Spring Data JPA **: JpaRepository를 상속받아 쿼리 작성을 하지 않고 DB Table의 객체로 접근하게 하여 기능들을 구현
+
+**XSS Filter** : 네이버에서 제공하는 lucy-xss-servlet-filter 를 이용하여 서버로 보내는 입력 값에 자바스크립트를 보내서
+
+다른 사용자에게 자신이 만든 스크립트를 실행시켜서 사용자의 정보를 빼내는 XSS 공격에 대비하도록 구현 
+
+**MySql** : 사용자 및 블로그, 게시글 등 Memody PJT에서 필요한 Data를 저장
+
+**Redis** :  Key와 value가 매핑된 단순한 맵 데이터 저장소로서 데이터를 레디스에 쉽고 편하게 읽고 쓸 수 있게 하였습니다. Memody PJT에서는 로그아웃한 사용자의 토큰을 만료시간까지 저장해두는 블랙리스트를 구성하였고, 이메일 인증코드를 사용하는 기능에서 사용자 이메일과 인증 코드를 redisTemplate을 사용하여 key, value로 저장하고, 인증 코드 사용이 완료되면 삭제를 하는 기능을 구현 
+
+**AWS** : EC2 서비스를 이용하여 Ubuntu 서버를 구축(호스팅), S3 서비스를 이용하여 파일을 업로드 할 수 있도록 구축
+
+**Nginx** : 웹서버를 구축
+
+
+
+<hr>
+
+
+
+### 📃 Commit  | Merge | Pull
 
 - 시간
 
-  - AM 10:00  | PM 16:00
+  - AM 10:00  | PM 16:00 에 
 
-  - 하루에 한번은 `develop`에 MR
-  - `Front` / `Back` 에 각자 `Feature` MR 후  `develop`  Pull 땡겨서 최신화 
+  - 일주일에 한번은 `develop`에 MR
+  - `Front` / `Back` 에 각자 `Feature`를 MR,  `develop`  Pull 하여 최신화 
 
 - Commit Message Rule
 
@@ -33,28 +111,32 @@
   `[MR] | {날짜} | '{소스브랜치}' into '{타겟브랜치}'`
 
   
-  
+
   **진행상황** 
 
   - Todo
   - In Progress
   - Done
+
   
-  
 
-### 역할 분담
+### 📃 역할 분담
 
-- Front 
-  - **유빈**
-  - 재영
-  - 유진
-- Back
-  - **형택**
-  - 민경
+- PM
+
+  🕵‍♂ **민경**
+
+- Frontend
+
+  👩‍💻 **유빈** 👨‍💻 재영 👩‍💻 유진
+
+- Backend
+
+  👨‍💻 **형택** 👩‍💻 민경
 
 
 
-### GitLab Branch 전략
+### 📃 Git Branch 전략
 
 - Master
 
@@ -63,24 +145,29 @@
     - Front
 
       - FeatureFront/doc
-      - FeatureFront/에픽
-        - FeatureFront/에픽/스토리(?)
+      - FeatureFront/epic Name
 
     - Back
 
       - FeatureBack/doc
-- FeatureBack/에픽
-      
-      
+      - FeatureBack/epic Name
+            
 
-### 지라
+### 📃 Jira
 
-- Epic : Front / 회원관리 (User)
-  - Stroy : 로그인 (Login)
+##### 프로젝트 관리 도구로 Jira를 사용, Issue를 등록하여 프로젝트를 진행
+
+- Epic : 전체적인 큰 기능들을 Epic으로 구성
+  - Ex) Front / User Function (회원 관리) , Back / Blog Function (블로그)
+
+- Story : Epic과 연결하고 Epic에 관련된 기능 구현을 위주로 구성
+  - Ex) Front / Main Page , Back / Blog CRUD , Back / Spring Security
+- Bug : 테스트 과정에서 발견된 bug를 등록
+  - Ex) Back / JWT Token update
 
 
 
-### 컨벤션
+### 📃 Code convention
 
 - [JavaScript](https://github.com/airbnb/javascript)
 
@@ -555,7 +642,7 @@ uix-accounts-login_email
 
 
 
-### 와이어프레임
+### 📃 와이어프레임
 
-- 발사믹
+- [발사믹](https://lab.ssafy.com/s03-webmobile1-sub3/s03p13a306/tree/develop/doc/Wireframe)
 

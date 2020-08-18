@@ -98,10 +98,9 @@ public class PostService {
 		return post;
 	}
 	
-	public void updatePost(Post post,String bucketName, String accessKey, String secretKey) {
+	public void updatePost(String content, Post post,String bucketName, String accessKey, String secretKey) {
 		Post updatePost = postRepository.findByPid(post.getPid());
 		
-		String content = updatePost.getPcontent();
 		System.out.println("[이전 데이터] "+content);
 		System.out.println("[바뀔 데이터] "+post.getPcontent());
 		
