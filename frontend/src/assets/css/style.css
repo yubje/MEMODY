@@ -12,7 +12,7 @@ hr {
   border-bottom: 1px solid #dfdfdf;
 }
 
-.v-menu__content {
+.v-menu__content--fixed {
   width: 153px;
   top: 55px !important;
   contain: none !important;
@@ -67,7 +67,8 @@ hr {
 #navbar-menu-before:hover, #navbar-menu-after:hover, .v-application a:hover,
 .searchTab-type:hover, #search-icon:hover,
 .main-blog-item-title:hover,
-#user-login-cancel-icon:hover, .user-login-content-btn:hover {
+#user-login-cancel-icon:hover, .user-login-content-btn:hover,
+#user-signup-cancel-icon:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -143,13 +144,13 @@ hr {
   border-image: initial;
 }
 
-.dropdown-menu {
+.searchTab-dropdown-menu {
   transform: translate3d(-1px, 56px, 0px) !important;
   min-width: 10px !important;
   width: 126px;
 }
 
-.dropdown-item {
+.searchTab-dropdown-item {
   letter-spacing: 0.2px;
   padding: 0.25rem 25px !important;
   text-align: center;
@@ -257,29 +258,32 @@ hr {
 }
 
 /*--------------------UserLogin--------------------*/
-.v-dialog, .user-login-container {
+.v-dialog, .user-login-container, .user-signup-container {
   border-radius: 0px !important;
 }
 
-#user-login-cancel-icon {
+#user-login-cancel-icon, #user-signup-cancel-icon {
   font-size: x-large;
   color: #505050;
+}
+
+#user-login-cancel-icon {
   margin: 17px 0px 0px 89%;
 }
 
-.user-login-contents {
+.user-login-contents, .user-signup-contents {
   margin: 0px 19px;
 }
 
-.user-login-title {
+.user-login-title, .user-signup-title {
   display: unset;
 }
 
-.user-login-content {
+.user-login-content, .user-signup-content {
   margin-top: 33px;
 }
 
-.user-login-content-padding {
+.user-login-content-padding, .user-signup-content-padding {
   padding: 2px 15px;
 }
 
@@ -289,11 +293,36 @@ hr {
   padding-bottom: 0px;
 }
 
-#user-login-content-login-btn {
+#user-login-content-login-btn, .user-signup-content-btn, #user-signup-content-signup-btn {
   border-radius: 0px;
 }
 
 .user-login-content-signup {
   margin-top: 15px;
   margin-bottom: 3px;
+}
+
+/*--------------------UserSignup--------------------*/
+#user-signup-cancel-icon {
+  margin: 17px 0px 0px 90%;
+}
+
+.user-signup-content-left {
+  float: left; 
+  width: 74%;
+}
+
+.user-signup-content-right {
+  float: right; 
+  width: 24%;
+}
+
+.user-signup-content-btn {
+  margin-top:12px; 
+  width:90px;
+  color: white !important;
+}
+
+#user-signup-content-signup-btn {
+  margin-top: 15px;
 }
