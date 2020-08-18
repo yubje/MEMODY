@@ -405,5 +405,43 @@ public class LoginController {
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLRANK_SUCCESS, list),
 				HttpStatus.OK);
 	}
-
+	
+	@ApiOperation(value = "닉네임으로 회원 목록 조회", response = ResponseEntity.class, notes = "블로그 이름을 입력하여 해당 블로그 이름을 가진 블로그 목록을 조회합니다.")
+	@GetMapping(value = "/users/{uid}/list")
+	public ResponseEntity listByUid(@PathVariable String uid, HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			List<Users> list = userService.searchListByNickname(uid);
+			if(list.size() != 0) {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_NICKNAME_SUCCESS, list),
+						HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_NICKNAME_FAIL, list),
+						HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
+	
+	@ApiOperation(value = "전체 회원 목록 조회", response = ResponseEntity.class, notes = "블로그 이름을 입력하여 해당 블로그 이름을 가진 블로그 목록을 조회합니다.")
+	@GetMapping(value = "/users")
+	public ResponseEntity UsersList(HttpServletRequest req) {
+		String token = req.getHeader("auth");
+		if (jwtTokenProvider.validateToken(token)) {
+			String roles = "ROLE_USER";
+			List<Users> list = userService.searchAllUsers(roles);
+			if(list.size() != 0) {
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_ALLUSERS_SUCCESS, list),
+						HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_ALLUSERS_FAIL, list),
+						HttpStatus.OK);
+			}
+		}else {
+			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+					HttpStatus.FORBIDDEN);
+		}
+	}
 }
