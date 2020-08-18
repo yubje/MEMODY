@@ -342,7 +342,15 @@ export const blog = {
     getUsers({response}, uid) {
       console.log(uid)
       return BlogService.getUsers(response,uid)
-    }
+    },
+
+    follow({ state }) {
+      BlogService.follow({ state })
+    },
+
+    unfollow({ state }) {
+      BlogService.unfollow({ state })
+    },
 
   },
 

@@ -23,7 +23,7 @@
         
         <p>관리자 {{ blogData.manager }}</p>
         <v-row>
-          <p class="mx-4"><span class="font-weight-bold">팔로워</span> {{blogData.followers}} 명</p>
+          <p class="mx-4"><span class="font-weight-bold">팔로워</span> {{blogData.followers }} 명</p>
         
           <!-- 블로그 관리자가 아니고, 블로그 회원이 아닌 경우 -->
           <div v-if="userInfo.email !== blogData.manager & !this.isMember">
@@ -102,13 +102,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember']),
+    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow']),
     clickFollow() {
       if (this.following) {
-        axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`,{data :this.blogData,headers: {"auth": cookies.get('auth-token')}})
+        this.unfollow()
         this.following = false
-      }else {
-        axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`,this.blogData,{headers: {"auth": cookies.get('auth-token')}})
+      } else {
+        this.follow()
         this.following = true
       }
     },
@@ -117,7 +117,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('blog', ['bid', 'blogData', 'members']),
+    ...mapState('blog', ['bid', 'blogData', 'members', 'blogInfo']),
     ...mapState(['userInfo'])
   },
   async mounted() {
@@ -126,6 +126,7 @@ export default {
     console.log(this.following)
   },
   created() {
+    this.getBlogInfo()
     this.getBlogMembers()
     this.members.forEach(member => {
       if (member.email === this.userInfo.email) {
