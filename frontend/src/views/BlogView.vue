@@ -70,15 +70,26 @@
   import axios from 'axios'
   import cookies from 'vue-cookies'
 
-  export default {
-    name: 'BlogView',
-    components: {
-      BlogPostSidebar,
-    },
-    data() {
-      return {
-        following: null,
-        isMember: false,
+export default {
+  name: 'BlogView',
+  components: {
+    BlogPostSidebar,
+  },
+  data() {
+    return {
+      following: null,
+      isMember: false,
+    }
+  },
+  methods: {
+    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow']),
+    clickFollow() {
+      if (this.following) {
+        this.unfollow()
+        this.following = false
+      } else {
+        this.follow()
+        this.following = true
       }
     },
     methods: {
@@ -105,29 +116,26 @@
         this.deleteBlogMember(email)
       },
     },
-    computed: {
-      ...mapState('blog', ['bid', 'blogData', 'members']),
-      ...mapState(['userInfo'])
-    },
-    async mounted() {
-      const {
-        data
-      } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`, {
-        headers: {
-          "auth": cookies.get('auth-token')
-        }
-      })
-      this.following = data.data
-    },
-    created() {
-      this.getBlogMembers()
-      this.members.forEach(member => {
-        if (member.email === this.userInfo.email) {
-          this.isMember = true;
-        }
-      });
-    },
-  }
+  },
+  computed: {
+    ...mapState('blog', ['bid', 'blogData', 'members', 'blogInfo']),
+    ...mapState(['userInfo'])
+  },
+  async mounted() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
+    this.following = data.data
+    console.log(this.following)
+  },
+  created() {
+    this.getBlogInfo()
+    this.getBlogMembers()
+    this.members.forEach(member => {
+      if (member.email === this.userInfo.email) {
+        this.isMember=true;
+      }
+    });
+  },  
+}
 </script>
 
 <style>

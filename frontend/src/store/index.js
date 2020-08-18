@@ -172,7 +172,7 @@ export default new Vuex.Store({
         .then(() => {
         })
         .catch(error => {
-          console.log(state.isValid)
+          console.log(state)
           alert(error.response.data.message)
         })
     },
@@ -244,7 +244,6 @@ export default new Vuex.Store({
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
         commit('SET_MODAL_RESETPW_CHECK_VALID')
-        console.log(response.data.data)
       })
       .catch(error => alert(error.response.data.message))
     },
@@ -355,11 +354,9 @@ export default new Vuex.Store({
     mainAfter({commit}) {
       axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
-          console.log(response.data.data)
           commit('SET_BLOGS_AFTER',response.data.data)
         })
         .catch(() => {
-          console.log('실패 ㅠㅠ')
         })
     },
 
