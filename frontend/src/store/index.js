@@ -101,9 +101,7 @@ export default new Vuex.Store({
     // 아이디 중복 확인 
     SET_UNIQUEID(state, data) {
       state.uniqueId = data
-
     },
-
 
     SET_CHECK_CODE_VALID(state, data) {
       state.checkCodeValid = data
@@ -229,14 +227,12 @@ export default new Vuex.Store({
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
         commit('SET_VALIDATION', response.data.data)
-
         commit('SET_SIGNUP_EMAIL_CHECK', '입력하신 이메일로 인증코드를 보냈습니다.')
         // console.log(response.data.data)                      //////////////////////////////////////////////////////// 인증코드(개발용)
       })
       .catch(error => {
         commit('SET_LOADING', false)
         commit('SET_SIGNUP_EMAIL_CHECK', error.response.data.message)
-
       })
     },
 
@@ -301,7 +297,6 @@ export default new Vuex.Store({
             }
           })
       } else {
-
         axios.get(`${SERVER}/nickname/${uid}`)
           .then(response => {
             if (response.data.status == 200) {
@@ -312,7 +307,6 @@ export default new Vuex.Store({
           .catch(()=>{
             commit('SET_SIGNUP_UID_CHECK', '사용할 수 없는 닉네임입니다.')
           })
-
       }
     },
     //회원 정보 조회
