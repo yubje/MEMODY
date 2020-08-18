@@ -7,7 +7,6 @@ export default function setup() {
     //토큰 갱신이 필요할 때
     if (response.headers.expires == 1) {
         //SET TOKEN
-        console.log('토큰업데이트 ---------------------------')
         store.commit('SET_TOKEN', response.headers.auth)      
         return axios.request(response.config);
       }

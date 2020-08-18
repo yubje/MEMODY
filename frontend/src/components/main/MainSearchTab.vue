@@ -2,9 +2,9 @@
   <div class="searchTab-container input-group" v-bind:class="{searchTab_container_input_click:inputClickValid}">
     <div class="input-group-prepend">
       <button class="searchTab-type dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchData.searchBy] }}</button>
-      <div class="dropdown-menu">
-        <a class="dropdown-item" @click="changeSearchBy(1)">블로그명</a>
-        <a class="dropdown-item" @click="changeSearchBy(2)">해시태그</a>
+      <div class="dropdown-menu searchTab-dropdown-menu">
+        <a class="dropdown-item searchTab-dropdown-item" @click="changeSearchBy(1)">블로그명</a>
+        <a class="dropdown-item searchTab-dropdown-item" @click="changeSearchBy(2)">해시태그</a>
       </div>
     </div>
     <input type="text" class="searchTab-input" aria-label="input" v-model="searchData.searchInput" @focus="inputClickFocus()" @blur="inputClickBlur()" @keyup.enter="checkValid()">

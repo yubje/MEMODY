@@ -52,7 +52,6 @@ export default {
     fetchBlogs() {
       if (cookies.get('auth-token')) {
         this.mainAfter()
-        console.log(this.$store.state.myBlogs)
       }else {
         this.mainBefore()
       }
