@@ -25,6 +25,7 @@ export default new Vuex.Store({
     // 아이디 중복 확인 
     uniqueId: false,
     uniqueEmail: false,
+    checkCodeValid: true,
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
@@ -35,7 +36,12 @@ export default new Vuex.Store({
     modalResetPW: false,
     modalSignup: false,
     //에러메세지 관리
-    loginError: ''
+    loginError: '',
+    signupUidCheck: '',
+    signupEmailCheck: '',
+    signupMsg: '',
+    //로딩
+    loading: false
   },
 
   getters: {
@@ -92,13 +98,13 @@ export default new Vuex.Store({
       state.uniqueEmail = false
     },
 
-
     // 아이디 중복 확인 
     SET_UNIQUEID(state, data) {
-      console.log(data)
       state.uniqueId = data
-      console.log(state.uniqueId)
+    },
 
+    SET_CHECK_CODE_VALID(state, data) {
+      state.checkCodeValid = data
     },
 
     SET_BLOGS_AFTER(state, data) {
@@ -139,20 +145,36 @@ export default new Vuex.Store({
     //에러메세지 관리
     SET_LOGIN_ERROR(state, data) {
       state.loginError = data
+    },
+
+    SET_SIGNUP_UID_CHECK(state, data) {
+      state.signupUidCheck = data
+    },
+
+    SET_SIGNUP_EMAIL_CHECK(state, data) {
+      state.signupEmailCheck = data
+    },
+
+    SET_SIGNUP_MSG(state, data) {
+      state.signupMsg = data
+    },
+
+    //로딩
+    SET_LOADING(state, data) {
+      state.loading = data
     }
   },
 
   actions: {
     // auth
     postAuthData({ state }, info) {
-      console.log(info.code)
       axios.post(SERVER + info.location, info.data, {headers:{"code":info.code}})
         .then(() => {
-          console.log(state)
-          // commit('SET_TOKEN', response.headers.auth)
-          router.push({ name: 'Main'})
         })
-        .catch(error => alert(error.response.data.message))
+        .catch(error => {
+          console.log(state.isValid)
+          alert(error.response.data.message)
+        })
     },
     // 로그인 (API 문서 - 10~11 D)
     login({ commit }, loginData) {
@@ -160,6 +182,7 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
+      commit('SET_LOGIN_ERROR', '')
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
         commit('SET_TOKEN', response.headers.auth)
@@ -191,19 +214,26 @@ export default new Vuex.Store({
         code: signupData.validationNumber,
         location: '/users'
       }
+      commit('SET_SIGNUP_MSG', '')
       dispatch('postAuthData', info)
+      commit('SET_SIGNUP_MSG', '회원가입이 완료되었습니다.')
       commit('SET_MODAL_SIGNUP')
+      commit('SET_MODAL_LOGIN')
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
     validateEmail({ commit }, email) {
+      commit('SET_SIGNUP_EMAIL_CHECK', '')
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
-        console.log('이메일 인증:', response)
         commit('SET_VALIDATION', response.data.data)
-        console.log(response.data.data)
+        commit('SET_SIGNUP_EMAIL_CHECK', '입력하신 이메일로 인증코드를 보냈습니다.')
+        // console.log(response.data.data)                      //////////////////////////////////////////////////////// 인증코드(개발용)
       })
-      .catch(error => alert(error.response.data.message))
+      .catch(error => {
+        commit('SET_LOADING', false)
+        commit('SET_SIGNUP_EMAIL_CHECK', error.response.data.message)
+      })
     },
 
     // 비밀번호 재설정 시 이메일 인증 (API 문서 - 21 D)
@@ -222,16 +252,21 @@ export default new Vuex.Store({
 
     //인증번호 매칭확인
     checkValidation( { commit } ,validationNumber) {
+      commit('SET_SIGNUP_EMAIL_CHECK', '')
+      commit('SET_CHECK_CODE_VALID', true)
+
       if (this.state.emailValidationNumber === validationNumber) {
-        alert("확인되었습니다.")
         if (this.state.validType) {
           commit('SET_MODAL_RESETPW')
         } else {
           commit('SET_ISVALID')
-          console.log(this.state.emailValidationNumber)
         }
+
+        commit('SET_SIGNUP_EMAIL_CHECK', '인증되었습니다.')
+
       } else {
-        alert("인증번호가 틀립니다.")
+        commit('SET_CHECK_CODE_VALID', false)
+        commit('SET_SIGNUP_EMAIL_CHECK', '인증코드가 틀렸습니다.')
       }
     },
 
@@ -251,6 +286,8 @@ export default new Vuex.Store({
     // 회원 검색(닉네임) (API 문서 - 21 D)
     lookUpNickname({ commit }, uid) {
       commit('SET_UNIQUEID', false)
+      commit('SET_SIGNUP_UID_CHECK', '')
+      
       if (cookies.get('auth-token')) {
         axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
         .then(response => {
@@ -262,19 +299,16 @@ export default new Vuex.Store({
             }
           })
       } else {
-          axios.get(`${SERVER}/nickname/${uid}`)
-            .then(response => {
-              if (response.data.status == 200) {
-                console.log("닉네임을 변경할 수 있습니다!")
-                commit('SET_UNIQUEID',true)
-              } else {
-                console.log("닉네임을 변경할 수 없습니다.")
-              }
-            })
-            .catch(()=>{
-              console.log("닉네임을 변경할 수 없습니다")
-            })
-
+        axios.get(`${SERVER}/nickname/${uid}`)
+          .then(response => {
+            if (response.data.status == 200) {
+              commit('SET_UNIQUEID',true)
+              commit('SET_SIGNUP_UID_CHECK', '사용 가능한 닉네임입니다.')
+            }
+          })
+          .catch(()=>{
+            commit('SET_SIGNUP_UID_CHECK', '사용할 수 없는 닉네임입니다.')
+          })
       }
     },
     //회원 정보 조회
