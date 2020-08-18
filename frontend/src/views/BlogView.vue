@@ -4,14 +4,9 @@
     <BlogPostSidebar/>
     <div class="col align-self-center" style="height: 60%;">
       <div class="col text-left m-5">
-        <h1 class="font-weight-black mb-3">{{ blogData.btitle }}</h1>
-        <h3 class="font-weight-bold ">{{ blogData.bsubtitle }}</h3>
-        
-        <p>{{ blogData.bcontent }}</p>
-        
-        <p>관리자 {{ blogData.manager }}</p>
         <v-btn
           outlined
+          small
           rounded
           color="teal"
           class="ma-1"
@@ -21,64 +16,47 @@
           <v-icon>mdi-music-accidental-sharp</v-icon>
           {{ hashtag.tname }}
         </v-btn>
-        <p><span class="font-weight-bold">팔로워</span> {{blogData.followers}} 명</p>
+        <h1 class="font-weight-black mb-3">{{ blogData.btitle }}</h1>
+        <h3 class="font-weight-bold ">{{ blogData.bsubtitle }}</h3>
         
-        <!-- 블로그 관리자가 아닌 경우 -->
-        <div v-if="userInfo.email !== blogData.manager">
-          <!-- 블로그 회원인 경우 블로그 탈퇴 버튼 보여주기 -->
-          <div v-if="this.isMember">
-            <!-- <v-btn 
-              v-if="this.isMember"
-              color="error" 
-              data-toggle="modal" 
-              data-target="#leaveBlogModal"
-              class="m-2"
-              small
-              dark
-              fab
-            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn> -->
-          </div>
-          <!-- 블로그 회원이 아닌 경우 -->
-          <div v-else>
+        <p>{{ blogData.bcontent }}</p>
+        
+        <p>관리자 {{ blogData.manager }}</p>
+        <v-row>
+          <p class="mx-4"><span class="font-weight-bold">팔로워</span> {{blogData.followers}} 명</p>
+        
+          <!-- 블로그 관리자가 아니고, 블로그 회원이 아닌 경우 -->
+          <div v-if="userInfo.email !== blogData.manager & !this.isMember">
             <!-- 팔로우 하고 있는 경우 -->
             <v-btn 
+              outlined
               color="secondary" 
               small
               dark
-              fab
+              rounded
               v-if="following"
               @click="clickFollow()"
             >
               <v-icon dark>mdi-account-remove-outline</v-icon>
+              언팔로우
             </v-btn>
 
             <v-btn 
+              outlined
               color="teal" 
-              small
               dark
-              fab
+              small
+              rounded
               v-else
               @click="clickFollow()"
             >
               <v-icon>mdi-account-star-outline</v-icon>
-          </v-btn>
+              팔로우
+            </v-btn>
           </div>
-          
-            
-          <!-- <div v-for="(member, n) in members" :key="n">
-            <v-btn 
-              v-if="userInfo.email==member.email"
-              color="error" 
-              data-toggle="modal" 
-              data-target="#leaveBlogModal"
-              class="m-2"
-              small
-              dark
-              fab
-            ><v-icon dark>mdi-account-remove-outline</v-icon></v-btn>
-          </div> -->
-
-          <!-- Modal -->
+        </v-row>
+        
+        <!-- Modal -->
           <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -99,7 +77,6 @@
             </div>
           </div>
 
-        </div>           
       </div>
     </div>
     </div>
