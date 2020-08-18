@@ -67,7 +67,7 @@
 
 **Spring Security + JWT** : 로그인한 사용자만 서비스를 사용가능 하도록(filter), Token을 계속 검사해서 유효한 회원인지 확인
 
-**Spring Data JPA **: JpaRepository를 상속받아 쿼리 작성을 하지 않고 DB Table의 객체로 접근하게 하여 기능들을 구현
+**Spring Data JPA**: JpaRepository를 상속받아 쿼리 작성을 하지 않고 DB Table의 객체로 접근하게 하여 기능들을 구현
 
 **XSS Filter** : 네이버에서 제공하는 lucy-xss-servlet-filter 를 이용하여 서버로 보내는 입력 값에 자바스크립트를 보내서
 
