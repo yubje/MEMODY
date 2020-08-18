@@ -1,8 +1,25 @@
 <template>
   <div>
     <div
-      v-for="(user, comment) in commentData" 
-      :key="user"
+      v-for="(comment, user, index) in commentData" 
+      :key="index"
+      class="d-flex flex-column text-dark"
+    > 
+    {{comment}} | {{user}} | {{index}}
+      <div v-if="comment_id && comment_id ==comment.cmid">
+        <BlogCommentForm
+          :comment="comment"
+        />
+      </div>
+      <div v-else>
+        <BlogCommentItem
+        :comment="comment"
+        />
+      </div>
+    </div>
+    <div
+      v-for="comment in commentData" 
+      :key="comment"
       class="d-flex flex-column text-dark"
     > 
     {{comment}} | {{user}}
