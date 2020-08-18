@@ -44,11 +44,44 @@
 
       </v-list>
       <template v-slot:append>
+        
         <div v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}"
-            class="text-dark text-decoration-none">Settings</router-link>
+            class="text-dark text-decoration-none">환경설정</router-link>
         </div>
+        <div v-else-if="userInfo.email !== blogData.manager && isMember" class="d-flex justify-end pa-5">
+          <v-btn 
+            text
+            data-toggle="modal" 
+            data-target="#leaveBlogModal"
+          >
+            <v-icon color="grey darken-1">mdi-account-remove</v-icon>
+            탈퇴하기
+          </v-btn>
+        </div>
+
+        <!-- Modal -->
+          <!-- <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="leaveBlogModalLabel">블로그 탈퇴</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  블로그 회원 탈퇴를 하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-danger" @click="leaveBlog(member.email)">탈퇴하기</button>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
       </template>
     </v-navigation-drawer>
   </v-card>
@@ -68,15 +101,29 @@ export default {
   props: {
     bid: Number 
   },
+  data() {
+    return {
+      isMember: false,
+    }
+  },
   computed: {
     ...mapState(['userInfo']),
-    ...mapState('blog', ['blogData','dataCategories']),
+    ...mapState('blog', ['blogData','dataCategories', 'members']),
   },
   methods: {
-    ...mapActions('blog',['getBlogCategory']),
+    ...mapActions('blog',['getBlogCategory', 'getBlogMembers']),
+    leaveBlog(email) {
+      this.deleteBlogMember(email)
+    },
   },
   created() {
     this.getBlogCategory(this.blogData.bid)
+    this.getBlogMembers()
+    this.members.forEach(member => {
+      if (member.email === this.userInfo.email) {
+        this.isMember=true;
+      }
+    });
   },
 }
 </script>
