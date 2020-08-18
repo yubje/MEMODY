@@ -14,7 +14,10 @@ public class ResponseMessage {
     public static final String FAIL_RESET_PWD = "비밀번호 재설정 실패";
     public static final String SEARCH_NICKNAME_NONE = "닉네임 사용 가능";
     public static final String SEARCH_NICKNAME_EXIST = "이미 존재하는 닉네임입니다.";
-    
+    public static final String SEARCH_NICKNAME_SUCCESS = "닉네임으로 조회 성공";
+    public static final String SEARCH_NICKNAME_FAIL = "닉네임으로 조회 실패";
+    public static final String SEARCH_ALLUSERS_FAIL = "전체 회원 목록 조회 실패";
+    public static final String SEARCH_ALLUSERS_SUCCESS = "전체 회원 목록 조회 성공";
     
     public static final String ALREADY_USER = "이미 존재하는 Email입니다.";
     public static final String CREATED_USER = "회원 가입 성공";

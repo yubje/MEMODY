@@ -91,4 +91,19 @@ public class UserService implements UserDetailsService {
 		return true;
 	}
 
+	public List<Users> searchListByNickname(String uid){
+		return userRepository.findByUidContaining(uid);
+	}
+
+	public List<Users> searchAllUsers(String roles){
+		List<Users> list = userRepository.findAllByOrderByEmail();
+		List<Users> result = new ArrayList<Users>();
+		for(Users user : list) {
+			if(user.getRoles().get(0).equals(roles)) {
+				System.out.println(user.getRoles().get(0));
+				result.add(user);
+			}
+		}
+		return result;
+	}
 }
