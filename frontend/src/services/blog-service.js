@@ -323,10 +323,29 @@ class BlogService {
   }
 
   deleteLike({ state }) {
-    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData,headers: {"auth": cookies.get('auth-token')}})
+    axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         state.postData.postlikecnt -= 1
       })
+  }
+
+  follow({ state }) {
+    axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, state.blogData, { headers: {"auth": cookies.get('auth-token')} })
+    .then(response => {
+      console.log(response.data)
+      state.blogData.followers += 1
+      state.blogData.follower.add(state.userInfo.email)
+    })
+    .catch(error => console.log(error.response.data))
+  }
+
+  unfollow({ state }) {
+    axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, { data: state.blogData, headers: {"auth": cookies.get('auth-token')} })
+    .then(() => {
+      state.blogData.followers -= 1
+      state.blogData.follower.remove(state.userInfo.email)
+    })
+    .catch(error => console.log(error.response.data))
   }
 }
 
