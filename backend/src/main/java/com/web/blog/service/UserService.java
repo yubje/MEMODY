@@ -73,7 +73,7 @@ public class UserService implements UserDetailsService {
 
 	public void profileUpdate(String email,String url) {
 		Optional<Users> user = userRepository.findByEmail(email);
-		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).build());
+		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).roles(Collections.singletonList("ROLE_USER")).build());
 		
 	}
 	
