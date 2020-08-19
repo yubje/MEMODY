@@ -15,7 +15,7 @@
 
     <hr class="hr-col">
 
-    <router-link :to="{ name: 'MainRankingView' }">전체랭킹</router-link>
+    <router-link :to="{ name: 'MainRankingView' }">TOP 10</router-link>
     <v-menu>
       <template v-slot:activator="{ on, attrs }">
         <MainRanking v-bind="attrs" v-on="on"/>
