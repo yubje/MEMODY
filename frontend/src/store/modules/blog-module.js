@@ -116,7 +116,6 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      console.log("dddd",postData)
       state.postData.bid = postData.post.bid
       state.postData.pid = postData.post.pid
       state.postData.lcid = postData.post.lcid
@@ -148,11 +147,9 @@ export const blog = {
     REMOVE_HASHTAG(state, key) {
       state.blogData.hashtags.splice(key, 1)
       // delete state.blogData.hashtags[key];
-      console.log(state.blogData)
     },
     ADD_HASHTAG(state, hashtag) {
       state.blogData.hashtags.push({"tname": hashtag})
-      console.log(state.blogData)
     },
 
 
@@ -208,7 +205,6 @@ export const blog = {
     lookupPostList({ commit, state }, page) {
       return BlogService.lookupPostList(state.bid, page)
       .then(postListData => {
-        console.log(postListData)
         commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
@@ -218,7 +214,6 @@ export const blog = {
     lookupPostDetail({commit}, response) {
       return BlogService.lookupPostDetail(response)
       .then(postDetailData => {
-        console.log("ddddddddd",postDetailData)
         commit('setPostDetailData', postDetailData)
       })
       .catch(error => console.log(error.data.message))
@@ -252,7 +247,6 @@ export const blog = {
     
     // 소분류 삭제
     deleteChildCategory({commit,state}, mediumCategoryData) {
-      console.log(mediumCategoryData)
       BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
     },
     //소분류 업데이트
@@ -293,7 +287,6 @@ export const blog = {
     },
 
     moveToPosts({commit}, categoryData) {
-      console.log(categoryData)
       BlogService.moveToPosts({commit}, categoryData)
     },
 
@@ -302,7 +295,6 @@ export const blog = {
     },
 
     getBlogMembers({ state }) {
-      console.log(state)
       BlogService.getBlogMembers({ state })
     },
 
@@ -352,7 +344,6 @@ export const blog = {
     },
 
     getUsers({response}, uid) {
-      console.log(uid)
       return BlogService.getUsers(response,uid)
     }
 
