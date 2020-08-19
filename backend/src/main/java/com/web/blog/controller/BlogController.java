@@ -43,7 +43,7 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-07-30, Blog 관리 Controller
+ * @version 1.0, 2020-08-19, Update Blog Controller
  * @see None
  * 
  */
@@ -53,14 +53,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 public class BlogController {
 
-	private final JwtTokenProvider 	jwtTokenProvider;
-	private final BlogService 		blogService;
-	private final TagService 		tagService;
-	private final BlogTagService 	blogtagService;
-	private final MemberService 	memberService;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final BlogService blogService;
+	private final TagService tagService;
+	private final BlogTagService blogtagService;
+	private final MemberService memberService;
 	private final BlogFollowService blogFollowService;
-	private final UserService		userService;
-	
+	private final UserService userService;
+
 	/**
 	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능.
 	 * 
@@ -80,10 +80,9 @@ public class BlogController {
 			int bid;
 			String email = jwtTokenProvider.getUserPk(token);
 			if (blogService.countBlogByUser(email)) {
-				bid = blogService.createBlog(blog.get("btitle"),blog.get("bsubtitle"),blog.get("bcontent"),email);
-				
-				System.out.println("블로그생성");
-				if( blog.get("hashtags") != null) {
+				bid = blogService.createBlog(blog.get("btitle"), blog.get("bsubtitle"), blog.get("bcontent"), email);
+
+				if (blog.get("hashtags") != null) {
 					String hashtags[] = blog.get("hashtags").replaceAll(" ", "").trim().split("#");
 					String tname;
 					int tid;
@@ -140,6 +139,28 @@ public class BlogController {
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
+		}
+	}
+
+	/**
+	 * 다른 사용자 블로그 목록 조회 - 다른 사용자가 참여하고 있는 블로그 조회
+	 * 
+	 * @param String email
+	 * @return ResponseEntity<Response> - StatusCode,
+	 *         ResponseMessage(SEARCH_MYBLOG_NONE,SEARCH_MYBLOG_SUCCESS),
+	 *         HttpStatus, data(블로그 목록 정보)
+	 */
+	@ApiOperation(value = "다른 사용자 블로그 목록 조회", response = ResponseEntity.class, notes = "다른 사용자가 참여하고 있는 블로그를 조회합니다.")
+	@GetMapping(value = "/blogs/list/{email}")
+	public ResponseEntity anotherBlogList(@PathVariable String email) {
+		List<Blog> list = blogService.myBlogList(email);
+
+		if (list.size() == 0) {
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_MYBLOG_NONE),
+					HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Response>(
+					new Response(StatusCode.OK, ResponseMessage.SEARCH_MYBLOG_SUCCESS, list), HttpStatus.OK);
 		}
 	}
 
@@ -219,7 +240,7 @@ public class BlogController {
 	@GetMapping(value = "/blogs/{btitle}/list")
 	public ResponseEntity listByBtitle(@PathVariable String btitle) {
 		List<Blog> list = blogService.searchListByBlog(btitle);
-		
+
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
 				HttpStatus.OK);
 	}
@@ -244,7 +265,7 @@ public class BlogController {
 			String bcontent = blog.get("bcontent");
 			String changeTag = blog.get("hashtags").trim();
 
-			if (blogService.updateBlog(user, btitle,bsubtitle,bcontent, changeTag, bid)) {
+			if (blogService.updateBlog(user, btitle, bsubtitle, bcontent, changeTag, bid)) {
 
 				String hashtags[] = changeTag.replaceAll(" ", "").split("#");
 				String tname;
@@ -311,7 +332,8 @@ public class BlogController {
 	 * 
 	 * @param int bid - 조회할 블로그 고유 ID값
 	 * @return ResponseEntity<Response> - StatusCode,
-	 *         ResponseMessage(BLOG_MEMBER_SUCCESS,BLOG_MEMBER_FAIL), HttpStatus, data(멤버 리스트)
+	 *         ResponseMessage(BLOG_MEMBER_SUCCESS,BLOG_MEMBER_FAIL), HttpStatus,
+	 *         data(멤버 리스트)
 	 * @exception FORBIDDEN
 	 */
 	@ApiOperation(value = "블로그 내 참여자 목록조회", response = ResponseEntity.class, notes = "블로그 내에 참여하고 있는 참여자들의 정보를 출력합니다.")
@@ -334,11 +356,11 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+
 	/**
 	 * 블로그 내 참여자 추가 - 블로그 게시를 할 수 있도록 사용자를 추가한다
 	 * 
-	 * @param int bid - 참여자 추가할 블로그 고유 ID값
-	 * 		  Users member - email
+	 * @param int bid - 참여자 추가할 블로그 고유 ID값 Users member - email
 	 * @return ResponseEntity<Response> - StatusCode,
 	 *         ResponseMessage(INVITE_MEMBER_SUCCESS,INVITE_MEMBER_FAIL), HttpStatus
 	 * @exception FORBIDDEN
@@ -362,14 +384,14 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/**
 	 * 블로그 내 참여자 삭제 - 블로그 내 사용자를 탈퇴시킨다.
 	 * 
-	 * @param int bid - 참여자 추가할 블로그 고유 ID값
-	 * 		  Users member - email
+	 * @param int bid - 참여자 추가할 블로그 고유 ID값 Users member - email
 	 * @return ResponseEntity<Response> - StatusCode,
-	 *         ResponseMessage(DELETE_MEMBER_SUCCESS,DELETE_MEMBER_FAIL), HttpStatus, data(멤버 리스트)
+	 *         ResponseMessage(DELETE_MEMBER_SUCCESS,DELETE_MEMBER_FAIL),
+	 *         HttpStatus, data(멤버 리스트)
 	 * 
 	 */
 	@ApiOperation(value = "블로그 내 참여자 삭제", response = ResponseEntity.class, notes = "블로그 내 사용자를 탈퇴시킵니다.")
@@ -383,7 +405,7 @@ public class BlogController {
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.DELETE_MEMBER_FAIL), HttpStatus.FORBIDDEN);
 			} else {
 				System.out.println(member.toString());
-				System.out.println(bid+" "+member.getEmail()+" "+user);
+				System.out.println(bid + " " + member.getEmail() + " " + user);
 				blogService.deleteMember(bid, member.getEmail(), user);
 				return new ResponseEntity<Response>(
 						new Response(StatusCode.CREATED, ResponseMessage.DELETE_MEMBER_SUCCESS), HttpStatus.OK);
@@ -393,13 +415,13 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/**
 	 * 매니저 블로그 조회 - 내가 매니저인 블로그 번호 조회.
 	 * 
 	 * @return ResponseEntity<Response> - StatusCode,
 	 *         ResponseMessage(SEARCH_BLOG_SUCCESS), HttpStatus, data(블로그 리스트)
-	 *         
+	 * 
 	 */
 	@ApiOperation(value = "manager 블로그", response = ResponseEntity.class, notes = "내가 매니저인 블로그 번호를 조회합니다.")
 	@GetMapping(value = "/blogs/manager")
@@ -409,15 +431,15 @@ public class BlogController {
 			String user = jwtTokenProvider.getUserPk(token);
 
 			List<Blog> list = blogService.myBlog(user);
-			return new ResponseEntity<Response>(
-					new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list), HttpStatus.OK);
+			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
+					HttpStatus.OK);
 
 		} else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
 					HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/**
 	 * 블로그 팔로우 - 블로그 팔로우하기
 	 * 
@@ -430,12 +452,13 @@ public class BlogController {
 		System.out.println(token);
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(blog.getBid())){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
+			if (!blogService.checkBlog(blog.getBid())) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL), HttpStatus.FORBIDDEN);
+			} else {
 				blogFollowService.increaseBlogFollow(blog.getBid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.FOLLOW_BLOG_SUCCESS, loginuser),
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.CREATED, ResponseMessage.FOLLOW_BLOG_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
 		} else {
@@ -443,6 +466,7 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
+
 	/**
 	 * 블로그 팔로우 취소 - 블로그 팔로우를 취소합니다.
 	 * 
@@ -454,12 +478,13 @@ public class BlogController {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(blog.getBid())){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
+			if (!blogService.checkBlog(blog.getBid())) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL), HttpStatus.FORBIDDEN);
+			} else {
 				blogFollowService.decreaseBlogFollow(blog.getBid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNFOLLOW_BLOG_SUCCESS, loginuser),
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.CREATED, ResponseMessage.UNFOLLOW_BLOG_SUCCESS, loginuser),
 						HttpStatus.OK);
 			}
 		} else {
@@ -467,9 +492,9 @@ public class BlogController {
 					HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/**
-	 * 블로그 팔로우 조회 - 블로그를 팔로우 했는지 여부를 알려준다. 팔로우 했을경우 파란색 / 안했을경우 회색 
+	 * 블로그 팔로우 조회 - 블로그를 팔로우 했는지 여부를 알려준다. 팔로우 했을경우 파란색 / 안했을경우 회색
 	 * 
 	 */
 	@ApiOperation(value = "블로그 팔로우 조회", response = ResponseEntity.class, notes = "블로그를 팔로우 했는지 여부를 알려줍니다. 팔로우 했을경우 파란색 / 안했을경우 회색 ")
@@ -479,17 +504,19 @@ public class BlogController {
 		System.out.println("블로그 팔로우 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!blogService.checkBlog(bid)){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
+			if (!blogService.checkBlog(bid)) {
+				return new ResponseEntity<Response>(
+						new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL), HttpStatus.FORBIDDEN);
+			} else {
 				boolean followed = blogFollowService.searchBlogFollow(bid, loginuser);
 				System.out.println(followed);
-				if(followed) {
-					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+				if (followed) {
+					return new ResponseEntity<Response>(
+							new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
 							HttpStatus.OK);
-				}else {
-					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
+				} else {
+					return new ResponseEntity<Response>(
+							new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),
 							HttpStatus.OK);
 				}
 			}
