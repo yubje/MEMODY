@@ -50,7 +50,7 @@ export const blog = {
       fork: '',
       postlikecnt: '',
       ptype: null,
-      authorNicknameL: '',
+      authorNickname: '',
       managerNickname: '',
       managerProfile: '',
 
