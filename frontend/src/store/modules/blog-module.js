@@ -1,7 +1,7 @@
 // blog 상태 관리 모듈
 import router from '@/router'
 import BlogService from '@/services/blog-service'
-// import { delete } from 'vue/types/umd';
+// import { delete } from 'vue/types/umd';http://c55b07877ea7.ngrok.io/
 
 export const blog = {
   namespaced: true,
@@ -15,6 +15,7 @@ export const blog = {
       bsubtitle: null,
       bcontent: null,
       hashtags: null,
+      member: null,
     },
 
     // 새 블로그 추가를 위한 새 정보
@@ -36,15 +37,23 @@ export const blog = {
 
     //블로그 게시글 상세정보
     postData: {
+      bid: '',
       pid: '',
-      lcid: '', /***나중에 수정***/
-      mcid: '', /***나중에 수정***/
+      lcid: '',
+      mcid: '',
       ptitle: '',
       pcontent: '',
       author: '',
+      manager: '',
       postTime: '',
-      update_time: '',
-      ptype: null
+      updateTime: '',
+      fork: '',
+      postlikecnt: '',
+      ptype: null,
+      authorNickname: '',
+      managerNickname: '',
+      managerProfile: '',
+
     },
     posts: [],
 
@@ -57,6 +66,10 @@ export const blog = {
     // 댓글
     comment_id: null,
     commentData: null,
+
+
+    // 임시 저장 리스트
+    blogPostTmpList: null,
 
   
 
@@ -79,8 +92,11 @@ export const blog = {
         pcontent: '',
         author: '',
         postTime: '',
-        update_time: '',
-        ptype: ''
+        updateTime: '',
+        ptype: '',
+        managerNickname: '',
+        authorNickname: '',
+        managerProfile: '' 
       }
     },
 
@@ -100,7 +116,22 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      state.postData = postData;
+      state.postData.bid = postData.post.bid
+      state.postData.pid = postData.post.pid
+      state.postData.lcid = postData.post.lcid
+      state.postData.mcid = postData.post.mcid
+      state.postData.ptitle = postData.post.ptitle
+      state.postData.pcontent = postData.post.pcontent
+      state.postData.author = postData.post.author
+      state.postData.manager = postData.post.manager
+      state.postData.postTime = postData.post.postTime
+      state.postData.updateTime = postData.post.updateTime
+      state.postData.fork = postData.post.fork
+      state.postData.postlikecnt = postData.post.postlikecnt
+      state.postData.ptype = postData.post.ptype
+      state.postData.authorNickname = postData.authorNickname
+      state.postData.managerNickname = postData.managerNickname
+      state.postData.managerProfile = postData.postManager.profile
     },
     
 
@@ -116,11 +147,9 @@ export const blog = {
     REMOVE_HASHTAG(state, key) {
       state.blogData.hashtags.splice(key, 1)
       // delete state.blogData.hashtags[key];
-      console.log(state.blogData)
     },
     ADD_HASHTAG(state, hashtag) {
       state.blogData.hashtags.push({"tname": hashtag})
-      console.log(state.blogData)
     },
 
 
@@ -168,13 +197,13 @@ export const blog = {
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
-    createPost(response) {
+    createPost(response, ) {
       BlogService.createPost(response)
     },
 
     // 블로그 게시글 전체 조회 (API 문서 - 62D)
-    lookupPostList({commit, state}) {
-      return BlogService.lookupPostList(state.bid)
+    lookupPostList({ commit, state }, page) {
+      return BlogService.lookupPostList(state.bid, page)
       .then(postListData => {
         commit('setPostListData', postListData)
       })
@@ -218,7 +247,6 @@ export const blog = {
     
     // 소분류 삭제
     deleteChildCategory({commit,state}, mediumCategoryData) {
-      console.log(mediumCategoryData)
       BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
     },
     //소분류 업데이트
@@ -244,8 +272,8 @@ export const blog = {
 
 
     // 블로그 게시글 수정 (API 문서 - 54D)
-    updatePost({commit}, response) {
-      return BlogService.updatePost(response)
+    updatePost({state, commit}) {
+      return BlogService.updatePost(state.postData)
       .then(result => {
         commit('setPostDetailData', result.data)
         alert(result.message)
@@ -259,16 +287,14 @@ export const blog = {
     },
 
     moveToPosts({commit}, categoryData) {
-      console.log(categoryData)
       BlogService.moveToPosts({commit}, categoryData)
     },
 
     fetchPosts({commit}, info) {
-      BlogService.fetchPosts({commit},info)
+      BlogService.fetchPosts({commit}, info)
     },
 
     getBlogMembers({ state }) {
-      console.log(state)
       BlogService.getBlogMembers({ state })
     },
 
@@ -311,9 +337,16 @@ export const blog = {
 
     changeDialogState({commit}) {
       BlogService.changeDialogState({commit})
+    },
+
+    getBlogPostTmpList({ state }) {
+      BlogService.getBlogPostTmpList({ state })
+    },
+
+    getUsers({response}, uid) {
+      return BlogService.getUsers(response,uid)
     }
 
   },
 
 }
-

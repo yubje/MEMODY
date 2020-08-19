@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="post-button">
-      <button id="post-save" @click="typeChange()">저장</button>
-      <button id="post-create" @click="blogPostCreate()">등록</button>
+      <button id="post-save" @click="typeChange()">임시저장</button>
+      <button id="post-create" @click="blogPostCreate()">글쓰기</button>
     </div>
 
     <BlogEditor />
@@ -39,13 +39,6 @@ export default {
   components: {
     BlogEditor
   },
-  data() {
-    return {
-      editorOptions: {
-        hideModeSwitch: true
-      }
-    }
-  },
   created() {
     this.initPostData
     this.postData.bid = this.bid
@@ -66,7 +59,7 @@ export default {
 
     blogPostCreate() {
       this.postData.pcontent = document.getElementById('editor-content').innerHTML
-      console.log(this.postData.pcontent)
+      
       this.createPost()
     }
   }

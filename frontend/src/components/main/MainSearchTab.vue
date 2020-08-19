@@ -1,22 +1,20 @@
 <template>
-<div class="container input-group my-3">
-  <div class="input-group-prepend">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchBy] }}</button>
-    <div class="dropdown-menu">
-      <a class="dropdown-item" @click="changeSearchBy(1)">블로그명</a>
-      <a class="dropdown-item" @click="changeSearchBy(2)">해쉬태그</a>
+  <div class="searchTab-container input-group" v-bind:class="{searchTab_container_input_click:inputClickValid}">
+    <div class="input-group-prepend">
+      <button class="searchTab-type dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ searchTab[searchData.searchBy] }}</button>
+      <div class="dropdown-menu searchTab-dropdown-menu">
+        <a class="dropdown-item searchTab-dropdown-item" @click="changeSearchBy(1)">블로그명</a>
+        <a class="dropdown-item searchTab-dropdown-item" @click="changeSearchBy(2)">해시태그</a>
+      </div>
+    </div>
+    <input type="text" class="searchTab-input" aria-label="input" v-model="searchData.searchInput" @focus="inputClickFocus()" @blur="inputClickBlur()" @keyup.enter="checkValid()">
+    <div class="input-group-append">
+      <font-awesome-icon v-bind:class="{searchTab_icon_input_click:inputClickValid}" id="search-icon" :icon="['fas','search']" @click="checkValid()" />
     </div>
   </div>
-  <input type="text" class="form-control" aria-label="input" v-model="searchInput">
-  <div class="input-group-append">
-    <button class="btn btn-primary" type="button" id="button-addon2" @click="search({searchBy, searchInput})">Button</button>
-  </div>
-</div>
-
 </template>
 
 <script>
-// import axios from 'axios'
 import { mapActions } from 'vuex'
 
 export default {
@@ -24,34 +22,42 @@ export default {
   data() {
     return {
       searchTab: {
-        '0': '선택',
         '1': '블로그명',
         '2': '해쉬태그'
       },
-      searchBy: '0',
-      searchInput: null,
+      searchData: {
+        searchBy: '1',
+        searchInput: null,
+      },
+      inputClickValid: false
     }
   },
-  computed: {
-
-  },
-
   methods: {
-    // 검색 
-    // 블로그 이름으로 블로그 목록 조회 (API 문서 - 24D)
-    // 해쉬태그로 블로그 목록 검색 및 조회 (API 문서 - 25D)
     ...mapActions('main', ['search']),
 
-
-    // 검색 카테고리 변경 
-    changeSearchBy(n) {
-      this.searchBy = n
-      console.log(this.searchBy)
+    changeSearchBy(num) {
+      this.searchData.searchBy = num
     },
+
+    inputClickFocus() {
+      this.inputClickValid = true;
+    },
+
+    inputClickBlur() {
+      this.inputClickValid = false;
+    },
+
+    checkValid() {
+      if (this.searchData.searchInput == null) {
+        this.$dialog.notify.error('검색어를 입력해주세요.', {
+          position: 'top-right',
+          timeout: 5000
+        })
+      } 
+      else {
+        this.search(this.searchData)
+      }
+    }
   }
 }
 </script>
-
-<style>
-
-</style>

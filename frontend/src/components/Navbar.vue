@@ -2,76 +2,103 @@
   <v-app-bar app flat color="white">
     <v-toolbar-title>
       <router-link :to="{ name: 'Main' }">
-        <img src="@/assets/memody.png" alt="memody" style="height: 45px;">
+        <img src="@/assets/logo/memody.png" alt="memody" style="height: 44px;">
       </router-link>
     </v-toolbar-title>
 
-    <!-- <v-spacer></v-spacer> -->
+    <v-spacer></v-spacer>
+
+    <div v-if="authToken">
+      <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
+      <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
+    </div>
+
+    <hr class="hr-col">
+
+    <router-link :to="{ name: 'MainRankingView' }">TOP 10</router-link>
+    <v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <MainRanking v-bind="attrs" v-on="on"/>
+      </template>
+    </v-menu>
+
+    <hr class="hr-col">
 
     <v-menu v-if="authToken">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn text v-bind="attrs" v-on="on">
-          <p>User</p>
-        </v-btn>
+        <button id="navbar-menu-after" v-bind="attrs" v-on="on">
+          <img v-if="userInfo.profile" id="profile-img-small" :src="userInfo.profile">
+          <img v-else id="profile-img-small" src="@/assets/img/user-default.png">
+          <span>{{userInfo.uid}} 님</span>
+        </button>
       </template>
-
-
-      <v-list>
+      <v-list class="navbar-menu-list-after">
         <v-list-item>
           <v-list-item-title>
-            <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
           </v-list-item-title>
         </v-list-item>
+        <hr>
         <v-list-item>
           <v-list-item-title>
-            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <router-link data-toggle="modal" data-target="#logout-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <font-awesome-icon id="logout-icon" :icon="['fas','sign-out-alt']" />
           </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
     
-
-    <v-menu
-      left
-      bottom
-      v-else
-    >
+    <v-menu v-else>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          icon
-          v-bind="attrs"
-          v-on="on"
-        >
-          <p>로그인·회원가입</p>
-        </v-btn>
+        <button id="navbar-menu-before" v-bind="attrs" v-on="on" @click="SET_MODAL_LOGIN()"> 회원가입 · 로그인</button>
+        
+        <div v-if="modalLogin">
+          <UserLogin />
+        </div>
       </template>
-
-      <v-list>
-        <v-list-item>
-          <v-list-item-title>
-            <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
-          </v-list-item-title>
-        </v-list-item>
-          
-
-      </v-list>
     </v-menu>
+
+    <div v-if="modalResetPWCheckEmail">
+      <UserResetPWCheckEmail />
+    </div>
+    <div v-if="modalResetPWCheckValid">
+      <UserResetPWCheckValid />
+    </div>
+    <div v-if="modalResetPW">
+      <UserResetPW />
+    </div>
+
+    <div v-if="modalSignup">
+      <UserSignup />
+    </div>
+    
   </v-app-bar>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import UserLogin from '@/components/user/UserLogin.vue'
+import MainRanking from '@/components/main/MainRanking.vue'
+import UserResetPWCheckEmail from '@/components/user/UserResetPWCheckEmail.vue'
+import UserResetPWCheckValid from '@/components/user/UserResetPWCheckValid.vue'
+import UserResetPW from '@/components/user/UserResetPW.vue'
+import UserSignup from '@/components/user/UserSignup.vue'
 
 export default {
   name: 'NavBar',
-  computed: {
-      ...mapState(['authToken'])
+  components: {
+    UserLogin,
+    UserResetPWCheckEmail,
+    UserResetPWCheckValid,
+    UserResetPW,
+    UserSignup,
+    MainRanking
   },
+  computed: {
+    ...mapState(['authToken', 'userInfo', 'modalLogin', 'modalResetPWCheckEmail', 'modalResetPWCheckValid', 'modalResetPW', 'modalSignup'])
+  },
+  methods: {
+    ...mapMutations(['SET_MODAL_LOGIN'])
+  }
 }
 </script>
-
-<style>
-.v-toolbar__content {
-  border-bottom: 1px solid #DFDFDF;
-}
-</style>

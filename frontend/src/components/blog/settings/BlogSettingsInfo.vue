@@ -2,27 +2,27 @@
   <div class="container-fluid">
     <div class="row">
       <BlogSettingsSidebar/>
-      <div class="col col-lg-10">
+      <div class="col">
         <div class="col w-75 mx-auto">
           <div class="mx-auto my-2">
-            <h1>블로그 정보 수정</h1>
+            <h3>블로그 정보 수정</h3>
           </div>
-          <div class="row">
-            <p class="col-1">블로그 이름</p>
-            <div class="col-11">
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 이름</p>
+            <div class="col-8">
               <v-text-field outlined v-model="blogData.btitle"></v-text-field>              
             </div>
 
           </div>
-          <div class="row justify-content-between">
-            <p class="col-1">블로그 부제</p>
-            <div class="col-11">
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 부제</p>
+            <div class="col-8">
               <v-text-field outlined v-model="blogData.bsubtitle"></v-text-field>
             </div>
           </div>
-          <div class="row justify-content-between">
-            <p class="col-1">블로그 설명</p>
-            <div class="col-11">
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">블로그 설명</p>
+            <div class="col-8">
               <v-textarea 
                 outlined
                 name="blogDataContent"
@@ -31,9 +31,9 @@
             </div>
             
           </div>
-          <div class="row">
-            <p class="col-1">해시태그</p>
-            <div class="col-11">
+          <div class="row justify-content-between" style="align-items:baseline;">
+            <p class="col-3">해시태그</p>
+            <div class="col-8">
               <form @click="addHashtag(newHashtag)">
                 <v-text-field outlined v-model="newHashtag" ></v-text-field>
                 <v-btn 
@@ -103,9 +103,7 @@ export default {
     addHashtag(newHashtag) {
       if (newHashtag) {
         this.ADD_HASHTAG(newHashtag)
-      } else {
-        alert('해시태그를 입력해 주세요')
-      }
+      } 
       newHashtag = null
     },
   },
