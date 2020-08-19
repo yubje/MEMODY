@@ -5,17 +5,23 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Blog;
 import com.web.blog.domain.BlogFollow;
 import com.web.blog.domain.Blogtag;
 import com.web.blog.domain.Member;
+import com.web.blog.domain.Users;
+import com.web.blog.model.RestException;
 import com.web.blog.repository.BlogFollowRepository;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.BlogTagRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.TagRepository;
+import com.web.blog.repository.UsersRepository;
+
+import com.web.blog.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +34,7 @@ public class BlogService {
 	private final BlogTagRepository blogtagRepository;
 	private final TagRepository tagRepository;
 	private final BlogFollowRepository blogFollowRepository;
+	private final UsersRepository userRepository;
 	
 	private final String ADMIN = "ROLE_ADMIN";
 
