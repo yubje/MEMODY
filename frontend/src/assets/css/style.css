@@ -68,7 +68,8 @@ hr {
 .searchTab-type:hover, #search-icon:hover,
 .main-blog-item-title:hover,
 #user-login-cancel-icon:hover, .user-login-content-btn:hover,
-#user-signup-cancel-icon:hover {
+#user-signup-cancel-icon:hover,
+#user-resetpw-icon:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -258,32 +259,32 @@ hr {
 }
 
 /*--------------------UserLogin--------------------*/
-.v-dialog, .user-login-container, .user-signup-container {
+.v-dialog, .user-login-container, .user-signup-container, .user-resetpw-container {
   border-radius: 0px !important;
 }
 
-#user-login-cancel-icon, #user-signup-cancel-icon {
+#user-login-cancel-icon, #user-signup-cancel-icon, #user-resetpw-icon {
   font-size: x-large;
   color: #505050;
 }
 
-#user-login-cancel-icon {
+#user-login-cancel-icon, #user-resetpw-icon {
   margin: 17px 0px 0px 89%;
 }
 
-.user-login-contents, .user-signup-contents {
+.user-login-contents, .user-signup-contents, .user-resetpw-contents {
   margin: 0px 19px;
 }
 
-.user-login-title, .user-signup-title {
+.user-login-title, .user-signup-title, .user-resetpw-title {
   display: unset;
 }
 
-.user-login-content, .user-signup-content {
+.user-login-content, .user-signup-content, .user-resetpw-content {
   margin-top: 33px;
 }
 
-.user-login-content-padding, .user-signup-content-padding {
+.user-login-content-padding, .user-signup-content-padding, .user-resetpw-content-padding {
   padding: 2px 15px;
 }
 
@@ -293,7 +294,7 @@ hr {
   padding-bottom: 0px;
 }
 
-#user-login-content-login-btn, .user-signup-content-btn, #user-signup-content-signup-btn {
+#user-login-content-login-btn, .user-signup-content-btn, #user-signup-content-signup-btn, #user-resetpw-content-btn {
   border-radius: 0px;
 }
 
@@ -325,4 +326,17 @@ hr {
 
 #user-signup-content-signup-btn {
   margin-top: 15px;
+}
+
+/*--------------------UserResetPW--------------------*/
+.user-resetpw-content-text {
+  margin-bottom: 20px;
+}
+
+#user-resetpw-content-btn {
+  color: white !important;
+}
+
+.user-resetpw-content-text a {
+  color: #1a73e8 !important;
 }
