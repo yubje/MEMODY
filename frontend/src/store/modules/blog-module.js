@@ -211,13 +211,10 @@ export const blog = {
     },
 
     // 블로그 게시글 상세 조회 (API 문서 - 70D)
-    lookupPostDetail({commit, state}, response) {
-      console.log('dddd',response)
+    lookupPostDetail({commit}, response) {
       return BlogService.lookupPostDetail(response)
       .then(postDetailData => {
-        console.log("받아온데이터",postDetailData)
         commit('setPostDetailData', postDetailData)
-        console.log("state", state.postData)
       })
       .catch(error => console.log(error.data.message))
       .then(function() {
@@ -245,7 +242,6 @@ export const blog = {
 
     // 소분류 추가 
     addChildCategory({commit},mediumCategoryData) {
-      console.log("들어옹ㄴ거",mediumCategoryData)
       BlogService.addChildCategory({commit},mediumCategoryData)
     },
     
