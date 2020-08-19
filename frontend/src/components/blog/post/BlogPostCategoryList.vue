@@ -101,10 +101,6 @@ export default {
   data() {
     return {
       page: 1,
-      items: [
-        { text: this.ldir, disabled: true, href: '',},
-        { text: this.mdir, disabled: true, href: '',},
-      ],
     }
   },
   props: {
@@ -114,7 +110,13 @@ export default {
     mdir: String,
   },
   computed: {
-    ...mapState('blog', ['blogData','posts'])
+    ...mapState('blog', ['blogData','posts']),
+    items () {
+      return [
+        { text: this.ldir, disabled: true, href: '',},
+        { text: this.mdir, disabled: true, href: '',},
+      ]
+    }
   },
   methods: {
     ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),

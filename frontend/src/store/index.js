@@ -177,8 +177,7 @@ export default new Vuex.Store({
         .then(() => {
         })
         .catch(error => {
-          console.log(state)
-          alert(error.response.data.message)
+          console.log(state,error)
         })
     },
     // 로그인 (API 문서 - 10~11 D)
@@ -340,7 +339,6 @@ export default new Vuex.Store({
     // 회원 정보 수정 (API 문서 - 15~17 D)
     updateUserInfo({ state, getters, commit }) {
       if (state.uniqueId) {
-        console.log('asdfasdf')
         axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
         .then(response => {
           commit('SET_USERINFO', response.data.data)
