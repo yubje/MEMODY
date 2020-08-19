@@ -69,7 +69,8 @@ hr {
 .main-blog-item-title:hover,
 #user-login-cancel-icon:hover, .user-login-content-btn:hover,
 #user-signup-cancel-icon:hover,
-#user-resetpw-icon:hover {
+#user-resetpw-icon:hover,
+#create-blog-btn:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -344,7 +345,7 @@ hr {
 /*--------------------MainRankingView--------------------*/
 .ranking-container {
   width: 630px;
-  margin-top: 40px;
+  margin-top: 68px;
 }
 
 .ranking-title {
@@ -379,4 +380,20 @@ hr {
 
 #rank-icon-left, #rank-icon-right {
   margin: 0px !important;
+}
+
+/*--------------------MainFollowBlogListView--------------------*/
+.blog-list-container {
+  margin: 68px 19%;
+}
+
+.blog-list-title {
+  font-size: 28px;
+  margin-bottom: 7px !important;
+  color: #222222;
+}
+
+.blog-list-subtitle {
+  color: #666666;
+  margin-bottom: 20px !important;
 }
