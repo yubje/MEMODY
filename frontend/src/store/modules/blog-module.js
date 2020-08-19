@@ -49,10 +49,7 @@ export const blog = {
       updateTime: '',
       fork: '',
       postlikecnt: '',
-      ptype: null,
-      managerNickname: '',
-      authorNickname: '',
-      managerProfile: ''
+      ptype: null
     },
     posts: [],
 
@@ -92,10 +89,7 @@ export const blog = {
         author: '',
         postTime: '',
         updateTime: '',
-        ptype: '',
-        managerNickname: '',
-        authorNickname: '',
-        managerProfile: ''
+        ptype: ''
       }
     },
 
@@ -115,23 +109,19 @@ export const blog = {
     
 
     setPostDetailData(state, postData) {
-      state.postData.bid = postData.post.bid
-      state.postData.pid = postData.post.pid
-      state.postData.lcid = postData.post.lcid
-      state.postData.mcid = postData.post.mcid
-      state.postData.ptitle = postData.post.ptitle
-      state.postData.pcontent = postData.post.pcontent
-      state.postData.author = postData.post.author
-      state.postData.manager = postData.post.manager
-      state.postData.postTime = postData.post.postTime
-      state.postData.updateTime = postData.post.updateTime
-      state.postData.fork = postData.post.fork
-      state.postData.postlikecnt = postData.post.postlikecnt
-      state.postData.ptype = postData.post.ptype
-      state.postData.managerNickname = postData.managerNickname
-      state.postData.authorNickname = postData.authorNickname
-      state.postData.managerProfile = postData.postManager.profile
-
+      state.postData.bid = postData.bid
+      state.postData.pid = postData.pid
+      state.postData.lcid = postData.lcid
+      state.postData.mcid = postData.mcid
+      state.postData.ptitle = postData.ptitle
+      state.postData.pcontent = postData.pcontent
+      state.postData.author = postData.author
+      state.postData.manager = postData.manager
+      state.postData.postTime = postData.postTime
+      state.postData.updateTime = postData.updateTime
+      state.postData.fork = postData.fork
+      state.postData.postlikecnt = postData.postlikecnt
+      state.postData.ptype = postData.ptype
     },
     
 
@@ -147,9 +137,11 @@ export const blog = {
     REMOVE_HASHTAG(state, key) {
       state.blogData.hashtags.splice(key, 1)
       // delete state.blogData.hashtags[key];
+      console.log(state.blogData)
     },
     ADD_HASHTAG(state, hashtag) {
       state.blogData.hashtags.push({"tname": hashtag})
+      console.log(state.blogData)
     },
 
 
@@ -197,7 +189,7 @@ export const blog = {
     },
 
     // 블로그 게시글 작성 (API 문서 - 44D)
-    createPost(response, ) {
+    createPost(response) {
       BlogService.createPost(response)
     },
 
@@ -205,6 +197,7 @@ export const blog = {
     lookupPostList({ commit, state }, page) {
       return BlogService.lookupPostList(state.bid, page)
       .then(postListData => {
+        console.log(postListData)
         commit('setPostListData', postListData)
       })
       .catch(error => console.log(error.data.message))
@@ -247,6 +240,7 @@ export const blog = {
     
     // 소분류 삭제
     deleteChildCategory({commit,state}, mediumCategoryData) {
+      console.log(mediumCategoryData)
       BlogService.deleteChildCategory({commit,state}, mediumCategoryData)
     },
     //소분류 업데이트
@@ -287,6 +281,7 @@ export const blog = {
     },
 
     moveToPosts({commit}, categoryData) {
+      console.log(categoryData)
       BlogService.moveToPosts({commit}, categoryData)
     },
 
@@ -295,6 +290,7 @@ export const blog = {
     },
 
     getBlogMembers({ state }) {
+      console.log(state)
       BlogService.getBlogMembers({ state })
     },
 
@@ -341,18 +337,6 @@ export const blog = {
 
     getBlogPostTmpList({ state }) {
       BlogService.getBlogPostTmpList({ state })
-    },
-
-    getUsers({response}, uid) {
-      return BlogService.getUsers(response,uid)
-    },
-
-    follow({ state }) {
-      BlogService.follow({ state })
-    },
-
-    unfollow({ state }) {
-      BlogService.unfollow({ state })
     },
 
   },

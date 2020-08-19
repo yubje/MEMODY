@@ -24,25 +24,9 @@ export default new Vuex.Store({
     validType: false,
     // 아이디 중복 확인 
     uniqueId: false,
-    uniqueEmail: false,
-    checkCodeValid: true,
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
-    //모달창 관리
-    modalLogin: false,
-    modalResetPWCheckEmail: false,
-    modalResetPWCheckValid: false,
-    modalResetPW: false,
-    modalSignup: false,
-    //에러메세지 관리
-    loginError: '',
-    signupUidCheck: '',
-    signupEmailCheck: '',
-    signupMsg: '',
-    resetpwMsg: '',
-    //로딩
-    loading: false
   },
 
   getters: {
@@ -77,7 +61,6 @@ export default new Vuex.Store({
 
     SET_VALIDATION(state, number) {
       state.emailValidationNumber = number
-      state.uniqueEmail = true
     },
 
     SET_ISVALID(state) {
@@ -91,21 +74,10 @@ export default new Vuex.Store({
     SET_VALIDTYPE(state) {
       state.validType = true
     },
-    RESET_VALIDTYPE(state) {
-      state.validType = false
-    },
-
-    RESET_UNIQUEEMAIL(state){
-      state.uniqueEmail = false
-    },
 
     // 아이디 중복 확인 
-    SET_UNIQUEID(state, data) {
-      state.uniqueId = data
-    },
-
-    SET_CHECK_CODE_VALID(state, data) {
-      state.checkCodeValid = data
+    SET_UNIQUEID(state) {
+      state.uniqueId = !state.uniqueId
     },
 
     SET_BLOGS_AFTER(state, data) {
@@ -116,57 +88,6 @@ export default new Vuex.Store({
 
     SET_BLOGS_BEFORE(state, data) {
       state.recommendBlog = data
-    },
-
-    //모달창 관리
-    SET_MODAL_LOGIN(state) {
-      state.modalLogin = !state.modalLogin
-    },
-
-    SET_MODAL_RESETPW_CHECK_EMAIL(state) {
-      state.modalLogin = false
-      state.modalResetPWCheckEmail = !state.modalResetPWCheckEmail
-    },
-
-    SET_MODAL_RESETPW_CHECK_VALID(state) {
-      state.modalResetPWCheckEmail = false
-      state.modalResetPWCheckValid = !state.modalResetPWCheckValid
-    },
-
-    SET_MODAL_RESETPW(state) {
-      state.modalResetPWCheckValid = false
-      state.modalResetPW = !state.modalResetPW
-    },
-
-    SET_MODAL_SIGNUP(state) {
-      state.modalLogin = false
-      state.modalSignup = !state.modalSignup
-    },
-
-    //에러메세지 관리
-    SET_LOGIN_ERROR(state, data) {
-      state.loginError = data
-    },
-
-    SET_SIGNUP_UID_CHECK(state, data) {
-      state.signupUidCheck = data
-    },
-
-    SET_SIGNUP_EMAIL_CHECK(state, data) {
-      state.signupEmailCheck = data
-    },
-
-    SET_SIGNUP_MSG(state, data) {
-      state.signupMsg = data
-    },
-
-    SET_RESET_MSG(state, data) {
-      state.resetpwMsg = data
-    },
-
-    //로딩
-    SET_LOADING(state, data) {
-      state.loading = data
     }
   },
 
@@ -175,11 +96,11 @@ export default new Vuex.Store({
     postAuthData({ state }, info) {
       axios.post(SERVER + info.location, info.data, {headers:{"code":info.code}})
         .then(() => {
-        })
-        .catch(error => {
           console.log(state)
-          alert(error.response.data.message)
+          // commit('SET_TOKEN', response.headers.auth)
+          router.push({ name: 'Main'})
         })
+        .catch(error => alert(error.response.data.message))
     },
     // 로그인 (API 문서 - 10~11 D)
     login({ commit }, loginData) {
@@ -187,147 +108,110 @@ export default new Vuex.Store({
         data: loginData,
         location: '/login'
       }
-      commit('SET_LOGIN_ERROR', '')
       axios.post(SERVER + info.location, info.data)
       .then((response) => {
+        console.log('로그인:',response )
+        console.log(response.config)
         commit('SET_TOKEN', response.headers.auth)
         commit('SET_USERINFO', response.data.data)
-        commit('SET_MODAL_LOGIN')
+        router.push({ name: 'Main' })
       })
-      .catch(error => commit('SET_LOGIN_ERROR', error.response.data.message))
+      .catch(error => alert(error.response.data.message))
     },
-    
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
-      axios.get(SERVER + '/logout/', getters.config)
-      .then(() => {
-        commit('SET_TOKEN', null)
-        cookies.remove('auth-token')
-        window.localStorage.removeItem('userInfo')
-           })
-          .catch(() => {
-            // alert(error.response.data.message)
-          })
-      router.push({ name: 'Main'})
-    },
-
-    logoutForExpired({commit}) {
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
       window.localStorage.removeItem('userInfo')
+      axios.get(SERVER + '/logout/', getters.config)
+        .then(() => {
+         })
+        .catch(error => {
+          alert(error.response.data.message)
+        })
+      router.push({ name: 'Main'})
     },
 
-
     // 회원가입 (API 문서 - 7~9 D)
-    signup({ dispatch, commit }, signupData) {
+    signup({ dispatch }, signupData) {
       // signupData['code'] = signupData.validationNumber
       const info = {
         data: signupData,
         code: signupData.validationNumber,
         location: '/users'
       }
-      commit('SET_SIGNUP_MSG', '')
       dispatch('postAuthData', info)
-      commit('SET_SIGNUP_MSG', '회원가입이 완료되었습니다.')
-      commit('SET_MODAL_SIGNUP')
-      commit('SET_MODAL_LOGIN')
+      
     },
 
     // 회원가입 시 이메일 인증 (API 문서 - 20 D)
     validateEmail({ commit }, email) {
-      commit('SET_SIGNUP_EMAIL_CHECK', '')
       axios.get(`${SERVER}/auth/join/${email}`)
       .then(response => {
+        console.log('이메일 인증:', response)
         commit('SET_VALIDATION', response.data.data)
-        commit('SET_SIGNUP_EMAIL_CHECK', '입력하신 이메일로 인증코드를 보냈습니다.')
-        // console.log(response.data.data)                      //////////////////////////////////////////////////////// 인증코드(개발용)
+        console.log(response.data.data)
       })
-      .catch(error => {
-        commit('SET_LOADING', false)
-        commit('SET_SIGNUP_EMAIL_CHECK', error.response.data.message)
-      })
+      .catch(error => alert(error.response.data.message))
     },
 
     // 비밀번호 재설정 시 이메일 인증 (API 문서 - 21 D)
     validateEmailForResetPW({ commit }, email) {
-      commit('SET_RESET_MSG', '')
-      commit('RESET_VALIDTYPE')
-
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
+        console.log('비번 재설정시', response.data)
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
-        commit('SET_RESET_MSG', '입력하신 이메일로 인증코드를 보냈습니다.')
-        commit('SET_LOADING', false)
-        commit('SET_MODAL_RESETPW_CHECK_VALID')
+        console.log(response.data.data)
+        router.push({ name: 'UserResetPWCheckValidView'})
       })
-      .catch(error => {
-        commit('SET_RESET_MSG', error.response.data.message)
-        commit('SET_LOADING', false)
-      })
+      .catch(error => alert(error.response.data.message))
     },
 
     //인증번호 매칭확인
     checkValidation( { commit } ,validationNumber) {
-      commit('SET_SIGNUP_EMAIL_CHECK', '')
-      commit('SET_CHECK_CODE_VALID', true)
-
       if (this.state.emailValidationNumber === validationNumber) {
+        alert("확인되었습니다.")
+        
         if (this.state.validType) {
-          commit('SET_MODAL_RESETPW')
+          router.push({ name: 'UserResetPWView' })
         } else {
           commit('SET_ISVALID')
+          console.log(this.state.emailValidationNumber)
         }
-
-        commit('SET_SIGNUP_EMAIL_CHECK', '인증되었습니다.')
-
       } else {
-        commit('SET_CHECK_CODE_VALID', false)
-        commit('SET_SIGNUP_EMAIL_CHECK', '인증코드가 틀렸습니다.')
+        alert("인증번호가 틀립니다.")
       }
     },
 
     // 비밀번호 재설정 (API 문서 - 13D)
-    resetPW({ state, commit }, resetPWData) {
+    resetPW({ state }, resetPWData) {
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
+      console.log(code)
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
-        .then(() => {
-          commit('SET_RESET_MSG', '비밀번호를 재설정하였습니다.')
-          commit('SET_MODAL_RESETPW')
-          commit('SET_MODAL_LOGIN')
+        .then(response => {
+          alert(response.data.message)
+          router.push({ name: 'Main'})
         })
         .catch(error => alert(error))
     },
 
     // 회원 검색(닉네임) (API 문서 - 21 D)
     lookUpNickname({ commit }, uid) {
-      commit('SET_UNIQUEID', false)
-      commit('SET_SIGNUP_UID_CHECK', '')
-      
-      if (cookies.get('auth-token')) {
-        axios.get(`${SERVER}/users/${uid}/nickname`,{headers:{'auth':cookies.get('auth-token')}})
+      console.log(uid)
+      axios.get(`${SERVER}/users/${uid}/nickname`)
         .then(response => {
           if (response.data.status == 200) {
             alert("닉네임을 변경할 수 있습니다!")
-            commit('SET_UNIQUEID', true)
-            } else {
-              alert("닉네임을 변경할 수 없습니다.")
-            }
-          })
-      } else {
-        axios.get(`${SERVER}/nickname/${uid}`)
-          .then(response => {
-            if (response.data.status == 200) {
-              commit('SET_UNIQUEID',true)
-              commit('SET_SIGNUP_UID_CHECK', '사용 가능한 닉네임입니다.')
-            }
-          })
-          .catch(()=>{
-            commit('SET_SIGNUP_UID_CHECK', '사용할 수 없는 닉네임입니다.')
-          })
-      }
+            console.log(response.getters.userUpdateInfo)
+            commit('SET_UNIQUEID')
+          } else {
+            alert("닉네임을 변경할 수 없습니다.")
+          }
+        })
+        .catch(error => alert(error.response.data.message))
     },
     //회원 정보 조회
     lookupUserInfo({state, commit}) {
@@ -335,16 +219,17 @@ export default new Vuex.Store({
       .then(response => {
         commit('SET_USERINFO', response.data.data)
       })
+
     },
 
     // 회원 정보 수정 (API 문서 - 15~17 D)
     updateUserInfo({ state, getters, commit }) {
+      commit('SET_UNIQUEID')
       if (state.uniqueId) {
-        console.log('asdfasdf')
         axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
         .then(response => {
           commit('SET_USERINFO', response.data.data)
-          commit('SET_UNIQUEID',false)
+          commit('SET_UNIQUEID')
           router.push({ name: 'UserInfoView'})
         })
         .catch(error => alert(error))
@@ -374,9 +259,11 @@ export default new Vuex.Store({
     mainAfter({commit}) {
       axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
         .then(response => {
+          console.log(response.data.data)
           commit('SET_BLOGS_AFTER',response.data.data)
         })
         .catch(() => {
+          console.log('실패 ㅠㅠ')
         })
     },
 

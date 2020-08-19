@@ -1,45 +1,16 @@
 <template>
-  <v-list-item>
-    <v-list-item v-if="editStatus" >
-      <v-list-item-avatar>
-        <v-icon color="teal">mdi-folder-outline</v-icon>
-      </v-list-item-avatar>
-      <v-list-item-title class="text-left">{{ child.medium_dir }}</v-list-item-title>
-      <v-btn
-        fab
-        text
-        x-small
-        dark
-        color="teal" 
-        @click="clickEditButton()"
-      >
-        <v-icon>mdi-folder-edit-outline</v-icon>
-      </v-btn> 
-      <v-btn
-        fab
-        text
-        x-small
-        dark
-        color="error" 
-        @click="deleteChildCategory(child)"
-      >
-        <v-icon>mdi-trash-can</v-icon>
-      </v-btn>
-    </v-list-item>
-   
-    <v-list-item v-else>
-      <v-text-field
-        color="teal"
-        type="text" 
-        v-model="childData.medium_dir"
-        append-icon="mdi-folder-edit-outline"
-        clear-icon="mdi-close-circle"
-        clearable
-        @click:append="clickUpdate(childData)"
-        @click:clear="clickEditButton()"
-      ></v-text-field>
-    </v-list-item>
-  </v-list-item>
+  <div>
+    <div v-if="editStatus" >
+      {{child.medium_dir}}
+      <button @click="clickEditButton()">Edit</button> 
+    </div>
+    <div v-else>
+      <input type="text" v-model="childData.medium_dir" > 
+      <button @click="clickUpdate(childData)">수정</button>
+      <button @click="deleteChildCategory(child)">삭제</button>
+      <button @click="clickEditButton()">취소</button>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -71,7 +42,7 @@ export default {
     clickEditButton() {
       if (this.editStatus) {
         this.editStatus = false
-      } else {
+      }else {
         this.editStatus = true
       }
     },

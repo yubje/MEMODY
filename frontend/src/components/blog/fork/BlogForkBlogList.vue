@@ -1,11 +1,10 @@
 <template>
   <div>
-    <v-card outlined>
-      <v-card-title class="headline">내 블로그로 공유하기</v-card-title>
+    <v-card>
+      <v-card-title class="headline">퍼가요 ~ S2</v-card-title>
       <v-card-text>
-           <v-card outlined>
-          <v-tabs v-model="temp.bid" background-color="teal lighten-3" dark outlined>
-            <v-tabs-slider color="teal lighten-2"></v-tabs-slider>
+           <v-card>
+          <v-tabs v-model="temp.bid" background-color="teal lighten-3" dark>
             <v-tab v-for="myBlog in myBlogs" :key="myBlog.bid">
               {{ myBlog.btitle }}
             </v-tab>
