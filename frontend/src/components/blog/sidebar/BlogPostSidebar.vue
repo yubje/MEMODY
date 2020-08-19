@@ -32,8 +32,8 @@
               <v-list-item-title><b>{{ categories.large_dir }}</b></v-list-item-title>
             </template>  
 
-          <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
-            <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" style="width:100%;">
+          <v-list-item style="padding: 0px" v-for="child in categories.mcategory" :key="child.mcid" link>
+            <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" style="width:100%; height:35px">
               <v-list-item-title>
                 {{child.medium_dir}}
               </v-list-item-title>
@@ -45,7 +45,6 @@
 
       </v-list>
       <template v-slot:append>
-        
         <div v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}"
