@@ -34,7 +34,7 @@ class BlogService {
 
   // 블로그 게시글 작성 (API 문서 - 44D)
   createPost(response) {
-    console.log(response)
+    console.log(response.state.postData)
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         alert(result.data.message)
@@ -44,8 +44,9 @@ class BlogService {
   }
 
   // 블로그 게시글 전체 조회 (API 문서 - 62D)
-  lookupPostList(bid) {
-    return axios.get(`${SERVER}/blogs/${bid}/posts/`, {headers: {"auth": cookies.get('auth-token')}})
+  lookupPostList(bid, page) {
+    console.log(bid, page)
+    return axios.get(`${SERVER}/blogs/${bid}/posts?page=${page}`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         return result.data.data
       })
@@ -63,7 +64,9 @@ class BlogService {
 
   // 블로그 게시글 수정 (API 문서 - 54D)
   updatePost(response) {
-    return axios.put(`${SERVER}/blogs/posts`, response.postData, {headers: {"auth": cookies.get('auth-token')}})
+    console.log("#####")
+    console.log(response)
+    return axios.put(`${SERVER}/blogs/posts`, response, {headers: {"auth": cookies.get('auth-token')}})
     .then((result) => {
       return result.data
     })
@@ -145,7 +148,7 @@ class BlogService {
     axios.delete(`${SERVER}/blogs/${state.blogData.bid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         alert(response.data.message)
-        router.push({ name: 'MainView' })
+        router.push({ name: 'Main' })
       })
       .catch(error => console.log(error.response.data))
   }
@@ -219,17 +222,8 @@ class BlogService {
       .catch(error => console.log(error.response.data))
   }
 
-  //카테고리 별 글목록 조회
-  moveToPosts({commit},categoryData) {
-    console.log(commit)
-    router.push({ name: 'BlogPostCategoryList', query: {bid: categoryData.bid, mcid: categoryData.mcid, lcid:categoryData.lcid }},
-    
-    )
-  }
-
   fetchPosts({commit},info) {
-      
-      axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}`, {headers: {"auth": cookies.get('auth-token')}})
+    axios.get(`${SERVER}/blogs/${info.bid}/categories/${info.mcid}?page=${info.page}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         commit('SET_POSTS', response.data.data)
       })
@@ -298,7 +292,16 @@ class BlogService {
         router.go()
       })
       .catch(error => console.log(error.response.data))
+    
+  }
 
+  getBlogPostTmpList({ state }) {
+    console.log(state.blogData.bid)
+    axios.get(`${SERVER}/blogs/${state.blogData.bid}/tmpposts/`, {headers: {"auth": cookies.get('auth-token')}})
+      .then(response => {
+        state.blogPostTmpList = response.data.data
+      })
+      .catch(error => console.log(error.response.data))
   }
 
 }

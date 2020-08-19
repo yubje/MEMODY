@@ -1,18 +1,22 @@
 <template>
-  <div id="main">
-    <div class="m-5">
-      <h1>MEMODY</h1>
-    </div>
-    <div class="container w-75">
+  <div class="main-container">
+    <div class="main-intro">
+      <div class="main-intro-title">
+        <p>어떤 <span>공유 블로그</span>를</p>
+        <p>찾고 싶으신가요?</p>
+      </div>
       <MainSearchTab/>
     </div>
-    
+    <hr>
+    <MainRanking/>
     <div v-if="authToken">
       <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
       팔로잉 블로그
       <MainRecommendBlogList :recommendBlog="followBlog"/>
     </div>
-    <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      추천 블로그
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+      
   </div>
 </template>
 
@@ -27,13 +31,19 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
+  data() {
+    return {
+
+    }
+  },
   computed: {
       ...mapState(['authToken','myBlogs','recommendBlog','followBlog'])
   },
   components: {
     MainSearchTab,
     MainMyBlogList,
-    MainRecommendBlogList
+    MainRecommendBlogList,
+    MainRanking,
   },
   async mounted() {
     await this.fetchBlogs()
@@ -41,17 +51,13 @@ export default {
   methods: {
     ...mapActions(['mainAfter','mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token')) {
+      if (cookies.get('auth-token') !== undefined) {
         this.mainAfter()
+        console.log(this.$store.state.myBlogs)
       }else {
         this.mainBefore()
-        console.log(this.$store.state.recommendBlog)
       }
     }
   },
 }
 </script>
-
-<style>
-
-</style>

@@ -1,27 +1,32 @@
 package com.web.blog.service;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Users;
 import com.web.blog.repository.UsersRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
 
 	private final UsersRepository userRepository;
-//	private final PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender javaMailSender;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,20 +37,12 @@ public class UserService implements UserDetailsService {
 	public Optional<Users> findByEmail(String email) {
 		return userRepository.findByEmail(email);
 	}
-
+	
 	@Transactional
 	public void deleteUser(String email) {
 		userRepository.deleteByEmail(email);
 	}
 
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
-//	public void join(String email, String uid, String password) {
-//		userRepository.save(Users.builder().email(email).uid(uid).password(passwordEncoder.encode(password))
-//				.roles(Collections.singletonList("ROLE_USER")).build());
-//	}
 	public void join(Users user,String password) {
 		userRepository.save(Users.builder().email(user.getEmail()).uid(user.getUid()).password(password)
 				.roles(Collections.singletonList("ROLE_USER")).build());
@@ -71,6 +68,27 @@ public class UserService implements UserDetailsService {
 	@Transactional
 	public Optional<Users> findByUid(String uid) {
 		return userRepository.findByUid(uid);
+	}
+
+	public void profileUpdate(String email,String url) {
+		Optional<Users> user = userRepository.findByEmail(email);
+		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).build());
+		
+	}
+	
+	public List<Users> findAll(){
+//		return userRepository.findAllByOrderByExpDesc();
+		return userRepository.findTop10ByOrderByExpDesc();
+	}
+	
+	public boolean send(String subject, String text, String from, String to, String filePath) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(to);
+		message.setSubject(subject);
+		message.setText(text);
+		javaMailSender.send(message);
+
+		return true;
 	}
 
 }

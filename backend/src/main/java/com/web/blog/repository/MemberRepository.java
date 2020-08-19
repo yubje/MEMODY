@@ -14,7 +14,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	List<Member> findByBid(int bid);
 	
 	@Transactional
-	void deleteByEmail(String email);
+	void deleteByEmailAndBid(String email, int bid);
 	
 	int countByBid(int bid);
 	
