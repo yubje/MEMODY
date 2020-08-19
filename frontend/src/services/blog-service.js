@@ -298,14 +298,14 @@ class BlogService {
   addLike({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
       .then(()=> {
-        // state.postData.postlikecnt += 1
+        state.postData.postlikecnt += 1
       })
   }
 
   deleteLike({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
-        // state.postData.postlikecnt -= 1
+        state.postData.postlikecnt -= 1
       })
   }
 
