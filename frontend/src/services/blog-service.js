@@ -15,7 +15,6 @@ class BlogService {
 
   // 블로그 추가 (API 문서 - 26~29 D)
   createBlog({ state, commit }) {
-    console.log(state.newBlogData)
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
@@ -207,7 +206,6 @@ class BlogService {
       "bid": state.bid,
       "email": email,
     }
-    console.log(info)
     axios.delete(`${SERVER}/blogs/${state.bid}/members`, { data: info, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.members = response.data.data
@@ -235,10 +233,10 @@ class BlogService {
   // fork
   forkPost({commit},forkData) {
     axios.post(`${SERVER}/blogs/fork`, forkData, {headers: {"auth": cookies.get('auth-token')}})
-    .then(response =>{
-      console.log(commit)
-      console.log(response)
+    .then(() =>{
       router.push({ name: 'MainMyBlogListView' })
+    }).catch(()=>{
+      console.log(commit)
     })
   }
 
@@ -279,13 +277,12 @@ class BlogService {
   }
 
   deleteComment({ state }, comment) {
-    console.log(state)
     axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {    
         router.push({ name: 'BlogPostDetail' })
         router.go()
       })
-      .catch(error => console.log(error.response.data))
+      .catch(error => console.log(error.response.data,state))
     
   }
 
