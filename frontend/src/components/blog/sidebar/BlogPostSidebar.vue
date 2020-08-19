@@ -70,7 +70,6 @@
     mapState,
     mapActions
   } from 'vuex'
-
 export default {
   name: 'BlogPostSidebar',
   components: {

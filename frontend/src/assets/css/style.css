@@ -69,7 +69,8 @@ hr {
 .main-blog-item-title:hover,
 #user-login-cancel-icon:hover, .user-login-content-btn:hover,
 #user-signup-cancel-icon:hover,
-#user-resetpw-icon:hover {
+#user-resetpw-icon:hover,
+#create-blog-btn:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;

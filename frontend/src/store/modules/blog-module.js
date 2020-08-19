@@ -50,9 +50,10 @@ export const blog = {
       fork: '',
       postlikecnt: '',
       ptype: null,
-      managerNickname: '',
       authorNickname: '',
-      managerProfile: ''
+      managerNickname: '',
+      managerProfile: '',
+
     },
     posts: [],
 
@@ -95,7 +96,7 @@ export const blog = {
         ptype: '',
         managerNickname: '',
         authorNickname: '',
-        managerProfile: ''
+        managerProfile: '' 
       }
     },
 
@@ -128,10 +129,9 @@ export const blog = {
       state.postData.fork = postData.post.fork
       state.postData.postlikecnt = postData.post.postlikecnt
       state.postData.ptype = postData.post.ptype
-      state.postData.managerNickname = postData.managerNickname
       state.postData.authorNickname = postData.authorNickname
+      state.postData.managerNickname = postData.managerNickname
       state.postData.managerProfile = postData.postManager.profile
-
     },
     
 
@@ -211,10 +211,13 @@ export const blog = {
     },
 
     // 블로그 게시글 상세 조회 (API 문서 - 70D)
-    lookupPostDetail({commit}, response) {
+    lookupPostDetail({commit, state}, response) {
+      console.log('dddd',response)
       return BlogService.lookupPostDetail(response)
       .then(postDetailData => {
+        console.log("받아온데이터",postDetailData)
         commit('setPostDetailData', postDetailData)
+        console.log("state", state.postData)
       })
       .catch(error => console.log(error.data.message))
       .then(function() {
@@ -242,6 +245,7 @@ export const blog = {
 
     // 소분류 추가 
     addChildCategory({commit},mediumCategoryData) {
+      console.log("들어옹ㄴ거",mediumCategoryData)
       BlogService.addChildCategory({commit},mediumCategoryData)
     },
     
@@ -354,6 +358,15 @@ export const blog = {
     unfollow({ state }) {
       BlogService.unfollow({ state })
     },
+    addLike({ state }) {
+      BlogService.addLike({ state })
+    },
+
+    deleteLike({ state }) {
+      BlogService.deleteLike({ state })
+    },
+
+
 
   },
 
