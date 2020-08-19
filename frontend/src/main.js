@@ -14,8 +14,11 @@ import 'vuetify-dialog/dist/vuetify-dialog.css'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueCookies from 'vue-cookies'
+import 'babel-polyfill'
 import vuetify from './plugins/vuetify';
 import VuetifyDialog from 'vuetify-dialog';
+
+import VueMoment from 'vue-moment';
 
 require('@/assets/css/style.css')
 
@@ -31,6 +34,8 @@ Vue.use(VuetifyDialog, {
 Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+
+Vue.use(VueMoment);
 
 library.add(fas)
 library.add(far)

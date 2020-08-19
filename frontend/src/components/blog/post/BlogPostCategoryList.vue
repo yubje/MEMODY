@@ -145,7 +145,6 @@ export default {
     
   },
   created() {
-    console.log('created')
     const info = {
       "bid": this.blogData.bid,
       "mcid": this.mcid,
@@ -158,5 +157,10 @@ export default {
 </script>
 ;
 <style scoped>
-
+.mdi-chevron-right {
+  color: gray !important;
+}
+td {
+  cursor: pointer;
+}
 </style>

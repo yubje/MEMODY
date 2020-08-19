@@ -1,8 +1,9 @@
 <template>
   <div>
+    {{commentData}}
     <div
       v-for="comment in commentData" 
-      :key="comment.cmid"
+      :key="comment.id"
       class="d-flex flex-column text-dark"
     > 
       <div v-if="comment_id && comment_id ==comment.cmid">
@@ -16,6 +17,23 @@
         />
       </div>
     </div>
+    <!-- <div
+      v-for="comment in commentData" 
+      :key="comment"
+      class="d-flex flex-column text-dark"
+    > 
+    {{comment}} | {{user}}
+      <div v-if="comment_id && comment_id ==comment.cmid">
+        <BlogCommentForm
+          :comment="comment"
+        />
+      </div>
+      <div v-else>
+        <BlogCommentItem
+        :comment="comment"
+        />
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -32,6 +50,7 @@ export default {
   },
   created() {
     this.getCommentData()
+
   },
   computed: {
     ...mapState('blog', ['commentData', 'comment_id'])

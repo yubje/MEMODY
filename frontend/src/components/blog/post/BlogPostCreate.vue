@@ -59,6 +59,7 @@ export default {
 
     blogPostCreate() {
       this.postData.pcontent = document.getElementById('editor-content').innerHTML
+      
       this.createPost()
     }
   }
