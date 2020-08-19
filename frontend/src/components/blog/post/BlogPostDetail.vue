@@ -42,9 +42,11 @@
             <v-col cols="6" class="pa-0 text-left">
               <v-btn icon v-if="liked" @click="clickLike()" class="mr-auto">
                 <font-awesome-icon :icon="['fas','heart']" style="color:red;" />
+                <a>{{ postData.postlikecnt }}</a>
               </v-btn>
               <v-btn icon v-else @click="clickLike()">
                 <font-awesome-icon :icon="['far','heart']" style="color:red;" />
+                <a>{{ postData.postlikecnt }}</a>
               </v-btn>
             </v-col>
             <v-col cols="6" class="pa-0 text-right">
@@ -107,7 +109,7 @@
 
     },
     methods: {
-      ...mapActions('blog', ['deletePost']),
+      ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike']),
 
       blogPostUpdate() {
         this.$router.push({
@@ -121,19 +123,10 @@
 
       clickLike() {
         if (this.liked) {
-          axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`, {
-            data: this.postData,
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
+          this.deleteLike()
           this.liked = false
         } else {
-          axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`, this.postData, {
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
+          this.addLike()
           this.liked = true
         }
       },
