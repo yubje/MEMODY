@@ -304,8 +304,19 @@ public class PostController {
 		if (jwtTokenProvider.validateToken(token)) {
 //			Post post = postService.findByPid(pid);
 			Post post = postService.postInfo(pid);
+			Users manager = userService.findByEmail(post.getManager())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			String managerNickname = manager.getUid();
+			Users author = userService.findByEmail(post.getAuthor())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			String authorNickname = author.getUid();
+			Map<String, Object> map = new HashMap<>();
+			map.put("post", post);
+			map.put("managerNickname", managerNickname);
+			map.put("authorNickname", authorNickname);
+			map.put("postManager", manager);
 			if(post != null) {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, map),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
 			}
