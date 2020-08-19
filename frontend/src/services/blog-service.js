@@ -157,6 +157,7 @@ class BlogService {
   addChildCategory({commit},mediumCategoryData) {
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
+      console.log('소분류 ',mediumCategoryData )
       this.getBlogCategory({commit}, mediumCategoryData.bid)
     })
   }
@@ -297,22 +298,22 @@ class BlogService {
   addLike({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
       .then(()=> {
-        state.postData.postlikecnt += 1
+        // state.postData.postlikecnt += 1
       })
   }
 
   deleteLike({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
-        state.postData.postlikecnt -= 1
+        // state.postData.postlikecnt -= 1
       })
   }
 
   follow({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, state.blogData, { headers: {"auth": cookies.get('auth-token')} })
     .then(() => {
-      state.blogData.followers += 1
-      state.blogData.follower.add(state.userInfo.email)
+      // state.blogData.followers += 1
+      // state.blogData.follower.add(state.userInfo.email)
     })
     .catch(error => console.log(error.response.data))
   }
@@ -320,8 +321,8 @@ class BlogService {
   unfollow({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, { data: state.blogData, headers: {"auth": cookies.get('auth-token')} })
     .then(() => {
-      state.blogData.followers -= 1
-      state.blogData.follower.remove(state.userInfo.email)
+      // state.blogData.followers -= 1
+      // state.blogData.follower.remove(state.userInfo.email)
     })
     .catch(error => console.log(error.response.data))
   }

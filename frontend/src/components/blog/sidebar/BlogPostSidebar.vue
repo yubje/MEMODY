@@ -5,11 +5,7 @@
       <v-list>
         <v-list-item>
           <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none">
-<<<<<<< HEAD
-            <h4> Home</h4>
-=======
             <v-card-title><b>Home</b></v-card-title>
->>>>>>> 9b79e5692c34f9f3781585dcef795b0fd664dca1
           </router-link>
         </v-list-item>
         <v-list-item>
@@ -26,24 +22,6 @@
           </router-link>
           
         </v-list-item>
-<<<<<<< HEAD
-        <div v-for="categories in dataCategories" :key="categories.lcid">
-          <v-list-item link>
-            <v-list-item-content>
-              <v-list-item-title>
-                <h5>{{ categories.large_dir }}</h5>
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-
-
-          <v-list-item v-for="child in categories.mcategory" :key="child.mcid" link>
-            <v-list-item-title
-              @click="moveToPost(child.mcid, blogData.bid, categories.lcid),fetchPost(child.mcid,blogData.bid)">
-              | {{child.medium_dir}}
-            </v-list-item-title>
-          </v-list-item>
-=======
         <div v-for="categories in dataCategories"
           :key="categories.lcid" >
           <v-list-group
@@ -63,7 +41,6 @@
             
           </v-list-item>       
           </v-list-group>  
->>>>>>> 9b79e5692c34f9f3781585dcef795b0fd664dca1
         </div>
 
       </v-list>
@@ -71,9 +48,6 @@
         <div v-if="blogData.manager==userInfo.email | userInfo.roles[0] === 'ROLE_ADMIN'" class="d-flex justify-end pa-5">
           <v-icon>mdi-wrench</v-icon>
           <router-link :to="{name: 'BlogSettingsInfo', query: {bid: blogData.bid }}"
-<<<<<<< HEAD
-            class="text-dark text-decoration-none">Settings</router-link>
-=======
             class="text-dark text-decoration-none">환경설정</router-link>
         </div>
         <div v-else-if="userInfo.email !== blogData.manager && isMember" class="d-flex justify-end pa-5">
@@ -85,7 +59,6 @@
             <v-icon color="grey darken-1">mdi-account-remove</v-icon>
             탈퇴하기
           </v-btn>
->>>>>>> 9b79e5692c34f9f3781585dcef795b0fd664dca1
         </div>
       </template>
     </v-navigation-drawer>
@@ -97,42 +70,6 @@
     mapState,
     mapActions
   } from 'vuex'
-
-<<<<<<< HEAD
-  export default {
-    name: 'BlogPostSidebar',
-    components: {
-
-    },
-    props: {
-      bid: Number
-    },
-    computed: {
-      ...mapState('blog', ['blogData', 'dataCategories'])
-    },
-    methods: {
-      ...mapActions('blog', ['addParentCategory', 'addChildCategory', 'getBlogCategory', 'moveToPosts', 'fetchPosts']),
-      moveToPost(mcid, bid, lcid) {
-        const categoryData = {
-          "bid": bid,
-          "mcid": mcid,
-          "lcid": lcid,
-        }
-        this.moveToPosts(categoryData)
-      },
-      fetchPost(mcid, bid) {
-        const temp = {
-          "bid": bid,
-          "mcid": mcid
-        }
-        this.fetchPosts(temp)
-      }
-    },
-    created() {
-      this.getBlogCategory(this.blogData.bid)
-    }
-  }
-=======
 export default {
   name: 'BlogPostSidebar',
   components: {
@@ -167,25 +104,12 @@ export default {
     });
   },
 }
->>>>>>> 9b79e5692c34f9f3781585dcef795b0fd664dca1
 </script>
 
 
 <style scoped>
-<<<<<<< HEAD
-  p {
-    cursor: pointer;
-  }
-
-  th {
-    cursor: pointer;
-    color: #313D4F;
-
-  }
-=======
 a:hover {
   color: #00897B !important;
   background-color: #E0F2F1 !important;
 }
->>>>>>> 9b79e5692c34f9f3781585dcef795b0fd664dca1
 </style>
