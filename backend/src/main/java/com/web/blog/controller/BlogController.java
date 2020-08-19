@@ -25,6 +25,7 @@ import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
+import com.web.blog.repository.BlogRepository;
 import com.web.blog.service.BlogFollowService;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.BlogTagService;
@@ -60,6 +61,7 @@ public class BlogController {
 	private final MemberService 	memberService;
 	private final BlogFollowService blogFollowService;
 	private final UserService		userService;
+	private final BlogRepository 	blogRepository;
 	
 	/**
 	 * 블로그 생성 - 사용자가 블로그를 생성하는 기능.
@@ -435,7 +437,8 @@ public class BlogController {
 						HttpStatus.FORBIDDEN);
 			}else {
 				blogFollowService.increaseBlogFollow(blog.getBid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.FOLLOW_BLOG_SUCCESS, loginuser),
+				Blog newBlog = blogRepository.findByBid(blog.getBid());
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.FOLLOW_BLOG_SUCCESS, newBlog),
 						HttpStatus.OK);
 			}
 		} else {
@@ -459,7 +462,8 @@ public class BlogController {
 						HttpStatus.FORBIDDEN);
 			}else {
 				blogFollowService.decreaseBlogFollow(blog.getBid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNFOLLOW_BLOG_SUCCESS, loginuser),
+				Blog newBlog = blogRepository.findByBid(blog.getBid());
+				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNFOLLOW_BLOG_SUCCESS, newBlog),
 						HttpStatus.OK);
 			}
 		} else {

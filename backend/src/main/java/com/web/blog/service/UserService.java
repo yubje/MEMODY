@@ -1,5 +1,6 @@
 package com.web.blog.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -77,8 +78,19 @@ public class UserService implements UserDetailsService {
 	}
 	
 	public List<Users> findAll(){
-//		return userRepository.findAllByOrderByExpDesc();
-		return userRepository.findTop10ByOrderByExpDesc();
+		List<Users> list = userRepository.findTop11ByOrderByExpDesc();
+		List<Users> result = new ArrayList<>();
+		for(Users user : list) {
+			if(user.getRoles().get(0).equals("ROLE_USER")) {
+				result.add(user);
+			}
+		}
+		if(result.size()>10) {
+			result.remove(10);
+			return result;
+		}else {
+			return result;
+		}
 	}
 	
 	public boolean send(String subject, String text, String from, String to, String filePath) {
@@ -100,7 +112,6 @@ public class UserService implements UserDetailsService {
 		List<Users> result = new ArrayList<Users>();
 		for(Users user : list) {
 			if(user.getRoles().get(0).equals(roles)) {
-				System.out.println(user.getRoles().get(0));
 				result.add(user);
 			}
 		}

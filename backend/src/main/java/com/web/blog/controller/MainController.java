@@ -83,9 +83,6 @@ public class MainController {
 			result.put("myBlog",myList);
 			result.put("recommendBlog",recommendList);
 			result.put("followBlog",followList);
-			for(Blog b : myList) {
-				System.out.println(b);
-			}
 			return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.MAIN_SUCCESS, result),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
