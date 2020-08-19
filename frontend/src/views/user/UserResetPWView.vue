@@ -1,0 +1,65 @@
+<template>
+  <div>
+    <v-row justify="center">
+
+      <v-dialog v-model="dialog" persistent max-width="400">
+        <v-card>
+          <v-card-title class="headline">비밀번호 재설정</v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-form>
+              <v-row justify="center">
+                <v-col cols="12">
+                <v-text-field v-model="resetPWData.password" :rules="passwordRules"  type="password" label="비밀번호를 입력" ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                <v-text-field v-model="password2" :rules="passwordCheckRules" type="password"  label="비밀번호를 확인"  ></v-text-field>
+                </v-col>
+                <v-btn block color="teal accent-4" text @click="resetPW(resetPWData)">
+                  비밀번호 재설정
+                </v-btn>
+              </v-row>
+              </v-form>
+            </v-container>
+          </v-card-text>
+            <v-btn block color ="teal accent-4" text @click="goBack()">취소</v-btn>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
+</template>
+
+<script>
+  import {
+    mapActions
+  } from 'vuex'
+
+  export default {
+    name: 'UserResetPWView',
+    data() {
+      return {
+        dialog: true,
+        password2: '',
+        resetPWData: {
+          email: '',
+          password: ''
+        },
+        passwordRules: [
+          v => !!v || 'password is required'
+        ],
+        passwordCheckRules: [
+          v => v == this.password2 || '비밀번호가 틀립니다.'
+        ]
+      }
+    },
+    mounted() {
+      window.$('#resetpw-modal').modal('show')
+    },
+    methods: {
+      ...mapActions(['resetPW','goBack'])
+    }
+  }
+</script>
