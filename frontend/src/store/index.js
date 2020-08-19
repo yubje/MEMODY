@@ -40,6 +40,7 @@ export default new Vuex.Store({
     signupUidCheck: '',
     signupEmailCheck: '',
     signupMsg: '',
+    resetpwMsg: '',
     //로딩
     loading: false
   },
@@ -159,6 +160,10 @@ export default new Vuex.Store({
       state.signupMsg = data
     },
 
+    SET_RESET_MSG(state, data) {
+      state.resetpwMsg = data
+    },
+
     //로딩
     SET_LOADING(state, data) {
       state.loading = data
@@ -245,14 +250,22 @@ export default new Vuex.Store({
 
     // 비밀번호 재설정 시 이메일 인증 (API 문서 - 21 D)
     validateEmailForResetPW({ commit }, email) {
+      commit('SET_RESET_MSG', '')
+      commit('RESET_VALIDTYPE')
+
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
+        commit('SET_RESET_MSG', '입력하신 이메일로 인증코드를 보냈습니다.')
+        commit('SET_LOADING', false)
         commit('SET_MODAL_RESETPW_CHECK_VALID')
       })
-      .catch(error => alert(error.response.data.message))
+      .catch(error => {
+        commit('SET_RESET_MSG', error.response.data.message)
+        commit('SET_LOADING', false)
+      })
     },
 
     //인증번호 매칭확인
@@ -280,9 +293,10 @@ export default new Vuex.Store({
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
-        .then(response => {
-          alert(response.data.message)
+        .then(() => {
+          commit('SET_RESET_MSG', '비밀번호를 재설정하였습니다.')
           commit('SET_MODAL_RESETPW')
+          commit('SET_MODAL_LOGIN')
         })
         .catch(error => alert(error))
     },

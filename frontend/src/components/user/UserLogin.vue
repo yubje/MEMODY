@@ -70,14 +70,21 @@
       }
     },
     created() {
-      if (this.signupMsg) this.$dialog.notify.success(this.signupMsg, { position: 'top-right', timeout: 5000 });
-      this.SET_SIGNUP_MSG('')
+      if (this.signupMsg) {
+        this.$dialog.notify.success(this.signupMsg, { position: 'top-right', timeout: 5000 });
+        this.SET_SIGNUP_MSG('')
+      }
+
+      if(this.resetpwMsg) {
+        this.$dialog.notify.success(this.resetpwMsg, { position: 'top-right', timeout: 5000 });
+        this. SET_RESET_MSG('')
+      }
     },
     computed: {
-      ...mapState(['loginError', 'signupMsg'])
+      ...mapState(['loginError', 'signupMsg', 'resetpwMsg'])
     },
     methods: {
-      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP', 'SET_SIGNUP_MSG','RESET_VALIDTYPE']),
+      ...mapMutations(['SET_MODAL_LOGIN', 'SET_LOGIN_ERROR', 'SET_MODAL_RESETPW_CHECK_EMAIL', 'SET_MODAL_SIGNUP', 'SET_SIGNUP_MSG','RESET_VALIDTYPE', 'SET_RESET_MSG']),
       ...mapActions(['login']),
 
       checkForm() {
