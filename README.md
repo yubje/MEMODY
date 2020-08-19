@@ -81,6 +81,24 @@
 
 **Nginx** : 웹서버를 구축
 
+**Vue.js**: Memody Project의 Frontend 기능 구현
+
+**Vue router**: 중첩된 라우트/뷰 매핑, 컴포넌트 기반의 라우터 설정, 세밀한 네비게이션 컨트롤
+
+**Vuex**: Vue.js 중앙 집중식 관리 (User, Main, Blog로 나누어 구현)
+
+**JavaScript**: Frontend의 상태 및 액션 관리
+
+**Html**: Frontend의 View 구현 
+
+**css**: Frontend의 스타일 적용
+
+**Vuetify**: Frontend 디자인 및 레이아웃 설정
+
+**Axios**: http 통신 라이브러리, 비동기 통신 요청 처리
+
+**vue-cookies**: User 정보 쿠키 설정
+
 
 
 <hr>
