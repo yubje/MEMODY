@@ -335,17 +335,16 @@ export default new Vuex.Store({
       .then(response => {
         commit('SET_USERINFO', response.data.data)
       })
-
     },
 
     // 회원 정보 수정 (API 문서 - 15~17 D)
     updateUserInfo({ state, getters, commit }) {
-      commit('SET_UNIQUEID')
       if (state.uniqueId) {
+        console.log('asdfasdf')
         axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
         .then(response => {
           commit('SET_USERINFO', response.data.data)
-          commit('SET_UNIQUEID')
+          commit('SET_UNIQUEID',false)
           router.push({ name: 'UserInfoView'})
         })
         .catch(error => alert(error))

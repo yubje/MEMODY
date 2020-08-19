@@ -92,10 +92,10 @@
         let err = true;
         let msg = "";
 
-        !this.loginData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
-        err && !this.validEmail.test(this.loginData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
-        err && !this.loginData.password && (msg="비밀번호를 입력해주세요.", err=false, this.$refs.password.focus());
-        err && !this.validPW.test(this.loginData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
+        // !this.loginData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
+        // err && !this.validEmail.test(this.loginData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
+        // err && !this.loginData.password && (msg="비밀번호를 입력해주세요.", err=false, this.$refs.password.focus());
+        // err && !this.validPW.test(this.loginData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
 
         if (err) {
           this.login(this.loginData);

@@ -258,6 +258,7 @@ class BlogService {
   getCommentData({ commit, state }) {
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
+        console.log(response)
         commit('SET_COMMENTDATA', response.data.data)
       })
      
@@ -312,8 +313,7 @@ class BlogService {
 
   follow({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, state.blogData, { headers: {"auth": cookies.get('auth-token')} })
-    .then(response => {
-      console.log(response.data)
+    .then(() => {
       state.blogData.followers += 1
       state.blogData.follower.add(state.userInfo.email)
     })
