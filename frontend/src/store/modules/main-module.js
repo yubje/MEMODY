@@ -45,7 +45,5 @@ export const main = {
     getRankedUsers({ state, commit }) {
       MainService.getRankedUsers({ state, commit })
     },
-
-
   },
 }
