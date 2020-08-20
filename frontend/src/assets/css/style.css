@@ -70,7 +70,8 @@ hr {
 #user-login-cancel-icon:hover, .user-login-content-btn:hover,
 #user-signup-cancel-icon:hover,
 #user-resetpw-icon:hover,
-#create-blog-btn:hover {
+#create-blog-btn:hover,
+.ranking-content-uid:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -260,11 +261,11 @@ hr {
 }
 
 /*--------------------UserLogin--------------------*/
-.v-dialog, .user-login-container, .user-signup-container, .user-resetpw-container {
+.v-dialog, .user-login-container, .user-signup-container, .user-resetpw-container, .main-ranking-blog-list-container {
   border-radius: 0px !important;
 }
 
-#user-login-cancel-icon, #user-signup-cancel-icon, #user-resetpw-icon {
+#user-login-cancel-icon, #user-signup-cancel-icon, #user-resetpw-icon, #main-ranking-blog-list-icon {
   font-size: x-large;
   color: #505050;
 }
@@ -361,13 +362,14 @@ hr {
 
 .ranking-contents-top3-detail {
   flex: 1;
+  padding: 0px;
 }
 
-#rank-icon-top3 {
+#ranking-icon-top3 {
   font-size: xxx-large;
 }
 
-.rank-img-top3 {
+.ranking-img-top3 {
   width: 70px !important;
   height: 70px !important;
   margin: 0px !important;
@@ -391,9 +393,36 @@ hr {
   font-size: 28px;
   margin-bottom: 7px !important;
   color: #222222;
+  display: block;
 }
 
 .blog-list-subtitle {
   color: #666666;
   margin-bottom: 20px !important;
+}
+
+/*--------------------MainRankingBlogList--------------------*/
+#main-ranking-blog-list-icon {
+  margin: 17px 0px 0px 95%;
+}
+
+.main-ranking-blog-list-contents {
+  padding: 38px 59px;
+}
+
+.ranking-content-rank {
+  font-size: large;
+  font-weight: bold; 
+  padding-top: 3px;
+  background-color: #666666; 
+  color: white;
+}
+
+.ranking-content-rank-first {
+  font-size: x-large;
+  padding-top: 19px;
+}
+
+.ranking-content-rank-second {
+  padding-top: 8px;
 }

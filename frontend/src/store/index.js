@@ -29,12 +29,14 @@ export default new Vuex.Store({
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
+    rankingBlog:null,
     //모달창 관리
     modalLogin: false,
     modalResetPWCheckEmail: false,
     modalResetPWCheckValid: false,
     modalResetPW: false,
     modalSignup: false,
+    modalRankingBlog: false,
     //에러메세지 관리
     loginError: '',
     signupUidCheck: '',
@@ -118,6 +120,10 @@ export default new Vuex.Store({
       state.recommendBlog = data
     },
 
+    SET_RANKING_BLOG(state, data) {
+      state.rankingBlog = data
+    },
+
     //모달창 관리
     SET_MODAL_LOGIN(state) {
       state.modalLogin = !state.modalLogin
@@ -141,6 +147,10 @@ export default new Vuex.Store({
     SET_MODAL_SIGNUP(state) {
       state.modalLogin = false
       state.modalSignup = !state.modalSignup
+    },
+
+    SET_MODAL_RANKING_BLOG(state) {
+      state.modalRankingBlog = !state.modalRankingBlog
     },
 
     //에러메세지 관리
@@ -384,6 +394,15 @@ export default new Vuex.Store({
           commit('SET_BLOGS_BEFORE',response.data.data)
         })
         .catch(() => {
+        })
+    },
+
+    //top10 중 선택한 사람의 블로그 목록 조회
+    getRankingBlogList({commit}, email) {
+      axios.get(`${SERVER}/blogs/list/`+ email)
+        .then(response => {
+          commit('SET_RANKING_BLOG', response.data.data)
+          commit('SET_MODAL_RANKING_BLOG')
         })
     },
 

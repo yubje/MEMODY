@@ -15,7 +15,7 @@
 
 <script>
 import MainBlogItem from '@/components/main/MainBlogItem.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainMyBlogListView',
@@ -29,6 +29,15 @@ export default {
   },
   computed: {
     ...mapState(['followBlog'])
-  }
+  },
+  async mounted() {
+    await this.fetchBlogs()
+  },
+  methods: {
+    ...mapActions(['mainAfter']),
+    fetchBlogs() {
+      this.mainAfter()
+    }
+  },
 }
 </script>
