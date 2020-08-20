@@ -36,37 +36,35 @@
         <hr>
         <div id="post-content" v-html="postData.pcontent"></div>
         <hr>
-        <v-container fluid ma-0>
+        <v-flex>
           <v-row>
             <!-- 좋아요 버튼 -->
-            <v-col cols="6" class="pa-0 text-left">
+            <v-col cols="6" class="px-5 py-2 text-left">
               <v-btn icon v-if="liked" @click="clickLike()" class="mr-auto">
-                <font-awesome-icon :icon="['fas','heart']" style="color:red;" />
-                <a>{{ postData.postlikecnt }}</a>
+                <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
               </v-btn>
               <v-btn icon v-else @click="clickLike()">
-                <font-awesome-icon :icon="['far','heart']" style="color:red;" />
-                <a>{{ postData.postlikecnt }}</a>
+                <font-awesome-icon :icon="['far','heart']" style="color:red;"/> 
               </v-btn>
+              <a>{{ postData.postlikecnt }}</a>
             </v-col>
-            <v-col cols="6" class="pa-0 text-right">
+            <v-col cols="6" class="px-5 py-2 text-right">
               <!-- 퍼가기, 히스토리 버튼 -->
               <div v-if="userInfo.email !== postData.manager">
                 <v-dialog v-model="dialog" persistent max-width="400">
-                  <BlogForkBlogList :pid="postData.pid" @closeModal="closeModal()" />
+                <BlogForkBlogList  :pid="postData.pid" @closeModal="closeModal()" />
                 </v-dialog>
                 <v-btn icon @click="dialog=true" color="teal accent-3">
                   <font-awesome-icon :icon="['fas','share-square']" />
                 </v-btn>
-                <BlogForkUsers :pid="postData.pid" />
+                <BlogForkUsers :pid="postData.pid"/>
               </div>
             </v-col>
           </v-row>
-        </v-container>
+        </v-flex>
         <hr>
-        <BlogCommentForm />
-        <BlogCommentList />
-
+        <BlogCommentForm @createcomment="createComment()" @deletecomment="deleteComment()"/>
+        <BlogCommentList :commentData="commentData"/>
       </div>
     </div>
   </div>
@@ -105,16 +103,24 @@
     },
     computed: {
       ...mapState(['userInfo', ]),
-      ...mapState('blog', ['postData']),
+      ...mapState('blog', ['postData','commentData']),
 
     },
     methods: {
-      ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike']),
+
+      ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike', 'lookupPostDetail', 'getCommentData']),
+
 
       blogPostUpdate() {
         this.$router.push({
           name: 'BlogPostUpdate'
         })
+      },
+      createComment(){
+        this.getCommentData()
+      },
+       deleteComment(){
+         this.getCommentData()
       },
 
       blogPostDelete() {
@@ -175,6 +181,8 @@
       })
       this.liked = data.data
       this.timeBefore()
+      // this.lookupPostDetail()
+      this.getCommentData()
     }
   }
 </script>

@@ -60,6 +60,8 @@ class BlogService {
 
   // 블로그 게시글 상세 조회 (API 문서 - 70D)
   lookupPostDetail(response) {
+    console.log('lookupPostDetail')
+    console.log(response)
     return axios.get(`${SERVER}/blogs/${response.bid}/posts/${response.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
         return result.data.data
@@ -249,7 +251,7 @@ class BlogService {
     axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         router.go()
-      })
+        })
       
   }
 
@@ -258,8 +260,6 @@ class BlogService {
       .then(response => {
         commit('SET_COMMENTDATA', response.data.data)
       })
-     
-    
   }
 
   updateComment({ commit }, comment) {
@@ -270,15 +270,14 @@ class BlogService {
     axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('SET_COMMENTID', null)
-        router.push({ name: 'BlogPostDetail' })
+        router.go()
       })
       .catch(error => console.log(error))
   }
 
-  deleteComment({ state }, comment) {
+  deleteComment({ state, }, comment) {
     axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {    
-        router.push({ name: 'BlogPostDetail' })
         router.go()
       })
       .catch(error => console.log(error.response.data,state))
@@ -295,32 +294,33 @@ class BlogService {
 
   addLike({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
-      .then(()=> {
-        state.postData.postlikecnt += 1
+      .then(response => {
+        state.postData = response.data.data
+        console.log(state.postData)
       })
   }
 
   deleteLike({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
-      .then(() => {
-        state.postData.postlikecnt -= 1
+      .then(response => {
+        state.postData = response.data.data
+        console.log(state.postData)
       })
   }
 
   follow({ state }) {
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, state.blogData, { headers: {"auth": cookies.get('auth-token')} })
-    .then(() => {
-      // state.blogData.followers += 1
-      // state.blogData.follower.add(state.userInfo.email)
+    .then(response => {
+      state.blogData = response.data.data
     })
     .catch(error => console.log(error.response.data))
   }
 
   unfollow({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, { data: state.blogData, headers: {"auth": cookies.get('auth-token')} })
-    .then(() => {
-      // state.blogData.followers -= 1
-      // state.blogData.follower.remove(state.userInfo.email)
+    .then(response => {
+      console.log(response.data)
+      state.blogData = response.data.data
     })
     .catch(error => console.log(error.response.data))
   }
