@@ -65,7 +65,7 @@
 
 <script>
 import MainRankingBlogList from '@/components/main/MainRankingBlogList.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'MainRankingView',
   data() {
@@ -81,11 +81,15 @@ export default {
   components: {
     MainRankingBlogList
   },
+  created() {
+    if (this.modalRankingBlog) this.SET_MODAL_RANKING_BLOG()
+  },
   computed: {
     ...mapState('main', ['rankedUsers']),
     ...mapState(['modalRankingBlog'])
   },
   methods: {
+    ...mapMutations(['SET_MODAL_RANKING_BLOG']),
     ...mapActions(['getRankingBlogList']),
 
     openModal(rankingBlogData) {
