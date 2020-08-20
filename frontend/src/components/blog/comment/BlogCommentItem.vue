@@ -102,7 +102,6 @@
           }
         })
         .then(response => {
-          console.log('updated!!')
           this.nickname = response.data.data.uid
           this.profile = response.data.data.profile
         })
