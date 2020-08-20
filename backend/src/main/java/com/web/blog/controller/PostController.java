@@ -83,6 +83,7 @@ public class PostController {
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		String uemail = jwtTokenProvider.getUserPk(token);
 		if (jwtTokenProvider.validateToken(token)) {
 			String input = post.get("pcontent");
 			if(input.contains("img")) {
@@ -112,7 +113,7 @@ public class PostController {
 						String img_path;
 						String url = null;
 						try {
-							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
+							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+uemail, data,bucketName, accessKey, secretKey);
 							String img_url = img_path;
 							url = s3.getFileURL(bucketName, uploadpath+img_url);
 						} catch (Exception e) {
@@ -158,70 +159,7 @@ public class PostController {
 		}
 	}
 
-	// test
-	@PostMapping("/image/test")
-	public ResponseEntity img_url(@RequestBody Map<String,String> post, HttpServletRequest req) {
-		String input = post.get("pcontent");
-		if(input.contains("img")) {
-			String base64String = null;
-			String[] inputArr = post.get("pcontent").split("'");
-			for(int i=0;i<inputArr.length;i++) {
-				if(inputArr[i].contains("data:image/")) {
-					base64String = inputArr[i];
-					String[] strings = base64String.split(",");
-			        String extension;
-			        switch (strings[0]) {//check image's extension
-			            case "data:image/jpeg;base64":
-			                extension = "jpeg";
-			                break;
-			            case "data:image/png;base64":
-			                extension = "png";
-			                break;
-			            default://should write cases for more images types
-			                extension = "jpg";
-			                break;
-			        }
-			        //convert base64 string to binary data
-			        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
-			        
-			        String uploadpath = "post";
-					S3Util s3 = new S3Util(accessKey, secretKey);
-					System.out.println("1");
-					String img_path;
-					String url = null;
-					try {
-						img_path = FileUpload.uploadFile(uploadpath, "post넘버_number", data,bucketName, accessKey, secretKey);
-						System.out.println("*****   "+img_path);
-						String img_url = img_path;
-						System.out.println(img_url);
-						System.out.println(bucketName);
-						url = s3.getFileURL(bucketName, uploadpath+img_url);
-						System.out.println("Service: "+url);
-						System.out.println(url);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					inputArr[i] = url;
-				}
-			}
-			String result = "";
-			for(int i=0;i<inputArr.length;i++) {
-				result+=inputArr[i];
-				if(i!=inputArr.length-1) {
-					result+="'";
-				}
-			}
-			System.out.println(result);
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
-		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
-		}
-	}
-	
-	
-	
-	
+		
 	/**
 	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
 	 * 
@@ -345,7 +283,7 @@ public class PostController {
 						String img_path;
 						String url = null;
 						try {
-							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
+							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+email, data,bucketName, accessKey, secretKey);
 							String img_url = img_path;
 							url = s3.getFileURL(bucketName, uploadpath+img_url);
 						} catch (Exception e) {

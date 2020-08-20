@@ -160,8 +160,8 @@ public class BlogService {
 	public boolean updateBlog(String user,String btitle,String bsubtitle,String bcontent, String changeTag, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
-			System.out.println("수정 시작");
-			blog.setBtitle(bsubtitle);
+			blog.setBtitle(btitle);
+			blog.setBsubtitle(bsubtitle);
 			blog.setBcontent(bcontent);
 			blogRepository.save(blog);
 
