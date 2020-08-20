@@ -1,7 +1,7 @@
 <!--카테고리 2중-->
 <template>
   <v-card class="mr-auto" height="100%;" width="256">
-    <v-navigation-drawer class="teal lighten-5" absolute light permanent right>
+    <v-navigation-drawer class="teal lighten-5" light right permanent>
       <v-list>
         <v-list-item>
           <router-link :to="{ name: 'BlogView' }" class="text-dark text-decoration-none">
@@ -25,20 +25,18 @@
         <div v-for="categories in dataCategories"
           :key="categories.lcid" >
           <v-list-group
-            value="true"
             color="teal"
           >
             <template v-slot:activator>
               <v-list-item-title><b>{{ categories.large_dir }}</b></v-list-item-title>
             </template>  
 
-          <v-list-item style="padding: 0px" v-for="child in categories.mcategory" :key="child.mcid" link>
-            <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" style="width:100%; height:35px">
+            <v-list-item style="padding: 0px" v-for="child in categories.mcategory" :key="child.mcid" link>
+              <router-link :to="{ name: 'BlogPostCategoryList', query: {bid: blogData.bid, mcid: child.mcid, lcid:categories.lcid, ldir: categories.large_dir, mdir:child.medium_dir }}" style="width:100%; height:35px">
               <v-list-item-title>
                 {{child.medium_dir}}
               </v-list-item-title>
             </router-link>
-            
           </v-list-item>       
           </v-list-group>  
         </div>

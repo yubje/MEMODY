@@ -6,7 +6,7 @@
            <v-card outlined>
           <v-tabs v-model="temp.bid" background-color="teal lighten-3" dark outlined>
             <v-tabs-slider color="teal lighten-2"></v-tabs-slider>
-            <v-tab v-for="myBlog in Blogs" :key="myBlog.bid">
+            <v-tab v-for="myBlog in myBlogs" :key="myBlog.bid">
               {{ myBlog.btitle }}
             </v-tab>
           </v-tabs>
@@ -39,8 +39,7 @@
     name: 'BlogForkBlogList',
     data () {
       return {
-        temp: null,
-        Blogs: null,
+        temp: null
       }
     },
     props: {
@@ -50,16 +49,10 @@
       BlogForkBlogCategoryList
     },
     computed: {
-      ...mapState('blog', ['myBlogs', ]),
-      ...mapState(['followBlog']),
+      ...mapState(['myBlogs'])
     },
     methods: {
       ...mapActions('blog', ['getBlogs']),
-      ...mapActions(['mainAfter']),
-      fetchBlogs() {
-        this.mainAfter()
-
-      },
       closeModal() {
         this.$emit('closeModal', false)
       }
