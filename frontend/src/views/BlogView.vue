@@ -82,7 +82,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow']),
+    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow','getBlogInfo','getBlogMembers']),
     clickFollow() {
       if (this.following) {
         this.unfollow()
@@ -92,45 +92,25 @@ export default {
         this.following = true
       }
     },
-    methods: {
-      ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember']),
-      clickFollow() {
-        if (this.following) {
-          axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, {
-            data: this.blogData,
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
-          this.following = false
-        } else {
-          axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, this.blogData, {
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
-          this.following = true
-        }
-      },
-      leaveBlog(email) {
-        this.deleteBlogMember(email)
-      },
+    leaveBlog(email) {
+      this.deleteBlogMember(email)
     },
   },
   computed: {
     ...mapState('blog', ['bid', 'blogData', 'members', 'blogInfo']),
     ...mapState(['userInfo'])
   },
-  async mounted() {
-    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
-    this.following = data.data
-  },
   async updated() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
     this.following = data.data
   },
+  async mounted() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
+    this.following = data.data
+
+  },
   created() {
-    this.getBlogInfo()
+    this.getBlogInfo(this.bid)
     this.getBlogMembers()
     this.members.forEach(member => {
       if (member.email === this.userInfo.email) {
