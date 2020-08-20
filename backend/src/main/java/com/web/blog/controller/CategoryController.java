@@ -162,7 +162,6 @@ public class CategoryController {
 	@PutMapping("/blogs/categories/child")
 	public ResponseEntity updateCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println(mcategory);
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!categoryService.checkCategory(mcategory.getLcid())){

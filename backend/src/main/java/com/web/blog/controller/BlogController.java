@@ -222,7 +222,6 @@ public class BlogController {
 	@ApiOperation(value = "해쉬태그로 블로그 목록 조회", response = ResponseEntity.class, notes = "해쉬태그를 입력하여 해당 해쉬태그를 가진 블로그 목록을 조회합니다.")
 	@GetMapping(value = "/tags/{hashtag}/list")
 	public ResponseEntity listByHashtag(@PathVariable String hashtag) {
-		System.out.println(hashtag);
 		List<Blog> list = blogService.searchListByTag(hashtag);
 		return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_BLOG_SUCCESS, list),
 				HttpStatus.OK);
@@ -477,7 +476,6 @@ public class BlogController {
 	@ApiOperation(value = "블로그 팔로우 취소", response = ResponseEntity.class, notes = "블로그 팔로우를 취소합니다.")
 	@DeleteMapping(value = "/blogs/follows")
 	public ResponseEntity decreaseBlogFollow(@RequestBody Blog blog, HttpServletRequest req) {
-		System.out.println("블로그 팔로우 취소");
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
@@ -509,7 +507,6 @@ public class BlogController {
 	@GetMapping(value = "/blogs/{bid}/follows")
 	public ResponseEntity searchPostLike(@PathVariable int bid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("블로그 팔로우 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
 			if (!blogService.checkBlog(bid)) {
@@ -517,7 +514,6 @@ public class BlogController {
 						new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_BLOGFOLLOW_FAIL), HttpStatus.FORBIDDEN);
 			} else {
 				boolean followed = blogFollowService.searchBlogFollow(bid, loginuser);
-				System.out.println(followed);
 				if (followed) {
 					return new ResponseEntity<Response>(
 							new Response(StatusCode.CREATED, ResponseMessage.SEARCH_BLOGFOLLOW_SUCCESS, followed),

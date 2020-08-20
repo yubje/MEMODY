@@ -36,7 +36,6 @@ public class PostService {
 	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createPost(Post post) {
-		System.out.println(post);
 		postRepository.save(Post.builder()
 				.bid(post.getBid())
 				.lcid(post.getLcid())
@@ -57,20 +56,7 @@ public class PostService {
 		});
 	}
 	
-//	public boolean countBlogByUser(String email) {
-//		if(blogRepository.countByManager(email)>6) {
-//			return false;
-//		}else {
-//			return true;
-//		}
-//	}
-//	
 	public Page<Post> listAllPost(int bid, Pageable pageable){
-//		List<Post> result = new ArrayList<Post>();
-//		Page<Post> result = new ArrayList<Post>();
-//		result = postRepository.findAllByBid(bid);
-		// 최신글 순서로 조회 
-//		result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid);
 		Page<Post> result = postRepository.findAllByBidAndPtypeIsNullOrderByPostTimeDesc(bid, pageable);
 		return result;
 	}
@@ -104,15 +90,13 @@ public class PostService {
 		System.out.println("[이전 데이터] "+content);
 		System.out.println("[바뀔 데이터] "+post.getPcontent());
 		
-		if(content.contains("img")) {
+		if(content.contains("img") && !content.equals(post.getPcontent())) {
 			String[] inputArr = content.split("'");
 			for(int i=0;i<inputArr.length;i++) {
 				if(inputArr[i].contains("https://memody")) {
 					String[] temp = inputArr[i].split("/");
 					S3Util s3 = new S3Util(accessKey, secretKey);
 					String temp2 = temp[3]+"/"+temp[4]+"/"+temp[5]+"/"+temp[6]+"/"+temp[7];
-					System.out.println(temp2);
-					System.out.println(temp[temp.length-1]);
 					s3.fileDelete(bucketName, temp2);
 				}
 			}
@@ -137,9 +121,7 @@ public class PostService {
 	}
 
 	public Page<Post> listAllPostByMCategory(int bid, int mcid, Pageable pageable){
-//		List<Post> result = new ArrayList<Post>();
 		// 최신글 순서로 조회 
-//		result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid);
 		Page<Post> result = postRepository.findAllByBidAndMcidAndPtypeIsNullOrderByPostTimeDesc(bid, mcid, pageable);
 		return result;
 	}
