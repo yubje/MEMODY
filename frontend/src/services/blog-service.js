@@ -252,7 +252,7 @@ class BlogService {
     axios.post(`${SERVER}/comments`, commentData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         router.go()
-      })
+        })
       
   }
 
@@ -261,8 +261,6 @@ class BlogService {
       .then(response => {
         commit('SET_COMMENTDATA', response.data.data)
       })
-     
-    
   }
 
   updateComment({ commit }, comment) {
@@ -273,15 +271,14 @@ class BlogService {
     axios.put(`${SERVER}/comments`, info, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('SET_COMMENTID', null)
-        router.push({ name: 'BlogPostDetail' })
+        router.go()
       })
       .catch(error => console.log(error))
   }
 
-  deleteComment({ state }, comment) {
+  deleteComment({ state, }, comment) {
     axios.delete(`${SERVER}/comments`, { data: comment, headers: {"auth": cookies.get('auth-token')}})
       .then(() => {    
-        router.push({ name: 'BlogPostDetail' })
         router.go()
       })
       .catch(error => console.log(error.response.data,state))

@@ -60,6 +60,7 @@
       ...mapState(['userInfo']),
     },
     methods: {
+
       ...mapActions('blog', ['deleteComment']),
       ...mapMutations('blog', ['SET_COMMENTID']),
       timeBefore() {
@@ -92,8 +93,19 @@
         } else {
           this.time = this.comment.commentTime;
         }
-      }
-
+      },
+    },
+    updated(){
+      axios.get(`${SERVER}/users/${this.comment.email}`, {
+          headers: {
+            'auth': cookies.get('auth-token')
+          }
+        })
+        .then(response => {
+          console.log('updated!!')
+          this.nickname = response.data.data.uid
+          this.profile = response.data.data.profile
+        })
     },
     async created() {
       console.log(this.comment)
@@ -103,7 +115,6 @@
           }
         })
         .then(response => {
-          console.log(response.data.data)
           this.nickname = response.data.data.uid
           this.profile = response.data.data.profile
         })
