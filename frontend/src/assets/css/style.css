@@ -80,7 +80,7 @@ hr {
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
 .searchTab-type:focus, .searchTab-input:focus,
-#main-blog-item-hashtag-btn:focus,
+.main-blog-item-icon:focus, #main-blog-item-hashtag-btn:focus,
 .user-login-content-btn:focus,
 #blog-item-hashtag-btn:focus {
   outline: none !important;
@@ -240,6 +240,10 @@ hr {
   margin-right: 3px;
 }
 
+.main-blog-item-icon:hover {
+  cursor: unset;
+}
+
 .main-blog-item-num {
   font-weight: bold;
 }
@@ -255,6 +259,20 @@ hr {
 
 .main-blog-item-view-follower {
   margin: 13px 0px 7px 0px !important;
+  display: flex;
+}
+
+.main-blog-item-view-detail {
+  flex: 1;
+  padding: 0px; 
+  text-align:right; 
+  padding-left: 22px;
+}
+
+.main-blog-item-follower-detail {
+  flex: 1;
+  padding: 0px; 
+  text-align:left;
 }
 
 #main-blog-item-hashtag-btn {

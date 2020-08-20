@@ -100,13 +100,13 @@ img {
 
 .editor-background {
   width: 100%;
-  height: 790px;
+  height: 100%;
   background-color: rgb(249, 249, 249);
 }
 
 .editor-body {
   width: 893px;
-  height: 790px;
+  height: 100%;
   margin: 0 auto;
   background-color: white;
 }

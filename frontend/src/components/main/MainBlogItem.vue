@@ -2,24 +2,48 @@
   <v-card class="mx-auto main-blog-item-container" outlined>
     <v-list-item>
       <v-list-item-content>
-        <div v-if="blog.member.length == 1" class="main-blog-item-member">
-          <font-awesome-icon class="main-blog-item-icon" :icon="['fas','user']" />
-          <span class="main-blog-item-num">{{blog.member.length}}</span>
-        </div>
-        <div v-else class="main-blog-item-member">
-          <font-awesome-icon class="main-blog-item-icon" :icon="['fas','user-friends']" />
-          <span class="main-blog-item-num">{{blog.member.length}}</span>
-        </div>
+            <div v-if="blog.member.length == 1" class="main-blog-item-member">
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <font-awesome-icon class="main-blog-item-icon" v-bind="attrs" v-on="on" :icon="['fas','user']" />
+                  <span class="main-blog-item-num">{{blog.member.length}}</span>
+                </template>
+                <span>멤버</span>
+              </v-tooltip>
+            </div>
+            <div v-else class="main-blog-item-member">
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <font-awesome-icon class="main-blog-item-icon" v-bind="attrs" v-on="on"  :icon="['fas','user-friends']" />
+                  <span class="main-blog-item-num">{{blog.member.length}}</span>
+                </template>
+                <span>멤버</span>
+              </v-tooltip>
+            </div>
 
         <v-list-item-title class="main-blog-item-title" @click="getBlogInfo(blog.bid)">{{blog.btitle}}</v-list-item-title>
         <v-list-item-subtitle>{{blog.bsubtitle}}</v-list-item-subtitle>
 
         <div class="main-blog-item-view-follower">
-          <font-awesome-icon class="main-blog-item-icon" :icon="['fas','eye']" />
-          <span class="main-blog-item-num" id="main-blog-item-views-num">{{blog.views}}</span>
+          <div class="main-blog-item-view-detail">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <font-awesome-icon class="main-blog-item-icon" v-bind="attrs" v-on="on" :icon="['fas','eye']" />
+              <span class="main-blog-item-num" id="main-blog-item-views-num">{{blog.views}}</span>
+            </template>
+            <span>방문 수</span>
+          </v-tooltip>
+          </div>
 
-          <font-awesome-icon class="main-blog-item-icon" :icon="['fas','user-plus']" />
-          <span class="main-blog-item-num">{{blog.followers}}</span>          
+          <div class="main-blog-item-follower-detail">
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+                <font-awesome-icon class="main-blog-item-icon" v-bind="attrs" v-on="on" :icon="['fas','user-plus']" />
+                <span class="main-blog-item-num">{{blog.followers}}</span>   
+            </template>
+            <span>팔로워</span>
+          </v-tooltip>
+          </div>
         </div>
 
         <div>
@@ -44,7 +68,7 @@ export default {
       searchData: {
         searchBy: '2',
         searchInput: null,
-      }
+      },
     }
   },
   methods: {

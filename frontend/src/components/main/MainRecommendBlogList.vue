@@ -1,5 +1,5 @@
 <template>
-  <v-carousel cycle class="main-recommend-blog-container" height="265px" hide-delimiter-background light>
+  <v-carousel  class="main-recommend-blog-container" height="265px" hide-delimiter-background light>
     <v-carousel-item v-for="i in 2" :key="i">
       <v-sheet>
         <v-row class="main-recommend-blog-list">
