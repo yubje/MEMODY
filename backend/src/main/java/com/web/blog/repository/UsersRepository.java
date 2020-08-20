@@ -16,5 +16,9 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByUid(String uid);
 
 //    List<Users> findAllByOrderByExpDesc();
-    List<Users> findTop10ByOrderByExpDesc();
+    List<Users> findTop11ByOrderByExpDesc();
+
+    List<Users> findByUidContaining(String uid);
+
+    List<Users> findAllByOrderByEmail();
 }

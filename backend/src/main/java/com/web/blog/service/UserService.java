@@ -1,5 +1,6 @@
 package com.web.blog.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -72,13 +73,28 @@ public class UserService implements UserDetailsService {
 
 	public void profileUpdate(String email,String url) {
 		Optional<Users> user = userRepository.findByEmail(email);
-		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).build());
+		user.ifPresent(selectUser->{
+			selectUser.setProfile(url);
+			userRepository.save(selectUser);
+		});
+//		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).roles(Collections.singletonList("ROLE_USER")).build());
 		
 	}
 	
 	public List<Users> findAll(){
-//		return userRepository.findAllByOrderByExpDesc();
-		return userRepository.findTop10ByOrderByExpDesc();
+		List<Users> list = userRepository.findTop11ByOrderByExpDesc();
+		List<Users> result = new ArrayList<>();
+		for(Users user : list) {
+			if(user.getRoles().get(0).equals("ROLE_USER")) {
+				result.add(user);
+			}
+		}
+		if(result.size()>10) {
+			result.remove(10);
+			return result;
+		}else {
+			return result;
+		}
 	}
 	
 	public boolean send(String subject, String text, String from, String to, String filePath) {
@@ -91,4 +107,18 @@ public class UserService implements UserDetailsService {
 		return true;
 	}
 
+	public List<Users> searchListByNickname(String uid){
+		return userRepository.findByUidContaining(uid);
+	}
+
+	public List<Users> searchAllUsers(String roles){
+		List<Users> list = userRepository.findAllByOrderByEmail();
+		List<Users> result = new ArrayList<Users>();
+		for(Users user : list) {
+			if(user.getRoles().get(0).equals(roles)) {
+				result.add(user);
+			}
+		}
+		return result;
+	}
 }

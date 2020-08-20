@@ -1,11 +1,7 @@
 package com.web.blog.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,12 +83,9 @@ public class PostController {
 	@PostMapping("/blogs/{bid}/posts")
 	public ResponseEntity createPost(@PathVariable int bid, @RequestBody Map<String,String> post, HttpServletRequest req) {
 		String token = req.getHeader("auth");
+		String uemail = jwtTokenProvider.getUserPk(token);
 		if (jwtTokenProvider.validateToken(token)) {
-			System.out.println("게시글 작성!!!");
 			String input = post.get("pcontent");
-			System.out.println("*********************");
-			System.out.println(input);
-			System.out.println("*********************");
 			if(input.contains("img")) {
 				String base64String = null;
 				String[] inputArr = post.get("pcontent").split("\"");
@@ -120,14 +113,9 @@ public class PostController {
 						String img_path;
 						String url = null;
 						try {
-							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
-							System.out.println("*****   "+img_path);
+							img_path = FileUpload.uploadFile(uploadpath, post.get("mcid")+"_"+uemail, data,bucketName, accessKey, secretKey);
 							String img_url = img_path;
-							System.out.println(img_url);
-							System.out.println(bucketName);
 							url = s3.getFileURL(bucketName, uploadpath+img_url);
-							System.out.println("Service: "+url);
-							System.out.println(url);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -150,11 +138,7 @@ public class PostController {
 			if(post.get("ptype")=="") {
 				temp = new Post(bid, Integer.parseInt(post.get("lcid")), Integer.parseInt(post.get("mcid")), post.get("ptitle")
 						, input, email,email, LocalDateTime.now(), LocalDateTime.now(), null, 0);
-				
-				System.out.println("게시글 작성");
-				System.out.println(post.get("pid"));
 				if(!post.get("pid").equals("")) {
-					System.out.println("임시저장 글이었다.");
 					Users user = userService.findByEmail(email)
 							.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
 					postService.deletePost(email, Integer.parseInt(post.get("pid")), user.getRoles().get(0));
@@ -175,70 +159,7 @@ public class PostController {
 		}
 	}
 
-	// test
-	@PostMapping("/image/test")
-	public ResponseEntity img_url(@RequestBody Map<String,String> post, HttpServletRequest req) {
-		String input = post.get("pcontent");
-		if(input.contains("img")) {
-			String base64String = null;
-			String[] inputArr = post.get("pcontent").split("'");
-			for(int i=0;i<inputArr.length;i++) {
-				if(inputArr[i].contains("data:image/")) {
-					base64String = inputArr[i];
-					String[] strings = base64String.split(",");
-			        String extension;
-			        switch (strings[0]) {//check image's extension
-			            case "data:image/jpeg;base64":
-			                extension = "jpeg";
-			                break;
-			            case "data:image/png;base64":
-			                extension = "png";
-			                break;
-			            default://should write cases for more images types
-			                extension = "jpg";
-			                break;
-			        }
-			        //convert base64 string to binary data
-			        byte[] data = DatatypeConverter.parseBase64Binary(strings[1]);
-			        
-			        String uploadpath = "post";
-					S3Util s3 = new S3Util(accessKey, secretKey);
-					System.out.println("1");
-					String img_path;
-					String url = null;
-					try {
-						img_path = FileUpload.uploadFile(uploadpath, "post넘버_number", data,bucketName, accessKey, secretKey);
-						System.out.println("*****   "+img_path);
-						String img_url = img_path;
-						System.out.println(img_url);
-						System.out.println(bucketName);
-						url = s3.getFileURL(bucketName, uploadpath+img_url);
-						System.out.println("Service: "+url);
-						System.out.println(url);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					inputArr[i] = url;
-				}
-			}
-			String result = "";
-			for(int i=0;i<inputArr.length;i++) {
-				result+=inputArr[i];
-				if(i!=inputArr.length-1) {
-					result+="'";
-				}
-			}
-			System.out.println(result);
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
-		}else {
-			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SAVE_POST_SUCCESS),HttpStatus.CREATED);
-		}
-	}
-	
-	
-	
-	
+		
 	/**
 	 * 블로그의 게시글 목록 조회 - 해당 블로그에 있는 전체 게시글 목록 조회
 	 * 
@@ -251,11 +172,7 @@ public class PostController {
 	public ResponseEntity readPostListAll(@PathVariable int bid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-//			List<Post> list = postService.listAllPost(bid, pageable);
 			Page<Post> list = postService.listAllPost(bid, pageable);
-			System.out.println(list);
-			System.out.println(pageable);
-//			if(list.size()==0) {
 			if(list.getSize()==0) {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_ALLPOST_NONE, list),HttpStatus.OK);
 			}else {
@@ -302,10 +219,20 @@ public class PostController {
 	public ResponseEntity readPost(@PathVariable int bid, @PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
-//			Post post = postService.findByPid(pid);
 			Post post = postService.postInfo(pid);
+			Users manager = userService.findByEmail(post.getManager())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			String managerNickname = manager.getUid();
+			Users author = userService.findByEmail(post.getAuthor())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			String authorNickname = author.getUid();
+			Map<String, Object> map = new HashMap<>();
+			map.put("post", post);
+			map.put("managerNickname", managerNickname);
+			map.put("authorNickname", authorNickname);
+			map.put("postManager", manager);
 			if(post != null) {
-				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, post),HttpStatus.OK);
+				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_POST_SUCCESS, map),HttpStatus.OK);
 			}else {
 				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_POST_FAIL, post),HttpStatus.OK);
 			}
@@ -324,7 +251,6 @@ public class PostController {
 	@ApiOperation(value = "게시글 수정", response = ResponseEntity.class, notes = "게시글을 수정합니다.")
 	@PutMapping(value = "/blogs/posts")
 	public ResponseEntity updatePost(@RequestBody Map<String,String> post, HttpServletRequest req) {
-		System.out.println("게시글 수정");
 		String token = req.getHeader("auth");
 		String email = jwtTokenProvider.getUserPk(token);
 		if (jwtTokenProvider.validateToken(token) && email.equals(postService.findByPid(Integer.parseInt(post.get("pid"))).getManager())) {
@@ -337,9 +263,6 @@ public class PostController {
 					if(inputArr[i].contains("data:image/")) {
 						base64String = inputArr[i];
 						String[] strings = base64String.split(",");
-						System.out.println("!!!!!!!!!!");
-						System.out.println(strings[0]);
-						System.out.println(strings.length);
 				        String extension;
 				        switch (strings[0]) {//check image's extension
 				            case "data:image/jpeg;base64":
@@ -357,18 +280,12 @@ public class PostController {
 				        
 				        String uploadpath = "post";
 						S3Util s3 = new S3Util(accessKey, secretKey);
-						System.out.println("1");
 						String img_path;
 						String url = null;
 						try {
-							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+post.get("ptitle"), data,bucketName, accessKey, secretKey);
-							System.out.println("*****   "+img_path);
+							img_path = FileUpload.uploadFile(uploadpath, post.get("pid")+"_"+email, data,bucketName, accessKey, secretKey);
 							String img_url = img_path;
-							System.out.println(img_url);
-							System.out.println(bucketName);
 							url = s3.getFileURL(bucketName, uploadpath+img_url);
-							System.out.println("Service: "+url);
-							System.out.println(url);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -387,13 +304,11 @@ public class PostController {
 			}
 			Post result = postService.findByPid(Integer.parseInt(post.get("pid")));
 			result.setPtitle(post.get("ptitle"));
-			System.out.println(result.getPcontent());
 			String content = result.getPcontent();
 			result.setPcontent(input);
 			
 			postService.updatePost(content,result,bucketName,accessKey, secretKey);
 			Post updatePost = postService.findByPid(Integer.parseInt(post.get("pid")));
-			System.out.println(updatePost);
 			return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UPDATE_POST_SUCCESS, updatePost),HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
@@ -526,7 +441,6 @@ public class PostController {
 	@GetMapping(value = "/posts/{pid}/likes")
 	public ResponseEntity searchPostLike(@PathVariable int pid, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("게시글 좋아요 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String loginuser = jwtTokenProvider.getUserPk(token);
 			if(!postService.checkPost(pid)){
@@ -534,7 +448,6 @@ public class PostController {
 						HttpStatus.FORBIDDEN);
 			}else {
 				boolean liked = postLikeService.searchPostLike(pid, loginuser);
-				System.out.println(liked);
 				if(liked) {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTLIKE_SUCCESS, liked),
 							HttpStatus.OK);
