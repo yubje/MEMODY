@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container class="user-info-container">
     <v-row justify="center">
       <v-card outlined> 
-        <v-card-title class="headline">회원 정보 </v-card-title>
+        <v-card-title class="user-info-title">회원 정보 </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>

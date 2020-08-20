@@ -60,8 +60,6 @@ export default {
     }
   },
   created() {
-    console.log(this.child)
-    console.log(this.childData)
     this.childData.medium_dir = this.child.medium_dir
     this.childData.mcid = this.child.mcid
     this.childData.lcid = this.child.lcid
