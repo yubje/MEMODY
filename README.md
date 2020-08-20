@@ -65,6 +65,8 @@
 
 **Spring boot** : Memody Project의 전반적인 기능 Rest Controller 구현
 
+**Swagger** : Swagger를 이용하여 RESTful API 문서 자동화 **(http://i3a306.p.ssafy.io:8499/swagger-ui.html)**
+
 **Spring Security + JWT** : 로그인한 사용자만 서비스를 사용가능 하도록(filter), Token을 계속 검사해서 유효한 회원인지 확인
 
 **Spring Data JPA**: JpaRepository를 상속받아 쿼리 작성을 하지 않고 DB Table의 객체로 접근하게 하여 기능들을 구현
@@ -80,6 +82,8 @@
 **AWS** : EC2 서비스를 이용하여 Ubuntu 서버를 구축(호스팅), S3 서비스를 이용하여 파일을 업로드 할 수 있도록 구축
 
 **Nginx** : 웹서버를 구축
+
+
 
 **Vue.js**: Memody Project의 Frontend 기능 구현
 
