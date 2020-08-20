@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <v-container class="user-info-container">
     <v-row justify="center">
       <v-card outlined>
-        <v-card-title class="headline">회원 정보 수정</v-card-title>
+        <v-card-title class="user-info-title">회원 정보 수정</v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
@@ -68,7 +68,7 @@
         </v-card-actions>
       </v-card>
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -124,17 +124,12 @@
 </script>
 
 <style>
-  .profile-img-box {
+  #profile-img {
     width: 150px;
     height: 150px;
     border-radius: 70%;
-    overflow: hidden;
-  }
-
-  .profile-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    margin: 0px 7px 0px 15px;
+    border: 1px solid #c7c7c7;
   }
 
   .profile-img-button {

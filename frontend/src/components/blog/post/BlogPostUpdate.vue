@@ -1,9 +1,14 @@
 <template>
-  <v-container>
+  <div class="blog-post-create-container">
     <div>
       <div class="post-button">
-        <button id="post-update-back" @click="$router.go(-1)">취소</button>
-        <button id="post-update" @click="blogPostUpdate()">수정</button>
+        <v-btn class="mt-5 mr-3" style="margin-top:7px !important" color="teal" outlined @click="$router.go(-1)">
+          취소
+        </v-btn>
+        <v-btn class="mt-5 mr-3" style="margin-top:7px !important" color="teal" dark @click="blogPostUpdate()">
+          <v-icon left>mdi-pencil</v-icon>
+          수정
+        </v-btn>
       </div>
 
       <BlogEditor />
@@ -23,7 +28,7 @@
         </div>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
