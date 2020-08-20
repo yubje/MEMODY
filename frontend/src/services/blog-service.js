@@ -296,7 +296,6 @@ class BlogService {
     axios.post(`${process.env.VUE_APP_SERVER}/posts/likes`,state.postData,{headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.postData = response.data.data
-        console.log(state.postData)
       })
   }
 
@@ -304,7 +303,6 @@ class BlogService {
     axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.postData = response.data.data
-        console.log(state.postData)
       })
   }
 
@@ -319,7 +317,6 @@ class BlogService {
   unfollow({ state }) {
     axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, { data: state.blogData, headers: {"auth": cookies.get('auth-token')} })
     .then(response => {
-      console.log(response.data)
       state.blogData = response.data.data
     })
     .catch(error => console.log(error.response.data))

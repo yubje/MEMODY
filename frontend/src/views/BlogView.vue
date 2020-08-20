@@ -88,8 +88,7 @@ export default {
   },
   methods: {
     ...mapActions('main', ['search']),
-    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow']),
-
+    ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow','getBlogInfo','getBlogMembers']),
     clickFollow() {
       if (this.following) {
         this.unfollow()
@@ -103,17 +102,27 @@ export default {
     searchByHashTag(hashtag) {
       this.searchData.searchInput = hashtag
       this.search(this.searchData)
-    }
+    },
+    
+    leaveBlog(email) {
+      this.deleteBlogMember(email)
+    },
   },
   computed: {
     ...mapState('blog', ['bid', 'blogData', 'members', 'blogInfo']),
     ...mapState(['userInfo'])
   },
-  async mounted() {
+  async updated() {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
     this.following = data.data
   },
+  async mounted() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
+    this.following = data.data
+
+  },
   created() {
+    this.getBlogInfo(this.bid)
     this.getBlogMembers()
     if (this.members) {
       this.members.forEach(member => {
