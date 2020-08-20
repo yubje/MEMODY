@@ -29,7 +29,7 @@
 <script>
 import MainCreateBlog from '@/components/main/MainCreateBlog.vue'
 import MainBlogItem from '@/components/main/MainBlogItem.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainMyBlogListView',
@@ -44,6 +44,15 @@ export default {
   },
   computed: {
     ...mapState(['myBlogs'])
-  }
+  },
+  async mounted() {
+    await this.fetchBlogs()
+  },
+  methods: {
+    ...mapActions(['mainAfter']),
+    fetchBlogs() {
+      this.mainAfter()
+    }
+  },
 }
 </script>
