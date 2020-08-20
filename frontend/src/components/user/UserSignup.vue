@@ -51,7 +51,7 @@
       </div>
               
       <!-- 이메일 인증 모달 -->
-      <v-dialog v-model="uniqueEmail" max-width="430px">
+      <v-dialog v-model="uniqueEmail" persistent max-width="430px">
         <v-card class="user-signup-container">
           <v-card-actions>
             <font-awesome-icon id="user-signup-cancel-icon" :icon="['far','times-circle']" @click="$store.state.uniqueEmail = false, $refs.email.validate(), SET_LOADING(false)" />
@@ -63,7 +63,7 @@
             <v-row>
               <v-col class="user-signup-content-padding" cols="12">
                 <div class="user-signup-content-left">
-                   <v-text-field v-model="signupData.validationNumber" label="인증번호를 입력해주세요." required></v-text-field>
+                   <v-text-field v-model="signupData.validationNumber" label="인증코드를 입력해주세요." required></v-text-field>
                 </div>
 
                 <div class="user-signup-content-right">

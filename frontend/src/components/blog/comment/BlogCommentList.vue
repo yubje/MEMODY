@@ -2,7 +2,7 @@
   <div>
     <div
       v-for="comment in commentData" 
-      :key="comment.cmid"
+      :key="comment.id"
       class="d-flex flex-column text-dark"
     > 
       <div v-if="comment_id && comment_id ==comment.cmid">
@@ -32,6 +32,7 @@ export default {
   },
   created() {
     this.getCommentData()
+
   },
   computed: {
     ...mapState('blog', ['commentData', 'comment_id'])

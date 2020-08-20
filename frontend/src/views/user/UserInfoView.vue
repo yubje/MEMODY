@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-card>
+      <v-card outlined> 
         <v-card-title class="headline">회원 정보 </v-card-title>
         <v-card-text>
           <v-container>

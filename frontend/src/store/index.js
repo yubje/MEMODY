@@ -29,17 +29,20 @@ export default new Vuex.Store({
     myBlogs: null,
     recommendBlog: null,
     followBlog:null,
+    rankingBlog:null,
     //모달창 관리
     modalLogin: false,
     modalResetPWCheckEmail: false,
     modalResetPWCheckValid: false,
     modalResetPW: false,
     modalSignup: false,
+    modalRankingBlog: false,
     //에러메세지 관리
     loginError: '',
     signupUidCheck: '',
     signupEmailCheck: '',
     signupMsg: '',
+    resetpwMsg: '',
     //로딩
     loading: false
   },
@@ -117,6 +120,10 @@ export default new Vuex.Store({
       state.recommendBlog = data
     },
 
+    SET_RANKING_BLOG(state, data) {
+      state.rankingBlog = data
+    },
+
     //모달창 관리
     SET_MODAL_LOGIN(state) {
       state.modalLogin = !state.modalLogin
@@ -142,6 +149,10 @@ export default new Vuex.Store({
       state.modalSignup = !state.modalSignup
     },
 
+    SET_MODAL_RANKING_BLOG(state) {
+      state.modalRankingBlog = !state.modalRankingBlog
+    },
+
     //에러메세지 관리
     SET_LOGIN_ERROR(state, data) {
       state.loginError = data
@@ -159,6 +170,10 @@ export default new Vuex.Store({
       state.signupMsg = data
     },
 
+    SET_RESET_MSG(state, data) {
+      state.resetpwMsg = data
+    },
+
     //로딩
     SET_LOADING(state, data) {
       state.loading = data
@@ -172,8 +187,7 @@ export default new Vuex.Store({
         .then(() => {
         })
         .catch(error => {
-          console.log(state)
-          alert(error.response.data.message)
+          console.log(state,error)
         })
     },
     // 로그인 (API 문서 - 10~11 D)
@@ -194,17 +208,24 @@ export default new Vuex.Store({
     
     // 로그아웃 (API 문서 - 12 D)
     logout({ getters, commit }) {
+      axios.get(SERVER + '/logout/', getters.config)
+      .then(() => {
+        commit('SET_TOKEN', null)
+        cookies.remove('auth-token')
+        window.localStorage.removeItem('userInfo')
+           })
+          .catch(() => {
+            // alert(error.response.data.message)
+          })
+      router.push({ name: 'Main'})
+    },
+
+    logoutForExpired({commit}) {
       commit('SET_TOKEN', null)
       cookies.remove('auth-token')
       window.localStorage.removeItem('userInfo')
-      axios.get(SERVER + '/logout/', getters.config)
-        .then(() => {
-         })
-        .catch(() => {
-          // alert(error.response.data.message)
-        })
-      router.push({ name: 'Main'})
     },
+
 
     // 회원가입 (API 문서 - 7~9 D)
     signup({ dispatch, commit }, signupData) {
@@ -238,14 +259,22 @@ export default new Vuex.Store({
 
     // 비밀번호 재설정 시 이메일 인증 (API 문서 - 21 D)
     validateEmailForResetPW({ commit }, email) {
+      commit('SET_RESET_MSG', '')
+      commit('RESET_VALIDTYPE')
+
       axios.get(`${SERVER}/auth/pwd/${email}`)
       .then(response => {
         commit('SET_EMAIL', email)
         commit('SET_VALIDATION', response.data.data)
         commit('SET_VALIDTYPE')
+        commit('SET_RESET_MSG', '입력하신 이메일로 인증코드를 보냈습니다.')
+        commit('SET_LOADING', false)
         commit('SET_MODAL_RESETPW_CHECK_VALID')
       })
-      .catch(error => alert(error.response.data.message))
+      .catch(error => {
+        commit('SET_RESET_MSG', error.response.data.message)
+        commit('SET_LOADING', false)
+      })
     },
 
     //인증번호 매칭확인
@@ -273,9 +302,10 @@ export default new Vuex.Store({
       resetPWData.email = state.email
       const code = this.state.emailValidationNumber
       axios.put(`${SERVER}/users/pw`, resetPWData, {headers: {'code': code}})
-        .then(response => {
-          alert(response.data.message)
+        .then(() => {
+          commit('SET_RESET_MSG', '비밀번호를 재설정하였습니다.')
           commit('SET_MODAL_RESETPW')
+          commit('SET_MODAL_LOGIN')
         })
         .catch(error => alert(error))
     },
@@ -314,17 +344,15 @@ export default new Vuex.Store({
       .then(response => {
         commit('SET_USERINFO', response.data.data)
       })
-
     },
 
     // 회원 정보 수정 (API 문서 - 15~17 D)
     updateUserInfo({ state, getters, commit }) {
-      commit('SET_UNIQUEID')
       if (state.uniqueId) {
         axios.put(`${SERVER}/users`, getters.userUpdateInfo, getters.config)
         .then(response => {
           commit('SET_USERINFO', response.data.data)
-          commit('SET_UNIQUEID')
+          commit('SET_UNIQUEID',false)
           router.push({ name: 'UserInfoView'})
         })
         .catch(error => alert(error))
@@ -366,6 +394,15 @@ export default new Vuex.Store({
           commit('SET_BLOGS_BEFORE',response.data.data)
         })
         .catch(() => {
+        })
+    },
+
+    //top10 중 선택한 사람의 블로그 목록 조회
+    getRankingBlogList({commit}, email) {
+      axios.get(`${SERVER}/blogs/list/`+ email)
+        .then(response => {
+          commit('SET_RANKING_BLOG', response.data.data)
+          commit('SET_MODAL_RANKING_BLOG')
         })
     },
 
