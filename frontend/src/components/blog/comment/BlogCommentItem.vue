@@ -108,6 +108,7 @@
         })
     },
     async created() {
+      console.log(this.comment)
       await axios.get(`${SERVER}/users/${this.comment.email}`, {
           headers: {
             'auth': cookies.get('auth-token')
