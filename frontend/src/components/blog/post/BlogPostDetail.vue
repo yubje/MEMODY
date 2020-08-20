@@ -39,6 +39,7 @@
         <v-flex>
           <v-row>
             <!-- 좋아요 버튼 -->
+            {{this.postData.pid}}
             <v-col cols="6" class="px-5 py-2 text-left">
               <v-btn icon v-if="liked" @click="clickLike()" class="mr-auto">
                 <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
@@ -170,6 +171,16 @@
           this.time = this.postData.postTime;
         }
       }
+    },
+    async updated(){
+      const {
+        data
+      } = await axios.get(`${process.env.VUE_APP_SERVER}/posts/${this.postData.pid}/likes`, {
+        headers: {
+          "auth": cookies.get('auth-token')
+        }
+      })
+      this.liked = data.data
     },
     async created() {
       const {

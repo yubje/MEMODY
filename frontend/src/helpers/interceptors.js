@@ -24,13 +24,13 @@ export default function setup() {
     return Promise.reject(error);
   });
 
-  axios.interceptors.request.use(function (config) {
-      // Do something before request is sent
-      console.log('보내기전데이터',config)
-      return config;
-    }, function (error) {
-      // Do something with request error
-      console.log("보내기전 에러",error)
-      return Promise.reject(error);
-    });
+  // axios.interceptors.request.use(function (config) {
+  //     // Do something before request is sent
+  //     console.log('보내기전데이터',config.url)
+  //     return config;
+  //   }, function (error) {
+  //     // Do something with request error
+  //     console.log("보내기전 에러",error)
+  //     return Promise.reject(error);
+  //   });
 }

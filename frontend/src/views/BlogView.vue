@@ -125,6 +125,10 @@ export default {
     const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
     this.following = data.data
   },
+  async updated() {
+    const { data } = await axios.get(`${process.env.VUE_APP_SERVER}/blogs/${this.blogData.bid}/follows`,{headers: {"auth": cookies.get('auth-token')}})
+    this.following = data.data
+  },
   created() {
     this.getBlogInfo()
     this.getBlogMembers()
