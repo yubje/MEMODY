@@ -63,9 +63,8 @@
           </v-row>
         </v-flex>
         <hr>
-        <BlogCommentForm />
-        <BlogCommentList />
-
+        <BlogCommentForm @createcomment="createComment()" @deletecomment="deleteComment()"/>
+        <BlogCommentList :commentData="commentData"/>
       </div>
     </div>
   </div>
@@ -104,16 +103,24 @@
     },
     computed: {
       ...mapState(['userInfo', ]),
-      ...mapState('blog', ['postData']),
+      ...mapState('blog', ['postData','commentData']),
 
     },
     methods: {
-      ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike', 'lookupPostDetail']),
+
+      ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike', 'lookupPostDetail', 'getCommentData']),
+
 
       blogPostUpdate() {
         this.$router.push({
           name: 'BlogPostUpdate'
         })
+      },
+      createComment(){
+        this.getCommentData()
+      },
+       deleteComment(){
+         this.getCommentData()
       },
 
       blogPostDelete() {
@@ -175,7 +182,8 @@
       this.liked = data.data
       this.timeBefore()
       // this.lookupPostDetail()
-    },
+      this.getCommentData()
+    }
   }
 </script>
 
