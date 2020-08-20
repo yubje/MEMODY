@@ -58,11 +58,11 @@
           type="text" 
           placeholder="카테고리 소분류 추가" 
           v-model="categoryData.medium_dir"
-          append-icon="mdi-close-circle"
-          clear-icon="mdi-folder-plus-outline"
+          append-icon="mdi-folder-plus-outline"
+          clear-icon="mdi-close-circle"
           clearable
-          @click:append="clickAdd()"
-          @click:clear="addChildCategory(categoryData)"
+          @click:append="addChildCategory(categoryData)"
+          @click:clear="clickAdd()"
         ></v-text-field>
       </v-list-item>
     <!-- </v-list-item> -->

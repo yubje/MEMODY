@@ -16,45 +16,30 @@
     </div>
 
     <hr class="main-hr">
-
-    <!-- <div v-if="authToken">
-      <MainMyBlogList :myBlogs="$store.state.myBlogs"/>
-      팔로잉 블로그
-      <MainRecommendBlogList :recommendBlog="followBlog"/>
-    </div> -->
-      
   </div>
 </template>
 
 <script>
-import cookies from 'vue-cookies'
-
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
-// import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
   computed: {
-      ...mapState(['authToken','myBlogs','recommendBlog','followBlog'])
+      ...mapState(['recommendBlog'])
   },
   components: {
     MainSearchTab,
-    // MainMyBlogList,
     MainRecommendBlogList,
   },
   async mounted() {
     await this.fetchBlogs()
   },
   methods: {
-    ...mapActions(['mainAfter','mainBefore']),
+    ...mapActions(['mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token')) {
-        this.mainAfter()
-      }else {
-        this.mainBefore()
-      }
+      this.mainBefore()
     }
   },
 }

@@ -22,11 +22,11 @@ hr {
 }
 
 .navbar-menu {
-  margin-right: 10px;
+  margin-right: 15px;
 }
 
 #navbar-menu-after{
-  margin-left: 37px;
+  margin-left: 3px;
 }
 
 .navbar-menu-list-after {
@@ -68,7 +68,10 @@ hr {
 .searchTab-type:hover, #search-icon:hover,
 .main-blog-item-title:hover,
 #user-login-cancel-icon:hover, .user-login-content-btn:hover,
-#user-signup-cancel-icon:hover {
+#user-signup-cancel-icon:hover,
+#user-resetpw-icon:hover,
+#create-blog-btn:hover,
+.ranking-content-uid:hover {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
@@ -100,7 +103,7 @@ hr {
   border-width: 0px 0px 0px 1px;
   border-image: initial;
   border-left: 1px solid #dfdfdf;
-  margin-right: 10px;
+  margin-right: 13px;
 }
 
 /*--------------------MainView--------------------*/
@@ -258,32 +261,32 @@ hr {
 }
 
 /*--------------------UserLogin--------------------*/
-.v-dialog, .user-login-container, .user-signup-container {
+.v-dialog, .user-login-container, .user-signup-container, .user-resetpw-container, .main-ranking-blog-list-container {
   border-radius: 0px !important;
 }
 
-#user-login-cancel-icon, #user-signup-cancel-icon {
+#user-login-cancel-icon, #user-signup-cancel-icon, #user-resetpw-icon, #main-ranking-blog-list-icon {
   font-size: x-large;
   color: #505050;
 }
 
-#user-login-cancel-icon {
+#user-login-cancel-icon, #user-resetpw-icon {
   margin: 17px 0px 0px 89%;
 }
 
-.user-login-contents, .user-signup-contents {
+.user-login-contents, .user-signup-contents, .user-resetpw-contents {
   margin: 0px 19px;
 }
 
-.user-login-title, .user-signup-title {
+.user-login-title, .user-signup-title, .user-resetpw-title {
   display: unset;
 }
 
-.user-login-content, .user-signup-content {
+.user-login-content, .user-signup-content, .user-resetpw-content {
   margin-top: 33px;
 }
 
-.user-login-content-padding, .user-signup-content-padding {
+.user-login-content-padding, .user-signup-content-padding, .user-resetpw-content-padding {
   padding: 2px 15px;
 }
 
@@ -293,7 +296,7 @@ hr {
   padding-bottom: 0px;
 }
 
-#user-login-content-login-btn, .user-signup-content-btn, #user-signup-content-signup-btn {
+#user-login-content-login-btn, .user-signup-content-btn, #user-signup-content-signup-btn, #user-resetpw-content-btn {
   border-radius: 0px;
 }
 
@@ -325,4 +328,101 @@ hr {
 
 #user-signup-content-signup-btn {
   margin-top: 15px;
+}
+
+/*--------------------UserResetPW--------------------*/
+.user-resetpw-content-text {
+  margin-bottom: 20px;
+}
+
+#user-resetpw-content-btn {
+  color: white !important;
+}
+
+.user-resetpw-content-text a {
+  color: #1a73e8 !important;
+}
+
+/*--------------------MainRankingView--------------------*/
+.ranking-container {
+  width: 630px;
+  margin-top: 68px;
+}
+
+.ranking-title {
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+.ranking-contents-top3 {
+  display: flex; 
+  padding: 10px;
+  border: 3px solid #6ac6c8;
+}
+
+.ranking-contents-top3-detail {
+  flex: 1;
+  padding: 0px;
+}
+
+#ranking-icon-top3 {
+  font-size: xxx-large;
+}
+
+.ranking-img-top3 {
+  width: 70px !important;
+  height: 70px !important;
+  margin: 0px !important;
+  margin-top: 4px !important;
+}
+
+.ranking-contents .v-list-item__content {
+  display: unset;
+}
+
+#rank-icon-left, #rank-icon-right {
+  margin: 0px !important;
+}
+
+/*--------------------MainFollowBlogListView--------------------*/
+.blog-list-container {
+  margin: 68px 19%;
+}
+
+.blog-list-title {
+  font-size: 28px;
+  margin-bottom: 7px !important;
+  color: #222222;
+  display: block;
+}
+
+.blog-list-subtitle {
+  color: #666666;
+  margin-bottom: 20px !important;
+}
+
+/*--------------------MainRankingBlogList--------------------*/
+#main-ranking-blog-list-icon {
+  margin: 17px 0px 0px 95%;
+}
+
+.main-ranking-blog-list-contents {
+  padding: 38px 59px;
+}
+
+.ranking-content-rank {
+  font-size: large;
+  font-weight: bold; 
+  padding-top: 3px;
+  background-color: #666666; 
+  color: white;
+}
+
+.ranking-content-rank-first {
+  font-size: x-large;
+  padding-top: 19px;
+}
+
+.ranking-content-rank-second {
+  padding-top: 8px;
 }
