@@ -7,6 +7,10 @@ hr {
   margin: 0px auto;
 }
 
+img {
+  max-width: 713px;
+}
+
 /*--------------------Navbar--------------------*/
 .v-toolbar__content {
   border-bottom: 1px solid #dfdfdf;
@@ -80,8 +84,9 @@ hr {
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
 .searchTab-type:focus, .searchTab-input:focus,
-#main-blig-item-hashtag-btn:focus,
-.user-login-content-btn:focus {
+.main-blog-item-icon:focus, #main-blog-item-hashtag-btn:focus,
+.user-login-content-btn:focus,
+#blog-item-hashtag-btn:focus {
   outline: none !important;
 }
 
@@ -193,6 +198,11 @@ hr {
   color: #6ac6c8 !important;
 }
 
+/*--------------------MainSearchResultView--------------------*/
+.main-search-result-contents {
+  margin-bottom: 20px;
+}
+
 /*--------------------MainRanking--------------------*/
 .main-ranking-container {
   max-width: 243px;
@@ -234,6 +244,10 @@ hr {
   margin-right: 3px;
 }
 
+.main-blog-item-icon:hover {
+  cursor: unset;
+}
+
 .main-blog-item-num {
   font-weight: bold;
 }
@@ -249,9 +263,23 @@ hr {
 
 .main-blog-item-view-follower {
   margin: 13px 0px 7px 0px !important;
+  display: flex;
 }
 
-#main-blig-item-hashtag-btn {
+.main-blog-item-view-detail {
+  flex: 1;
+  padding: 0px; 
+  text-align:right; 
+  padding-left: 22px;
+}
+
+.main-blog-item-follower-detail {
+  flex: 1;
+  padding: 0px; 
+  text-align:left;
+}
+
+#main-blog-item-hashtag-btn {
   margin: 2px 3px 2px 0px;
 }
 
@@ -349,7 +377,7 @@ hr {
   margin-top: 68px;
 }
 
-.ranking-title {
+.ranking-title, .user-info-title {
   font-size: xx-large;
   font-weight: bold;
 }
@@ -385,7 +413,7 @@ hr {
 }
 
 /*--------------------MainFollowBlogListView--------------------*/
-.blog-list-container {
+.blog-list-container, .main-search-result-container {
   margin: 68px 19%;
 }
 
@@ -425,4 +453,73 @@ hr {
 
 .ranking-content-rank-second {
   padding-top: 8px;
+}
+
+/*--------------------UserInfoView--------------------*/
+.user-info-container {
+  margin-top: 68px;
+}
+
+/*--------------------BlogView--------------------*/
+#blog-item-hashtag-btn:hover {
+  background-color: #00808038;;
+}
+
+/*--------------------BlogPostCreate--------------------*/
+.blog-post-create-container {
+  height: 100%;
+}
+
+.post-button {
+  margin: 10px 10px;
+  text-align: right;
+}
+
+.post-save, .post-create {
+  margin-top: 7px !important;
+}
+
+.editor-background {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgb(249, 249, 249);
+}
+
+.editor-body {
+  width: 893px;
+  height: auto;
+  height: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: white;
+}
+
+.editor-body-padding {
+  padding: 100px 90px;
+  text-align: left;
+}
+
+.editor-title-area {
+  padding-bottom: 20px;
+}
+
+#editor-title {
+  border: 0;
+  width: 100%;
+  height: 50px;
+  font-size: 35px;
+}
+
+#editor-title::placeholder {
+  color: rgb(160, 160, 160);
+}
+
+#editor-title:focus, #editor-content:focus {
+  outline: none;
+}
+
+[contenteditable=true]:empty:before {
+  content: attr(placeholder);
+  color: rgb(160, 160, 160);
 }

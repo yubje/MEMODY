@@ -17,7 +17,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <button class="dropdown-item" @click="SET_COMMENTID(comment.cmid)">update</button>
-            <button class="dropdown-item" @click="deleteComment(comment)">delete</button>
+            <button class="dropdown-item" @click="deleteComment(comment), $emit('deletecomment')">delete</button>
           </div>
         </li>
       </ul>
@@ -107,7 +107,6 @@
         })
     },
     async created() {
-      console.log(this.comment)
       await axios.get(`${SERVER}/users/${this.comment.email}`, {
           headers: {
             'auth': cookies.get('auth-token')
