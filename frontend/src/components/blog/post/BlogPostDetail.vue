@@ -108,10 +108,7 @@
 
     },
     methods: {
-
       ...mapActions('blog', ['deletePost', 'addLike', 'deleteLike', 'lookupPostDetail', 'getCommentData']),
-
-
       blogPostUpdate() {
         this.$router.push({
           name: 'BlogPostUpdate'
@@ -194,7 +191,7 @@
       this.timeBefore()
       // this.lookupPostDetail()
       this.getCommentData()
-    }
+    },
   }
 </script>
 

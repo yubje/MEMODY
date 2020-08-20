@@ -304,7 +304,6 @@ class BlogService {
     axios.delete(`${process.env.VUE_APP_SERVER}/posts/likes`,{data :state.postData, headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
         state.postData = response.data.data
-        console.log(state.postData)
       })
   }
 
