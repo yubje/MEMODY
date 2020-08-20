@@ -193,6 +193,11 @@ hr {
   color: #6ac6c8 !important;
 }
 
+/*--------------------MainSearchResultView--------------------*/
+.main-search-result-contents {
+  margin-bottom: 20px;
+}
+
 /*--------------------MainRanking--------------------*/
 .main-ranking-container {
   max-width: 243px;
@@ -385,7 +390,7 @@ hr {
 }
 
 /*--------------------MainFollowBlogListView--------------------*/
-.blog-list-container {
+.blog-list-container, .main-search-result-container {
   margin: 68px 19%;
 }
 

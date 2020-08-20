@@ -18,7 +18,7 @@ class BlogService {
     axios.post(`${SERVER}/blogs`, state.newBlogData, {headers: {"auth": cookies.get('auth-token')}})
       .then(() => {
         commit('CLEAR_NEWBLOGDATA')
-        router.push({ name: 'Main'})
+        router.go()
       })
       .catch(error => console.log(error))
   }
