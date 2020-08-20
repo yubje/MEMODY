@@ -69,7 +69,6 @@
         if (now.getDate() == origin.getDate()) {
           const nowTime = now.getTime();
           const originTime = origin.getTime();
-          console.log("여기")
           if (nowTime > originTime) {
             let sec = parseInt(nowTime - originTime) / 1000;
             let day = parseInt(sec / 60 / 60 / 24);
@@ -80,16 +79,13 @@
             sec = parseInt(sec - (min * 60));
             if (hour > 0) {
               //몇시간전인지
-              console.log(hour + "시간 전");
               this.time = hour + "시간 전";
             } else if (min > 0) {
               //몇분전인지
-              console.log(min + "분 전");
               this.time = min + "분 전";
             } else if (sec > 0) {
               //몇초전인지 계산
               // document.getElementsByClassName("sub")[0].innerHTML = sec+"초 전";
-              console.log(sec + "초 전");
               this.time = sec + "초 전";
             }
           }

@@ -42,7 +42,7 @@ class BlogService {
   createPost(response) {
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
-        alert(result.data.message)
+        console.log(result.data.message)
         router.push({ name: 'BlogView'})
       })
       .catch(error => console.log(error.data.message))
@@ -257,7 +257,6 @@ class BlogService {
   getCommentData({ commit, state }) {
     axios.get(`${SERVER}/comments/${state.postData.pid}`, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response)
         commit('SET_COMMENTDATA', response.data.data)
       })
      
