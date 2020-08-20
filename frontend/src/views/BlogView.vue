@@ -4,11 +4,12 @@
       <BlogPostSidebar />
       <div class="col align-self-center" style="height: 60%;">
         <div class="col text-left m-5">
-          <v-btn outlined small rounded color="teal" class="ma-1" v-for="hashtag in blogData.hashtags"
-            :key="hashtag.tname">
+          <v-btn id="blog-item-hashtag-btn" outlined small rounded color="teal" class="ma-1" v-for="hashtag in blogData.hashtags"
+            :key="hashtag.tname" @click="searchByHashTag(hashtag.tname)">
             <v-icon>mdi-music-accidental-sharp</v-icon>
             {{ hashtag.tname }}
           </v-btn>
+
           <h1 class="font-weight-black mb-3">{{ blogData.btitle }}</h1>
           <h3 class="font-weight-bold ">{{ blogData.bsubtitle }}</h3>
 
@@ -79,10 +80,16 @@ export default {
     return {
       following: null,
       isMember: false,
+      searchData: {
+        searchBy: '2',
+        searchInput: null,
+      }
     }
   },
   methods: {
+    ...mapActions('main', ['search']),
     ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember', 'follow', 'unfollow']),
+
     clickFollow() {
       if (this.following) {
         this.unfollow()
@@ -92,30 +99,11 @@ export default {
         this.following = true
       }
     },
-    methods: {
-      ...mapActions('blog', ['getBlogMembers', 'deleteBlogMember']),
-      clickFollow() {
-        if (this.following) {
-          axios.delete(`${process.env.VUE_APP_SERVER}/blogs/follows`, {
-            data: this.blogData,
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
-          this.following = false
-        } else {
-          axios.post(`${process.env.VUE_APP_SERVER}/blogs/follows`, this.blogData, {
-            headers: {
-              "auth": cookies.get('auth-token')
-            }
-          })
-          this.following = true
-        }
-      },
-      leaveBlog(email) {
-        this.deleteBlogMember(email)
-      },
-    },
+
+    searchByHashTag(hashtag) {
+      this.searchData.searchInput = hashtag
+      this.search(this.searchData)
+    }
   },
   computed: {
     ...mapState('blog', ['bid', 'blogData', 'members', 'blogInfo']),
@@ -126,14 +114,15 @@ export default {
     this.following = data.data
   },
   created() {
-    this.getBlogInfo()
     this.getBlogMembers()
-    this.members.forEach(member => {
-      if (member.email === this.userInfo.email) {
-        this.isMember=true;
-      }
-    });
-  },  
+    if (this.members) {
+      this.members.forEach(member => {
+        if (member.email === this.userInfo.email) {
+          this.isMember=true;
+        }
+      });
+    }
+  }, 
 }
 </script>
 

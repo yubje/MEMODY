@@ -23,7 +23,7 @@
         </div>
 
         <div>
-          <v-btn id="main-blig-item-hashtag-btn" rounded color="#6ac6c8" dark small v-for="hashtags in blog.hashtags" :key="hashtags.id" @click="searchByHashTag(hashtags.tname)"> #{{hashtags.tname}}</v-btn>
+          <v-btn id="main-blog-item-hashtag-btn" rounded color="#6ac6c8" dark small v-for="hashtags in blog.hashtags" :key="hashtags.id" @click="searchByHashTag(hashtags.tname)"> #{{hashtags.tname}}</v-btn>
         </div>
       </v-list-item-content>
     </v-list-item>

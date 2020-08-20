@@ -42,7 +42,7 @@ class BlogService {
   createPost(response) {
     axios.post(`${SERVER}/blogs/${response.state.bid}/posts`, response.state.postData, {headers: {"auth": cookies.get('auth-token')}})
       .then((result) => {
-        console.log(result.data.message)
+        alert(result.data.message)
         router.push({ name: 'BlogView'})
       })
       .catch(error => console.log(error.data.message))
@@ -157,7 +157,6 @@ class BlogService {
   addChildCategory({commit},mediumCategoryData) {
     axios.post(`${process.env.VUE_APP_SERVER}/blogs/categories/child`,mediumCategoryData, { headers: {"auth": cookies.get('auth-token')}})
     .then(() => {
-      console.log('소분류 ',mediumCategoryData )
       this.getBlogCategory({commit}, mediumCategoryData.bid)
     })
   }

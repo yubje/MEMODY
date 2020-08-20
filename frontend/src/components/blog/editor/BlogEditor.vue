@@ -219,7 +219,6 @@ pre {
   margin-bottom: 1em;
   padding: 12px 8px;
   width: auto;
-  max-height: 100px;
   overflow: auto;
   border-radius: 3px;
   

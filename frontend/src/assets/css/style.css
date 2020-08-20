@@ -80,8 +80,9 @@ hr {
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
 .searchTab-type:focus, .searchTab-input:focus,
-#main-blig-item-hashtag-btn:focus,
-.user-login-content-btn:focus {
+#main-blog-item-hashtag-btn:focus,
+.user-login-content-btn:focus,
+#blog-item-hashtag-btn:focus {
   outline: none !important;
 }
 
@@ -256,7 +257,7 @@ hr {
   margin: 13px 0px 7px 0px !important;
 }
 
-#main-blig-item-hashtag-btn {
+#main-blog-item-hashtag-btn {
   margin: 2px 3px 2px 0px;
 }
 
@@ -430,4 +431,9 @@ hr {
 
 .ranking-content-rank-second {
   padding-top: 8px;
+}
+
+/*--------------------BlogView--------------------*/
+#blog-item-hashtag-btn:hover {
+  background-color: #00808038;;
 }
