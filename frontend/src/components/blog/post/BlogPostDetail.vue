@@ -181,7 +181,6 @@
       // this.lookupPostDetail()
       this.getCommentData()
     },
-
   }
 </script>
 
