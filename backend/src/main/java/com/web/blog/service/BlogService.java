@@ -252,6 +252,12 @@ public class BlogService {
 				for (Blogtag tags : hashtags) {
 					blog.addHashTag(tags);
 				}
+				
+				List<Member> members = memberRepository.findByBid(tag.getBid());
+				for(Member mem:members) {
+					blog.addMember(mem);
+				}
+				
 				result.add(blog);
 			}
 			return result;
