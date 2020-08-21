@@ -21,7 +21,7 @@
               <tbody>
                 <tr v-for="post in postListData.content" :key="post.pid" @click="blogPostDetail(post)">
                   <td class="text-left">{{ post.ptitle }}</td>
-                  <td class="text-left">{{ post.author }}</td>
+                  <td class="text-left">{{ post.manager }}</td>
                   <td class="text-left">{{ post.postTime.slice(0,10) }}</td>
                   <td class="text-left"><font-awesome-icon  :icon="['fas','heart']" style="color:red;"/> {{ post.postlikecnt }}</td>
                 </tr>
@@ -34,6 +34,8 @@
               :length="postListData.totalPages"
               circle
               color="teal"
+              next-icon="mdi-chevron-right"
+              prev-icon="mdi-chevron-left"
               @input="onPageChange"
             ></v-pagination>
           </div>
@@ -81,3 +83,9 @@ export default {
    
 }
 </script>
+
+<style scoped>
+td {
+  cursor: pointer;
+}
+</style>

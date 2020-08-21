@@ -24,8 +24,6 @@ export const main = {
     // 블로그 이름으로 블로그 목록 조회 (API 문서 - 24D)
     // 해쉬태그로 블로그 목록 검색 및 조회 (API 문서 - 25D)
     search({ commit }, response) {
-      console.log("############")
-      console.log(response)
       if (response.searchBy == 1) {
         const info = {
           searchInput: response.searchInput,
@@ -33,14 +31,12 @@ export const main = {
         }
 
         MainService.searchBlogs({ commit }, info)
-        // dispatch('searchBlogs',info)
       } else if (response.searchBy == 2) {
         const info = {
           searchInput: response.searchInput,
           location: `/tags/${response.searchInput}/list`
         }
         MainService.searchBlogs({ commit }, info)
-        // dispatch('searchBlogs',info)
       } else {
         alert('검색 카테고리를 선택하세요.')
       }
@@ -49,7 +45,5 @@ export const main = {
     getRankedUsers({ state, commit }) {
       MainService.getRankedUsers({ state, commit })
     },
-
-
   },
 }

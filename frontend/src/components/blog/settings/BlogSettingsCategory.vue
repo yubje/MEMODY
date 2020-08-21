@@ -1,26 +1,35 @@
 <template>
-  <v-container fluid class="m-0 mb-0 mr-0">
+  <div class="conatiner-fluid" style="height:100%;">
     <v-row>
-      <BlogSettingsSidebar /> 
-      <v-col cols="4"></v-col>
-      <v-col cols="8">
-          <h1>카테고리 설정 </h1>
-        <v-col cols="12">
-          <v-text-field text type="text" label="카테고리 추가" v-model="largeCategoryData.large_dir"></v-text-field>
+      <BlogSettingsSidebar />
+      <v-col>
+        <div class="col w-75 mx-auto">
+          <div class="mx-auto my-2">
+            <h3>블로그 카테고리 설정</h3>
+          </div>
+        <v-col>
+          <v-text-field
+            outlined 
+            color="teal"
+            text type="text" 
+            label="카테고리 대분류 추가" 
+            v-model="largeCategoryData.large_dir"
+            append-icon="mdi-folder-plus"
+            @click:append="addParentCategory(largeCategoryData)"
+          ></v-text-field>   
         </v-col>
-        <v-col cols="12">
-          <v-btn @click="addParentCategory(largeCategoryData)">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
+        <v-col>
+          <v-card outlined>
+            <v-list v-for="(categories, i) in dataCategories"  :key="`category-`+i">
+                <BlogSettingsCategoryItem :categories="categories" :i="i"/>
+            </v-list>
+            
+          </v-card>
         </v-col>
-        <v-col cols="12">
-          <v-row v-for="categories in dataCategories" :key="categories.lcid">
-            <BlogSettingsCategoryItem :categories="categories" />
-          </v-row>
-        </v-col>
+      </div>
       </v-col>
     </v-row>
-  </v-container >
+  </div>
 
 </template>
 
@@ -57,7 +66,7 @@
       },
     },
     computed: {
-      ...mapState('blog', ['blogData', 'dataCategories', 'bid'])
+      ...mapState('blog', ['blogData', 'dataCategories', 'bid']),
     }
   }
 </script>
