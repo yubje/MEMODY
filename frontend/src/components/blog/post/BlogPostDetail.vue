@@ -39,7 +39,6 @@
         <v-flex>
           <v-row>
             <!-- 좋아요 버튼 -->
-            {{this.postData.pid}}
             <v-col cols="6" class="px-5 py-2 text-left">
               <v-btn icon v-if="liked" @click="clickLike()" class="mr-auto">
                 <font-awesome-icon :icon="['fas','heart']" style="color:red;"/> 
