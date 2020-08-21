@@ -1,73 +1,104 @@
 <template>
-    <v-dialog
-      v-model="dialog2"
-      max-width="500px"
-    >
-        <v-card>
-          <v-card-title>
-            Dialog 2
-          </v-card-title>
-          <v-card-text>
-            <v-btn
-              color="primary"
-              dark
-              @click="dialog3 = !dialog3"
-            >
-              Open Dialog 3
-            </v-btn>
-            <v-select
-              :items="select"
-              label="A Select List"
-              item-value="text"
-            ></v-select>
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-              color="primary"
-              text
-              @click="dialog2 = false"
-            >
-              Close
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-  <!-- <div class="modal fade bd-example-modal-sm" id ="email-validation" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <p>인증번호 입력</p>
-        <input v-model="validationNumber" type="text">
-        <button @click="checkValidation(validationNumber)">확인</button>
-      </div>
+  <v-app-bar app flat color="white">
+    <v-toolbar-title>
+      <router-link :to="{ name: 'Main' }">
+        <img src="@/assets/logo/memody.png" alt="memody" style="height: 44px;">
+      </router-link>
+    </v-toolbar-title>
+
+    <v-spacer></v-spacer>
+
+    <div v-if="authToken">
+      <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
+      <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
     </div>
-  </div> -->
+
+    <hr class="hr-col">
+
+    <router-link :to="{ name: 'MainRankingView' }">TOP 10</router-link>
+    <v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <MainRanking v-bind="attrs" v-on="on"/>
+      </template>
+    </v-menu>
+
+    <hr class="hr-col">
+
+    <v-menu v-if="authToken">
+      <template v-slot:activator="{ on, attrs }">
+        <button id="navbar-menu-after" v-bind="attrs" v-on="on">
+          <img v-if="userInfo.profile" id="profile-img-small" :src="userInfo.profile">
+          <img v-else id="profile-img-small" src="@/assets/img/user-default.png">
+          <span>{{userInfo.uid}} 님</span>
+        </button>
+      </template>
+      <v-list class="navbar-menu-list-after">
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+          </v-list-item-title>
+        </v-list-item>
+        <hr>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#logout-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <font-awesome-icon id="logout-icon" :icon="['fas','sign-out-alt']" />
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    
+    <v-menu v-else>
+      <template v-slot:activator="{ on, attrs }">
+        <button id="navbar-menu-before" v-bind="attrs" v-on="on" @click="SET_MODAL_LOGIN()"> 회원가입 · 로그인</button>
+        
+        <div v-if="modalLogin">
+          <UserLogin />
+        </div>
+      </template>
+    </v-menu>
+
+    <div v-if="modalResetPWCheckEmail">
+      <UserResetPWCheckEmail />
+    </div>
+    <div v-if="modalResetPWCheckValid">
+      <UserResetPWCheckValid />
+    </div>
+    <div v-if="modalResetPW">
+      <UserResetPW />
+    </div>
+
+    <div v-if="modalSignup">
+      <UserSignup />
+    </div>
+    
+  </v-app-bar>
 </template>
 
 <script>
-import { mapActions , mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import UserLogin from '@/components/user/UserLogin.vue'
+import MainRanking from '@/components/main/MainRanking.vue'
+import UserResetPWCheckEmail from '@/components/user/UserResetPWCheckEmail.vue'
+import UserResetPWCheckValid from '@/components/user/UserResetPWCheckValid.vue'
+import UserResetPW from '@/components/user/UserResetPW.vue'
+import UserSignup from '@/components/user/UserSignup.vue'
 
 export default {
-  name: 'Modal',
-  props: {
-    dialog2: Boolean
-  },
-  data() {
-    return {
-      validationNumber: '',
-    }
-  },
-  methods: {
-    ...mapActions(["validateEmail", "checkValidation"]),
- 
+  name: 'NavBar',
+  components: {
+    UserLogin,
+    UserResetPWCheckEmail,
+    UserResetPWCheckValid,
+    UserResetPW,
+    UserSignup,
+    MainRanking
   },
   computed: {
-      ...mapState(['emailValidationNumber'])
+    ...mapState(['authToken', 'userInfo', 'modalLogin', 'modalResetPWCheckEmail', 'modalResetPWCheckValid', 'modalResetPW', 'modalSignup'])
   },
-
-  
+  methods: {
+    ...mapMutations(['SET_MODAL_LOGIN'])
+  }
 }
 </script>
-
-<style>
-
-</style>

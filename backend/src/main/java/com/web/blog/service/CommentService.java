@@ -26,7 +26,6 @@ public class CommentService {
 	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createComments(Comments comment) {
-		System.out.println(comment);
 		commentRepository.save(Comments.builder()
 				.pid(comment.getPid())
 				.comment(comment.getComment())

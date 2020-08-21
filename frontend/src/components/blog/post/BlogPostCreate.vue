@@ -86,16 +86,16 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.page-header
-  // ...
-  transition: all 0.4s ease-out
-  &.scrolled
-    top: 0
-    left: 0
-    width: 100vw
-    transform: none
-    border-radius: 0
-    background-color: rgba(darken($point-color, 30%), 0.55)
-    backdrop-filter: blur(2px)
-</style
+// <style lang="sass" scoped>
+// .page-header
+//   // ...
+//   transition: all 0.4s ease-out
+//   &.scrolled
+//     top: 0
+//     left: 0
+//     width: 100vw
+//     transform: none
+//     border-radius: 0
+//     background-color: rgba(darken($point-color, 30%), 0.55)
+//     backdrop-filter: blur(2px)
+// </style>

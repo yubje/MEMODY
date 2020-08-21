@@ -92,6 +92,10 @@ public class Users implements UserDetails {
 		this.exp = exp;
 	}
     
+    public void setProfile(String profile) {
+		this.profile = profile;
+	}
+    
     public String toString() {
     	return "User [email=" + email + ", uid=" + uid + ", exp=" + exp + ", profile=" + profile + ", password=" + password
 				+ "]";
