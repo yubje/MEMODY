@@ -77,7 +77,6 @@ public class UserService implements UserDetailsService {
 			selectUser.setProfile(url);
 			userRepository.save(selectUser);
 		});
-//		userRepository.save(Users.builder().email(email).uid(user.get().getUid()).password(user.get().getPassword()).profile(url).roles(Collections.singletonList("ROLE_USER")).build());
 		
 	}
 	

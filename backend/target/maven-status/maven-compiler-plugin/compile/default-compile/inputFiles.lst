@@ -1,7 +1,6 @@
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\CategoryService.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\Blog.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\Member.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\model\UserDao2.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\model\Response.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\controller\PostController.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\config\redis\RedisConfig.java
@@ -16,7 +15,6 @@ C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\we
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\BlogService.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\repository\ForkRepository.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\BlogFollow.java
-C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\model\UserDto.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\BlogTagService.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\service\S3Service.java
 C:\Users\multicampus\Desktop\SSAFYPJT1_3\s03p13a306\backend\src\main\java\com\web\blog\domain\Tag.java

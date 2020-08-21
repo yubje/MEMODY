@@ -143,8 +143,6 @@ public class BlogService {
 			for(Member mem:members) {
 				list.get(i).addMember(mem);
 			}
-//			System.out.println(list.get(i).getHashtags());
-//			System.out.println(list.get(i).getMember());
 			
 		}
 
@@ -156,7 +154,6 @@ public class BlogService {
 	}
 
 	// 수정
-	// blogService.updateBlog(user, changeBlog,changeTag,bid))
 	public boolean updateBlog(String user,String btitle,String bsubtitle,String bcontent, String changeTag, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
@@ -235,12 +232,10 @@ public class BlogService {
 			int bid = blog.getBid();
 			List<Blogtag> hashtags = blogtagRepository.findByBid(bid);
 			for (Blogtag tag : hashtags) {
-				System.out.println(tag);
 				blog.addHashTag(tag);
 			}
 			result.add(blog);
 		}
-		System.out.println("블로그>>"+result);
 		return result;
 	}
 	
@@ -257,6 +252,12 @@ public class BlogService {
 				for (Blogtag tags : hashtags) {
 					blog.addHashTag(tags);
 				}
+				
+				List<Member> members = memberRepository.findByBid(tag.getBid());
+				for(Member mem:members) {
+					blog.addMember(mem);
+				}
+				
 				result.add(blog);
 			}
 			return result;

@@ -32,6 +32,7 @@ import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
 import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
+import com.web.blog.repository.PostRepository;
 import com.web.blog.service.PostLikeService;
 import com.web.blog.service.PostService;
 import com.web.blog.service.UserService;
@@ -63,6 +64,7 @@ public class PostController {
 	private final 	PostService 		postService;
 	private final 	PostLikeService 	postLikeService;
 	private final	UserService			userService;
+	private final   PostRepository      postRepository;
 
 	@Value("${cloud.aws.s3.bucket}")
 	String bucketName;
@@ -386,51 +388,53 @@ public class PostController {
 	
 	
 	/**
-	 * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
-	 * 
-	 */
-	@ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class, notes = "게시글에 좋아요를 누르면 좋아요가 증가합니다.")
-	@PostMapping(value = "/posts/likes")
-	public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
-		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token)) {
-			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(post.getPid())){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
-				postLikeService.increasePostLike(post.getPid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, loginuser),
-						HttpStatus.OK);
-			}
-		} else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-					HttpStatus.FORBIDDEN);
-		}
-	}
-	/**
-	 * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
-	 * 
-	 */
-	@ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class, notes = "게시글에 좋아요를 다시 누르면 좋아요가 취소됩니다.")
-	@DeleteMapping(value = "/posts/likes")
-	public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
-		String token = req.getHeader("auth");
-		if (jwtTokenProvider.validateToken(token)) {
-			String loginuser = jwtTokenProvider.getUserPk(token);
-			if(!postService.checkPost(post.getPid())){
-				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
-						HttpStatus.FORBIDDEN);
-			}else {
-				postLikeService.decreasePostLike(post.getPid(), loginuser);
-				return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, loginuser),
-						HttpStatus.OK);
-			}
-		} else {
-			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
-					HttpStatus.FORBIDDEN);
-		}
-	}
+	    * 게시글 좋아요 - 게시글에 좋아요를 누르면 좋아요가 증가한다.
+	    * 
+	    */
+	   @ApiOperation(value = "게시글 좋아요 증가", response = ResponseEntity.class, notes = "게시글에 좋아요를 누르면 좋아요가 증가합니다.")
+	   @PostMapping(value = "/posts/likes")
+	   public ResponseEntity increasePostLike(@RequestBody Post post, HttpServletRequest req) {
+	      String token = req.getHeader("auth");
+	      if (jwtTokenProvider.validateToken(token)) {
+	         String loginuser = jwtTokenProvider.getUserPk(token);
+	         if(!postService.checkPost(post.getPid())){
+	            return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+	                  HttpStatus.FORBIDDEN);
+	         }else {
+	            postLikeService.increasePostLike(post.getPid(), loginuser);
+	            Post newPost = postRepository.findByPid(post.getPid());
+	            return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.LIKE_POST_SUCCESS, newPost),
+	                  HttpStatus.OK);
+	         }
+	      } else {
+	         return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+	               HttpStatus.FORBIDDEN);
+	      }
+	   }
+	   /**
+	    * 게시글 좋아요 취소 - 게시글에 좋아요를 다시 누르면 좋아요가 취소된다.
+	    * 
+	    */
+	   @ApiOperation(value = "게시글 좋아요 취소", response = ResponseEntity.class, notes = "게시글에 좋아요를 다시 누르면 좋아요가 취소됩니다.")
+	   @DeleteMapping(value = "/posts/likes")
+	   public ResponseEntity decreasePostLike(@RequestBody Post post, HttpServletRequest req) {
+	      String token = req.getHeader("auth");
+	      if (jwtTokenProvider.validateToken(token)) {
+	         String loginuser = jwtTokenProvider.getUserPk(token);
+	         if(!postService.checkPost(post.getPid())){
+	            return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_POST_FAIL),
+	                  HttpStatus.FORBIDDEN);
+	         }else {
+	            postLikeService.decreasePostLike(post.getPid(), loginuser);
+	            Post newPost = postRepository.findByPid(post.getPid());
+	            return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.UNLIKE_POST_SUCCESS, newPost),
+	                  HttpStatus.OK);
+	         }
+	      } else {
+	         return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),
+	               HttpStatus.FORBIDDEN);
+	      }
+	   }
 	
 	// 상세 게시글 조회시 내가 좋아요 했는지 안했는지 알기 위한 기능 필요함!
 	/**
