@@ -161,7 +161,7 @@ Vue.use(VueRouter)
     name: 'BlogPostCategoryList',
     component: BlogPostCategoryList,
     props(route) {
-      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid }
+      return { bid: route.query.bid, mcid: route.query.mcid, lcid: route.query.lcid, ldir: route.query.ldir, mdir: route.query.mdir }
     }
   },
   {

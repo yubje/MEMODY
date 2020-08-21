@@ -99,31 +99,6 @@ public class CommentController {
 	}
 	
 	/**
-	 * 댓글 상세 조회 - 댓글 상세내용 조회
-	 * 
-	 * @param String Email
-	 * @return ResponseEntity<Response> - 
-	 * @exception RestException - NOT_FOUND
-	 */
-//	@ApiOperation(value = "댓글 상세 조회", response = ResponseEntity.class)
-//	@GetMapping(value = "/comments/{cmid}")
-//	public ResponseEntity readPost(@PathVariable int cmid, HttpServletRequest req) {
-//		String token = req.getHeader("auth");
-//		System.out.println("댓글 조회 ");
-//		if (jwtTokenProvider.validateToken(token)) {
-//			Comments comment = commentService.findByCmid(cmid);
-//			System.out.println(comment);
-//			if(comment != null) {
-//				return new ResponseEntity<Response>(new Response(StatusCode.OK, ResponseMessage.SEARCH_COMMENT_SUCCESS, comment),HttpStatus.OK);
-//			}else {
-//				return new ResponseEntity<Response>(new Response(StatusCode.NOT_FOUND, ResponseMessage.SEARCH_COMMENT_NONE, comment),HttpStatus.OK);
-//			}
-//		}else {
-//			return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.FORBIDDEN),HttpStatus.FORBIDDEN);
-//		}
-//	}
-	
-	/**
 	 * 댓글 수정 - 댓글을 수정한다.
 	 * 
 	 * @param String Email

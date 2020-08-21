@@ -29,14 +29,14 @@
               <div class="d-flex justify-content-between align-items-center my-1">
                 <div class="col-9"><a>{{ member.email }}</a></div>
                 <div class="col-2" v-if="blogData.manager!==member.email">
-                  <v-btn v-if="member.email===userInfo.email" color="teal" 
+                  <!-- <v-btn v-if="member.email===userInfo.email" color="teal" 
                     data-toggle="modal" data-target="#leaveBlogModal"
                     class="m-2"
                     small
                     dark
                     fab>
                     <v-icon dark>mdi-account-remove-outline</v-icon>
-                  </v-btn>
+                  </v-btn> -->
                   <v-btn v-if="member.email!==userInfo.email" color="teal"
                     data-toggle="modal" data-target="#deleteBlogMemberModal"
                     class="m-2"
@@ -51,7 +51,7 @@
                 
 
                     <!-- Modal -->
-                <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
+                <!-- <div class="modal fade" id="leaveBlogModal" tabindex="-1" role="dialog" aria-labelledby="leaveBlogModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -69,7 +69,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
 
                 <!-- Modal -->
                 <div class="modal fade" id="deleteBlogMemberModal" tabindex="-1" role="dialog" aria-labelledby="deleteBlogMemberModalLabel" aria-hidden="true">
@@ -91,7 +91,6 @@
                     </div>
                   </div>
                 </div>
-
               </div>
               <hr>
             </div>
@@ -127,9 +126,9 @@ export default {
   methods: {
     ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember']),
 
-    leaveBlog(email) {
-      this.deleteBlogMember(email)
-    }
+    // leaveBlog(email) {
+    //   this.deleteBlogMember(email)
+    // }
   },
   created() {
     this.getBlogMembers()

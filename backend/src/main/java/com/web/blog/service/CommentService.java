@@ -26,7 +26,6 @@ public class CommentService {
 	private final String ADMIN = "ROLE_ADMIN";
 	
 	public void createComments(Comments comment) {
-		System.out.println(comment);
 		commentRepository.save(Comments.builder()
 				.pid(comment.getPid())
 				.comment(comment.getComment())
@@ -44,7 +43,7 @@ public class CommentService {
 	
 	public List<Comments> listAllComments(int pid){
 		List<Comments> result = new ArrayList<Comments>();
-		result = commentRepository.findByPid(pid);
+		result = commentRepository.findAllByPidOrderByCommentTimeDesc(pid);
 		return result;
 	}
 	
