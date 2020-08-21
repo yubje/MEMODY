@@ -1,11 +1,12 @@
 package com.web.blog.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.web.blog.config.jwt.JwtTokenProvider;
@@ -23,7 +25,6 @@ import com.web.blog.domain.MCategory;
 import com.web.blog.domain.Post;
 import com.web.blog.model.Response;
 import com.web.blog.model.ResponseMessage;
-import com.web.blog.model.RestException;
 import com.web.blog.model.StatusCode;
 import com.web.blog.service.BlogService;
 import com.web.blog.service.CategoryService;
@@ -40,31 +41,30 @@ import lombok.RequiredArgsConstructor;
  * </pre>
  * 
  * @author 김형택
- * @version 0.1, 2020-07-30, Category 관리 Controller
+ * @version 1.0, 2020-08-19, Category 관리 Controller
  * @see None
  * 
  */
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class CategoryController {
 
 	private final 	JwtTokenProvider 	jwtTokenProvider;
 	private final 	PostService 		postService;
-//	private final 	TagService 			tagService;
 	private final 	BlogService 		blogService;
-//	private final 	MemberService 		memberService;
 	private final 	CategoryService		categoryService;
 
 	/**
 	 * 카테고리 추가(대분류) - 블로그 내의 카테고리를 추가하는 기능. 
 	 * 
-	 * @param LCategory int bid, String large_dir
-	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_CATEGORY_SUCCESS,CREATE_CATEGORY_FAIL), HttpStatus
+	 * @param 	lcategory - 추가할 대분류 카테고리 객체
+	 * @return 	ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_CATEGORY_SUCCESS,CREATE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/parent")
 	public ResponseEntity createCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -90,12 +90,12 @@ public class CategoryController {
 	/**
 	 * 카테고리 추가(중분류) - 블로그 내의 카테고리를 추가하는 기능. 
 	 * 
-	 * @param MCategory int lcid, String medium_dir
+	 * @param mcategory - 추가할 중분류 카테고리 객체 (int lcid, String medium_dir)
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(CREATE_CATEGORY_SUCCESS,CREATE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 추가(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 추가합니다.")
 	@PostMapping("/blogs/categories/child")
 	public ResponseEntity createCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -119,17 +119,15 @@ public class CategoryController {
 		}
 	}
 
-	///////////////////////////////////////////////////// 수정
-	
 	/**
 	 * 카테고리 수정(대분류) - 블로그 내의 카테고리를 수정하는 기능. 
 	 * 
-	 * @param LCategory int lcid, int bid, String large_dir
+	 * @param lcategory - 수정할 카테고리 객체 (int lcid, int bid, String large_dir)
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(UPDATE_CATEGORY_SUCCESS,UPDATE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/parent")
 	public ResponseEntity updateCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -155,12 +153,12 @@ public class CategoryController {
 	/**
 	 * 카테고리 수정(중분류) - 블로그 내의 카테고리를 수정하는 기능. 
 	 * 
-	 * @param MCategory int mcid, int lcid, String medium_dir
+	 * @param mcategory - 수정할 카테고리 중분류 (int mcid, int lcid, String medium_dir)
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(UPDATE_CATEGORY_SUCCESS,UPDATE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 수정(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 수정합니다.")
 	@PutMapping("/blogs/categories/child")
 	public ResponseEntity updateCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -184,19 +182,15 @@ public class CategoryController {
 		}
 	}
 	
-	
-	
-	///////////////////////////////////////////////////// 삭제
-	
 	/**
 	 * 카테고리 삭제(대분류) - 블로그 내의 카테고리를 삭제하는 기능. 
 	 * 
-	 * @param LCategory int lcid, int bid
+	 * @param lcategory - 삭제할 카테고리 대분류 (int lcid, int bid)
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(DELETE_CATEGORY_SUCCESS,DELETE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(대분류)", response = ResponseEntity.class, notes = "블로그 내의 대분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/parent")
 	public ResponseEntity deleteCategory1(@RequestBody LCategory lcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -222,12 +216,12 @@ public class CategoryController {
 	/**
 	 * 카테고리 삭제(중분류) - 블로그 내의 카테고리를 삭제하는 기능. 
 	 * 
-	 * @param MCategory int lcid, int mcid
+	 * @param mcategory - 삭제할 카테고리 중분류 (int lcid, int mcid)
 	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(DELETE_CATEGORY_SUCCESS,DELETE_CATEGORY_FAIL), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 삭제(중분류)", response = ResponseEntity.class, notes = "블로그 내의 중분류 카테고리를 삭제합니다.")
 	@DeleteMapping("/blogs/categories/child")
 	public ResponseEntity deleteCategory2(@RequestBody MCategory mcategory, HttpServletRequest req) {
 		String token = req.getHeader("auth");
@@ -251,19 +245,17 @@ public class CategoryController {
 		}
 	}
 	
-	/////////////////////////////////////////////////////////// 조회
 	/**
 	 * 카테고리 조회 - 블로그 내의 카테고리를 구조를 조회하는 기능. 
 	 * 
-	 * @param MCategory int lcid, int mcid
-	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(DELETE_CATEGORY_SUCCESS,DELETE_CATEGORY_FAIL), HttpStatus
+	 * @param bid - 조회할 블로그의 고유 id
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(SEARCH_CATEGORY_FAIL,SEARCH_CATEGORY_SUCCESS), HttpStatus
 	 * @exception FORBIDDEN
 	 * 			  
 	 */
-	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class)
+	@ApiOperation(value = "카테고리 조회", response = ResponseEntity.class, notes = "블로그 내의 카테고리 구조를 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories")
 	public ResponseEntity searchCategory(@PathVariable int bid, HttpServletRequest req) {
-		System.out.println(bid);
 		String token = req.getHeader("auth");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
@@ -281,24 +273,34 @@ public class CategoryController {
 		}
 	}
 	
-	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class)
+	
+	/**
+	 * 카테고리 게시글 조회 - 중분류 카테고리내의 게시글을 조회합니다.
+	 * 
+	 * @param bid - 조회할 블로그의 고유 id
+	 * @param mcid - 조회할 블로그 중분류 카테고리 고유 id
+	 * @param pageable - 페이지네이션 관련 객체
+	 * @return ResponseEntity<Response> - StatusCode, ResponseMessage(SEARCH_CATEGORY_FAIL,SEARCH_CATEGORY_SUCCESS), HttpStatus
+	 * @exception FORBIDDEN
+	 * 			  
+	 */
+	@ApiOperation(value = "카테고리의 게시글 조회", response = ResponseEntity.class, notes = "중분류 카테고리내의 게시글을 조회합니다.")
 	@GetMapping("/blogs/{bid}/categories/{mcid}")
-	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, HttpServletRequest req) {
+	public ResponseEntity searchPostByCategory(@PathVariable int bid,@PathVariable int mcid, @PageableDefault(size=10) Pageable pageable, HttpServletRequest req) {
 		String token = req.getHeader("auth");
-		System.out.println("카테고리의 게시글 조회");
 		if (jwtTokenProvider.validateToken(token)) {
 			String user = jwtTokenProvider.getUserPk(token);
 			if(!blogService.checkBlog(bid)){
 				return new ResponseEntity<Response>(new Response(StatusCode.FORBIDDEN, ResponseMessage.SEARCH_CATEGORY_FAIL),
 						HttpStatus.FORBIDDEN);
 			}else {
-				List<Post> list = postService.listAllPostByMCategory(bid, mcid);
-				if(list.size()!=0) {
+				Page<Post> list = postService.listAllPostByMCategory(bid, mcid, pageable);
+				if(list.getSize()!=0) {
 					return new ResponseEntity<Response>(new Response(StatusCode.CREATED, ResponseMessage.SEARCH_POSTBYCATEGORY_SUCCESS,list),
 						HttpStatus.CREATED);
 				}else {
 					return new ResponseEntity<Response>(new Response(StatusCode.NO_CONTENT, ResponseMessage.SEARCH_POSTBYCATEGORY_FAIL,list),
-							HttpStatus.FORBIDDEN);
+							HttpStatus.NO_CONTENT);
 				}
 			}
 		} else {

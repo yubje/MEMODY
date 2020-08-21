@@ -1,69 +1,104 @@
 <template>
-  <div id="nav">
-    <b-navbar class="navbar" toggleable="lg" type="dark">
-    <b-navbar-brand>
-      <router-link 
-      :to="{ name: 'Main' }"
-      class="text-light text-decoration-none"
-      >
-        MEMODY
+  <v-app-bar app flat color="white">
+    <v-toolbar-title>
+      <router-link :to="{ name: 'Main' }">
+        <img src="@/assets/logo/memody.png" alt="memody" style="height: 44px;">
       </router-link>
-    </b-navbar-brand>
+    </v-toolbar-title>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav class="ml-auto">
-        <!-- <b-nav-item>
-          <router-link :to="{ name: 'BlogView' }" class="text-decoration-none text-light">Blog</router-link>
-        </b-nav-item> -->
-        <div v-if="authToken" class="row">
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content >알람</template>
-            <b-dropdown-item href="#">Alarm1</b-dropdown-item>
-          </b-nav-item-dropdown>
+    <v-spacer></v-spacer>
 
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>User</template>
-            <b-dropdown-item>
-              <router-link  data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
-              <br>
-              <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
+    <div v-if="authToken">
+      <router-link class="navbar-menu" :to="{ name: 'MainMyBlogListView' }">내블로그</router-link>
+      <router-link class="navbar-menu" :to="{ name: 'MainFollowBlogListView' }">팔로잉블로그</router-link>
+    </div>
+
+    <hr class="hr-col">
+
+    <router-link :to="{ name: 'MainRankingView' }">TOP 10</router-link>
+    <v-menu>
+      <template v-slot:activator="{ on, attrs }">
+        <MainRanking v-bind="attrs" v-on="on"/>
+      </template>
+    </v-menu>
+
+    <hr class="hr-col">
+
+    <v-menu v-if="authToken">
+      <template v-slot:activator="{ on, attrs }">
+        <button id="navbar-menu-after" v-bind="attrs" v-on="on">
+          <img v-if="userInfo.profile" id="profile-img-small" :src="userInfo.profile">
+          <img v-else id="profile-img-small" src="@/assets/img/user-default.png">
+          <span>{{userInfo.uid}} 님</span>
+        </button>
+      </template>
+      <v-list class="navbar-menu-list-after">
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#info-modal" :to="{ name: 'UserInfoView' }">회원 정보</router-link>
+          </v-list-item-title>
+        </v-list-item>
+        <hr>
+        <v-list-item>
+          <v-list-item-title>
+            <router-link data-toggle="modal" data-target="#logout-modal" :to="{ name: 'UserLogout' }">로그아웃</router-link>
+            <font-awesome-icon id="logout-icon" :icon="['fas','sign-out-alt']" />
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    
+    <v-menu v-else>
+      <template v-slot:activator="{ on, attrs }">
+        <button id="navbar-menu-before" v-bind="attrs" v-on="on" @click="SET_MODAL_LOGIN()"> 회원가입 · 로그인</button>
+        
+        <div v-if="modalLogin">
+          <UserLogin />
         </div>
+      </template>
+    </v-menu>
 
-        <div v-else>
-          <b-nav-item-dropdown right>
-            <template v-slot:button-content>로그인·회원가입</template>
-            <b-dropdown-item>
-              <router-link data-toggle="modal" data-target="#login-modal" :to="{ name: 'UserLoginView' }">Login</router-link>
-            </b-dropdown-item>
-          </b-nav-item-dropdown>
-        </div>
+    <div v-if="modalResetPWCheckEmail">
+      <UserResetPWCheckEmail />
+    </div>
+    <div v-if="modalResetPWCheckValid">
+      <UserResetPWCheckValid />
+    </div>
+    <div v-if="modalResetPW">
+      <UserResetPW />
+    </div>
 
-      </b-navbar-nav>
-    </b-collapse>
-  </b-navbar>
-  </div>
+    <div v-if="modalSignup">
+      <UserSignup />
+    </div>
+    
+  </v-app-bar>
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import UserLogin from '@/components/user/UserLogin.vue'
+import MainRanking from '@/components/main/MainRanking.vue'
+import UserResetPWCheckEmail from '@/components/user/UserResetPWCheckEmail.vue'
+import UserResetPWCheckValid from '@/components/user/UserResetPWCheckValid.vue'
+import UserResetPW from '@/components/user/UserResetPW.vue'
+import UserSignup from '@/components/user/UserSignup.vue'
 
 export default {
   name: 'NavBar',
-  computed: {
-      ...mapState(['authToken'])
+  components: {
+    UserLogin,
+    UserResetPWCheckEmail,
+    UserResetPWCheckValid,
+    UserResetPW,
+    UserSignup,
+    MainRanking
   },
-
+  computed: {
+    ...mapState(['authToken', 'userInfo', 'modalLogin', 'modalResetPWCheckEmail', 'modalResetPWCheckValid', 'modalResetPW', 'modalSignup'])
+  },
+  methods: {
+    ...mapMutations(['SET_MODAL_LOGIN'])
+  }
 }
 </script>
-
-<style scoped>
-.navbar {
-  background-color: #25374F !important;
-  color: white !important;
-}
-
-</style>

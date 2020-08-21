@@ -1,37 +1,31 @@
 <template>
-  <div class="modal fade" id="addBlogModal" tabindex="-1" role="dialog" aria-labelledby="addBlogModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addBlogModalLabel">블로그 추가</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body col">
-          <div class="row justify-content-center">
-            <h1>블로그 추가</h1>
-          </div>
-          <div class="row justify-content-between p-3">
-            <p>블로그명</p>
-            <input v-model="newBlogData.btitle" class="input-text" type="text">
-          </div>
-          <div class="row justify-content-between p-3">
-            <p>블로그 부제</p>
-            <input v-model="newBlogData.bsubtitle" class="input-text" type="text">
-          </div>
-          <div class="row justify-content-between p-3">
-            <p>블로그 설명</p>
-            <textarea v-model="newBlogData.bcontent" class="input-text" name="blogInfo" cols="30" rows="10"></textarea>
-          </div>
-          <div class="row justify-content-between p-3">
-            <p>해시태그</p>
-            <input v-model="newBlogData.hashtags" class="input-text" type="text">
-          </div>
-        </div>
-        <button type="button" class="btn btn-primary w-100" @click="createBlog" data-dismiss="modal">블로그 추가</button>
-      </div>
-    </div>
+  <div>
+      <v-card>
+        <v-card-title class="headline">블로그 추가</v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field v-model="newBlogData.btitle" label="블로그명" type="text"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="newBlogData.bsubtitle" label="블로그 부제" type="text"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field  v-model="newBlogData.bcontent" label="블로그 설명" type="text"></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="newBlogData.hashtags" label="블로그 해시태그" type="text"></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+          </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="teal accent-4" text @click="$emit('closemodal')">닫기</v-btn>
+          <v-btn color="teal accent-4" text @click="createBlog() ,$emit('closemodal')" >블로그 추가 </v-btn>
+        </v-card-actions>
+      </v-card>
   </div>
 </template>
 

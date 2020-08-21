@@ -1,76 +1,46 @@
 <template>
-  <div id="main">
-    <div class="m-5">
-      <h1>MEMODY</h1>
-      <!-- <img src="https://i.fltcdn.net/contents/1178/original_1427021757117_fkq4tufpqfr.jpeg" style="height:300px"> -->
-    </div>
-    <div class="container w-75">
+  <div class="main-container">
+    <div class="main-intro">
+      <div class="main-intro-title">
+        <p>어떤 <span>공유 블로그</span>를</p>
+        <p>찾고 싶으신가요?</p>
+      </div>
       <MainSearchTab/>
     </div>
     
-    <div v-if="authToken">
-      <MainMyBlogList :myBlogs="myBlogs"/>
+    <hr class="main-hr">
+
+    <div class="main-contents">
+      <span class="main-content-title">추천 블로그</span>
+      <MainRecommendBlogList :recommendBlog="recommendBlog"/>
     </div>
-    <MainRecommendBlogList :recommendBlog="recommendBlog"/>
+
+    <hr class="main-hr">
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import cookies from 'vue-cookies'
-
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
-import MainMyBlogList from '@/components/main/MainMyBlogList.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
-
-import { mapState } from 'vuex'
-
-const SERVER = process.env.VUE_APP_SERVER
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'MainView',
   computed: {
-      ...mapState(['authToken'])
-  },
-  data() {
-    return {
-      myBlogs: [],
-      recommendBlog: null,
-    }
+      ...mapState(['recommendBlog'])
   },
   components: {
     MainSearchTab,
-    MainMyBlogList,
-    MainRecommendBlogList
+    MainRecommendBlogList,
   },
-  mounted() {
-    this.fetchBlogs()
+  async mounted() {
+    await this.fetchBlogs()
   },
   methods: {
+    ...mapActions(['mainBefore']),
     fetchBlogs() {
-      if (cookies.get('auth-token')) {
-        axios.get(`${SERVER}/main/after/`,{ headers: {"auth": cookies.get('auth-token')}})
-        .then(response => {
-          console.log('조회성공')
-          this.myBlogs = response.data.data.myBlog
-          this.recommendBlog = response.data.data.recommendBlog
-          return response
-        })
-        .catch(error => {
-          console.log('실패 ㅠㅠ')
-          console.log(error)
-        })
-      }else {
-        axios.get(`${SERVER}/main/before/`)
-        .then(response => {
-          this.recommendBlog = response.data.data
-        })
-      }
+      this.mainBefore()
     }
-  }
+  },
 }
 </script>
-
-<style>
-
-</style>
