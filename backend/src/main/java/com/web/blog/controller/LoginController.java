@@ -346,10 +346,15 @@ public class LoginController {
 	
 	/**
 	 * 회원가입 시 닉네임 중복 조회 - 회원가입 시 닉네임 중복 방지 기능 
+<<<<<<< HEAD
+	 * @param String uid
+	 * @return
+=======
 	 * @param uid
 	 * @return ResponseEntity<Response> - StatusCode,<br>
 	 * 		   ResponseMessage(SEARCH_NICKNAME_NONE,SEARCH_NICKNAME_EXIST), HttpStatus<br>
 	 * 		   data(사용자 닉네임)
+>>>>>>> 253fcbc037eb308a5dc7ede9f9a52bb8e9e661d2
 	 */
 	@ApiOperation(value = "회원가입 시 닉네임 중복 조회", response = ResponseEntity.class, notes = "회원가입 시 닉네임 중복 방지 기능입니다.")
 	@GetMapping(value = "/nickname/{uid}")
