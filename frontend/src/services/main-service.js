@@ -9,10 +9,8 @@ class MainService {
   // 해쉬태그로 블로그 목록 검색 및 조회 (API 문서 - 25D)
   searchBlogs({ commit }, info) {
     // 토큰 넣어서 보내야함 
-    console.log(info.searchInput)
     axios.get(SERVER + info.location, {headers: {"auth": cookies.get('auth-token')}})
       .then(response => {
-        console.log(response.data)
         commit('SET_SEARCHEDBLOGS', response.data.data)
         router.push({ name: 'MainSearchResultView', query: { search: info.searchInput }})
       })
@@ -20,18 +18,13 @@ class MainService {
 
   }
 
-  getRankedUsers({ state, commit }) {
-    axios.get(`${SERVER}/rank`, {headers: {"auth": cookies.get('auth-token')}})
+  getRankedUsers({ commit }) {
+    axios.get(`${SERVER}/rank`)
       .then(response => {
-        console.log(response.data)
         commit('SET_RANKEDUSERS', response.data.data)
-        console.log(state.rankedUsers)
       })
       .catch(error => console.log(error.response.data))
   }
-  
-
-
 }
 
 export default new MainService() 

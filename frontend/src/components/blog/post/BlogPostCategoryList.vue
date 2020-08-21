@@ -62,7 +62,7 @@
               <tbody>
                 <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
                   <td class="text-left">{{ post.ptitle }}</td>
-                  <td class="text-left">{{ post.author }}</td>
+                  <td class="text-left">{{ post.manager }}</td>
                   <td class="text-left">{{ post.postTime.slice(0,10) }}</td>
                   <td class="text-left"><font-awesome-icon  :icon="['fas','heart']" style="color:red;"/> {{ post.postlikecnt }}</td>
                 </tr>
@@ -101,10 +101,6 @@ export default {
   data() {
     return {
       page: 1,
-      items: [
-        { text: this.ldir, disabled: true, href: '',},
-        { text: this.mdir, disabled: true, href: '',},
-      ],
     }
   },
   props: {
@@ -114,7 +110,13 @@ export default {
     mdir: String,
   },
   computed: {
-    ...mapState('blog', ['blogData','posts'])
+    ...mapState('blog', ['blogData','posts']),
+    items () {
+      return [
+        { text: this.ldir, disabled: true, href: '',},
+        { text: this.mdir, disabled: true, href: '',},
+      ]
+    }
   },
   methods: {
     ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),
@@ -145,7 +147,6 @@ export default {
     
   },
   created() {
-    console.log('created')
     const info = {
       "bid": this.blogData.bid,
       "mcid": this.mcid,
@@ -158,5 +159,10 @@ export default {
 </script>
 ;
 <style scoped>
-
+.mdi-chevron-right {
+  color: gray !important;
+}
+td {
+  cursor: pointer;
+}
 </style>

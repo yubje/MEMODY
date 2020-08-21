@@ -3,7 +3,7 @@
     <div class="editor-header">
       <ul class="editor-header-main">
         <li>
-          <select v-model="fontName" v-on:change="changeFontName()">
+          <select class="pointer" v-model="fontName" v-on:change="changeFontName()">
             <option id="font-arial" value="Arial">Arial</option>
             <option id="font-gullim" value="굴림">굴림</option>
             <option id="font-gothic" value="Nanum Gothic">나눔고딕</option>
@@ -12,7 +12,7 @@
           </select>
         </li>
         <li>
-          <select v-model="fontSize" v-on:change="changeFontSize()">
+          <select class="pointer" v-model="fontSize" v-on:change="changeFontSize()">
             <option value="1">1pt</option>
             <option value="2">2pt</option>
             <option value="3">3pt</option>
@@ -45,6 +45,11 @@
         <li>
           <button class="editor-header-button" @click="changeFontStrikethrough()">
             <font-awesome-icon :icon="['fas','strikethrough']" />
+          </button>
+        </li>
+        <li>
+          <button class="editor-header-button" @click="changeFontHighlight()">
+            <font-awesome-icon :icon="['fas','highlighter']" />
           </button>
         </li>
 
@@ -98,11 +103,6 @@
             <input id="add-img" type="file" multiple="multiple" accept="image/*">
           </label>
         </li>
-        <li>
-          <button class="editor-header-button" @click="createLink()">
-            <font-awesome-icon :icon="['fas','link']" />
-          </button>
-        </li>
       </ul>
     </div>
   </div>
@@ -142,12 +142,17 @@ export default {
       document.execCommand('Strikethrough')
     },
 
+    changeFontHighlight() {
+      document.execCommand('Hilitecolor', false, "lightblue")
+    },
+
     changeFontJustify(fontJustify) {
       document.execCommand(fontJustify)
     },
 
     makeBlock(tagType) {
       document.execCommand('formatBlock', false, tagType)
+     
     },
 
     addImage() {
@@ -167,10 +172,6 @@ export default {
         }
       };
     },
-
-    createLink() {
-      document.execCommand('createLink', false, 'https://www.naver.com')
-    }
   }
 }
 </script>
@@ -205,7 +206,18 @@ blockquote:before, blockquote:after{
 }
 
 pre {
-  background-color: #aaaaaa;
+  background-color: #eff0f1;
+  margin-bottom: 1em;
+  padding: 12px 8px;
+  width: auto;
+  overflow: auto;
+  border-radius: 3px;
+  
+}
+
+.pointer:hover {
+  cursor: pointer;
+  /* color: rgb(0, 212, 195); */
 }
 
 .editor-header {

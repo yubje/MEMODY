@@ -1,5 +1,6 @@
 <template>
-    <v-navigation-drawer class="teal lighten-5"  absolute light permanent fixed sticky>
+  <v-card class="mr-auto" height="100%;" width="256">
+    <v-navigation-drawer class="teal lighten-5"  absolute light permanent right>
       <v-list>
         <v-list-item>
           <v-list-item-content>
@@ -26,6 +27,7 @@
         </div>
       </template>
     </v-navigation-drawer>
+  </v-card>
 </template>
 
 <script>
@@ -53,5 +55,9 @@
 <style scoped>
 v-navigation-drawer {
   height : 100vh
+}
+a:hover {
+  color: #00897B !important;
+  background-color: #E0F2F1 !important;
 }
 </style>

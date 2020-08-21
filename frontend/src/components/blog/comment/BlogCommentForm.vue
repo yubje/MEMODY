@@ -4,7 +4,7 @@
       <div class="inputbox d-flex flex-column ma-0">
         <input class="textbox" v-model="newComment"><br>
         <button 
-          @click="createComment(newComment)"
+          @click="createComment(newComment), $emit('createcomment')"
           class="btn btn-sm d-flex justify-content-end m-1"
           >댓글 작성</button>
       </div>

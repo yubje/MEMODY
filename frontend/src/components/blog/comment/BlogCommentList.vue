@@ -2,7 +2,7 @@
   <div>
     <div
       v-for="comment in commentData" 
-      :key="comment.cmid"
+      :key="comment.id"
       class="d-flex flex-column text-dark"
     > 
       <div v-if="comment_id && comment_id ==comment.cmid">
@@ -11,7 +11,7 @@
         />
       </div>
       <div v-else>
-        <BlogCommentItem
+        <BlogCommentItem @deletecomment="$emit('deletecomment')"
         :comment="comment"
         />
       </div>
@@ -26,21 +26,22 @@ import BlogCommentItem from '@/components/blog/comment/BlogCommentItem.vue'
 
 export default {
   name: 'BlogCommentList',
+  props:{
+    commentData : Array
+  },
   components: {
     BlogCommentForm,
     BlogCommentItem,
   },
   created() {
-    this.getCommentData()
   },
   computed: {
-    ...mapState('blog', ['commentData', 'comment_id'])
+    ...mapState('blog', [ 'comment_id'])
   },
   methods: {
     ...mapActions('blog', ['getCommentData'])
 
   },
-
 }
 </script>
 
