@@ -35,15 +35,10 @@ public class S3Service {
 //			ResponseEntity<String> img_path = new ResponseEntity<>(
 //					FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes()),
 //					HttpStatus.CREATED);
-			System.out.println("1");
 			String img_path = FileUpload.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes(),bucketName, accessKey, secretKey);
-			System.out.println("*****   "+img_path);
 //			String img_url = (String) img_path.getBody();
 			String img_url = img_path;
-			System.out.println(img_url);
-			System.out.println(bucketName);
 			String url = s3.getFileURL(bucketName, uploadpath+img_url);
-			System.out.println("Service: "+url);
 			return url;
 			
 		}catch(RuntimeException e) {

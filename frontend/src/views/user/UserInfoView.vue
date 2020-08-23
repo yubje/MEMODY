@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container class="user-info-container">
     <v-row justify="center">
-      <v-card>
-        <v-card-title class="headline">회원 정보 </v-card-title>
+      <v-card outlined> 
+        <v-card-title class="user-info-title">회원 정보 </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
@@ -55,16 +55,11 @@
         </v-card-actions>
       </v-card>
     </v-row>
-
-
   </v-container>
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'UserInfoView',
@@ -77,7 +72,7 @@ export default {
     this.lookupUserInfo()
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
   },
   methods: {
     ...mapActions(['logout', 'deleteUserInfo', 'lookupUserInfo']),
@@ -92,6 +87,3 @@ export default {
   },
 }
 </script>
-
-<style>
-</style>

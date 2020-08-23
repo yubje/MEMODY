@@ -2,7 +2,7 @@ package com.web.blog.model;
 public class ResponseMessage {
 
     public static final String LOGIN_SUCCESS = "로그인 성공";
-    public static final String LOGIN_FAIL = "로그인 실패";
+    public static final String LOGIN_FAIL = "가입하지 않은 이메일이거나, 잘못된 비밀번호입니다.";
     public static final String LOGOUT_SUCCESS = "로그아웃 성공";
     public static final String LOGOUT_FAIL = "로그아웃 실패";
     
@@ -14,7 +14,10 @@ public class ResponseMessage {
     public static final String FAIL_RESET_PWD = "비밀번호 재설정 실패";
     public static final String SEARCH_NICKNAME_NONE = "닉네임 사용 가능";
     public static final String SEARCH_NICKNAME_EXIST = "이미 존재하는 닉네임입니다.";
-    
+    public static final String SEARCH_NICKNAME_SUCCESS = "닉네임으로 조회 성공";
+    public static final String SEARCH_NICKNAME_FAIL = "닉네임으로 조회 실패";
+    public static final String SEARCH_ALLUSERS_FAIL = "전체 회원 목록 조회 실패";
+    public static final String SEARCH_ALLUSERS_SUCCESS = "전체 회원 목록 조회 성공";
     
     public static final String ALREADY_USER = "이미 존재하는 Email입니다.";
     public static final String CREATED_USER = "회원 가입 성공";
@@ -45,8 +48,11 @@ public class ResponseMessage {
     public static final String DELETE_MEMBER_SUCCESS = "블로그 멤버 삭제 성공";
     public static final String DELETE_MEMBER_FAIL = "블로그 멤버 삭제 실패";
     public static final String FOLLOW_BLOG_SUCCESS = "블로그 팔로우 성공";
+    public static final String FOLLOW_BLOG_FAIL = "블로그 팔로우 실패";
     public static final String UNFOLLOW_BLOG_SUCCESS = "블로그 팔로우 취소 성공";
+    public static final String UNFOLLOW_BLOG_FAIL = "블로그 팔로우 취소 실패";
     public static final String SEARCH_BLOGFOLLOW_SUCCESS = "블로그 팔로우 조회 성공";
+    public static final String SEARCH_BLOGFOLLOW_FAIL = "블로그 팔로우 조회 실패";
     
     
     public static final String RECOMMEND_BLOG_SUCCESS = "추천 블로그 목록 조회 성공";
@@ -68,6 +74,7 @@ public class ResponseMessage {
     public static final String SEARCH_POST_FAIL = "해당 게시글이 존재하지 않습니다.";
     public static final String UPDATE_POST_SUCCESS = "게시글 수정 성공";
     public static final String DELETE_POST_SUCCESS = "게시글 삭제 성공";
+    public static final String DELETE_POST_FAIL = "게시글 삭제 실패";
     public static final String LIKE_POST_SUCCESS = "게시글 좋아요 성공";
     public static final String UNLIKE_POST_SUCCESS = "게시글 좋아요 취소 성공";
     public static final String SEARCH_POSTLIKE_SUCCESS = "게시글 좋아요 조회 성공";
@@ -85,6 +92,7 @@ public class ResponseMessage {
     public static final String SEARCH_COMMENT_SUCCESS = "댓글 조회 성공";
     public static final String UPDATE_COMMENT_SUCCESS = "댓글 수정 성공";
     public static final String DELETE_COMMENT_SUCCESS = "댓글 삭제 성공";
+    public static final String DELETE_COMMENT_FAIL = "댓글 삭제 실패";
     
     // Category
     public static final String CREATE_CATEGORY_SUCCESS = "카테고리 추가 성공";
@@ -101,6 +109,7 @@ public class ResponseMessage {
     public static final String AUTHORIZED = "인증 성공";
     public static final String UNAUTHORIZED = "인증 실패";
     public static final String FORBIDDEN = "인가 실패";
+    public static final String TOKEN_REFRESH = "토큰 갱신 성공";
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String SERVICE_UNAVAILABLE = "현재 서비스를 사용하실 수 없습니다. 잠시후 다시 시도해 주세요.";

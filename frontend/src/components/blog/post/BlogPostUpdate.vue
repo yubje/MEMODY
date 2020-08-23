@@ -1,9 +1,14 @@
 <template>
-  <v-container>
+  <div class="blog-post-create-container">
     <div>
       <div class="post-button">
-        <button id="post-update-back" @click="$router.go(-1)">취소</button>
-        <button id="post-update" @click="blogPostUpdate()">수정</button>
+        <v-btn class="mt-5 mr-3" style="margin-top:7px !important" color="teal" outlined @click="$router.go(-1)">
+          취소
+        </v-btn>
+        <v-btn class="mt-5 mr-3" style="margin-top:7px !important" color="teal" dark @click="blogPostUpdate()">
+          <v-icon left>mdi-pencil</v-icon>
+          수정
+        </v-btn>
       </div>
 
       <BlogEditor />
@@ -23,13 +28,12 @@
         </div>
       </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import BlogEditor from '../editor/BlogEditor.vue'
-
-import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostUpdate',
@@ -63,8 +67,8 @@ export default {
 
       this.updatePost()
       this.$router.push({ name: 'BlogPostList'})
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -141,5 +145,4 @@ img {
   content: attr(placeholder);
   color: rgb(160, 160, 160);
 }
-
 </style>

@@ -3,16 +3,10 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col">
-        <v-card
-          outlined
-        >
+        <v-card outlined>
           <v-card-title>
             {{ mdir }}
-
-
-            <v-menu 
-              bottom
-            >
+            <v-menu bottom>
               <template v-slot:activator="{ on, attrs }">    
               <v-btn
                 fab
@@ -41,8 +35,8 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-          
           </v-card-title>
+
           <v-breadcrumbs :items="items" class="px-3 py-1">
             <template v-slot:divider>
               <v-icon>mdi-chevron-right</v-icon>
@@ -62,7 +56,7 @@
               <tbody>
                 <tr v-for="post in posts.content" :key="post.pid" @click="blogPostDetail(post)">
                   <td class="text-left">{{ post.ptitle }}</td>
-                  <td class="text-left">{{ post.author }}</td>
+                  <td class="text-left">{{ post.manager }}</td>
                   <td class="text-left">{{ post.postTime.slice(0,10) }}</td>
                   <td class="text-left"><font-awesome-icon  :icon="['fas','heart']" style="color:red;"/> {{ post.postlikecnt }}</td>
                 </tr>
@@ -86,11 +80,8 @@
 </template>
 
 <script>
-import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
-
-
 import { mapState, mapActions } from 'vuex'
+import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 export default {
   name: 'BlogPostList',
@@ -101,10 +92,6 @@ export default {
   data() {
     return {
       page: 1,
-      items: [
-        { text: this.ldir, disabled: true, href: '',},
-        { text: this.mdir, disabled: true, href: '',},
-      ],
     }
   },
   props: {
@@ -114,7 +101,13 @@ export default {
     mdir: String,
   },
   computed: {
-    ...mapState('blog', ['blogData','posts'])
+    ...mapState('blog', ['blogData','posts']),
+    items () {
+      return [
+        { text: this.ldir, disabled: true, href: '',},
+        { text: this.mdir, disabled: true, href: '',},
+      ]
+    }
   },
   methods: {
     ...mapActions('blog',['fetchPosts', 'lookupPostDetail']),
@@ -145,18 +138,21 @@ export default {
     
   },
   created() {
-    console.log('created')
     const info = {
       "bid": this.blogData.bid,
       "mcid": this.mcid,
       "page": this.page-1,
     }
     this.fetchPosts(info)
-  },
-   
+  },  
 }
 </script>
-;
-<style scoped>
 
+<style scoped>
+.mdi-chevron-right {
+  color: gray !important;
+}
+td {
+  cursor: pointer;
+}
 </style>

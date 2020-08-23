@@ -12,7 +12,6 @@
             <div class="col-8">
               <v-text-field outlined v-model="blogData.btitle"></v-text-field>              
             </div>
-
           </div>
           <div class="row justify-content-between" style="align-items:baseline;">
             <p class="col-3">블로그 부제</p>
@@ -103,15 +102,10 @@ export default {
     addHashtag(newHashtag) {
       if (newHashtag) {
         this.ADD_HASHTAG(newHashtag)
-      } else {
-        alert('해시태그를 입력해 주세요')
-      }
+      } 
       newHashtag = null
     },
   },
 }
 </script>
 
-<style scoped>
-
-</style>

@@ -1,38 +1,35 @@
 <template>
-  <v-sheet
-    class="mx-auto"
-    max-width="800"
-  > 
-    <p>전체랭킹</p>
-    <v-slide-group show-arrows>
-      <v-slide-item
-        v-for="(rankedUser, n) in rankedUsers.entries()"
-        :key="n"
-        v-slot:default="{ active, toggle }"
-      >
-        <router-link :to="{ name: 'MainRankingView' }">
-          <v-btn
-            text
-            class="mx-2"
-            :input-value="active"
-            active-class="teal lighten-3 white--text"
-            depressed
-            rounded
-            @click="toggle"
-          >
-            {{ n+1 }}위  {{ rankedUser[1].uid }}
-          </v-btn>
-        </router-link>
-      </v-slide-item>
-    </v-slide-group>
-  </v-sheet>
-
+  <v-carousel class="main-ranking-container" cycle hide-delimiters interval="5000" height="50px" light :show-arrows="false" vertical>
+    <v-carousel-item v-for="(rankedUser, idx) in rankedUsers" :key="idx">
+      <v-sheet height="100%">
+        <v-row align="center" justify="center">
+          <font-awesome-icon id="rank-icon" v-if="idx<3" :color="colors[idx]" :icon="['fas','crown']"/>
+          <div>
+            <span id="rank-number">{{ idx+1 }}</span> <span>위</span>  
+            <img v-if="rankedUser.profile" id="profile-img-small" :src="rankedUser.profile">
+            <img v-else id="profile-img-small" src="@/assets/img/user-default.png">
+            <span>{{ rankedUser.uid }}</span>
+          </div>
+        </v-row>
+      </v-sheet>
+    </v-carousel-item>
+  </v-carousel>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex' 
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'MainRanking',
+  data() {
+    return {
+      colors: [
+        '#ffcc33',
+        '#b4b4b4',
+        '#dd8a3e'
+      ]
+    }
+  },
   computed: {
     ...mapState('main', ['rankedUsers']),
   },
@@ -44,7 +41,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

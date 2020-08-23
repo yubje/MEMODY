@@ -5,17 +5,22 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.web.blog.domain.Blog;
 import com.web.blog.domain.BlogFollow;
 import com.web.blog.domain.Blogtag;
 import com.web.blog.domain.Member;
+import com.web.blog.domain.Users;
+import com.web.blog.model.ResponseMessage;
+import com.web.blog.model.RestException;
 import com.web.blog.repository.BlogFollowRepository;
 import com.web.blog.repository.BlogRepository;
 import com.web.blog.repository.BlogTagRepository;
 import com.web.blog.repository.MemberRepository;
 import com.web.blog.repository.TagRepository;
+import com.web.blog.repository.UsersRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +33,9 @@ public class BlogService {
 	private final BlogTagRepository blogtagRepository;
 	private final TagRepository tagRepository;
 	private final BlogFollowRepository blogFollowRepository;
+	private final UsersRepository userRepository;
 	
+	private final String ADMIN = "ROLE_ADMIN";
 
 	public int createBlog(String title,String subtitle,String content, String email) {
 		return blogRepository.save(Blog.builder().btitle(title).bsubtitle(subtitle)
@@ -136,8 +143,6 @@ public class BlogService {
 			for(Member mem:members) {
 				list.get(i).addMember(mem);
 			}
-//			System.out.println(list.get(i).getHashtags());
-//			System.out.println(list.get(i).getMember());
 			
 		}
 
@@ -149,12 +154,11 @@ public class BlogService {
 	}
 
 	// 수정
-	// blogService.updateBlog(user, changeBlog,changeTag,bid))
 	public boolean updateBlog(String user,String btitle,String bsubtitle,String bcontent, String changeTag, int bid) {
 		Blog blog = blogRepository.findByBid(bid);
 		if (user.equals(blog.getManager())) {
-			System.out.println("수정 시작");
-			blog.setBtitle(bsubtitle);
+			blog.setBtitle(btitle);
+			blog.setBsubtitle(bsubtitle);
 			blog.setBcontent(bcontent);
 			blogRepository.save(blog);
 
@@ -165,10 +169,9 @@ public class BlogService {
 	}
 
 	// 삭제
-	public boolean deleteBlog(String user, int bid) {
+	public boolean deleteBlog(String user, int bid, String role) {
 		Blog blog = blogRepository.findByBid(bid);
-		if (user.equals(blog.getManager())) {
-//			blogRepository.deleteById(bid);
+		if (user.equals(blog.getManager()) | role.equals(ADMIN)) {
 			blogRepository.deleteByBid(bid);
 			return true;
 		} else {
@@ -180,6 +183,18 @@ public class BlogService {
 	// 블로그 내 멤버 조회
 	public List<Member> searchMember(int bid) {
 		return memberRepository.findByBid(bid);
+	}
+
+	// 블로그 내 멤버 조회
+	public List<Users> searchMemberToUsers(int bid) {
+		List<Users> result = new ArrayList<Users>();
+		List<Member> list = memberRepository.findByBid(bid);
+		for(Member mem : list) {
+			Users user = userRepository.findByEmail(mem.getEmail())
+					.orElseThrow(() -> new RestException(ResponseMessage.NOT_FOUND_USER, HttpStatus.NOT_FOUND));
+			result.add(user);
+		}
+		return result;
 	}
 
 	// 블로그 내 멤버 추가
@@ -200,12 +215,12 @@ public class BlogService {
 	public boolean deleteMember(int bid, String email, String user) {
 		String manager = blogRepository.findByBid(bid).getManager();
 
-		if (user.equals(manager)) {
-			memberRepository.deleteByEmail(email);
+		if (user.equals(manager) | user.equals(email)) {
+			memberRepository.deleteByEmailAndBid(email, bid);
+			return true;
 		} else {
 			return false;
 		}
-		return true;
 	}
 	
 	// 블로그 이름으로 블로그 목록 검색
@@ -217,7 +232,6 @@ public class BlogService {
 			int bid = blog.getBid();
 			List<Blogtag> hashtags = blogtagRepository.findByBid(bid);
 			for (Blogtag tag : hashtags) {
-				System.out.println(tag);
 				blog.addHashTag(tag);
 			}
 			result.add(blog);
@@ -228,16 +242,22 @@ public class BlogService {
 	// 해쉬태그 이름으로 블로그 목록 검색
 	public List<Blog> searchListByTag(String tname){
 		List<Blogtag> list = blogtagRepository.findDistinctByTnameContaining(tname);
+		List<Blog> result = new ArrayList<Blog>();
 		if(list.size()==0) {
-			return null;
+			return result;
 		}else {
-			List<Blog> result = new ArrayList<Blog>();
 			for(Blogtag tag:list) {
 				Blog blog = blogRepository.findByBid(tag.getBid());
 				List<Blogtag> hashtags = blogtagRepository.findByBid(tag.getBid());
 				for (Blogtag tags : hashtags) {
 					blog.addHashTag(tags);
 				}
+				
+				List<Member> members = memberRepository.findByBid(tag.getBid());
+				for(Member mem:members) {
+					blog.addMember(mem);
+				}
+				
 				result.add(blog);
 			}
 			return result;

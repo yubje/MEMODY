@@ -10,7 +10,7 @@ public interface CommentRepository extends JpaRepository<Comments, Long> {
 
 	Comments findByCmid(int cmid);
 	
-	List<Comments> findByPid(int pid);
+	List<Comments> findAllByPidOrderByCommentTimeDesc(int pid);
 	
 	void deleteByCmid(int cmid);
 }

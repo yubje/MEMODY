@@ -4,7 +4,7 @@
       <div class="inputbox d-flex flex-column ma-0">
         <input class="textbox" v-model="newComment"><br>
         <button 
-          @click="createComment(newComment)"
+          @click="createComment(newComment), $emit('createcomment')"
           class="btn btn-sm d-flex justify-content-end m-1"
           >댓글 작성</button>
       </div>
@@ -21,7 +21,6 @@
     </div>
   </v-card>
 </template>
-
 
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -40,11 +39,9 @@ export default {
   computed: {
     ...mapState('blog', ['comment_id'])
   },
-
   methods: {
     ...mapActions('blog', ['createComment', 'updateComment']),
   },
-  
 }
 </script>
 
@@ -65,5 +62,4 @@ export default {
 .textbox:focus {
   outline: none;
 }
-
 </style>
