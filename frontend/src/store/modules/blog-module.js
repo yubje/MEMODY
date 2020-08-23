@@ -361,9 +361,6 @@ export const blog = {
     deleteLike({ state }) {
       BlogService.deleteLike({ state })
     },
-
-
-
   },
 
 }

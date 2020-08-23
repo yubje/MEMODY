@@ -38,6 +38,6 @@ export default {
   },
   created() {
     this.getRankedUsers()
-  }
+  },
 }
 </script>

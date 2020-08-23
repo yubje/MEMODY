@@ -5,14 +5,13 @@
       <div class="col">
         <div class="col w-75 mx-auto">
           <div class="mx-auto my-2">
-            <h3>블로그 정보 수정</h3>
+            <h1>블로그 정보 수정</h1>
           </div>
           <div class="row justify-content-between" style="align-items:baseline;">
             <p class="col-3">블로그 이름</p>
             <div class="col-8">
               <v-text-field outlined v-model="blogData.btitle"></v-text-field>              
             </div>
-
           </div>
           <div class="row justify-content-between" style="align-items:baseline;">
             <p class="col-3">블로그 부제</p>
@@ -110,6 +109,3 @@ export default {
 }
 </script>
 
-<style scoped>
-
-</style>

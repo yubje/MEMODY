@@ -16,13 +16,21 @@ img {
   border-bottom: 1px solid #dfdfdf;
 }
 
-.v-menu__content {
+.v-menu__content--fixed {
   width: 153px;
   top: 55px !important;
   contain: none !important;
   overflow-y: visible;
   overflow-x: visible;
   box-shadow: 0px 10px 18px -10px rgba(0, 0, 0, 0.251);
+}
+
+.navbar-menu {
+  margin-right: 15px;
+}
+
+#navbar-menu-after{
+  margin-left: 3px;
 }
 
 .navbar-menu-list-after {
@@ -55,7 +63,7 @@ img {
   color: #000000 !important;
 }
 
-#navbar-menu-before a {
+#navbar-menu-before {
   color: #888888 !important;
   font-size: 15px;
 }
@@ -71,6 +79,7 @@ img {
   color: #6ac6c8 !important;
   background-color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 
 #navbar-menu-before:focus, #navbar-menu-after:focus,
@@ -82,15 +91,24 @@ img {
 }
 
 #profile-img-small {
-  width: 30px;
-  height: 30px; 
+  width: 31px;
+  height: 31px; 
   border-radius: 70%;
-  margin-right: 7px;
+  margin: 0px 7px 0px 15px;
+  border: 1px solid #c7c7c7;
 }
 
 #logout-icon {
   float: right;
   color: #646464;
+}
+
+.hr-col {
+  height: 30px;
+  border-width: 0px 0px 0px 1px;
+  border-image: initial;
+  border-left: 1px solid #dfdfdf;
+  margin-right: 13px;
 }
 
 /*--------------------MainView--------------------*/
@@ -109,6 +127,19 @@ img {
   color: #6ac6c8;
 }
 
+.main-hr {
+  width: 65%;
+}
+
+.main-contents {
+  margin: 36px 0px;
+}
+
+.main-content-title {
+  color: rgb(34, 34, 34);
+  font-size: 25px;
+}
+
 /*--------------------MainSearchTab--------------------*/
 .searchTab-container {
   width: 800px;
@@ -121,13 +152,13 @@ img {
   border-image: initial;
 }
 
-.dropdown-menu {
+.searchTab-dropdown-menu {
   transform: translate3d(-1px, 56px, 0px) !important;
   min-width: 10px !important;
   width: 126px;
 }
 
-.dropdown-item {
+.searchTab-dropdown-item {
   letter-spacing: 0.2px;
   padding: 0.25rem 25px !important;
   text-align: center;
@@ -147,7 +178,7 @@ img {
   font-size: 20px;
   border-width: 0px 0px 0px 1px;
   border-image: initial;
-  border-left: 1px solid rgb(221, 221, 221);
+  border-left: 1px solid #dddddd;
 }
 
 #search-icon {

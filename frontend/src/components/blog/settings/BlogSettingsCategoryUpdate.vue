@@ -44,6 +44,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+
 export default {
   name: 'BlogSettingsCategoryUpdate',
   props: {
@@ -76,12 +77,7 @@ export default {
     clickUpdate(childData) {
       this.updateChildCategory(childData)
       this.clickEditButton()
-    }
-  }
-
+    },
+  },
 }
 </script>
-
-<style>
-
-</style>

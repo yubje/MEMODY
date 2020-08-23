@@ -57,7 +57,7 @@ export default {
       else {
         this.search(this.searchData)
       }
-    }
-  }
+    },
+  },
 }
 </script>

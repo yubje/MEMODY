@@ -27,7 +27,7 @@ import BlogCommentItem from '@/components/blog/comment/BlogCommentItem.vue'
 export default {
   name: 'BlogCommentList',
   props:{
-    commentData : Array
+    commentData : Array,
   },
   components: {
     BlogCommentForm,
@@ -36,15 +36,10 @@ export default {
   created() {
   },
   computed: {
-    ...mapState('blog', [ 'comment_id'])
+    ...mapState('blog', [ 'comment_id']),
   },
   methods: {
-    ...mapActions('blog', ['getCommentData'])
-
+    ...mapActions('blog', ['getCommentData']),
   },
 }
 </script>
-
-<style>
-
-</style>

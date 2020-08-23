@@ -7,7 +7,6 @@
 
       <div class="user-resetpw-contents">
         <v-card-title class="headline user-resetpw-title">인증코드 확인</v-card-title>
-
         <v-card-text class="user-resetpw-content">
           <v-row>
             <v-col class="user-resetpw-content-padding user-resetpw-content-text" cols="12">
@@ -31,36 +30,36 @@
 </template>
 
 <script>
-  import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
-  export default {
-    name: 'UserResetPWCheckValid',
-    data() {
-      return {
-        validationNumber: '',
-        dialog: true,
-        validationNumberRules: [
-          v => !!v || '인증코드를 입력해주세요.'
-        ]
-      }
-    },
-    created() {
-      if (this.resetpwMsg) this.$dialog.notify.info(this.resetpwMsg, { position: 'top-right', timeout: 5000 });
-      this.SET_RESET_MSG('')
-    },
-    computed: {
-      ...mapState(['resetpwMsg'])
-    },
-    methods: {
-      ...mapMutations(['SET_MODAL_RESETPW_CHECK_VALID', 'SET_RESET_MSG']),
-      ...mapActions(['checkValidation']),
-
-      checkForm() {
-        if (!this.validationNumber) {
-          this.$refs.validationNumber.focus();
-          this.$dialog.notify.error('인증코드를 입력해주세요.', { position: 'top-right', timeout: 5000 });
-        } else this.checkValidation(this.validationNumber)
-      }
+export default {
+  name: 'UserResetPWCheckValid',
+  data() {
+    return {
+      validationNumber: '',
+      dialog: true,
+      validationNumberRules: [
+        v => !!v || '인증코드를 입력해주세요.'
+      ]
     }
-  }
+  },
+  created() {
+    if (this.resetpwMsg) this.$dialog.notify.info(this.resetpwMsg, { position: 'top-right', timeout: 5000 });
+    this.SET_RESET_MSG('')
+  },
+  computed: {
+    ...mapState(['resetpwMsg'])
+  },
+  methods: {
+    ...mapMutations(['SET_MODAL_RESETPW_CHECK_VALID', 'SET_RESET_MSG']),
+    ...mapActions(['checkValidation']),
+
+    checkForm() {
+      if (!this.validationNumber) {
+        this.$refs.validationNumber.focus();
+        this.$dialog.notify.error('인증코드를 입력해주세요.', { position: 'top-right', timeout: 5000 });
+      } else this.checkValidation(this.validationNumber)
+    },
+  },
+}
 </script>

@@ -15,7 +15,6 @@ class MainService {
         router.push({ name: 'MainSearchResultView', query: { search: info.searchInput }})
       })
       .catch(error => console.log(error.response.data))
-
   }
 
   getRankedUsers({ commit }) {

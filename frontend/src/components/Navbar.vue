@@ -67,11 +67,9 @@
     <div v-if="modalResetPW">
       <UserResetPW />
     </div>
-
     <div v-if="modalSignup">
       <UserSignup />
     </div>
-    
   </v-app-bar>
 </template>
 
@@ -99,6 +97,6 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_MODAL_LOGIN'])
-  }
+  },
 }
 </script>

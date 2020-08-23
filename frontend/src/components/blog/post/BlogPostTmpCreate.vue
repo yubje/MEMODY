@@ -25,9 +25,8 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
 import BlogEditor from '../editor/BlogEditor.vue'
-
-import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostTmpCreate',
@@ -76,11 +75,8 @@ export default {
       this.postData.pcontent = document.getElementById('editor-content').innerHTML
       this.createPost()
 
-    }
-  }
-
-
-  
+    },
+  },
 }
 </script>
 
@@ -157,5 +153,4 @@ img {
   content: attr(placeholder);
   color: rgb(160, 160, 160);
 }
-
 </style>

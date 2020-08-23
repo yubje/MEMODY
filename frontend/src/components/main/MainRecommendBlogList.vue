@@ -24,7 +24,7 @@ export default {
     recommendBlog: Array
   },
   components: {
-    MainBlogItem
-  }
+    MainBlogItem,
+  },
 }
 </script>

@@ -3,9 +3,7 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col">
-        <v-card
-          outlined
-        >
+        <v-card outlined>
           <v-card-title>전체 글 조회</v-card-title>
           <hr>
           <v-simple-table>
@@ -49,7 +47,6 @@
 import { mapState, mapActions } from 'vuex'
 import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
-
 export default {
   name: 'BlogPostList',
   components: {
@@ -78,9 +75,6 @@ export default {
       this.lookupPostList(this.page-1)
     },
   },
-
-
-   
 }
 </script>
 

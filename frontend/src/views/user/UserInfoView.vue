@@ -55,16 +55,11 @@
         </v-card-actions>
       </v-card>
     </v-row>
-
-
   </v-container>
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'UserInfoView',
@@ -77,7 +72,7 @@ export default {
     this.lookupUserInfo()
   },
   computed: {
-    ...mapState(['userInfo'])
+    ...mapState(['userInfo']),
   },
   methods: {
     ...mapActions(['logout', 'deleteUserInfo', 'lookupUserInfo']),
@@ -92,6 +87,3 @@ export default {
   },
 }
 </script>
-
-<style>
-</style>

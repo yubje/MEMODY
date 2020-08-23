@@ -31,25 +31,19 @@
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
-  export default {
-    name: 'BlogSettingsSidebar',
-    computed: {
-      ...mapState('blog', ['blogData'])
-    },
-    methods: {
-      ...mapActions('blog', ['addParentCategory', 'addChildCategory', 'getBlogCategory']),
-    },
-    created() {
-      this.getBlogCategory(this.blogData.bid)
-    }
-
-
-
-  }
+import { mapState, mapActions } from 'vuex'
+export default {
+  name: 'BlogSettingsSidebar',
+  computed: {
+    ...mapState('blog', ['blogData'])
+  },
+  methods: {
+    ...mapActions('blog', ['addParentCategory', 'addChildCategory', 'getBlogCategory']),
+  },
+  created() {
+    this.getBlogCategory(this.blogData.bid)
+  },
+}
 </script>
 
 <style scoped>

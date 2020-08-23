@@ -64,8 +64,9 @@
 </template>
 
 <script>
-import MainRankingBlogList from '@/components/main/MainRankingBlogList.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import MainRankingBlogList from '@/components/main/MainRankingBlogList.vue'
+
 export default {
   name: 'MainRankingView',
   data() {
@@ -75,11 +76,11 @@ export default {
         '#b4b4b4',
         '#dd8a3e'
       ],
-      uid: ''
+      uid: '',
     }
   },
   components: {
-    MainRankingBlogList
+    MainRankingBlogList,
   },
   created() {
     if (this.modalRankingBlog) this.SET_MODAL_RANKING_BLOG()
@@ -95,7 +96,7 @@ export default {
     openModal(rankingBlogData) {
       this.uid = rankingBlogData.uid
       this.getRankingBlogList(rankingBlogData.email)
-    }
-  }
+    },
+  },
 }
 </script>
