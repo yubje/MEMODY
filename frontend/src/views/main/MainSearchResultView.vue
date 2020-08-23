@@ -12,8 +12,6 @@
         <MainBlogItem style="margin:0px !important"  class="col-md-4 mt-2" v-for="blog in searchedBlogs" :key="blog.bid" :blog="blog" />
       </div>
     </div>
-    
-    
   </div>
 </template>
 
@@ -21,11 +19,12 @@
 import { mapState, mapActions } from 'vuex'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainBlogItem from '@/components/main/MainBlogItem.vue'
+
 export default {
   name: 'MainSearchResultView',
   components: {
     MainSearchTab,
-    MainBlogItem
+    MainBlogItem,
   },
   props: {
     search: {
@@ -33,10 +32,10 @@ export default {
     }
   },
   computed: {
-    ...mapState('main', ['searchedBlogs'])
+    ...mapState('main', ['searchedBlogs']),
   },
   methods: {
-    ...mapActions('blog', ['getBlogInfo'])
+    ...mapActions('blog', ['getBlogInfo']),
   },
 }
 </script>

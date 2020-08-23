@@ -36,9 +36,6 @@
               <v-expansion-panel-header>{{member.uid}}</v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-card outlined>
-                  <!-- <div class="profile-img-box">
-                    <img id="profile-img" :src="member.profile" alt="@/assets/img/user-default.png">
-                  </div> -->
                   <v-list-item three-line>
                     <v-list-item-content>
                       <div class="overline mb-4">{{member.email}}</div>
@@ -57,20 +54,7 @@
           </v-expansion-panels>
           <div class="mx-auto" style="width:100%">
             <v-list rounded="true">
-
-
               <v-list-item v-for="(member, i) in members" :key="member.email">
-                <!-- <v-list-item-content>
-                  <v-list-item-title>
-                    {{ member.email }}
-                  </v-list-item-title>
-                </v-list-item-content>
-                <v-btn v-if="member.email !== userInfo.email" color="error" data-toggle="modal"
-                  :data-target="`#deleteBlogMemberModal`+i" class="m-2" small dark fab>
-                  <v-icon dark>mdi-account-remove-outline</v-icon>
-                </v-btn>
-                <font-awesome-icon v-if="member.email == userInfo.email" id="rank-icon" color="#ffcc33"
-                  :icon="['fas','crown']" /> -->
                 <div class="modal fade" :id="`deleteBlogMemberModal`+i" tabindex="-1" role="dialog"
                   aria-labelledby="deleteBlogMemberModalLabel" aria-hidden="true">
                   <div class="modal-dialog">
@@ -92,7 +76,6 @@
                   </div>
                 </div>
               </v-list-item>
-
             </v-list>
           </div>
         </div>
@@ -102,56 +85,45 @@
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
-  import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
-  // import axios from 'axios'
+import { mapState, mapActions } from 'vuex'
+import BlogSettingsSidebar from '@/components/blog/sidebar/BlogSettingsSidebar.vue'
 
-  export default {
-    name: 'BlogSettingsMember',
-    components: {
-      BlogSettingsSidebar
-    },
-    data() {
-      return {
-        email: '',
-        users: null,
-      }
-    },
-    methods: {
-      ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember', 'getUsers']),
-      // leaveBlog(email) {
-      //   this.deleteBlogMember(email)
-      // }
+export default {
+  name: 'BlogSettingsMember',
+  components: {
+    BlogSettingsSidebar
+  },
+  data() {
+    return {
+      email: '',
+      users: null,
+    }
+  },
+  methods: {
+    ...mapActions('blog', ['getBlogMembers', 'addBlogMember', 'deleteBlogMember', 'getUsers']),
+  },
+  created() {
+    this.getBlogMembers()
 
-    },
-    created() {
-      this.getBlogMembers()
-
-    },
-    computed: {
-      ...mapState('blog', ['members', 'blogData']),
-      ...mapState(['userInfo']),
-      // ...mapActions('blog''getBlogMembers'),
-    },
-
-
-  }
+  },
+  computed: {
+    ...mapState('blog', ['members', 'blogData']),
+    ...mapState(['userInfo']),
+  },
+}
 </script>
 
 <style scoped>
-  .profile-img-box {
-    width: 150px;
-    height: 150px;
-    border-radius: 70%;
-    overflow: hidden;
-  }
+.profile-img-box {
+  width: 150px;
+  height: 150px;
+  border-radius: 70%;
+  overflow: hidden;
+}
 
-  .profile-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+.profile-img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>

@@ -4,7 +4,7 @@
         <v-card-actions>
           <font-awesome-icon id="main-ranking-blog-list-icon" :icon="['far','times-circle']" @click="SET_MODAL_RANKING_BLOG()" />
         </v-card-actions>
-
+        
         <v-card-title class="headline blog-list-title">{{ uid }} 님 블로그</v-card-title>
 
         <div class="container-fluid main-ranking-blog-list-contents">
@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import MainBlogItem from '@/components/main/MainBlogItem.vue'
 import { mapState, mapMutations } from 'vuex'
+import MainBlogItem from '@/components/main/MainBlogItem.vue'
 
 export default {
   name: 'MainMyBlogList',
@@ -33,6 +33,6 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_MODAL_RANKING_BLOG'])
-  }
+  },
 }
 </script>

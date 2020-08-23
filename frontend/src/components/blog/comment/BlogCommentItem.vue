@@ -24,7 +24,6 @@
     </div>
     <div>
       <p class="px-3 text-left">{{ comment.comment }}</p>
-
     </div>
     <hr>
   </div>
@@ -39,7 +38,6 @@
   import axios from 'axios'
   import cookies from 'vue-cookies'
   const SERVER = process.env.VUE_APP_SERVER
-
 
   export default {
     name: 'BlogCommentItem',
@@ -60,11 +58,9 @@
       ...mapState(['userInfo']),
     },
     methods: {
-
       ...mapActions('blog', ['deleteComment']),
       ...mapMutations('blog', ['SET_COMMENTID']),
       timeBefore() {
-
         const now = new Date();
         const origin = new Date(this.comment.commentTime);
         if (now.getDate() == origin.getDate()) {
@@ -120,7 +116,3 @@
     },
   }
 </script>
-
-<style>
-
-</style>

@@ -8,19 +8,12 @@
 </template>
 
 <script>
-
 import Navbar from '@/components/Navbar.vue'
-
 
 export default {
   components: {
     Navbar,
   },
-  methods: {
-
-  },
-  mounted() {
-  }
 }
 </script>
 
@@ -39,7 +32,6 @@ export default {
 .btn-primary {
   background-color: #25374F !important;
 }
-
 
 input {
   font-family: Avenir !important;

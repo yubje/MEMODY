@@ -12,8 +12,6 @@
         <MainBlogItem style="margin:0px !important"  class="col-md-4 mt-2" v-for="blog in searchedBlogs" :key="blog.bid" :blog="blog" />
       </div>
     </div>
-    
-    
   </div>
 </template>
 

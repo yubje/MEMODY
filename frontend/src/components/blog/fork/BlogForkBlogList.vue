@@ -17,7 +17,6 @@
               </v-card>
             </v-tab-item>
           </v-tabs-items>
-
         </v-card>
       </v-card-text>
       <v-card-actions>
@@ -25,44 +24,38 @@
         <v-btn color="green darken-1" text @click="closeModal()">닫기</v-btn>
       </v-card-actions>
     </v-card>
-
   </div>
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
-  import BlogForkBlogCategoryList from '@/components/blog/fork/BlogForkBlogCategoryList.vue'
-  export default {
-    name: 'BlogForkBlogList',
-    data () {
-      return {
-        temp: null
-      }
-    },
-    props: {
-      pid: Number,
-    },
-    components: {
-      BlogForkBlogCategoryList
-    },
-    computed: {
-      ...mapState(['myBlogs'])
-    },
-    methods: {
-      ...mapActions('blog', ['getBlogs']),
-      closeModal() {
-        this.$emit('closeModal', false)
-      }
-    },
-    async created() {
-      await this.getBlogs()
-      this.temp = this.myBlogs
-    }
-  }
-</script>
+import { mapState, mapActions } from 'vuex'
+import BlogForkBlogCategoryList from '@/components/blog/fork/BlogForkBlogCategoryList.vue'
 
-<style>
-</style>
+export default {
+  name: 'BlogForkBlogList',
+  data () {
+    return {
+      temp: null,
+    }
+  },
+  props: {
+    pid: Number,
+  },
+  components: {
+    BlogForkBlogCategoryList
+  },
+  computed: {
+    ...mapState(['myBlogs'])
+  },
+  methods: {
+    ...mapActions('blog', ['getBlogs']),
+    closeModal() {
+      this.$emit('closeModal', false)
+    }
+  },
+  async created() {
+    await this.getBlogs()
+    this.temp = this.myBlogs
+  }
+}
+</script>

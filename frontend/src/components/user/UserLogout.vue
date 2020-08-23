@@ -1,10 +1,10 @@
 <template>
-  <div>
-  </div>
+  <div></div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+
 export default {
   name: 'UserLogout',
   methods: {
@@ -12,10 +12,7 @@ export default {
   },
   created() {
     this.logout()
-  }
+  },
 }
 </script>
 
-<style>
-
-</style>

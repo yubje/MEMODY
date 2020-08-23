@@ -15,7 +15,6 @@
             </v-list-item-content>
           </v-list-item>
         </v-card>
-
         <MainBlogItem style="margin:0px !important"  class="col-md-4 mt-2" v-for="blog in myBlogs" :key="blog.bid" :blog="blog" />
       </div>
     </div>
@@ -40,7 +39,7 @@ export default {
   },
   components: {
     MainCreateBlog,
-    MainBlogItem
+    MainBlogItem,
   },
   computed: {
     ...mapState(['myBlogs'])
@@ -52,7 +51,7 @@ export default {
     ...mapActions(['mainAfter']),
     fetchBlogs() {
       this.mainAfter()
-    }
+    },
   },
 }
 </script>

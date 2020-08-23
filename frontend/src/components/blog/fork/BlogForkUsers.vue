@@ -17,35 +17,30 @@
 </template>
 
 <script>
-  import axios from 'axios'
-  import cookies from 'vue-cookies'
+import axios from 'axios'
+import cookies from 'vue-cookies'
 
-  export default {
-    name: 'BlogForkUsers',
-    props: {
-      pid: Number
-    },
-    data: () => ({
-      items: null,
-      disabled: false,
-      absolute: false,
-      openOnHover: true,
-      value: false,
-      closeOnClick: true,
-      closeOnContentClick: true,
-      offsetX: true,
-      offsetY: false,
-    }),
-    created() {
-      axios.get(`${process.env.VUE_APP_SERVER}/blogs/fork/${this.pid}`,{headers: {"auth": cookies.get('auth-token')}})
-      .then(response => {
-        this.items = response.data.data
-      })
-    }
-
-  }
+export default {
+  name: 'BlogForkUsers',
+  props: {
+    pid: Number
+  },
+  data: () => ({
+    items: null,
+    disabled: false,
+    absolute: false,
+    openOnHover: true,
+    value: false,
+    closeOnClick: true,
+    closeOnContentClick: true,
+    offsetX: true,
+    offsetY: false,
+  }),
+  created() {
+    axios.get(`${process.env.VUE_APP_SERVER}/blogs/fork/${this.pid}`,{headers: {"auth": cookies.get('auth-token')}})
+    .then(response => {
+      this.items = response.data.data
+    })
+  },
+}
 </script>
-
-<style>
-
-</style>

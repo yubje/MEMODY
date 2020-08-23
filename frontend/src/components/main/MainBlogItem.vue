@@ -78,7 +78,7 @@ export default {
     searchByHashTag(hashtag) {
       this.searchData.searchInput = hashtag
       this.search(this.searchData)
-    }
-  }
+    },
+  },
 }
 </script>

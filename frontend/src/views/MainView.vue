@@ -14,15 +14,15 @@
       <span class="main-content-title">추천 블로그</span>
       <MainRecommendBlogList :recommendBlog="recommendBlog"/>
     </div>
-
     <hr class="main-hr">
   </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import MainSearchTab from '@/components/main/MainSearchTab.vue'
 import MainRecommendBlogList from '@/components/main/MainRecommendBlogList.vue'
-import { mapState, mapActions } from 'vuex'
+
 
 export default {
   name: 'MainView',

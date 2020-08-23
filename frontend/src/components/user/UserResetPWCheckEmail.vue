@@ -71,7 +71,7 @@ export default {
         this.SET_LOADING(true);
         this.validateEmailForResetPW(this.resetpwcheckemailData.email);
       } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
-    }
-  }
+    },
+  },
 }
 </script>

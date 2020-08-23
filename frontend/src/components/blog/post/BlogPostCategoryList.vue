@@ -3,16 +3,10 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col">
-        <v-card
-          outlined
-        >
+        <v-card outlined>
           <v-card-title>
             {{ mdir }}
-
-
-            <v-menu 
-              bottom
-            >
+            <v-menu bottom>
               <template v-slot:activator="{ on, attrs }">    
               <v-btn
                 fab
@@ -41,8 +35,8 @@
                 </v-list-item>
               </v-list>
             </v-menu>
-          
           </v-card-title>
+
           <v-breadcrumbs :items="items" class="px-3 py-1">
             <template v-slot:divider>
               <v-icon>mdi-chevron-right</v-icon>
@@ -86,11 +80,8 @@
 </template>
 
 <script>
-import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
-
-
 import { mapState, mapActions } from 'vuex'
+import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 export default {
   name: 'BlogPostList',
@@ -153,11 +144,10 @@ export default {
       "page": this.page-1,
     }
     this.fetchPosts(info)
-  },
-   
+  },  
 }
 </script>
-;
+
 <style scoped>
 .mdi-chevron-right {
   color: gray !important;

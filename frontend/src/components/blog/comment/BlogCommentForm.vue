@@ -22,7 +22,6 @@
   </v-card>
 </template>
 
-
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
@@ -40,11 +39,9 @@ export default {
   computed: {
     ...mapState('blog', ['comment_id'])
   },
-
   methods: {
     ...mapActions('blog', ['createComment', 'updateComment']),
   },
-  
 }
 </script>
 
@@ -65,5 +62,4 @@ export default {
 .textbox:focus {
   outline: none;
 }
-
 </style>

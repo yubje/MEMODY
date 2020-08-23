@@ -1,6 +1,6 @@
 <template>
   <div>
-      <v-subheader :inset="inset">{{ myBlog.btitle }}</v-subheader>
+    <v-subheader :inset="inset">{{ myBlog.btitle }}</v-subheader>
     <v-list>
       <v-list-item v-for="dataCategory in blogCategories" :key="dataCategory.lcid">
         <BlogForkBlogLargeCategoryItem :dataCategory="dataCategory" :bid="myBlog.bid" :pid="pid" />

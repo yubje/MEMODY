@@ -3,9 +3,7 @@
     <div class="row">
       <BlogPostSidebar/>     
       <div class="col">
-        <v-card
-          outlined
-        >
+        <v-card outlined>
           <v-card-title>임시 저장된 글 조회</v-card-title>
           <v-simple-table>
             <template v-slot:default>
@@ -55,7 +53,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

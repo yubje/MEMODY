@@ -99,6 +99,6 @@ export default {
   },
   methods: {
     ...mapMutations(['SET_MODAL_LOGIN'])
-  }
+  },
 }
 </script>

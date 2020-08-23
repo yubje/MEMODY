@@ -62,14 +62,10 @@
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
-  import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
-
-  import axios from 'axios'
-  import cookies from 'vue-cookies'
+import { mapState, mapActions } from 'vuex'
+import axios from 'axios'
+import cookies from 'vue-cookies'
+import BlogPostSidebar from '@/components/blog/sidebar/BlogPostSidebar.vue'
 
 export default {
   name: 'BlogView',
@@ -136,15 +132,15 @@ export default {
 </script>
 
 <style>
-  #blog {
-    height: 100%;
-  }
+#blog {
+  height: 100%;
+}
 
-  .container-fluid {
-    height: 100%;
-  }
+.container-fluid {
+  height: 100%;
+}
 
-  .row {
-    height: 100%;
-  }
+.row {
+  height: 100%;
+}
 </style>

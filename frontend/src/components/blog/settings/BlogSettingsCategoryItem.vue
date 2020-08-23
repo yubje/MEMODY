@@ -4,13 +4,11 @@
       <v-list-item-avatar>
         <v-icon v-if="categories.mcategory.length">mdi-folder-open</v-icon>
         <v-icon v-else>mdi-folder</v-icon>
-        
       </v-list-item-avatar>
-      <!-- <template v-slot:activator> -->
       <v-list-item-content>
         <v-list-item-title v-text="categories.large_dir" class="text-left"></v-list-item-title>
       </v-list-item-content>
-    <!-- </template> -->
+
       <!-- 대분류 수정 -->
       <v-btn 
         v-if="largeShow"

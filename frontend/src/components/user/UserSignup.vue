@@ -80,110 +80,111 @@
 </template>
 
 <script>
-  import { mapState, mapMutations, mapActions } from 'vuex'
-  export default {
-    name: 'UserSignup',
-    data() {
-      return {
-        dialog: true,
-        emailValidation: false,
-        signupData: {
-          uid: '',
-          email: '',
-          password: null,
-          validationNumber: '',
-        },
-        password2: '',
-        valid: true,
-        //Validation Rules
-        nameRules: [
-          v => !!v || '닉네임을 입력해주세요.',
-          v => (!!v && this.uniqueId) || '닉네임 중복확인을 해주세요.'
-        ],
-        emailRules: [
-          v => !!v || '이메일을 입력해주세요.',
-          v => this.validEmail.test(v) || '이메일 형식을 확인해주세요. (예시: abc@abc.com)',
-          v => (!!v && this.isValid) || '이메일 인증을 완료해주세요.',
-        ],
-        passwordRules: [
-          v => !!v || '비밀번호를 입력해주세요.',
-          v => this.validPW.test(v) || '비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)'
-        ],
-        passwordCheckRules: [
-          v => v == this.signupData.password || '비밀번호가 틀립니다.'
-        ],
-        validEmail: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        validPW: /^.*(?=.{8})(?=.*[0-9])(?=.*[a-zA-Z]).*$/
-        //End Validation Rules
-      };
-    },
-    mounted() {
-      this.$store.commit('RESET_ISVALID')
-      this.$store.commit('SET_UNIQUEID', false)
-      this.$store.commit('SET_CHECK_CODE_VALID', true)
-      this.$store.commit('RESET_VALIDTYPE') 
-      this.$store.commit('RESET_UNIQUEEMAIL')
-      this.$store.commit('SET_LOADING', false)
-    },
-    computed: {
-      ...mapState(['isValid', 'uniqueId', 'uniqueEmail', 'checkCodeValid', 'signupUidCheck', 'signupEmailCheck', 'loading'])
-    },
-    watch: {
-      signupUidCheck(val) {
-        if (val && !this.uniqueId) this.$dialog.notify.error(val, { position: 'top-right', timeout: 5000 });
-        else if (val && this.uniqueId) this.$dialog.notify.success(val, { position: 'top-right', timeout: 5000 });
-        this.$refs.nickname.validate();
+import { mapState, mapMutations, mapActions } from 'vuex'
+
+export default {
+  name: 'UserSignup',
+  data() {
+    return {
+      dialog: true,
+      emailValidation: false,
+      signupData: {
+        uid: '',
+        email: '',
+        password: null,
+        validationNumber: '',
       },
-      signupEmailCheck(val) {
-        if (val && (!this.uniqueEmail || this.uniqueEmail && !this.checkCodeValid)) this.$dialog.notify.error(val, { position: 'top-right', timeout: 5000 });
-        else if (val && this.uniqueEmail && !this.isValid) this.$dialog.notify.info(val, { position: 'top-right', timeout: 5000 });
-        else if (val && this.uniqueEmail && this.isValid) {
-          this.$dialog.notify.success(val, { position: 'top-right', timeout: 5000 });
-          this.RESET_UNIQUEEMAIL()
-        }
-      }
+      password2: '',
+      valid: true,
+      //Validation Rules
+      nameRules: [
+        v => !!v || '닉네임을 입력해주세요.',
+        v => (!!v && this.uniqueId) || '닉네임 중복확인을 해주세요.'
+      ],
+      emailRules: [
+        v => !!v || '이메일을 입력해주세요.',
+        v => this.validEmail.test(v) || '이메일 형식을 확인해주세요. (예시: abc@abc.com)',
+        v => (!!v && this.isValid) || '이메일 인증을 완료해주세요.',
+      ],
+      passwordRules: [
+        v => !!v || '비밀번호를 입력해주세요.',
+        v => this.validPW.test(v) || '비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)'
+      ],
+      passwordCheckRules: [
+        v => v == this.signupData.password || '비밀번호가 틀립니다.'
+      ],
+      validEmail: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      validPW: /^.*(?=.{8})(?=.*[0-9])(?=.*[a-zA-Z]).*$/
+      //End Validation Rules
+    };
+  },
+  mounted() {
+    this.$store.commit('RESET_ISVALID')
+    this.$store.commit('SET_UNIQUEID', false)
+    this.$store.commit('SET_CHECK_CODE_VALID', true)
+    this.$store.commit('RESET_VALIDTYPE') 
+    this.$store.commit('RESET_UNIQUEEMAIL')
+    this.$store.commit('SET_LOADING', false)
+  },
+  computed: {
+    ...mapState(['isValid', 'uniqueId', 'uniqueEmail', 'checkCodeValid', 'signupUidCheck', 'signupEmailCheck', 'loading'])
+  },
+  watch: {
+    signupUidCheck(val) {
+      if (val && !this.uniqueId) this.$dialog.notify.error(val, { position: 'top-right', timeout: 5000 });
+      else if (val && this.uniqueId) this.$dialog.notify.success(val, { position: 'top-right', timeout: 5000 });
+      this.$refs.nickname.validate();
     },
-    methods: {
-      ...mapMutations(['SET_MODAL_SIGNUP', 'SET_UNIQUEID', 'SET_SIGNUP_UID_CHECK', 'RESET_ISVALID', 'SET_SIGNUP_EMAIL_CHECK', 'SET_LOADING', 'SET_CHECK_CODE_VALID', 'RESET_UNIQUEEMAIL']),
-      ...mapActions(['signup', 'validateEmail', 'checkValidation', 'lookUpNickname']),
-
-      checkNickname() {
-        if (!this.signupData.uid) {
-          this.$dialog.notify.error('닉네임을 입력해주세요.', { position: 'top-right', timeout: 5000 });
-          this.$refs.nickname.focus();
-        } else this.lookUpNickname(this.signupData.uid)
-      },
-
-      checkEmail() {
-        let err = true;
-        let msg = "";
-
-        !this.signupData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
-        err && !this.validEmail.test(this.signupData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
-
-        if (err) {
-          this.SET_LOADING(true);
-          this.validateEmail(this.signupData.email);
-        } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
-      },
-
-      checkForm() {
-        let err = true;
-        let msg = "";
-
-        !this.signupData.uid && (msg="닉네임을 입력해주세요.", err=false, this.$refs.nickname.focus());
-        err && !this.uniqueId && (msg="닉네임 중복확인을 해주세요.", err=false);
-        err && !this.signupData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
-        err && !this.validEmail.test(this.signupData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
-        err && !this.isValid && (msg="이메일 인증을 완료해주세요.", err=false);
-        err && !this.signupData.password && (msg="비밀번호를 입력해주세요.", err=false, this.$refs.password.focus());
-        err && !this.validPW.test(this.signupData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
-        err && (this.signupData.password != this.password2) && (msg="비밀번호를 확인해주세요.", err=false, this.$refs.password2.focus());
-
-        if (err) {
-          this.signup(this.signupData);
-        } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
+    signupEmailCheck(val) {
+      if (val && (!this.uniqueEmail || this.uniqueEmail && !this.checkCodeValid)) this.$dialog.notify.error(val, { position: 'top-right', timeout: 5000 });
+      else if (val && this.uniqueEmail && !this.isValid) this.$dialog.notify.info(val, { position: 'top-right', timeout: 5000 });
+      else if (val && this.uniqueEmail && this.isValid) {
+        this.$dialog.notify.success(val, { position: 'top-right', timeout: 5000 });
+        this.RESET_UNIQUEEMAIL()
       }
     }
+  },
+  methods: {
+    ...mapMutations(['SET_MODAL_SIGNUP', 'SET_UNIQUEID', 'SET_SIGNUP_UID_CHECK', 'RESET_ISVALID', 'SET_SIGNUP_EMAIL_CHECK', 'SET_LOADING', 'SET_CHECK_CODE_VALID', 'RESET_UNIQUEEMAIL']),
+    ...mapActions(['signup', 'validateEmail', 'checkValidation', 'lookUpNickname']),
+
+    checkNickname() {
+      if (!this.signupData.uid) {
+        this.$dialog.notify.error('닉네임을 입력해주세요.', { position: 'top-right', timeout: 5000 });
+        this.$refs.nickname.focus();
+      } else this.lookUpNickname(this.signupData.uid)
+    },
+
+    checkEmail() {
+      let err = true;
+      let msg = "";
+
+      !this.signupData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
+      err && !this.validEmail.test(this.signupData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
+
+      if (err) {
+        this.SET_LOADING(true);
+        this.validateEmail(this.signupData.email);
+      } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
+    },
+
+    checkForm() {
+      let err = true;
+      let msg = "";
+
+      !this.signupData.uid && (msg="닉네임을 입력해주세요.", err=false, this.$refs.nickname.focus());
+      err && !this.uniqueId && (msg="닉네임 중복확인을 해주세요.", err=false);
+      err && !this.signupData.email && (msg="이메일을 입력해주세요.", err=false, this.$refs.email.focus());
+      err && !this.validEmail.test(this.signupData.email) && (msg="이메일 형식을 확인해주세요. (예시: abc@abc.com)", err=false, this.$refs.email.focus());
+      err && !this.isValid && (msg="이메일 인증을 완료해주세요.", err=false);
+      err && !this.signupData.password && (msg="비밀번호를 입력해주세요.", err=false, this.$refs.password.focus());
+      err && !this.validPW.test(this.signupData.password) && (msg="비밀번호 형식을 확인해주세요. (영문/숫자 포함 8자 이상)", err=false, this.$refs.password.focus());
+      err && (this.signupData.password != this.password2) && (msg="비밀번호를 확인해주세요.", err=false, this.$refs.password2.focus());
+
+      if (err) {
+        this.signup(this.signupData);
+      } else this.$dialog.notify.error(msg, { position: 'top-right', timeout: 5000 });
+    }
   }
+}
 </script>

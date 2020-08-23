@@ -32,9 +32,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import BlogEditor from '../editor/BlogEditor.vue'
-
-import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'BlogPostUpdate',
@@ -68,8 +67,8 @@ export default {
 
       this.updatePost()
       this.$router.push({ name: 'BlogPostList'})
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -146,5 +145,4 @@ img {
   content: attr(placeholder);
   color: rgb(160, 160, 160);
 }
-
 </style>

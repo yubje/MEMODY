@@ -64,17 +64,12 @@
 </template>
 
 <script>
-  import {
-    mapState,
-    mapActions
-  } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   name: 'BlogPostSidebar',
-  components: {
-    
-  },
   props: {
-    bid: Number 
+    bid: Number, 
   },
   data() {
     return {
@@ -103,7 +98,6 @@ export default {
   },
 }
 </script>
-
 
 <style scoped>
 a:hover {
